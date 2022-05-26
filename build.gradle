@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+}
+
+group 'io.github.realyusufismail'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    //https and ws
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '5.0.0-alpha.6'
+    implementation group: 'com.neovisionaries', name: 'nv-websocket-client', version: '2.14'
+    //json
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.2'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.2'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.2'
+}
+
+test {
+    useJUnitPlatform()
+}
