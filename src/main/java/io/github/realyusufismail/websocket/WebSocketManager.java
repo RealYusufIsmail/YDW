@@ -62,12 +62,25 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         }
 
         switch (opcode) {
+            case 1 -> sendHeartbeat();
             case 10 -> {
                 int heartbeatInterval = d.get("heartbeat_interval").asInt();
                 //Send heartbeat
                 sendHeartbeat(heartbeatInterval);
             }
         }
+    }
+
+    /**
+     * The gateway may request a heartbeat from the client in some situations by sending an Opcode 1 Heartbeat.
+     * When this occurs,
+     * the client should immediately send an Opcode 1 Heartbeat without waiting the remainder of the current interval.
+     */
+    public void sendHeartbeat() {
+        JsonNode json = JsonNodeFactory.instance.objectNode()
+                .put("op", 1)
+                .put("d", s);
+        ws.sendText(json.toString());
     }
 
     /**
