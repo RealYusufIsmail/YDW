@@ -26,7 +26,8 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
     ObjectMapper mapper = new ObjectMapper();
 
-    private Integer s = null;
+    //The sequence number, used for resuming sessions and heartbeats.
+    private Integer seq = null;
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
@@ -63,18 +64,26 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         int opcode = payload.get("op").asInt();
         //event data
         JsonNode d  = payload.get("d");
-        //Integer s = payload.hasNonNull("s") ? payload.get("s").asInt() : null;
-        //the event name for this payload
-        String t = payload.hasNonNull("t") ? payload.get("t").asText() : null;
 
         onOpcode(opcode, d, payload);
+        onEvent(payload);
+    }
+
+    public void onEvent(JsonNode payload) {
+        if(payload.hasNonNull("t")) {
+            String t = payload.get("t").asText();
+            if(t.equals("READY")) {
+                sessionId = payload.get("d").get("session_id").asText();
+
+            }
+        }
     }
 
     public void onOpcode(int opcode, JsonNode d, JsonNode payload) {
 
         if(payload.hasNonNull("s")) {
             //sequence number, used for resuming sessions and heartbeats
-            s = payload.get("s").asInt();
+            seq = payload.get("s").asInt();
         }
 
         OpCode op = OpCode.fromCode(opcode);
@@ -132,7 +141,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     public void sendHeartbeat(int heartbeatInterval) {
         JsonNode json = JsonNodeFactory.instance.objectNode()
                 .put("op", 1)
-                .put("d", s);
+                .put("d", seq);
 
         scheduler.scheduleAtFixedRate(() -> {
             try {
@@ -180,6 +189,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
                                 .put("$device", "YDL")));
 
         ws.sendText(json.toString());
+        logger.info("Connected");
     }
 
     public void resume() {
@@ -192,5 +202,6 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
 
         ws.sendText(json.toString());
+        logger.info("Reconnected");
     }
 }
