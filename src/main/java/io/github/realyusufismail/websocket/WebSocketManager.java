@@ -33,9 +33,20 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     //Used to determine if any heart beats hve been missed.
     private int missedHeartbeats = 0;
 
+    //The bots token.
+    private final String token;
+
+    //The gateway intents
+    private final GateWayIntent intent;
+
+    //The session id. This is basically a key that stores the past activity of the bot.
+    private volatile String sessionId = null;
 
 
-    public WebSocketManager() throws IOException, WebSocketException {
+
+    public WebSocketManager(String token, GateWayIntent intent) throws IOException, WebSocketException {
+        this.token = token;
+        this.intent = intent;
         String gatewayUrl = "wss://gateway.discord.gg/?v=9&encoding=etf";
         ws = new WebSocketFactory().createSocket(gatewayUrl);
         ws.addHeader("Accept-Encoding", "gzip");
@@ -150,6 +161,36 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
     @Override
     public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
+        if(s == null) {
+            identify();
+        } else {
+            resume();
+        }
+    }
 
+    public void identify() {
+        JsonNode json = JsonNodeFactory.instance.objectNode()
+                .put("op", 2)
+                .set("d", JsonNodeFactory.instance.objectNode()
+                        .put("token", token)
+                        .put("intents", intent.getValue())
+                        .set("properties", JsonNodeFactory.instance.objectNode()
+                                .put("$os", "mac")
+                                .put("$browser", "YDL")
+                                .put("$device", "YDL")));
+
+        ws.sendText(json.toString());
+    }
+
+    public void resume() {
+        JsonNode json = JsonNodeFactory.instance.objectNode()
+                .put("op", 6)
+                .set("d", JsonNodeFactory.instance.objectNode()
+                        .put("token", token)
+                        .put("session_id", sessionId)
+                        .put("seq", s));
+
+
+        ws.sendText(json.toString());
     }
 }
