@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.Socket;
+import java.net.SocketException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -27,6 +29,9 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     private Integer s = null;
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+    //Used to determine if any heart beats hve been missed.
+    private int missedHeartbeats = 0;
 
 
 
@@ -61,26 +66,48 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             s = payload.get("s").asInt();
         }
 
-        switch (opcode) {
-            case 1 -> sendHeartbeat();
-            case 10 -> {
+        OpCode op = OpCode.fromCode(opcode);
+        switch (op) {
+            case HEARTBEAT -> sendHeartbeat();
+            case HELLO -> {
                 int heartbeatInterval = d.get("heartbeat_interval").asInt();
                 //Send heartbeat
                 sendHeartbeat(heartbeatInterval);
             }
+            case HEARTBEAT_ACK -> {
+                logger.debug("Heartbeat acknowledged");
+                missedHeartbeats = 0;
+            }
+
+            default -> logger.debug("Unhandled opcode: {}", op);
         }
     }
 
     /**
+     * <p>
      * The gateway may request a heartbeat from the client in some situations by sending an Opcode 1 Heartbeat.
      * When this occurs,
      * the client should immediately send an Opcode 1 Heartbeat without waiting the remainder of the current interval.
+     *  </p>
+     * <p>
+     *     If a client does not receive a heartbeat ack between its attempts at sending heartbeats,
+     *     this may be due to a failed or "zombied" connection. The client should then immediately terminate
+     *     the connection with a non-1000 close code, reconnect, and attempt to Resume.
+     *     </p>
      */
     public void sendHeartbeat() {
         JsonNode json = JsonNodeFactory.instance.objectNode()
                 .put("op", 1)
                 .put("d", s);
-        ws.sendText(json.toString());
+
+        if(missedHeartbeats >= 2) {
+            missedHeartbeats = 0;
+            prepareClose();
+            ws.disconnect(1000, "Heartbeat missed");
+        } else {
+            missedHeartbeats += 1;
+            ws.sendText(json.toString());
+        }
     }
 
     /**
@@ -104,6 +131,22 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             }
         }, 0, heartbeatInterval, TimeUnit.MILLISECONDS);
     }
+
+
+    /**
+     * This was taken from JDA's WebSocket. <a href="https://github.com/DV8FromTheWorld/JDA/blob/023a6c9de489d2e487d44b294614bb4911597817/src/main/java/net/dv8tion/jda/internal/requests/WebSocketClient.java#L671">WebSocketClient.java</a>
+     */
+    private void prepareClose() {
+        try {
+            if (ws != null) {
+                Socket rawSocket = ws.getSocket();
+                if (rawSocket != null) // attempt to set a 10 second timeout for the close frame
+                    rawSocket.setSoTimeout(10000); // this has no affect if the socket is already stuck in a read call
+            }
+        }
+        catch (SocketException ignored) {}
+    }
+
 
     @Override
     public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
