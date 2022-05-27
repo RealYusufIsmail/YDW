@@ -98,7 +98,8 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
                 logger.debug("Heartbeat acknowledged");
                 missedHeartbeats = 0;
             }
-
+            case INVALIDATE_SESSION -> {
+            }
             default -> logger.debug("Unhandled opcode: {}", op);
         }
     }
@@ -118,7 +119,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     public void sendHeartbeat() {
         JsonNode json = JsonNodeFactory.instance.objectNode()
                 .put("op", 1)
-                .put("d", s);
+                .put("d", seq);
 
         if(missedHeartbeats >= 2) {
             missedHeartbeats = 0;
@@ -170,7 +171,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
     @Override
     public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-        if(s == null) {
+        if(sessionId == null) {
             identify();
         } else {
             resume();
@@ -198,7 +199,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
                 .set("d", JsonNodeFactory.instance.objectNode()
                         .put("token", token)
                         .put("session_id", sessionId)
-                        .put("seq", s));
+                        .put("seq", seq));
 
 
         ws.sendText(json.toString());
