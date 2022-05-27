@@ -74,7 +74,6 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             String t = payload.get("t").asText();
             if(t.equals("READY")) {
                 sessionId = payload.get("d").get("session_id").asText();
-
             }
         }
     }
@@ -99,6 +98,14 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
                 missedHeartbeats = 0;
             }
             case INVALIDATE_SESSION -> {
+                boolean shouldResume = payload.get("d").asBoolean();
+                if(shouldResume)
+                    logger.debug("Session invalidated, resuming session");
+
+                int closeCode = shouldResume ? 4900 : 1000;
+
+                prepareClose();
+                ws.sendClose(closeCode, "Session invalidated");
             }
             default -> logger.debug("Unhandled opcode: {}", op);
         }
