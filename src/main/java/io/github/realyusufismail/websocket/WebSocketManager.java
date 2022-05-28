@@ -1,6 +1,7 @@
 package io.github.realyusufismail.websocket;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.JsonSerializable;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.google.common.util.concurrent.AbstractScheduledService;
@@ -13,6 +14,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -48,43 +50,47 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     public WebSocketManager(String token, GateWayIntent intent) throws IOException, WebSocketException {
         this.token = token;
         this.intent = intent;
-        String gatewayUrl = "wss://gateway.discord.gg/?v=9&encoding=etf";
+        String gatewayUrl = "wss://gateway.discord.gg/?v=9&encoding=json";
         ws = new WebSocketFactory().createSocket(gatewayUrl);
         ws.addHeader("Accept-Encoding", "gzip");
-        ws.setDirectTextMessage(true);
         ws.addListener(this);
         ws.connect();
     }
 
     @Override
-    public void onTextMessage(WebSocket websocket, byte[] data) throws Exception {
-        JsonNode payload = mapper.readTree(data);
-
-        //opcode
-        int opcode = payload.get("op").asInt();
-        //event data
-        JsonNode d  = payload.get("d");
-
-        onOpcode(opcode, d, payload);
-        onEvent(payload);
+    public void onTextMessage(WebSocket websocket, String message) throws Exception {
+        onHandelMessage(message);
     }
 
+    public void onHandelMessage(String message) throws Exception {
+        try {
+            JsonNode payload = mapper.readTree(message);
+            onHandel(payload);
+        } catch (Exception e) {
+            logger.error("Error while handling message", e);
+        }
+    }
+
+    public void onHandel(JsonNode payload) throws Exception {
+
+    }
     public void onEvent(JsonNode payload) {
-        if(payload.hasNonNull("t")) {
-            String t = payload.get("t").asText();
-            if(t.equals("READY")) {
-                sessionId = payload.get("d").get("session_id").asText();
+        Optional<Integer> s = Optional.of(payload.get("s").asInt());
+        s.ifPresent(integer -> this.seq = integer);
+
+        Optional<String> t = Optional.of(payload.get("t").asText());
+        t.ifPresent(text -> {
+            if(text.equals("READY")) {
+                this.sessionId = payload.get("d").get("session_id").asText();
             }
-        }
+        });
+
+        Optional<JsonNode> d = Optional.of(payload.get("d"));
+        Optional<Integer> op = Optional.of(payload.get("op").asInt());
+        op.ifPresent(integer -> onOpcode(op.get(), d.get()));
     }
 
-    public void onOpcode(int opcode, JsonNode d, JsonNode payload) {
-
-        if(payload.hasNonNull("s")) {
-            //sequence number, used for resuming sessions and heartbeats
-            seq = payload.get("s").asInt();
-        }
-
+    public void onOpcode(Integer opcode, JsonNode d) {
         OpCode op = OpCode.fromCode(opcode);
         switch (op) {
             case HEARTBEAT -> sendHeartbeat();
@@ -97,8 +103,8 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
                 logger.debug("Heartbeat acknowledged");
                 missedHeartbeats = 0;
             }
-            case INVALIDATE_SESSION -> {
-                boolean shouldResume = payload.get("d").asBoolean();
+            case INVALID_SESSION -> {
+                boolean shouldResume = d.asBoolean();
                 if(shouldResume)
                     logger.debug("Session invalidated, resuming session");
 
