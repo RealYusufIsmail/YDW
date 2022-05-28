@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.google.common.util.concurrent.AbstractScheduledService;
 import com.neovisionaries.ws.client.*;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,14 +41,14 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     private final String token;
 
     //The gateway intents
-    private final GateWayIntent intent;
+    private final int intent;
 
     //The session id. This is basically a key that stores the past activity of the bot.
     private volatile String sessionId = null;
 
 
 
-    public WebSocketManager(String token, GateWayIntent intent) throws IOException, WebSocketException {
+    public WebSocketManager(String token, Integer intent) throws IOException, WebSocketException {
         this.token = token;
         this.intent = intent;
         String gatewayUrl = "wss://gateway.discord.gg/?v=9&encoding=json";
@@ -56,6 +57,11 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         ws.addListener(this);
         ws.connect();
     }
+
+    public WebSocketManager(String token, @NotNull GateWayIntent intent) throws IOException,  WebSocketException {
+        this(token, intent.getValue());
+    }
+
 
     @Override
     public void onTextMessage(WebSocket websocket, String message) throws Exception {
@@ -90,7 +96,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         op.ifPresent(integer -> onOpcode(op.get(), d.get()));
     }
 
-    public void onOpcode(Integer opcode, JsonNode d) {
+        public void onOpcode(Integer opcode, JsonNode d) {
         OpCode op = OpCode.fromCode(opcode);
         switch (op) {
             case HEARTBEAT -> sendHeartbeat();
@@ -196,7 +202,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
                 .put("op", 2)
                 .set("d", JsonNodeFactory.instance.objectNode()
                         .put("token", token)
-                        .put("intents", intent.getValue())
+                        .put("intents", intent)
                         .set("properties", JsonNodeFactory.instance.objectNode()
                                 .put("$os", "mac")
                                 .put("$browser", "YDL")

@@ -29,9 +29,9 @@ public class HeartHandler { private final boolean isVoiceHearBeat;
 
     private final ScheduledExecutorService executor;
 
-    private final WebSocketManager webSocketManager;
+    private final WebSocketManager2 webSocketManager;
 
-    public HeartHandler(WebSocketManager manager, boolean isVoiceHearBeat, WebSocket webSocket,
+    public HeartHandler(WebSocketManager2 manager, boolean isVoiceHearBeat, WebSocket webSocket,
                         BiConsumer<Integer, String> closeFrameSender, ScheduledExecutorService executor) {
         this.webSocketManager = manager;
         this.isVoiceHearBeat = isVoiceHearBeat;
@@ -49,7 +49,7 @@ public class HeartHandler { private final boolean isVoiceHearBeat;
             long gatewayTime = System.currentTimeMillis() / lastHeartbeatTimeMillis;
             amountOfHeartbeatsMissed = 0;
 
-            WebSocketManager.logger.debug("Heartbeat ACK received, gateway ping: " + gatewayTime);
+            WebSocketManager2.logger.debug("Heartbeat ACK received, gateway ping: " + gatewayTime);
             receivedHeartbeat.set(true);
         }
     }
@@ -66,14 +66,14 @@ public class HeartHandler { private final boolean isVoiceHearBeat;
                     if (receivedHeartbeat.getAndSet(false)) {
                         beat();
                     } else {
-                        WebSocketManager.logger
+                        WebSocketManager2.logger
                                 .debug("Heartbeat missed, amount of missed heartbeats: "
                                         + amountOfHeartbeatsMissed);
                         closeFrameSender.accept(CloseCode.UNKNOWN.getCode(),
                                 CloseCode.UNKNOWN.getReason());
                     }
                 } catch (Exception e) {
-                    WebSocketManager.logger.error("Error while sending heartbeat", e);
+                    WebSocketManager2.logger.error("Error while sending heartbeat", e);
                 }
             }, 0, heartbeatInterval, TimeUnit.MILLISECONDS);
         });
@@ -93,7 +93,7 @@ public class HeartHandler { private final boolean isVoiceHearBeat;
             WebSocketFrame heartbeatFrame = WebSocketFrame.createTextFrame(heartBeatPayload.toString());
             webSocket.sendFrame(heartbeatFrame);
             lastHeartbeatTimeMillis = System.currentTimeMillis();
-            WebSocketManager.logger.debug("Sending heartbeat");
+            WebSocketManager2.logger.debug("Sending heartbeat");
         }
     }
 }

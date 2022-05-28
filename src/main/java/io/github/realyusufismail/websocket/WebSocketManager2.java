@@ -51,7 +51,7 @@ public class WebSocketManager2 extends WebSocketAdapter implements WebSocketList
     public WebSocketManager2(String token, int intent) throws IOException, WebSocketException {
         this.token = token;
         this.intent = intent;
-        heartHandler = new HeartHandler(null, false, ws, this::close, scheduler);
+        heartHandler = new HeartHandler(this, false, ws, this::close, scheduler);
         try {
             WebSocketFactory socketFactory = new WebSocketFactory();
             if (socketFactory.getSocketTimeout() > 0)
@@ -98,7 +98,7 @@ public class WebSocketManager2 extends WebSocketAdapter implements WebSocketList
             seq = payload.get("s").asInt();
         }
 
-        Optional<OpCode> opCode = OpCode.fromOptionalCode(op);
+        Optional<OpCode> opCode = Optional.of(OpCode.fromCode(op));
 
         if (!opCode.isPresent()) {
             logger.error(
@@ -117,7 +117,7 @@ public class WebSocketManager2 extends WebSocketAdapter implements WebSocketList
                 logger.debug("Heartbeat acknowledged");
                 missedHeartbeats = 0;
             }
-            case INVALIDATE_SESSION -> {
+            case INVALID_SESSION -> {
                 boolean shouldResume = payload.get("d").asBoolean();
                 if(shouldResume)
                     logger.debug("Session invalidated, resuming session");
