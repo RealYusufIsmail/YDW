@@ -17,12 +17,11 @@
 
 package yusufsdiscordbot.ydlreg.entities.message;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jetbrains.annotations.Nullable;
 import yusufsdiscordbot.ydl.YDL;
 import yusufsdiscordbot.ydl.entities.guild.message.MessageReference;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 public class MessageReferenceReg implements MessageReference {
     private final JsonNode message;

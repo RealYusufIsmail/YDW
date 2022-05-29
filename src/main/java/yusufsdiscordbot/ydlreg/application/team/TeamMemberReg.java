@@ -18,8 +18,6 @@
 package yusufsdiscordbot.ydlreg.application.team;
 
 import api.ydl.client.object.MembershipState;
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,6 +26,7 @@ import yusufsdiscordbot.ydl.application.team.TeamMember;
 import yusufsdiscordbot.ydl.entities.User;
 import yusufsdiscordbot.ydlreg.entities.UserReg;
 import yusufsdiscordbot.ydlreg.json.JsonUtils;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 import java.util.List;
 

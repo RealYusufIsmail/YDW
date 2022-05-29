@@ -17,8 +17,6 @@
 
 package yusufsdiscordbot.ydl.entities.guild;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import yusufsdiscordbot.ydl.application.Application;
 import yusufsdiscordbot.ydl.entities.Attachment;
 import yusufsdiscordbot.ydl.entities.GenericEntity;
@@ -34,6 +32,7 @@ import yusufsdiscordbot.ydlreg.entities.message.MessageActivityType;
 import yusufsdiscordbot.ydlreg.entities.message.MessageFlags;
 import yusufsdiscordbot.ydlreg.entities.message.MessageType;
 import yusufsdiscordbot.ydlreg.message_components.ComponentType;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 import java.time.ZonedDateTime;
 import java.util.EnumSet;

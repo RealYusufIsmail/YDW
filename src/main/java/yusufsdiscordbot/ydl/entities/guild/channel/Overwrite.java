@@ -17,9 +17,8 @@
 
 package yusufsdiscordbot.ydl.entities.guild.channel;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import org.jetbrains.annotations.Nullable;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 public interface Overwrite extends SnowFlake {
     OverwriteType getType();

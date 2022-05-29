@@ -18,57 +18,45 @@
 package yusufsdiscordbot.ydlreg.entities.embed.objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.entities.embed.objects.Author;
 
+import java.util.Optional;
+
 public class AuthorReg implements Author {
-    private final JsonNode author;
+
     private String name;
     private String url;
     private String iconUrl;
     private String proxyIconUrl;
 
-    public AuthorReg(JsonNode author) {
-        this.author = author;
+    public AuthorReg(@NotNull JsonNode author) {
+
+        this.name = author.hasNonNull("name") ? author.get("name").asText() : null;
+        this.url = author.hasNonNull("url") ? author.get("url").asText() : null;
+        this.iconUrl = author.hasNonNull("icon_url") ? author.get("icon_url").asText() : null;
+        this.proxyIconUrl =
+                author.hasNonNull("proxy_icon_url") ? author.get("proxy_icon_url").asText() : null;
+    }
+
+
+    @Override
+    public Optional<String> getName() {
+        return Optional.ofNullable(name);
     }
 
     @Override
-    public String getName() {
-        return author.get("name").asText();
+    public Optional<String> getUrl() {
+        return Optional.ofNullable(url);
     }
 
     @Override
-    public void setName(String name) {
-        this.name = name;
+    public Optional<String> getIconUrl() {
+        return Optional.ofNullable(iconUrl);
     }
 
     @Override
-    public String getUrl() {
-        return author.get("url").asText();
+    public Optional<String> getProxyIconUrl() {
+        return Optional.ofNullable(proxyIconUrl);
     }
-
-    @Override
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    @Override
-    public String getIconUrl() {
-        return author.get("icon_url").asText();
-    }
-
-    @Override
-    public void setIconUrl(String iconUrl) {
-        this.iconUrl = iconUrl;
-    }
-
-    @Override
-    public String getProxyIconUrl() {
-        return author.get("proxy_icon_url").asText();
-    }
-
-    @Override
-    public void setProxyIconUrl(String proxyIconUrl) {
-        this.proxyIconUrl = proxyIconUrl;
-    }
-
 }

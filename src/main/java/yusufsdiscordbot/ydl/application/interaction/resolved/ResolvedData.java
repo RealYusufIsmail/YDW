@@ -17,8 +17,6 @@
 
 package yusufsdiscordbot.ydl.application.interaction.resolved;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import org.jetbrains.annotations.Nullable;
 import yusufsdiscordbot.ydl.entities.Attachment;
 import yusufsdiscordbot.ydl.entities.User;
@@ -26,6 +24,7 @@ import yusufsdiscordbot.ydl.entities.guild.Channel;
 import yusufsdiscordbot.ydl.entities.guild.Member;
 import yusufsdiscordbot.ydl.entities.guild.Message;
 import yusufsdiscordbot.ydl.entities.guild.Role;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 import java.util.Map;
 

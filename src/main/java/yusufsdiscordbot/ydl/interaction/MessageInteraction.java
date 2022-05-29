@@ -18,11 +18,10 @@
 package yusufsdiscordbot.ydl.interaction;
 
 import api.ydl.client.event.GeneralEvent;
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import yusufsdiscordbot.ydl.entities.User;
 import yusufsdiscordbot.ydl.entities.guild.Member;
 import yusufsdiscordbot.ydlreg.application.interaction.InteractionType;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 
 public interface MessageInteraction extends SnowFlake, GeneralEvent {

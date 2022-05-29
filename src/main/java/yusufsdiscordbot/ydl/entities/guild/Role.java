@@ -17,12 +17,11 @@
 
 package yusufsdiscordbot.ydl.entities.guild;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.entities.GenericEntity;
 import yusufsdiscordbot.ydl.entities.guild.role.RoleTags;
 import yusufsdiscordbot.ydl.perm.Permission;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 import java.awt.*;
 import java.util.Optional;

@@ -17,8 +17,6 @@
 
 package yusufsdiscordbot.ydl.entities.guild;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.entities.GenericEntity;
 import yusufsdiscordbot.ydl.entities.Guild;
@@ -26,6 +24,7 @@ import yusufsdiscordbot.ydl.entities.User;
 import yusufsdiscordbot.ydlreg.entities.event.EventPrivacyLevel;
 import yusufsdiscordbot.ydlreg.entities.event.EventStatus;
 import yusufsdiscordbot.ydlreg.entities.event.EventType;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;

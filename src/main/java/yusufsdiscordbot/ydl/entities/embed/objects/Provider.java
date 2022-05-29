@@ -17,12 +17,10 @@
 
 package yusufsdiscordbot.ydl.entities.embed.objects;
 
+import java.util.Optional;
+
 public interface Provider {
-    String name();
+    Optional<String> name();
 
-    String url();
-
-    void setName(String name);
-
-    void setUrl(String url);
+    Optional<String> url();
 }

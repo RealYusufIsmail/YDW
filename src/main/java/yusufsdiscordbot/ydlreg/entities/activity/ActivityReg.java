@@ -17,8 +17,6 @@
 
 package yusufsdiscordbot.ydlreg.entities.activity;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.YDL;
@@ -32,6 +30,7 @@ import yusufsdiscordbot.ydlreg.application.interaction.InteractionType;
 import yusufsdiscordbot.ydlreg.entities.UserReg;
 import yusufsdiscordbot.ydlreg.entities.guild.MemberReg;
 import yusufsdiscordbot.ydlreg.entities.guild.MessageReg;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 public class ActivityReg implements Activity {
     private final JsonNode activity;

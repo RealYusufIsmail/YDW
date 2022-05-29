@@ -17,8 +17,6 @@
 
 package yusufsdiscordbot.ydl.entities.activity;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.application.interaction.InteractionData;
 import yusufsdiscordbot.ydl.entities.GenericEntity;
@@ -26,6 +24,7 @@ import yusufsdiscordbot.ydl.entities.User;
 import yusufsdiscordbot.ydl.entities.guild.Member;
 import yusufsdiscordbot.ydl.entities.guild.Message;
 import yusufsdiscordbot.ydlreg.application.interaction.InteractionType;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 public interface Activity extends SnowFlake, GenericEntity {
     @NotNull

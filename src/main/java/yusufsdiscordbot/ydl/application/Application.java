@@ -17,13 +17,12 @@
 
 package yusufsdiscordbot.ydl.application;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import yusufsdiscordbot.ydl.application.flags.ApplicationFlag;
 import yusufsdiscordbot.ydl.application.install.InstallParams;
 import yusufsdiscordbot.ydl.application.team.Team;
 import yusufsdiscordbot.ydl.entities.Guild;
 import yusufsdiscordbot.ydl.entities.User;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 import java.util.List;
 import java.util.Optional;

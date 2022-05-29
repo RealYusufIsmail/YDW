@@ -17,8 +17,6 @@
 
 package yusufsdiscordbot.ydlreg.entities.guild;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.YDL;
@@ -36,6 +34,7 @@ import yusufsdiscordbot.ydlreg.entities.channel.OverwriteReg;
 import yusufsdiscordbot.ydlreg.entities.channel.thread.ThreadMemberReg;
 import yusufsdiscordbot.ydlreg.entities.channel.thread.ThreadMetadataReg;
 import yusufsdiscordbot.ydlreg.entities.message.MessageFlags;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;

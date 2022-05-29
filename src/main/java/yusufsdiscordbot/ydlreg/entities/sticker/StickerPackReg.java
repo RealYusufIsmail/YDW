@@ -17,13 +17,12 @@
 
 package yusufsdiscordbot.ydlreg.entities.sticker;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.YDL;
 import yusufsdiscordbot.ydl.entities.sticker.Sticker;
 import yusufsdiscordbot.ydl.entities.sticker.StickerPack;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 import java.util.ArrayList;
 import java.util.List;

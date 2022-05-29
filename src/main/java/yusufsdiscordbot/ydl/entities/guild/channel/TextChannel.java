@@ -17,9 +17,7 @@
 
 package yusufsdiscordbot.ydl.entities.guild.channel;
 
-import api.ydl.CheckReturnValue;
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
+import com.google.errorprone.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import yusufsdiscordbot.ydl.entities.GenericEntity;
@@ -27,6 +25,7 @@ import yusufsdiscordbot.ydl.entities.guild.Message;
 import yusufsdiscordbot.ydlreg.action.Action;
 import yusufsdiscordbot.ydlreg.action.MessageAction;
 import yusufsdiscordbot.ydlreg.entities.embed.builder.EmbedBuilder;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 public interface TextChannel extends SnowFlake, GenericEntity, BaseChannel {
     @CheckReturnValue

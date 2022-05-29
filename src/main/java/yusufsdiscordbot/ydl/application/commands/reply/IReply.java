@@ -17,7 +17,7 @@
 
 package yusufsdiscordbot.ydl.application.commands.reply;
 
-import api.ydl.CheckReturnValue;
+import com.google.errorprone.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Nullable;
 import yusufsdiscordbot.ydlreg.action.ReplyAction;
 import yusufsdiscordbot.ydlreg.entities.embed.builder.EmbedBuilder;

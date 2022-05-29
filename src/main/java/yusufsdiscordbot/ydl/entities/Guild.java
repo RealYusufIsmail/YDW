@@ -18,9 +18,7 @@
 package yusufsdiscordbot.ydl.entities;
 
 
-import api.ydl.CheckReturnValue;
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
+import com.google.errorprone.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import yusufsdiscordbot.ydl.entities.emoji.Emoji;
@@ -29,6 +27,7 @@ import yusufsdiscordbot.ydl.entities.sticker.Sticker;
 import yusufsdiscordbot.ydl.entities.voice.VoiceState;
 import yusufsdiscordbot.ydlreg.action.Action;
 import yusufsdiscordbot.ydlreg.entities.guild.GuildFeatures;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 import java.time.ZonedDateTime;
 import java.util.EnumSet;

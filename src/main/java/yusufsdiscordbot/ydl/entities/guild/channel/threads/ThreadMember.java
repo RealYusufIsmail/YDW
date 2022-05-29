@@ -17,12 +17,11 @@
 
 package yusufsdiscordbot.ydl.entities.guild.channel.threads;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.entities.GenericEntity;
 import yusufsdiscordbot.ydl.entities.User;
 import yusufsdiscordbot.ydlreg.Flags;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;

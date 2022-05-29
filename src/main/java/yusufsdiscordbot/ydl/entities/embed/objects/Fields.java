@@ -17,16 +17,12 @@
 
 package yusufsdiscordbot.ydl.entities.embed.objects;
 
+import java.util.Optional;
+
 public interface Fields {
-    String getName();
+    Optional<String> getName();
 
-    void setName(String name);
+    Optional<String> getValue();
 
-    String getValue();
-
-    void setValue(String value);
-
-    boolean isInlined();
-
-    void isInlined(boolean inlined);
+    Optional<Boolean> isInline();
 }

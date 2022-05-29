@@ -17,10 +17,9 @@
 
 package yusufsdiscordbot.ydl.application.interaction;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import yusufsdiscordbot.ydl.application.commands.option.OptionTypeEnum;
 import yusufsdiscordbot.ydl.application.interaction.resolved.ResolvedData;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 public interface InteractionData extends SnowFlake {
     String getName();

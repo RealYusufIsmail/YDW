@@ -17,20 +17,14 @@
 
 package yusufsdiscordbot.ydl.entities.embed.objects;
 
+import java.util.Optional;
+
 public interface SameEmbedStructure {
-    String getUrl();
+    Optional<String> getUrl();
 
-    void setUrl(String url);
+    Optional<String> getProxyUrl();
 
-    String getProxyUrl();
+    Optional<Integer> getHeight();
 
-    void setProxyUrl(String proxyUrl);
-
-    int getHeight();
-
-    void setHeight(int height);
-
-    int getWidth();
-
-    void setWidth(int width);
+    Optional<Integer> getWidth();
 }

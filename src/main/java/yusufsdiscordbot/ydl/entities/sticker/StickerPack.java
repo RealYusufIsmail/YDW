@@ -19,7 +19,6 @@ package yusufsdiscordbot.ydl.entities.sticker;
 
 import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
-
 import java.util.List;
 
 public interface StickerPack extends SnowFlake {

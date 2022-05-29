@@ -17,14 +17,13 @@
 
 package yusufsdiscordbot.ydl.entities.sticker;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.entities.GenericEntity;
 import yusufsdiscordbot.ydl.entities.Guild;
 import yusufsdiscordbot.ydl.entities.User;
 import yusufsdiscordbot.ydlreg.entities.sticker.StickerFormatType;
 import yusufsdiscordbot.ydlreg.entities.sticker.StickerType;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 import java.util.List;
 import java.util.Optional;

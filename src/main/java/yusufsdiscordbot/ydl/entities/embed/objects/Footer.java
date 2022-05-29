@@ -17,16 +17,12 @@
 
 package yusufsdiscordbot.ydl.entities.embed.objects;
 
+import java.util.Optional;
+
 public interface Footer {
-    String getText();
+    Optional<String> getText();
 
-    void setText(String text);
+    Optional<String> getIconUrl();
 
-    String getIconUrl();
-
-    void setIconUrl(String iconUrl);
-
-    String getProxyIconUrl();
-
-    void setProxyIconUrl(String proxyIconUrl);
+    Optional<String> getProxyIconUrl();
 }

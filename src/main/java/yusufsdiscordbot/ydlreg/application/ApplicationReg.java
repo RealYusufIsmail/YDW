@@ -17,8 +17,6 @@
 
 package yusufsdiscordbot.ydlreg.application;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import yusufsdiscordbot.ydl.YDL;
 import yusufsdiscordbot.ydl.application.Application;
@@ -30,6 +28,7 @@ import yusufsdiscordbot.ydl.entities.User;
 import yusufsdiscordbot.ydlreg.application.install.InstallParamsReg;
 import yusufsdiscordbot.ydlreg.application.team.TeamReg;
 import yusufsdiscordbot.ydlreg.entities.UserReg;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 import java.util.ArrayList;
 import java.util.List;

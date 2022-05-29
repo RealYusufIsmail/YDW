@@ -19,7 +19,6 @@ package yusufsdiscordbot.ydl.entities;
 
 import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
-
 import java.util.Optional;
 
 public interface Attachment extends SnowFlake, GenericEntity {

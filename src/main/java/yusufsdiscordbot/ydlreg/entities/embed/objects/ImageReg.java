@@ -18,56 +18,12 @@
 package yusufsdiscordbot.ydlreg.entities.embed.objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.entities.embed.objects.Image;
 
-public class ImageReg implements Image {
-    private final JsonNode image;
-    private String url;
-    private String proxyUrl;
-    private int width;
-    private int height;
+public class ImageReg extends SameEmbedStructureReg implements Image {
 
-    public ImageReg(JsonNode image) {
-        this.image = image;
-    }
-
-    @Override
-    public String getUrl() {
-        return image.get("url").asText();
-    }
-
-    @Override
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    @Override
-    public String getProxyUrl() {
-        return image.get("proxy_url").asText();
-    }
-
-    @Override
-    public void setProxyUrl(String proxyUrl) {
-        this.proxyUrl = proxyUrl;
-    }
-
-    @Override
-    public int getHeight() {
-        return image.get("height").asInt();
-    }
-
-    @Override
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    @Override
-    public int getWidth() {
-        return image.get("width").asInt();
-    }
-
-    @Override
-    public void setWidth(int width) {
-        this.width = width;
+    public ImageReg(@NotNull JsonNode embed) {
+        super(embed);
     }
 }

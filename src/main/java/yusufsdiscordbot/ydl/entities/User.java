@@ -17,11 +17,10 @@
 
 package yusufsdiscordbot.ydl.entities;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydlreg.entities.user.PremiumTypes;
 import yusufsdiscordbot.ydlreg.entities.user.UserFlags;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 import java.util.List;
 import java.util.Optional;

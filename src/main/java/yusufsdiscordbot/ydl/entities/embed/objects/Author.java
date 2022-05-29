@@ -17,20 +17,14 @@
 
 package yusufsdiscordbot.ydl.entities.embed.objects;
 
+import java.util.Optional;
+
 public interface Author {
-    String getName();
+    Optional<String> getName();
 
-    void setName(String name);
+    Optional<String> getUrl();
 
-    String getUrl();
+    Optional<String> getIconUrl();
 
-    void setUrl(String url);
-
-    String getIconUrl();
-
-    void setIconUrl(String iconUrl);
-
-    String getProxyIconUrl();
-
-    void setProxyIconUrl(String proxyIconUrl);
+    Optional<String> getProxyIconUrl();
 }

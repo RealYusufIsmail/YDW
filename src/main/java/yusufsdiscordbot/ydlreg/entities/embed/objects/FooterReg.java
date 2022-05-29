@@ -20,43 +20,35 @@ package yusufsdiscordbot.ydlreg.entities.embed.objects;
 import com.fasterxml.jackson.databind.JsonNode;
 import yusufsdiscordbot.ydl.entities.embed.objects.Footer;
 
+import java.util.Optional;
+
 public class FooterReg implements Footer {
-    private final JsonNode footer;
-    private String text;
-    private String iconUrl;
-    private String proxyIconUrl;
+
+    private final String text;
+    private final String iconUrl;
+    private final String proxyIconUrl;
 
     public FooterReg(JsonNode footer) {
-        this.footer = footer;
+
+        this.text = footer.hasNonNull("text") ? footer.get("text").asText() : null;
+        this.iconUrl = footer.hasNonNull("icon_url") ? footer.get("icon_url").asText() : null;
+        this.proxyIconUrl =
+                footer.hasNonNull("proxy_icon_url") ? footer.get("proxy_icon_url").asText() : null;
+    }
+
+
+    @Override
+    public Optional<String> getText() {
+        return Optional.ofNullable(text);
     }
 
     @Override
-    public String getText() {
-        return footer.get("text").asText();
+    public Optional<String> getIconUrl() {
+        return Optional.ofNullable(iconUrl);
     }
 
     @Override
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    @Override
-    public String getIconUrl() {
-        return footer.get("icon_url").asText();
-    }
-
-    @Override
-    public void setIconUrl(String iconUrl) {
-        this.iconUrl = iconUrl;
-    }
-
-    @Override
-    public String getProxyIconUrl() {
-        return footer.get("proxy_icon_url").asText();
-    }
-
-    @Override
-    public void setProxyIconUrl(String proxyIconUrl) {
-        this.proxyIconUrl = proxyIconUrl;
+    public Optional<String> getProxyIconUrl() {
+        return Optional.ofNullable(proxyIconUrl);
     }
 }

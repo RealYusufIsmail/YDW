@@ -18,53 +18,35 @@
 package yusufsdiscordbot.ydlreg.entities.embed.objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.entities.embed.objects.Fields;
 
+import java.util.Optional;
+
 public class FieldsReg implements Fields {
-    private final @Nullable JsonNode fields;
-    private String name;
-    private String value;
-    private boolean inline;
 
-    public FieldsReg(JsonNode fields) {
-        this.fields = fields;
-    }
+    private final String name;
+    private final String value;
+    private final Boolean inline;
 
-    public FieldsReg(String name, String value, boolean inline) {
-        this.name = name;
-        this.value = value;
-        this.inline = inline;
-        this.fields = null;
+    public FieldsReg(@NotNull JsonNode fields) {
+        this.name = fields.hasNonNull("name") ? fields.get("name").asText() : null;
+        this.value = fields.hasNonNull("value") ? fields.get("value").asText() : null;
+        this.inline = fields.hasNonNull("inline") ? fields.get("inline").asBoolean() : null;
     }
 
     @Override
-    public String getName() {
-        return fields.get("name").asText();
+    public Optional<String> getName() {
+        return Optional.ofNullable(name);
     }
 
     @Override
-    public void setName(String name) {
-        this.name = name;
+    public Optional<String> getValue() {
+        return Optional.ofNullable(value);
     }
 
     @Override
-    public String getValue() {
-        return fields.get("value").asText();
-    }
-
-    @Override
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    @Override
-    public boolean isInlined() {
-        return fields.get("inline").asBoolean();
-    }
-
-    @Override
-    public void isInlined(boolean inlined) {
-        this.inline = inlined;
+    public Optional<Boolean> isInline() {
+        return Optional.ofNullable(inline);
     }
 }

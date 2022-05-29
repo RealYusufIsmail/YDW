@@ -18,49 +18,51 @@
 package yusufsdiscordbot.ydl.entities.embed;
 
 import org.jetbrains.annotations.NotNull;
+import yusufsdiscordbot.ydl.entities.embed.objects.Image;
 import yusufsdiscordbot.ydl.entities.embed.objects.*;
 
 import java.awt.*;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public interface Embed {
     @NotNull
-    String getTitle();
+    Optional<String> getTitle();
 
     @NotNull
-    EmbedType getEmbedType();
+    Optional<EmbedType> getEmbedType();
 
     @NotNull
-    String getDescription();
+    Optional<String> getDescription();
 
     @NotNull
-    String getUrl();
+    Optional<String> getUrl();
 
     @NotNull
-    ZonedDateTime getTimeStamp();
+    Optional<ZonedDateTime> getTimeStamp();
 
     @NotNull
-    Color getColour();
+    Optional<Color> getColour();
 
     @NotNull
-    Footer getFooter();
+    Optional<Footer> getFooter();
 
     @NotNull
-    Image getImage();
+    Optional<Image> getImage();
 
     @NotNull
-    Thumbnail getThumbnail();
+    Optional<Thumbnail> getThumbnail();
 
     @NotNull
-    Video getVideo();
+    Optional<Video> getVideo();
 
     @NotNull
-    Provider getProvider();
+    Optional<Provider> getProvider();
 
     @NotNull
-    Author getAuthor();
+    Optional<Author> getAuthor();
 
     @NotNull
     List<Fields> getFields();
@@ -81,7 +83,7 @@ public interface Embed {
         /**
          * animated gif image embed rendered as a video embed
          */
-        GIF("gifv"),
+        GIF("gif"),
         /**
          * article embed
          */
@@ -115,27 +117,4 @@ public interface Embed {
         }
     }
 
-    class Field {
-        private final String name;
-        private final String value;
-        private final boolean inline;
-
-        public Field(String name, String value, boolean inline) {
-            this.name = name;
-            this.value = value;
-            this.inline = inline;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public boolean isInline() {
-            return inline;
-        }
-    }
 }

@@ -24,7 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydlreg.YDLReg;
 import yusufsdiscordbot.ydlreg.exception.*;
 
-import java.net.http.HttpClient;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;

@@ -17,12 +17,11 @@
 
 package yusufsdiscordbot.ydl.entities.emoji;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.entities.GenericEntity;
 import yusufsdiscordbot.ydl.entities.User;
 import yusufsdiscordbot.ydl.entities.guild.Role;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 import java.util.List;
 import java.util.Optional;

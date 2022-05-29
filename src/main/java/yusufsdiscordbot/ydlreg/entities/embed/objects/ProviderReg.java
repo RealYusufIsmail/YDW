@@ -20,32 +20,27 @@ package yusufsdiscordbot.ydlreg.entities.embed.objects;
 import com.fasterxml.jackson.databind.JsonNode;
 import yusufsdiscordbot.ydl.entities.embed.objects.Provider;
 
+import java.util.Optional;
+
 public class ProviderReg implements Provider {
-    private final JsonNode provider;
-    private String name;
-    private String url;
+
+    private final String name;
+    private final String url;
 
     public ProviderReg(JsonNode provider) {
-        this.provider = provider;
+
+        this.name = provider.hasNonNull("name") ? provider.get("name").asText() : null;
+        this.url = provider.hasNonNull("url") ? provider.get("url").asText() : null;
+    }
+
+
+    @Override
+    public Optional<String> name() {
+        return Optional.ofNullable(name);
     }
 
     @Override
-    public String name() {
-        return provider.get("name").asText();
-    }
-
-    @Override
-    public String url() {
-        return provider.get("url").asText();
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public void setUrl(String url) {
-        this.url = url;
+    public Optional<String> url() {
+        return Optional.ofNullable(url);
     }
 }

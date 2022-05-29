@@ -17,12 +17,11 @@
 
 package yusufsdiscordbot.ydlreg.entities.role;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.YDL;
 import yusufsdiscordbot.ydl.entities.guild.role.RoleTags;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 public class RoleTagsReg implements RoleTags {
     private final JsonNode roles;

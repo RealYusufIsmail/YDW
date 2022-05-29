@@ -17,8 +17,6 @@
 
 package yusufsdiscordbot.ydlreg.entities.sticker;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.YDL;
@@ -28,6 +26,7 @@ import yusufsdiscordbot.ydl.entities.sticker.Sticker;
 import yusufsdiscordbot.ydl.entities.sticker.StickerPack;
 import yusufsdiscordbot.ydlreg.entities.GuildReg;
 import yusufsdiscordbot.ydlreg.entities.UserReg;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 import java.util.List;
 import java.util.Optional;

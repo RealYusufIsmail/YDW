@@ -20,87 +20,132 @@ package yusufsdiscordbot.ydlreg.entities.embed;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.entities.embed.Embed;
+import yusufsdiscordbot.ydl.entities.embed.objects.Image;
 import yusufsdiscordbot.ydl.entities.embed.objects.*;
 import yusufsdiscordbot.ydlreg.entities.embed.objects.*;
-import yusufsdiscordbot.ydlreg.json.JsonUtils;
 
 import java.awt.*;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class EmbedReg implements Embed {
-    private final JsonNode embed;
 
-    public EmbedReg(JsonNode embed) {
-        this.embed = embed;
-    }
+    private final String title;
+    private final EmbedType type;
+    private final String description;
+    private final String url;
+    private final String timestamp;
+    private final Color color;
+    private final Footer footer;
+    private final Image image;
+    private final Thumbnail thumbnail;
+    private final Video video;
+    private final Provider provider;
+    private final Author author;
+    private final List<Fields> fields = new ArrayList<>();
 
-    @Override
-    public @NotNull String getTitle() {
-        return embed.get("title").asText();
-    }
+    public EmbedReg(@NotNull JsonNode embed) {
+        this.title = embed.hasNonNull("title") ? embed.get("title").asText() : null;
+        this.type = embed.hasNonNull("type") ? EmbedType.valueOf(embed.get("type").asText()) : null;
+        this.description =
+                embed.hasNonNull("description") ? embed.get("description").asText() : null;
+        this.url = embed.hasNonNull("url") ? embed.get("url").asText() : null;
+        this.timestamp = embed.hasNonNull("timestamp") ? embed.get("timestamp").asText() : null;
+        this.color = embed.hasNonNull("color") ? new Color(embed.get("color").asInt()) : null;
+        this.footer = embed.hasNonNull("footer") ? new FooterReg(embed.get("footer")) : null;
+        this.image = embed.hasNonNull("image") ? new ImageReg(embed.get("image")) : null;
+        this.thumbnail =
+                embed.hasNonNull("thumbnail") ? new ThumbnailReg(embed.get("thumbnail")) : null;
+        this.video = embed.hasNonNull("video") ? new VideoReg(embed.get("video")) : null;
+        this.provider =
+                embed.hasNonNull("provider") ? new ProviderReg(embed.get("provider")) : null;
+        this.author = embed.hasNonNull("author") ? new AuthorReg(embed.get("author")) : null;
 
-    @Override
-    public @NotNull EmbedType getEmbedType() {
-        return EmbedType.getEmbedType(embed.get("type").asText());
-    }
-
-    @Override
-    public @NotNull String getDescription() {
-        return embed.get("description").asText();
-    }
-
-    @Override
-    public @NotNull String getUrl() {
-        return embed.get("url").asText();
-    }
-
-    @Override
-    public @NotNull ZonedDateTime getTimeStamp() {
-        return ZonedDateTime.parse(embed.get("timestamp").asText());
-    }
-
-    @Override
-    public @NotNull Color getColour() {
-        return new Color(embed.get("color").asInt());
-    }
-
-    @Override
-    public @NotNull Footer getFooter() {
-        return new FooterReg(embed.getAsJsonNode("footer"));
-    }
-
-    @Override
-    public @NotNull Image getImage() {
-        return new ImageReg(embed.getAsJsonNode("image"));
+        if (embed.hasNonNull("fields")) {
+            for (JsonNode field : embed.get("fields")) {
+                fields.add(new FieldsReg(field));
+            }
+        }
     }
 
 
+    @NotNull
     @Override
-    public @NotNull Thumbnail getThumbnail() {
-        return new ThumbnailReg(embed.getAsJsonNode("thumbnail"));
+    public Optional<String> getTitle() {
+        return Optional.ofNullable(title);
     }
 
+    @NotNull
     @Override
-    public @NotNull Video getVideo() {
-        return new VideoReg(embed.getAsJsonNode("video"));
+    public Optional<EmbedType> getEmbedType() {
+        return Optional.ofNullable(type);
     }
 
+    @NotNull
     @Override
-    public @NotNull Provider getProvider() {
-        return new ProviderReg(embed.getAsJsonNode("provider"));
+    public Optional<String> getDescription() {
+        return Optional.ofNullable(description);
     }
 
+    @NotNull
     @Override
-    public @NotNull Author getAuthor() {
-        return new AuthorReg(embed.getAsJsonNode("author"));
+    public Optional<String> getUrl() {
+        return Optional.ofNullable(url);
     }
 
+    @NotNull
     @Override
-    public @NotNull List<Fields> getFields() {
-        return new ArrayList<>(JsonUtils.stream(embed.get("fields").getAsArrayNode())
-            .map(field -> new FieldsReg(field.getAsJsonNode()))
-            .collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
+    public Optional<ZonedDateTime> getTimeStamp() {
+        return Optional.ofNullable(ZonedDateTime.parse(timestamp));
+    }
+
+    @NotNull
+    @Override
+    public Optional<Color> getColour() {
+        return Optional.ofNullable(color);
+    }
+
+    @NotNull
+    @Override
+    public Optional<Footer> getFooter() {
+        return Optional.ofNullable(footer);
+    }
+
+    @NotNull
+    @Override
+    public Optional<Image> getImage() {
+        return Optional.ofNullable(image);
+    }
+
+    @NotNull
+    @Override
+    public Optional<Thumbnail> getThumbnail() {
+        return Optional.ofNullable(thumbnail);
+    }
+
+    @NotNull
+    @Override
+    public Optional<Video> getVideo() {
+        return Optional.ofNullable(video);
+    }
+
+    @NotNull
+    @Override
+    public Optional<Provider> getProvider() {
+        return Optional.ofNullable(provider);
+    }
+
+    @NotNull
+    @Override
+    public Optional<Author> getAuthor() {
+        return Optional.ofNullable(author);
+    }
+
+    @NotNull
+    @Override
+    public List<Fields> getFields() {
+        return fields;
     }
 }

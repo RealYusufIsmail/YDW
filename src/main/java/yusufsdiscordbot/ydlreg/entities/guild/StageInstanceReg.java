@@ -17,8 +17,6 @@
 
 package yusufsdiscordbot.ydlreg.entities.guild;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.YDL;
@@ -26,6 +24,7 @@ import yusufsdiscordbot.ydl.entities.Guild;
 import yusufsdiscordbot.ydl.entities.guild.Channel;
 import yusufsdiscordbot.ydl.entities.guild.StageInstance;
 import yusufsdiscordbot.ydl.entities.guild.StagePrivacyLevel;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 public class StageInstanceReg implements StageInstance {
     private final YDL ydl;

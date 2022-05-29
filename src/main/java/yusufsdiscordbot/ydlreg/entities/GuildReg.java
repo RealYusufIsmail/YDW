@@ -18,8 +18,6 @@
 package yusufsdiscordbot.ydlreg.entities;
 
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +36,7 @@ import yusufsdiscordbot.ydlreg.entities.guild.*;
 import yusufsdiscordbot.ydlreg.entities.sticker.StickerReg;
 import yusufsdiscordbot.ydlreg.entities.voice.VoiceStateReg;
 import yusufsdiscordbot.ydlreg.rest.callers.GuildCaller;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 import yusufsdiscordbot.ydlreg.util.Verify;
 
 import java.time.ZonedDateTime;

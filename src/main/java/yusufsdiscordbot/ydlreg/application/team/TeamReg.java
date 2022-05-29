@@ -17,8 +17,6 @@
 
 package yusufsdiscordbot.ydlreg.application.team;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,6 +24,7 @@ import yusufsdiscordbot.ydl.YDL;
 import yusufsdiscordbot.ydl.application.team.Team;
 import yusufsdiscordbot.ydl.application.team.TeamMember;
 import yusufsdiscordbot.ydlreg.json.JsonUtils;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 import yusufsdiscordbot.ydlreg.util.Verify;
 
 import java.util.ArrayList;

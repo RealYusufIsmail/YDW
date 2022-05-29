@@ -18,56 +18,12 @@
 package yusufsdiscordbot.ydlreg.entities.embed.objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.entities.embed.objects.Video;
 
-public class VideoReg implements Video {
-    private final JsonNode video;
-    private String url;
-    private String proxyUrl;
-    private int width;
-    private int height;
+public class VideoReg extends SameEmbedStructureReg implements Video {
 
-    public VideoReg(JsonNode video) {
-        this.video = video;
-    }
-
-    @Override
-    public String getUrl() {
-        return video.get("url").asText();
-    }
-
-    @Override
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    @Override
-    public String getProxyUrl() {
-        return video.get("proxy_url").asText();
-    }
-
-    @Override
-    public void setProxyUrl(String proxyUrl) {
-        this.proxyUrl = proxyUrl;
-    }
-
-    @Override
-    public int getHeight() {
-        return video.get("height").asInt();
-    }
-
-    @Override
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    @Override
-    public int getWidth() {
-        return video.get("width").asInt();
-    }
-
-    @Override
-    public void setWidth(int width) {
-        this.width = width;
+    public VideoReg(@NotNull JsonNode embed) {
+        super(embed);
     }
 }

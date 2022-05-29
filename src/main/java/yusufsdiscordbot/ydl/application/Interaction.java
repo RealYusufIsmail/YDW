@@ -17,10 +17,9 @@
 
 package yusufsdiscordbot.ydl.application;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import org.jetbrains.annotations.Nullable;
 import yusufsdiscordbot.ydlreg.application.interaction.InteractionType;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 public interface Interaction extends SnowFlake {
     @Nullable

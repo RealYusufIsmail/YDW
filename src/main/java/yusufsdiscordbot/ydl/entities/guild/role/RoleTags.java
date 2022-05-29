@@ -17,10 +17,9 @@
 
 package yusufsdiscordbot.ydl.entities.guild.role;
 
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.entities.GenericEntity;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 public interface RoleTags extends GenericEntity {
     @NotNull
