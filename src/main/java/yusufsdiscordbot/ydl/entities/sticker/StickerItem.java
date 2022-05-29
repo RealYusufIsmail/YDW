@@ -17,11 +17,11 @@
 
 package yusufsdiscordbot.ydl.entities.sticker;
 
-import api.ydl.client.event.GeneralEvent;
+import yusufsdiscordbot.ydl.entities.GenericEntity;
 import yusufsdiscordbot.ydlreg.entities.sticker.StickerFormatType;
 import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
-public interface StickerItem extends SnowFlake, GeneralEvent {
+public interface StickerItem extends SnowFlake, GenericEntity {
     String getName();
 
     StickerFormatType getFormatType();

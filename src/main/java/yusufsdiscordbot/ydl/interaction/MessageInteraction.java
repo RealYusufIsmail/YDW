@@ -17,14 +17,14 @@
 
 package yusufsdiscordbot.ydl.interaction;
 
-import api.ydl.client.event.GeneralEvent;
+import yusufsdiscordbot.ydl.entities.GenericEntity;
 import yusufsdiscordbot.ydl.entities.User;
 import yusufsdiscordbot.ydl.entities.guild.Member;
 import yusufsdiscordbot.ydlreg.application.interaction.InteractionType;
 import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 
-public interface MessageInteraction extends SnowFlake, GeneralEvent {
+public interface MessageInteraction extends SnowFlake, GenericEntity {
     InteractionType getType();
 
     String getName();

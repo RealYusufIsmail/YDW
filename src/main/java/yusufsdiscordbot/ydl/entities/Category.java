@@ -17,7 +17,7 @@
 
 package yusufsdiscordbot.ydl.entities;
 
-import yusufsdiscordbot.ydl.entities.guild.GuildChannel;
+import yusufsdiscordbot.ydl.entities.guild.Channel;
 import yusufsdiscordbot.ydl.entities.guild.channel.NewsChannel;
 import yusufsdiscordbot.ydl.entities.guild.channel.StageChannel;
 import yusufsdiscordbot.ydl.entities.guild.channel.TextChannel;
@@ -27,9 +27,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public interface Category extends GuildChannel {
-    default List<GuildChannel> getChannels() {
-        List<GuildChannel> channels = new ArrayList<>();
+public interface Category extends Channel {
+    default List<Channel> getChannels() {
+        List<Channel> channels = new ArrayList<>();
         channels.addAll(getTextChannel());
         channels.addAll(getVoiceChannel());
         channels.addAll(getNewsChannel());

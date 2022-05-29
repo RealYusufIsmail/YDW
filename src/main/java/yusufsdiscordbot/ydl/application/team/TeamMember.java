@@ -17,15 +17,14 @@
 
 package yusufsdiscordbot.ydl.application.team;
 
-import api.ydl.client.event.GeneralEvent;
-import api.ydl.client.object.MembershipState;
 import org.jetbrains.annotations.NotNull;
+import yusufsdiscordbot.ydl.entities.GenericEntity;
 import yusufsdiscordbot.ydl.entities.User;
 import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 import java.util.List;
 
-public interface TeamMember extends GeneralEvent {
+public interface TeamMember extends GenericEntity {
     @NotNull
     MembershipState getMembershipState();
 
