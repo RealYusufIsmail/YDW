@@ -7,6 +7,9 @@ import io.github.realyusufismail.websocket.handle.handles.channel.ChannelCreateH
 import io.github.realyusufismail.websocket.handle.handles.channel.ChannelDeleteHandler;
 import io.github.realyusufismail.websocket.handle.handles.channel.ChannelPinsUpdateHandler;
 import io.github.realyusufismail.websocket.handle.handles.channel.ChannelUpdateHandler;
+import io.github.realyusufismail.websocket.handle.handles.thread.ThreadCreateHandler;
+import io.github.realyusufismail.websocket.handle.handles.thread.ThreadDeleteHandler;
+import io.github.realyusufismail.websocket.handle.handles.thread.ThreadUpdateHandler;
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydlreg.YDLReg;
 
@@ -40,6 +43,9 @@ public class OnHandler {
             case CHANNEL_UPDATE -> new ChannelUpdateHandler(json, ydl).start();
             case CHANNEL_DELETE -> new ChannelDeleteHandler(json, ydl).start();
             case CHANNEL_PINS_UPDATE -> new ChannelPinsUpdateHandler(json, ydl).start();
+            case THREAD_CREATE -> new ThreadCreateHandler(json, ydl).start();
+            case THREAD_UPDATE -> new ThreadUpdateHandler(json, ydl).start();
+            case THREAD_DELETE -> new ThreadDeleteHandler(json, ydl).start();
         }
     }
 }
