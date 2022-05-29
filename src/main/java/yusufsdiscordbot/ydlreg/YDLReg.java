@@ -19,7 +19,6 @@ package yusufsdiscordbot.ydlreg;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neovisionaries.ws.client.WebSocketException;
-import com.neovisionaries.ws.client.WebSocketFactory;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.websocket.core.GateWayIntent;
 import okhttp3.OkHttpClient;
@@ -38,7 +37,6 @@ import yusufsdiscordbot.ydlreg.util.Verify;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 public class YDLReg implements YDL {
 
@@ -137,20 +135,20 @@ public class YDLReg implements YDL {
     public void removeEventListeners(@NotNull Object... eventListener) {
         Verify.checkIfNull(eventListener, "Event listener cannot be null");
         for (Object listener : eventListener)
-            //eventHandler.unregister(listener);
+            // eventHandler.unregister(listener);
             logger.warn("Event listener not implemented");
     }
 
     @Override
     public List<Object> getEventListeners() {
-        return null; //eventHandler.getEventListeners();
+        return null; // eventHandler.getEventListeners();
     }
 
     @Override
     public void setEventListeners(@NotNull Object... eventListener) {
         Verify.checkIfNull(eventListener, "The event listener cannot be null");
         for (Object listener : eventListener)
-            //eventHandler.register(listener);
+            // eventHandler.register(listener);
             logger.warn("Event listener not implemented");
 
     }
@@ -163,7 +161,7 @@ public class YDLReg implements YDL {
     public void setGatewayPing(long gatewayPing) {
         var oldGatewayPing = this.gatewayPing;
         this.gatewayPing = gatewayPing;
-        //apiHandler(new GatewayPingEvent(this, oldGatewayPing));
+        // apiHandler(new GatewayPingEvent(this, oldGatewayPing));
     }
 
     @Override

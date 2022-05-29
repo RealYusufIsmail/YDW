@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import yusufsdiscordbot.ydl.Activity;
 import yusufsdiscordbot.ydl.YDL;
 import yusufsdiscordbot.ydl.YDLInfo;
+import yusufsdiscordbot.ydlreg.YDLReg;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -21,7 +22,6 @@ import java.net.SocketException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Vector;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -109,7 +109,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         op.ifPresent(integer -> onOpcode(op.get(), d.get()));
 
         Optional<String> t = Optional.of(payload.get("t").asText());
-        t.ifPresent(text -> new OnEvent(text, payload).start());
+        t.ifPresent(text -> new OnEvent((YDLReg) ydl, text, payload).start());
     }
 
     public void onOpcode(Integer opcode, @NotNull JsonNode d) {

@@ -23,13 +23,13 @@ import io.github.realyusufismail.websocket.WebSocketManager;
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.entities.Guild;
 import yusufsdiscordbot.ydl.entities.SelfUser;
+import yusufsdiscordbot.ydl.entities.UnavailableGuild;
 import yusufsdiscordbot.ydl.entities.User;
 import yusufsdiscordbot.ydl.entities.guild.Channel;
 import yusufsdiscordbot.ydlreg.rest.RestApiHandler;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 public interface YDL {
     @NotNull
@@ -43,7 +43,7 @@ public interface YDL {
         return getGuild(Long.parseLong(guildId));
     }
 
-    Set<String> getUnavailableGuilds();
+    List<UnavailableGuild> getUnavailableGuilds();
 
     boolean isSpecifiedGuildAvailable(long guildId);
 

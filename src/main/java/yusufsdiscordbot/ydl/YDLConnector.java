@@ -196,6 +196,7 @@ public class YDLConnector {
 
     /**
      * Used to set a custom http client
+     * 
      * @param httpClient http client
      * @return YDLConnector
      */
@@ -228,7 +229,7 @@ public class YDLConnector {
 
         Optional<OkHttpClient> httpClient = Optional.ofNullable(this.client);
 
-        if(httpClient.isEmpty()) {
+        if (httpClient.isEmpty()) {
             httpClient = Optional.of(new OkHttpClient());
         }
 
