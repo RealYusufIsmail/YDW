@@ -37,6 +37,7 @@ import yusufsdiscordbot.ydlreg.util.Verify;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class YDLReg implements YDL {
 
@@ -192,8 +193,11 @@ public class YDLReg implements YDL {
 
     @Override
     public @NotNull SelfUser getSelfUser() {
-        Verify.checkIfNull(selfUser, "The session is not ready yet");
-        return selfUser;
+        Optional<SelfUser> selfUser = Optional.ofNullable(this.selfUser);
+        if (selfUser.isPresent())
+            return selfUser.get();
+        else
+            throw new IllegalStateException("Self user is not set");
     }
 
     public void setSelfUser(@NotNull SelfUser selfUser) {

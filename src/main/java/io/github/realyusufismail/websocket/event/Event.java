@@ -1,17 +1,15 @@
 package io.github.realyusufismail.websocket.event;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import yusufsdiscordbot.ydl.YDL;
-import yusufsdiscordbot.ydlreg.YDLReg;
 
 public abstract class Event {
-    protected final JsonNode json;
-    protected final YDLReg ydl;
+    private final YDL ydl;
 
-    protected Event(JsonNode json, YDL ydl) {
-        this.json = json;
-        this.ydl = (YDLReg) ydl;
+    public Event(YDL ydl) {
+        this.ydl = ydl;
     }
 
-    public abstract void start();
+    public YDL getYDL() {
+        return ydl;
+    }
 }

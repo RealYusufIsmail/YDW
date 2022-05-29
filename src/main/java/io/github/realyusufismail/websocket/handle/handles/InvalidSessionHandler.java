@@ -1,11 +1,11 @@
-package io.github.realyusufismail.websocket.event.events;
+package io.github.realyusufismail.websocket.handle.handles;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.github.realyusufismail.websocket.event.Event;
+import io.github.realyusufismail.websocket.handle.Handle;
 import yusufsdiscordbot.ydl.YDL;
 
-public class InvalidSessionEvent extends Event {
-    public InvalidSessionEvent(JsonNode json, YDL ydl) {
+public class InvalidSessionHandler extends Handle {
+    public InvalidSessionHandler(JsonNode json, YDL ydl) {
         super(json, ydl);
     }
 

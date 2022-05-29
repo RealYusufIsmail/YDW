@@ -1,13 +1,13 @@
-package io.github.realyusufismail.websocket.event.events;
+package io.github.realyusufismail.websocket.handle.handles.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.github.realyusufismail.websocket.event.Event;
+import io.github.realyusufismail.websocket.handle.Handle;
 import yusufsdiscordbot.ydl.YDL;
 import yusufsdiscordbot.ydl.entities.guild.Channel;
 import yusufsdiscordbot.ydlreg.entities.guild.ChannelReg;
 
-public class ChannelCreateEvent extends Event {
-    public ChannelCreateEvent(JsonNode json, YDL ydl) {
+public class ChannelCreateHandler extends Handle {
+    public ChannelCreateHandler(JsonNode json, YDL ydl) {
         super(json, ydl);
     }
 

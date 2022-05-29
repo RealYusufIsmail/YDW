@@ -1,4 +1,4 @@
-package io.github.realyusufismail.websocket.event;
+package io.github.realyusufismail.websocket;
 
 import org.jetbrains.annotations.NotNull;
 

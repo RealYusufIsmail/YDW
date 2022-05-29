@@ -6,13 +6,12 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.neovisionaries.ws.client.*;
 import io.github.realyusufismail.websocket.core.GateWayIntent;
 import io.github.realyusufismail.websocket.core.OpCode;
-import io.github.realyusufismail.websocket.event.OnEvent;
+import io.github.realyusufismail.websocket.handle.OnHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yusufsdiscordbot.ydl.Activity;
-import yusufsdiscordbot.ydl.YDL;
 import yusufsdiscordbot.ydl.YDLInfo;
 import yusufsdiscordbot.ydlreg.YDLReg;
 
@@ -114,7 +113,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         op.ifPresent(integer -> onOpcode(op.get(), d.get()));
 
         Optional<String> t = Optional.of(payload.get("t").asText());
-        t.ifPresent(text -> new OnEvent((YDLReg) ydl, text, payload).start());
+        t.ifPresent(text -> new OnHandler((YDLReg) ydl, text, payload).start());
     }
 
     public void onOpcode(Integer opcode, @NotNull JsonNode d) {
