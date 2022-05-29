@@ -19,6 +19,13 @@ package yusufsdiscordbot.ydlreg.entities.embed.builder;
 
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.entities.embed.Embed;
+import yusufsdiscordbot.ydl.entities.embed.objects.*;
+import yusufsdiscordbot.ydl.entities.embed.objects.Image;
+import yusufsdiscordbot.ydlreg.entities.embed.EmbedReg;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 // TODO: requires full rewrite.
@@ -52,11 +59,53 @@ public class EmbedBuilder {
      */
     private static final int MAX_AUTHOR_NAME_LENGTH = 256;
 
+    private final String title;
+    private final String description;
+    private final String url;
+    private final String timestamp;
+    private final Color color;
+    private final Footer footer;
+    private final Image image;
+    private final Thumbnail thumbnail;
+    private final Video video;
+    private final Provider provider;
+    private final Author author;
+    private final List<Fields> fields = new ArrayList<>();
 
+    public EmbedBuilder() {
+        this(null);
+    }
+
+    public EmbedBuilder(Embed embed) {
+        this.title = embed.getTitle().get();
+        this.description = embed.getDescription().get();
+        this.url = embed.getUrl().get();
+        this.timestamp = embed.getTimeStamp().get().toString();
+        this.color = embed.getColour().get();
+        this.footer = embed.getFooter().get();
+        this.image = embed.getImage().get();
+        this.thumbnail = embed.getThumbnail().get();
+        this.video = embed.getVideo().get();
+        this.provider = embed.getProvider().get();
+        this.author = embed.getAuthor().get();
+        for(Fields field : embed.getFields().get()) {
+            this.fields.add(field);
+        }
+    }
+
+    public EmbedBuilder setTitle(@NotNull String title) {
+        this.title = title;
+        return this;
+    }
+
+    public EmbedBuilder setDescription(@NotNull String description) {
+        this.description = description;
+        return this;
+    }
 
     public @NotNull Embed build() {
         // TODO: implement
-        return null;
+        return new EmbedReg(title, description, url,  timestamp, color, );
     }
 
 
