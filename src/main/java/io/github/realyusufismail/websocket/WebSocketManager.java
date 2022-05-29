@@ -38,7 +38,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     // The gateway intents
     private final int intent;
     // The core class of the wrapper,
-    private final YDL ydl;
+    private final YDLReg ydl;
     // Create a WebSocketFactory instance.
     WebSocket ws;
     @NotNull
@@ -55,8 +55,12 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     // The activity of the bot e.g. playing, streaming, listening, watching etc.
     private final Activity activity;
 
+    // The inner d key of the invalid session event is a boolean that indicates whether the session
+    // may be resumable. See Connecting and Resuming for more information.
+    private final Boolean isResumable;
 
-    public WebSocketManager(YDL ydl, String token, Integer intent, String status,
+
+    public WebSocketManager(YDLReg ydl, String token, Integer intent, String status,
             int largeThreshold, boolean compress, Activity activity)
             throws IOException, WebSocketException {
         this.ydl = ydl;
@@ -66,10 +70,11 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         this.largeThreshold = largeThreshold;
         this.compress = compress;
         this.activity = activity;
+        this.isResumable = ydl.isResumable();
         connect();
     }
 
-    public WebSocketManager(YDL ydl, String token, @NotNull GateWayIntent intent, String status,
+    public WebSocketManager(YDLReg ydl, String token, @NotNull GateWayIntent intent, String status,
             int largeThreshold, boolean compress, Activity activity)
             throws IOException, WebSocketException {
         this(ydl, token, intent.getValue(), status, largeThreshold, compress, activity);

@@ -53,6 +53,8 @@ public class YDLReg implements YDL {
 
     private List<UnavailableGuild> unavailableGuilds;
 
+    private Boolean resumable;
+
     public YDLReg(OkHttpClient client) {
         rest = new RestApiHandler(this);
         mapper = new ObjectMapper();
@@ -204,5 +206,17 @@ public class YDLReg implements YDL {
 
     public OkHttpClient getHttpClient() {
         return client;
+    }
+
+    public Logger getLogger() {
+        return logger;
+    }
+
+    public Boolean isResumable() {
+        return resumable;
+    }
+
+    public void setResumable(Boolean resumable) {
+        this.resumable = resumable;
     }
 }

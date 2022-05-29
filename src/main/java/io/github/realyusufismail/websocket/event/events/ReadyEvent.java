@@ -1,16 +1,17 @@
-package io.github.realyusufismail.websocket.event.event;
+package io.github.realyusufismail.websocket.event.events;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.websocket.event.Event;
 import yusufsdiscordbot.ydl.YDL;
+import yusufsdiscordbot.ydl.entities.SelfUser;
 import yusufsdiscordbot.ydl.entities.UnavailableGuild;
+import yusufsdiscordbot.ydlreg.entities.SelfUserReg;
 import yusufsdiscordbot.ydlreg.entities.UnavailableGuildReg;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class ReadyEvent extends Event {
 
@@ -32,7 +33,9 @@ public class ReadyEvent extends Event {
             }
         }
         ydl.setUnavailableGuilds(unavailableGuilds);
+
+        SelfUser selfUser =
+                new SelfUserReg(json.get("user"), json.get("user").get("id").asLong(), ydl);
+        ydl.setSelfUser(selfUser);
     }
-
-
 }

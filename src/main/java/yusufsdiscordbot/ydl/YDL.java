@@ -96,5 +96,4 @@ public interface YDL {
     boolean needsToAutoReconnect();
 
     SelfUser getSelfUser();
-
 }

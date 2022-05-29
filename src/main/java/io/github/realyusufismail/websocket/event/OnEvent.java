@@ -1,7 +1,10 @@
 package io.github.realyusufismail.websocket.event;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.github.realyusufismail.websocket.event.event.ReadyEvent;
+import io.github.realyusufismail.websocket.event.events.ApplicationCommandPermissionsUpdateEvent;
+import io.github.realyusufismail.websocket.event.events.ChannelCreateEvent;
+import io.github.realyusufismail.websocket.event.events.InvalidSessionEvent;
+import io.github.realyusufismail.websocket.event.events.ReadyEvent;
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydlreg.YDLReg;
 
@@ -26,6 +29,12 @@ public class OnEvent {
     public void fire(@NotNull EventNames event, JsonNode json) {
         switch (event) {
             case READY -> new ReadyEvent(json, ydl).start();
+            case RESUMED -> ydl.getLogger().info("Resumed");
+            case RECONNECT -> ydl.getLogger().info("Reconnected");
+            case INVALID_SESSION -> new InvalidSessionEvent(json, ydl).start();
+            case APPLICATION_COMMAND_PERMISSIONS_UPDATE -> new ApplicationCommandPermissionsUpdateEvent(
+                    json, ydl).start();
+            case CHANNEL_CREATE -> new ChannelCreateEvent(json, ydl).start();
         }
     }
 }
