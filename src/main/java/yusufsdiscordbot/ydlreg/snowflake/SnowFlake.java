@@ -15,42 +15,36 @@
  * This is free software, and you are welcome to redistribute it under certain conditions
  */
 
-package yusufsdiscordbot.ydl.entities.guild;
-
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+package yusufsdiscordbot.ydlreg.snowflake;
 
 import org.jetbrains.annotations.NotNull;
-import yusufsdiscordbot.ydl.entities.GenericEntity;
-import yusufsdiscordbot.ydl.entities.User;
-import yusufsdiscordbot.ydl.perm.Permission;
 
-import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.Optional;
+public interface SnowFlake {
+    static @NotNull SnowFlake of(@NotNull String string) {
+        return new SnowFlakeReg(Long.parseUnsignedLong(string));
+    }
 
-public interface Member extends SnowFlake, GenericEntity {
-    Optional<User> getUser();
+    static @NotNull SnowFlake of(@NotNull Long id) {
+        return new SnowFlakeReg(id);
+    }
 
-    Optional<String> getNickname();
+    /**
+     * @return The core string of this api.
+     */
+    default String getId() {
+        return Long.toUnsignedString(getIdLong());
+    }
 
-    Optional<String> getAvatar();
+    /**
+     * @return The core long of this api.
+     */
+    Long getIdLong();}
 
-    @NotNull
-    List<Role> getRoles();
 
-    ZonedDateTime getJoinedAt();
+record SnowFlakeReg(long id) implements SnowFlake {
 
-    Optional<ZonedDateTime> getPremiumSince();
-
-    Boolean isDeafened();
-
-    Boolean isMuted();
-
-    Optional<Boolean> isPending();
-
-    String getPermissions();
-
-    Optional<ZonedDateTime> getTimeoutEnd();
-
-    Boolean memberHasPermission(Permission permission);
+    @Override
+    public Long getIdLong() {
+        return id;
+    }
 }

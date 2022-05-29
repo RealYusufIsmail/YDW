@@ -17,7 +17,8 @@
 
 package yusufsdiscordbot.ydl.entities.guild;
 
-import api.ydl.snowflake.SnowFlake;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+
 import yusufsdiscordbot.ydl.entities.Guild;
 
 public interface StageInstance extends SnowFlake {

@@ -21,7 +21,8 @@
 
 package yusufsdiscordbot.ydlreg.application;
 
-import api.ydl.snowflake.SnowFlake;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jetbrains.annotations.Nullable;
 import yusufsdiscordbot.ydl.application.Interaction;

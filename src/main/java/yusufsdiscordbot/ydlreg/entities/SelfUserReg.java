@@ -17,13 +17,13 @@
 
 package yusufsdiscordbot.ydlreg.entities;
 
-import api.ydl.snowflake.SnowFlake;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.YDL;
 import yusufsdiscordbot.ydl.entities.SelfUser;
 import yusufsdiscordbot.ydl.entities.User;
 import yusufsdiscordbot.ydlreg.YDLReg;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 import java.util.Optional;
 import java.util.function.Consumer;

@@ -17,7 +17,8 @@
 
 package yusufsdiscordbot.ydl.application.commands.option;
 
-import api.ydl.snowflake.SnowFlake;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+
 import yusufsdiscordbot.ydl.entities.Guild;
 
 import java.util.List;

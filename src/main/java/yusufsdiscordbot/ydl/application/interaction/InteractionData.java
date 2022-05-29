@@ -17,7 +17,8 @@
 
 package yusufsdiscordbot.ydl.application.interaction;
 
-import api.ydl.snowflake.SnowFlake;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+
 import yusufsdiscordbot.ydl.application.commands.option.OptionTypeEnum;
 import yusufsdiscordbot.ydl.application.interaction.resolved.ResolvedData;
 

@@ -17,7 +17,8 @@
 
 package yusufsdiscordbot.ydl.entities.guild.message;
 
-import api.ydl.snowflake.SnowFlake;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+
 
 public interface MessageReference extends SnowFlake {
     SnowFlake getMessageId();

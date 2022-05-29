@@ -30,6 +30,7 @@ import yusufsdiscordbot.ydl.Activity;
 import yusufsdiscordbot.ydl.YDL;
 import yusufsdiscordbot.ydl.entities.Guild;
 import yusufsdiscordbot.ydl.entities.SelfUser;
+import yusufsdiscordbot.ydl.entities.UnavailableGuild;
 import yusufsdiscordbot.ydl.entities.User;
 import yusufsdiscordbot.ydl.entities.guild.Channel;
 import yusufsdiscordbot.ydlreg.rest.RestApiHandler;
@@ -50,8 +51,9 @@ public class YDLReg implements YDL {
     private long sequenceNumber;
     private long gatewayPing;
     private SelfUser selfUser;
-
     private final OkHttpClient client;
+
+    private List<UnavailableGuild> unavailableGuilds;
 
     public YDLReg(OkHttpClient client) {
         rest = new RestApiHandler(this);
@@ -65,8 +67,12 @@ public class YDLReg implements YDL {
     }
 
     @Override
-    public Set<String> getUnavailableGuilds() {
-        return null;
+    public List<UnavailableGuild> getUnavailableGuilds() {
+        return unavailableGuilds;
+    }
+
+    public void setUnavailableGuilds(List<UnavailableGuild> unavailableGuilds) {
+        this.unavailableGuilds = unavailableGuilds;
     }
 
     @Override

@@ -19,7 +19,8 @@ package yusufsdiscordbot.ydl.application.team;
 
 import api.ydl.client.event.GeneralEvent;
 import api.ydl.client.object.MembershipState;
-import api.ydl.snowflake.SnowFlake;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.entities.User;
 

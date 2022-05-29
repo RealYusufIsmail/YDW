@@ -17,7 +17,8 @@
 
 package yusufsdiscordbot.ydl.entities.emoji;
 
-import api.ydl.snowflake.SnowFlake;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.entities.GenericEntity;
 import yusufsdiscordbot.ydl.entities.User;

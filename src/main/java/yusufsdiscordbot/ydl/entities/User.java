@@ -17,7 +17,8 @@
 
 package yusufsdiscordbot.ydl.entities;
 
-import api.ydl.snowflake.SnowFlake;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydlreg.entities.user.PremiumTypes;
 import yusufsdiscordbot.ydlreg.entities.user.UserFlags;

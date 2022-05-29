@@ -19,7 +19,8 @@ package yusufsdiscordbot.ydl.entities;
 
 
 import api.ydl.CheckReturnValue;
-import api.ydl.snowflake.SnowFlake;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import yusufsdiscordbot.ydl.entities.emoji.Emoji;

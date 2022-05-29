@@ -18,7 +18,8 @@
 package yusufsdiscordbot.ydl.interaction;
 
 import api.ydl.client.event.GeneralEvent;
-import api.ydl.snowflake.SnowFlake;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+
 import yusufsdiscordbot.ydl.entities.User;
 import yusufsdiscordbot.ydl.entities.guild.Member;
 import yusufsdiscordbot.ydlreg.application.interaction.InteractionType;

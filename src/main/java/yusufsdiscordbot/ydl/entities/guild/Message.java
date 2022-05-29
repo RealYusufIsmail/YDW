@@ -17,7 +17,8 @@
 
 package yusufsdiscordbot.ydl.entities.guild;
 
-import api.ydl.snowflake.SnowFlake;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+
 import yusufsdiscordbot.ydl.application.Application;
 import yusufsdiscordbot.ydl.entities.Attachment;
 import yusufsdiscordbot.ydl.entities.GenericEntity;

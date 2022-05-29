@@ -17,7 +17,8 @@
 
 package yusufsdiscordbot.ydl.application.interaction.resolved;
 
-import api.ydl.snowflake.SnowFlake;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+
 import org.jetbrains.annotations.Nullable;
 import yusufsdiscordbot.ydl.entities.Attachment;
 import yusufsdiscordbot.ydl.entities.User;

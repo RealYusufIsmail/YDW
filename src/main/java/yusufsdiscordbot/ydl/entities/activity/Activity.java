@@ -17,7 +17,8 @@
 
 package yusufsdiscordbot.ydl.entities.activity;
 
-import api.ydl.snowflake.SnowFlake;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.application.interaction.InteractionData;
 import yusufsdiscordbot.ydl.entities.GenericEntity;

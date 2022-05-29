@@ -18,7 +18,8 @@
 package yusufsdiscordbot.ydlreg.application.team;
 
 import api.ydl.client.object.MembershipState;
-import api.ydl.snowflake.SnowFlake;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

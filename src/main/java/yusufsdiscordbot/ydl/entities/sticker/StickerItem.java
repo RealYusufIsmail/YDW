@@ -18,7 +18,8 @@
 package yusufsdiscordbot.ydl.entities.sticker;
 
 import api.ydl.client.event.GeneralEvent;
-import api.ydl.snowflake.SnowFlake;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+
 import yusufsdiscordbot.ydlreg.entities.sticker.StickerFormatType;
 
 public interface StickerItem extends SnowFlake, GeneralEvent {

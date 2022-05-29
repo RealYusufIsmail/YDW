@@ -17,7 +17,8 @@
 
 package yusufsdiscordbot.ydl.application;
 
-import api.ydl.snowflake.SnowFlake;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+
 import yusufsdiscordbot.ydl.application.flags.ApplicationFlag;
 import yusufsdiscordbot.ydl.application.install.InstallParams;
 import yusufsdiscordbot.ydl.application.team.Team;

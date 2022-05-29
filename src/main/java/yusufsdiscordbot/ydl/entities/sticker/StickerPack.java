@@ -17,7 +17,8 @@
 
 package yusufsdiscordbot.ydl.entities.sticker;
 
-import api.ydl.snowflake.SnowFlake;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+
 
 import java.util.List;
 

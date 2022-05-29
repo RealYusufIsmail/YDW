@@ -18,7 +18,8 @@
 package yusufsdiscordbot.ydlreg.entities;
 
 
-import api.ydl.snowflake.SnowFlake;
+import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.jetbrains.annotations.NotNull;

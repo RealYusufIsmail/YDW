@@ -66,7 +66,7 @@ public enum Flags {
         this.value = value;
     }
 
-    public static Flags @NotNull [] getFlags(int value) {
+    public static Flags[] getFlags(int value) {
         Flags[] flags = new Flags[0];
         for (Flags flag : values()) {
             if ((value & flag.getValue()) == flag.getValue()) {
@@ -85,14 +85,14 @@ public enum Flags {
         return null;
     }
 
-    private static Flags @NotNull [] add(Flags @NotNull [] flags, Flags flag) {
+    private static Flags[] add(Flags[] flags, Flags flag) {
         Flags[] newFlags = new Flags[flags.length + 1];
         System.arraycopy(flags, 0, newFlags, 0, flags.length);
         newFlags[flags.length] = flag;
         return newFlags;
     }
 
-    public static int getValue(Flags @NotNull [] flags) {
+    public static int getValue(Flags[] flags) {
         int value = 0;
         for (Flags flag : flags) {
             value |= flag.getValue();
@@ -101,7 +101,7 @@ public enum Flags {
     }
 
     @Contract(pure = true)
-    public static boolean contains(Flags @NotNull [] flags, Flags flag) {
+    public static boolean contains(Flags[] flags, Flags flag) {
         for (Flags f : flags) {
             if (f == flag) {
                 return true;
