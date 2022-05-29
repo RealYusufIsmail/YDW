@@ -19,11 +19,17 @@ package yusufsdiscordbot.ydlreg.entities.embed.objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import yusufsdiscordbot.ydl.entities.embed.objects.Video;
 
 public class VideoReg extends SameEmbedStructureReg implements Video {
 
     public VideoReg(@NotNull JsonNode embed) {
         super(embed);
+    }
+
+    public VideoReg(@Nullable String url, @Nullable String proxyUrl, @Nullable Integer height,
+            @Nullable Integer width) {
+        super(url, proxyUrl, height, width);
     }
 }

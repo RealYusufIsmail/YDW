@@ -19,11 +19,18 @@ package yusufsdiscordbot.ydlreg.entities.embed.objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import yusufsdiscordbot.ydl.entities.embed.objects.Image;
 
 public class ImageReg extends SameEmbedStructureReg implements Image {
 
+
     public ImageReg(@NotNull JsonNode embed) {
         super(embed);
+    }
+
+    public ImageReg(@Nullable String url, @Nullable String proxyUrl, @Nullable Integer height,
+            @Nullable Integer width) {
+        super(url, proxyUrl, height, width);
     }
 }

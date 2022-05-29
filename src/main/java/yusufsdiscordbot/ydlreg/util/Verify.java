@@ -17,10 +17,9 @@
 
 package yusufsdiscordbot.ydlreg.util;
 
-import api.ydl.exception.InvalidTokenException;
-import api.ydl.exception.VerifyException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import yusufsdiscordbot.ydlreg.exception.VerifyException;
 
 import java.util.regex.Pattern;
 
@@ -28,12 +27,6 @@ import java.util.regex.Pattern;
 public class Verify {
     private Verify() {
         throw new IllegalStateException("Utility class");
-    }
-
-    public static void checkIfNull(@Nullable Object o) {
-        if (o == null) {
-            throw new VerifyException("The provided object is null!");
-        }
     }
 
     public static void checkIfNull(@Nullable Object o, String objectName) {
@@ -62,12 +55,6 @@ public class Verify {
         }
     }
 
-    public static void checkAmount(long amount, long maxAmount) {
-        if (amount > maxAmount) {
-            throw new VerifyException("Amount is too high! The maximum amount is " + maxAmount);
-        }
-    }
-
     public static void checkDoubleAmount(double amount, double minAmount, double maxAmount) {
         if (amount < minAmount || amount > maxAmount) {
             throw new VerifyException("Amount is out of range! The minimum amount is " + minAmount
@@ -78,12 +65,6 @@ public class Verify {
     public static void verify(boolean b, String s) {
         if (!b) {
             throw new VerifyException(s);
-        }
-    }
-
-    public static void verifyToken(boolean b, String s) throws InvalidTokenException {
-        if (!b) {
-            throw new InvalidTokenException(s);
         }
     }
 

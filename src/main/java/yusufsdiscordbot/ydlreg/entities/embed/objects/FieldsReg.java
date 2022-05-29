@@ -35,6 +35,12 @@ public class FieldsReg implements Fields {
         this.inline = fields.hasNonNull("inline") ? fields.get("inline").asBoolean() : null;
     }
 
+    public FieldsReg(@NotNull String name, @NotNull String value, Boolean inline) {
+        this.name = name;
+        this.value = value;
+        this.inline = inline;
+    }
+
     @Override
     public Optional<String> getName() {
         return Optional.ofNullable(name);

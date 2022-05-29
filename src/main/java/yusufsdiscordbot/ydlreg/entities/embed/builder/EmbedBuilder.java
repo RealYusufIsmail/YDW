@@ -17,18 +17,21 @@
 
 package yusufsdiscordbot.ydlreg.entities.embed.builder;
 
+import com.google.common.base.Objects;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import yusufsdiscordbot.ydl.entities.embed.Embed;
-import yusufsdiscordbot.ydl.entities.embed.objects.*;
 import yusufsdiscordbot.ydl.entities.embed.objects.Image;
+import yusufsdiscordbot.ydl.entities.embed.objects.*;
 import yusufsdiscordbot.ydlreg.entities.embed.EmbedReg;
+import yusufsdiscordbot.ydlreg.entities.embed.objects.*;
+import yusufsdiscordbot.ydlreg.util.Verify;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 
-// TODO: requires full rewrite.
 public class EmbedBuilder {
     /**
      * Tile max length is 256 characters.
@@ -59,24 +62,24 @@ public class EmbedBuilder {
      */
     private static final int MAX_AUTHOR_NAME_LENGTH = 256;
 
-    private final String title;
-    private final String description;
-    private final String url;
-    private final String timestamp;
-    private final Color color;
-    private final Footer footer;
-    private final Image image;
-    private final Thumbnail thumbnail;
-    private final Video video;
-    private final Provider provider;
-    private final Author author;
-    private final List<Fields> fields = new ArrayList<>();
+    private String title;
+    private String description;
+    private String url;
+    private String timestamp;
+    private Color color;
+    private Footer footer;
+    private Image image;
+    private Thumbnail thumbnail;
+    private Video video;
+    private Provider provider;
+    private Author author;
+    private List<Fields> fields = new ArrayList<>();
 
     public EmbedBuilder() {
         this(null);
     }
 
-    public EmbedBuilder(Embed embed) {
+    public EmbedBuilder(@Nullable Embed embed) {
         this.title = embed.getTitle().get();
         this.description = embed.getDescription().get();
         this.url = embed.getUrl().get();
@@ -88,26 +91,134 @@ public class EmbedBuilder {
         this.video = embed.getVideo().get();
         this.provider = embed.getProvider().get();
         this.author = embed.getAuthor().get();
-        for(Fields field : embed.getFields().get()) {
-            this.fields.add(field);
-        }
+        this.fields.addAll(embed.getFields());
     }
 
     public EmbedBuilder setTitle(@NotNull String title) {
+        Verify.verify(title.length() <= MAX_TITLE_LENGTH, "Title is too long");
         this.title = title;
         return this;
     }
 
     public EmbedBuilder setDescription(@NotNull String description) {
+        Verify.verify(description.length() <= MAX_DESCRIPTION_LENGTH, "Description is too long");
         this.description = description;
         return this;
     }
 
+    public EmbedBuilder setUrl(@NotNull String url) {
+        this.url = url;
+        return this;
+    }
+
+    public EmbedBuilder setTimestamp(@NotNull String timestamp) {
+        this.timestamp = timestamp;
+        return this;
+    }
+
+    public EmbedBuilder setColor(@NotNull Color color) {
+        this.color = color;
+        return this;
+    }
+
+    public EmbedBuilder setFooter(@NotNull String text, String iconUrl) {
+        Verify.verify(text.length() <= MAX_FOOTER_LENGTH, "Footer text is too long");
+        this.footer = new FooterReg(text, iconUrl, null);
+        return this;
+    }
+
+    public EmbedBuilder setImage(String url) {
+        this.image = new ImageReg(url, null, null, null);
+        return this;
+    }
+
+    public EmbedBuilder setThumbnail(String url) {
+        this.thumbnail = new ThumbnailReg(url, null, null, null);
+        return this;
+    }
+
+    public EmbedBuilder setVideo(String url) {
+        this.video = new VideoReg(url, null, null, null);
+        return this;
+    }
+
+    public EmbedBuilder setProvider(String name, String url) {
+        this.provider = new ProviderReg(name, url);
+        return this;
+    }
+
+    public EmbedBuilder setAuthor(@NotNull String name, String url, String iconUrl) {
+        Verify.verify(name.length() <= MAX_AUTHOR_NAME_LENGTH, "Author name is too long");
+        this.author = new AuthorReg(name, url, iconUrl, null);
+        return this;
+    }
+
+    public EmbedBuilder addField(@NotNull String name, @NotNull String value, boolean inline) {
+        Verify.verify(name.length() <= MAX_FIELD_NAME_LENGTH, "Field name is too long");
+        Verify.verify(value.length() <= MAX_FIELD_VALUE_LENGTH, "Field value is too long");
+        if (this.fields.size() >= MAX_FIELDS) {
+            throw new IllegalArgumentException("Maximum fields per embed is 25.");
+        }
+        this.fields.add(new FieldsReg(name, value, inline));
+        return this;
+    }
+
+    public EmbedBuilder addField(String name, String value) {
+        return addField(name, value, false);
+    }
+
+    public EmbedBuilder addFields(@NotNull List<Fields> fields) {
+        for (Fields field : fields) {
+            if (field.getName().isPresent() && field.getValue().isPresent()) {
+                addField(field.getName().get(), field.getValue().get());
+            } else {
+                throw new IllegalArgumentException("Fields must have a name and value.");
+            }
+        }
+        return this;
+    }
+
+    public boolean isEmpty() {
+        return title == null && description == null && url == null && timestamp == null
+                && color == null && footer == null && image == null && thumbnail == null
+                && video == null && provider == null && author == null && fields.isEmpty();
+    }
+
     public @NotNull Embed build() {
-        // TODO: implement
-        return new EmbedReg(title, description, url,  timestamp, color, );
+        if (isEmpty())
+            throw new IllegalArgumentException("Embed cannot be empty.");
+        return new EmbedReg(title, description, url, timestamp, color, footer, image, thumbnail,
+                video, provider, author, fields);
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof EmbedBuilder))
+            return false;
+        EmbedBuilder that = (EmbedBuilder) o;
+        return Objects.equal(title, that.title) && Objects.equal(description, that.description)
+                && Objects.equal(url, that.url) && Objects.equal(timestamp, that.timestamp)
+                && Objects.equal(color, that.color) && Objects.equal(footer, that.footer)
+                && Objects.equal(image, that.image) && Objects.equal(thumbnail, that.thumbnail)
+                && Objects.equal(video, that.video) && Objects.equal(provider, that.provider)
+                && Objects.equal(author, that.author) && Objects.equal(fields, that.fields);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(title, description, url, timestamp, color, footer, image, thumbnail,
+                video, provider, author, fields);
+    }
+
+    @Override
+    public String toString() {
+        return "EmbedBuilder{" + "title='" + title + '\'' + ", description='" + description + '\''
+                + ", url='" + url + '\'' + ", timestamp='" + timestamp + '\'' + ", color=" + color
+                + ", footer=" + footer + ", image=" + image + ", thumbnail=" + thumbnail
+                + ", video=" + video + ", provider=" + provider + ", author=" + author + ", fields="
+                + fields + '}';
+    }
 }

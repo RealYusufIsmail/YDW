@@ -19,6 +19,7 @@ package yusufsdiscordbot.ydlreg.entities.embed.objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import yusufsdiscordbot.ydl.entities.embed.objects.Author;
 
 import java.util.Optional;
@@ -39,6 +40,13 @@ public class AuthorReg implements Author {
                 author.hasNonNull("proxy_icon_url") ? author.get("proxy_icon_url").asText() : null;
     }
 
+    public AuthorReg(@Nullable String name, @Nullable String url, String iconUrl,
+            String proxyIconUrl) {
+        this.name = name;
+        this.url = url;
+        this.iconUrl = iconUrl;
+        this.proxyIconUrl = proxyIconUrl;
+    }
 
     @Override
     public Optional<String> getName() {

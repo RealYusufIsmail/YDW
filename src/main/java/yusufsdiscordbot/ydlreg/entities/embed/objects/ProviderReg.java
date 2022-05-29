@@ -18,6 +18,7 @@
 package yusufsdiscordbot.ydlreg.entities.embed.objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.entities.embed.objects.Provider;
 
 import java.util.Optional;
@@ -27,12 +28,16 @@ public class ProviderReg implements Provider {
     private final String name;
     private final String url;
 
-    public ProviderReg(JsonNode provider) {
+    public ProviderReg(@NotNull JsonNode provider) {
 
         this.name = provider.hasNonNull("name") ? provider.get("name").asText() : null;
         this.url = provider.hasNonNull("url") ? provider.get("url").asText() : null;
     }
 
+    public ProviderReg(@NotNull String name, @NotNull String url) {
+        this.name = name;
+        this.url = url;
+    }
 
     @Override
     public Optional<String> name() {

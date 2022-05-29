@@ -36,6 +36,12 @@ public class FooterReg implements Footer {
                 footer.hasNonNull("proxy_icon_url") ? footer.get("proxy_icon_url").asText() : null;
     }
 
+    public FooterReg(String text, String iconUrl, String proxyIconUrl) {
+        this.text = text;
+        this.iconUrl = iconUrl;
+        this.proxyIconUrl = proxyIconUrl;
+    }
+
 
     @Override
     public Optional<String> getText() {
