@@ -3,7 +3,7 @@ plugins {
     id "com.diffplug.spotless" version "6.3.0"
 }
 
-group 'io.github.realyusufismail'
+group 'io.github.realyusufismail.ydw'
 version '1.0-SNAPSHOT'
 
 repositories {
