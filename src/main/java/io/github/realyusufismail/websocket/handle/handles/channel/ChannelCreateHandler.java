@@ -2,9 +2,9 @@ package io.github.realyusufismail.websocket.handle.handles.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.websocket.handle.Handle;
-import yusufsdiscordbot.ydl.YDL;
-import yusufsdiscordbot.ydl.entities.guild.Channel;
-import yusufsdiscordbot.ydlreg.entities.guild.ChannelReg;
+import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
+import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.Channel;
+import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.guild.ChannelReg;
 
 public class ChannelCreateHandler extends Handle {
     public ChannelCreateHandler(JsonNode json, YDL ydl) {

@@ -1,7 +1,7 @@
 package io.github.realyusufismail.websocket;
 
-import yusufsdiscordbot.ydl.YDL;
-import yusufsdiscordbot.ydl.YDLConnector;
+import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
+import io.github.realyusufismail.yusufsdiscordbot.ydl.YDLConnector;
 
 public class WebSocketTest {
     public static void main(String[] args) throws Exception {

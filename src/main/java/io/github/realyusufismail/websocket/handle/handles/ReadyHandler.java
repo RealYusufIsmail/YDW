@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.websocket.handle.Handle;
-import yusufsdiscordbot.ydl.YDL;
-import yusufsdiscordbot.ydl.entities.SelfUser;
-import yusufsdiscordbot.ydl.entities.UnavailableGuild;
-import yusufsdiscordbot.ydlreg.entities.SelfUserReg;
-import yusufsdiscordbot.ydlreg.entities.UnavailableGuildReg;
+import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
+import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.SelfUser;
+import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.UnavailableGuild;
+import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.SelfUserReg;
+import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.UnavailableGuildReg;
 
 import java.util.ArrayList;
 import java.util.List;

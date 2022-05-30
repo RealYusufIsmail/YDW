@@ -1,6 +1,6 @@
 package io.github.realyusufismail.websocket.event;
 
-import yusufsdiscordbot.ydl.YDL;
+import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 
 public abstract class Event {
     private final YDL ydl;

@@ -1,8 +1,7 @@
 package io.github.realyusufismail.websocket.event.events;
 
 import io.github.realyusufismail.websocket.event.Event;
-import yusufsdiscordbot.ydl.YDL;
-import yusufsdiscordbot.ydl.entities.UnavailableGuild;
+import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 
 public class ReadyEvent extends Event {
     public ReadyEvent(YDL ydl) {

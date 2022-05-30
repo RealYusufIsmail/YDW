@@ -11,7 +11,7 @@ import io.github.realyusufismail.websocket.handle.handles.thread.ThreadCreateHan
 import io.github.realyusufismail.websocket.handle.handles.thread.ThreadDeleteHandler;
 import io.github.realyusufismail.websocket.handle.handles.thread.ThreadUpdateHandler;
 import org.jetbrains.annotations.NotNull;
-import yusufsdiscordbot.ydlreg.YDLReg;
+import io.github.realyusufismail.yusufsdiscordbot.ydlreg.YDLReg;
 
 import java.util.Optional;
 

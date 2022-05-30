@@ -1,8 +1,8 @@
 package io.github.realyusufismail.websocket.handle;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import yusufsdiscordbot.ydl.YDL;
-import yusufsdiscordbot.ydlreg.YDLReg;
+import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
+import io.github.realyusufismail.yusufsdiscordbot.ydlreg.YDLReg;
 
 public abstract class Handle {
     protected final JsonNode json;
