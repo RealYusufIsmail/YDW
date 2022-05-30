@@ -20,9 +20,11 @@ package io.github.realyusufismail.yusufsdiscordbot.ydlreg.application.commands.o
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.application.commands.option.CommandOptionChoice;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class CommandOptionChoiceReg implements CommandOptionChoice {
     private final String name;
+    @Nullable
     private final Object value;
 
     public CommandOptionChoiceReg(@NotNull JsonNode node) {

@@ -40,7 +40,7 @@ public interface YDL {
 
     Guild getGuild(long guildId);
 
-    default Guild getGuild(String guildId) {
+    default Guild getGuild(@NotNull String guildId) {
         return getGuild(Long.parseLong(guildId));
     }
 
@@ -48,20 +48,21 @@ public interface YDL {
 
     boolean isSpecifiedGuildAvailable(long guildId);
 
-    default boolean isSpecifiedGuildAvailable(String guildId) {
+    default boolean isSpecifiedGuildAvailable(@NotNull String guildId) {
         return isSpecifiedGuildAvailable(Long.parseLong(guildId));
     }
 
     @NotNull
     User getUser(long userId);
 
-    default User getUser(String userId) {
+    @NotNull
+    default User getUser(@NotNull String userId) {
         return getUser(Long.parseLong(userId));
     }
 
     Channel getChannel(long channelId);
 
-    default Channel getChannel(String channelId) {
+    default Channel getChannel(@NotNull String channelId) {
         return getChannel(Long.parseLong(channelId));
     }
 

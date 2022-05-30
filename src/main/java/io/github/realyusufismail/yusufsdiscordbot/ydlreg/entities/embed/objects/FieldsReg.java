@@ -41,16 +41,19 @@ public class FieldsReg implements Fields {
         this.inline = inline;
     }
 
+    @NotNull
     @Override
     public Optional<String> getName() {
         return Optional.ofNullable(name);
     }
 
+    @NotNull
     @Override
     public Optional<String> getValue() {
         return Optional.ofNullable(value);
     }
 
+    @NotNull
     @Override
     public Optional<Boolean> isInline() {
         return Optional.ofNullable(inline);

@@ -41,11 +41,13 @@ public class GuildPreviewReg implements GuildPreview {
     private final List<Emoji> emojis = new ArrayList<>();
     private final List<Sticker> stickers = new ArrayList<>();
     private final EnumSet<GuildFeatures> features = EnumSet.noneOf(GuildFeatures.class);
+    @NotNull
     private final Integer approximateMemberCount;
+    @NotNull
     private final Integer approximatePresenceCount;
     private final String description;
 
-    public GuildPreviewReg(@NotNull JsonNode preview, long id, YDL ydl) {
+    public GuildPreviewReg(@NotNull JsonNode preview, long id, @NotNull YDL ydl) {
         this.ydl = ydl;
         this.id = id;
 
@@ -77,6 +79,7 @@ public class GuildPreviewReg implements GuildPreview {
         }
     }
 
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;
@@ -107,11 +110,13 @@ public class GuildPreviewReg implements GuildPreview {
         return discoverySplash;
     }
 
+    @NotNull
     @Override
     public List<Emoji> getEmojis() {
         return emojis;
     }
 
+    @NotNull
     @Override
     public EnumSet<GuildFeatures> getFeatures() {
         return features;
@@ -132,6 +137,7 @@ public class GuildPreviewReg implements GuildPreview {
         return description;
     }
 
+    @NotNull
     @Override
     public List<Sticker> getStickers() {
         return stickers;

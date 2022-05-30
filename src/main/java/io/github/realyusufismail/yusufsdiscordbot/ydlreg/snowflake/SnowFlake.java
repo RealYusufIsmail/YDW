@@ -18,6 +18,7 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface SnowFlake {
     static @NotNull SnowFlake of(@NotNull String string) {
@@ -38,11 +39,13 @@ public interface SnowFlake {
     /**
      * @return The core long of this api.
      */
+    @Nullable
     Long getIdLong();}
 
 
 record SnowFlakeReg(long id) implements SnowFlake {
 
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;

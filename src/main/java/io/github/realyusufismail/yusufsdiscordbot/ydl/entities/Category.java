@@ -22,12 +22,14 @@ import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.channel.New
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.channel.StageChannel;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.channel.TextChannel;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.channel.VoiceChannel;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public interface Category extends Channel {
+    @NotNull
     default List<Channel> getChannels() {
         List<Channel> channels = new ArrayList<>();
         channels.addAll(getTextChannel());
@@ -38,6 +40,7 @@ public interface Category extends Channel {
         return channels;
     }
 
+    @NotNull
     default List<TextChannel> getTextChannel() {
         return Collections.unmodifiableList(getGuild().getTextChannels()
             .stream()
@@ -46,6 +49,7 @@ public interface Category extends Channel {
             .toList());
     }
 
+    @NotNull
     default List<VoiceChannel> getVoiceChannel() {
         return Collections.unmodifiableList(getGuild().getVoiceChannels()
             .stream()
@@ -54,6 +58,7 @@ public interface Category extends Channel {
             .toList());
     }
 
+    @NotNull
     default List<NewsChannel> getNewsChannel() {
         return Collections.unmodifiableList(getGuild().getNewsChannels()
             .stream()
@@ -62,6 +67,7 @@ public interface Category extends Channel {
             .toList());
     }
 
+    @NotNull
     default List<StageChannel> getStageChannel() {
         return Collections.unmodifiableList(getGuild().getStageChannels()
             .stream()

@@ -17,6 +17,8 @@
 
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.message;
 
+import org.jetbrains.annotations.NotNull;
+
 public enum MessageType {
     DEFAULT(0),
     RECIPIENT_ADD(1),
@@ -49,6 +51,7 @@ public enum MessageType {
         this.value = value;
     }
 
+    @NotNull
     public static MessageType fromInt(int i) {
         for (MessageType type : values()) {
             if (type.getValue() == i) {

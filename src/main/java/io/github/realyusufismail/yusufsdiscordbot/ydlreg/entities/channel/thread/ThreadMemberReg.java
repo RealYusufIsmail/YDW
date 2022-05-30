@@ -23,20 +23,23 @@ import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.User;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.channel.threads.ThreadMember;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.Flags;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
 public class ThreadMemberReg implements ThreadMember {
+    @NotNull
     private final Long id;
     private final YDL ydl;
 
+    @Nullable
     private final User user;
     private final ZonedDateTime joinedAt;
     private final Flags[] flags;
 
 
-    public ThreadMemberReg(@NotNull JsonNode json, long id, YDL ydl) {
+    public ThreadMemberReg(@NotNull JsonNode json, long id, @NotNull YDL ydl) {
         this.id = id;
         this.ydl = ydl;
 
@@ -49,6 +52,7 @@ public class ThreadMemberReg implements ThreadMember {
     /**
      * @return The core long of this api.
      */
+    @NotNull
     @Override
     public Long getIdLong() {
         return Optional.ofNullable(id).orElse(0L);

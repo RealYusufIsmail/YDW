@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.application.Interaction;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.application.interaction.InteractionType;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public record InteractionReg(JsonNode interaction) implements Interaction {
@@ -38,6 +39,7 @@ public record InteractionReg(JsonNode interaction) implements Interaction {
         return null;
     }
 
+    @NotNull
     @Override
     public Long getIdLong() {
         return 0;

@@ -20,13 +20,14 @@ package io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.callers;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.YDLReg;
 import okhttp3.OkHttpClient;
+import org.jetbrains.annotations.NotNull;
 
 public class SlashCommandCaller {
     private final YDLReg ydl;
 
     private final OkHttpClient client;
 
-    public SlashCommandCaller(YDL ydl) {
+    public SlashCommandCaller(@NotNull YDL ydl) {
         this.ydl = (YDLReg) ydl;
         this.client = ((YDLReg) ydl).getHttpClient();
     }

@@ -33,11 +33,14 @@ public class StickerPackReg implements StickerPack {
     private final List<Sticker> stickers = new ArrayList<>();
     private final String name;
     private final String description;
+    @NotNull
     private final Long skuId;
+    @NotNull
     private final Long coverStickerId;
+    @NotNull
     private final Long bannerAssetId;
 
-    public StickerPackReg(@NotNull JsonNode sticker, YDL ydl, long id) {
+    public StickerPackReg(@NotNull JsonNode sticker, @NotNull YDL ydl, long id) {
         this.id = id;
 
         this.name = sticker.get("name").asText();
@@ -53,11 +56,13 @@ public class StickerPackReg implements StickerPack {
         }
     }
 
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;
     }
 
+    @NotNull
     @Override
     public List<Sticker> getStickers() {
         return stickers;
@@ -73,16 +78,19 @@ public class StickerPackReg implements StickerPack {
         return description;
     }
 
+    @NotNull
     @Override
     public SnowFlake getSkuId() {
         return SnowFlake.of(skuId);
     }
 
+    @NotNull
     @Override
     public SnowFlake getCoverStickerId() {
         return SnowFlake.of(coverStickerId);
     }
 
+    @NotNull
     @Override
     public SnowFlake getBannerAssetId() {
         return SnowFlake.of(bannerAssetId);

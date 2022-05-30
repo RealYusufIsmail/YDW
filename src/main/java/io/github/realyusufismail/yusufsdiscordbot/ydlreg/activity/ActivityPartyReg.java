@@ -3,6 +3,7 @@ package io.github.realyusufismail.yusufsdiscordbot.ydlreg.activity;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.activity.ActivityParty;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,11 +23,13 @@ public class ActivityPartyReg implements ActivityParty {
         }
     }
 
+    @NotNull
     @Override
     public Map<Integer, Integer> getSize() {
         return size;
     }
 
+    @Nullable
     @Override
     public Long getIdLong() {
         return id != null ? Long.parseLong(id) : null;

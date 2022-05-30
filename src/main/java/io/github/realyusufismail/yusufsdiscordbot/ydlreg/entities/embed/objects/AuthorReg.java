@@ -26,7 +26,9 @@ import java.util.Optional;
 
 public class AuthorReg implements Author {
 
+    @Nullable
     private String name;
+    @Nullable
     private String url;
     private String iconUrl;
     private String proxyIconUrl;
@@ -48,21 +50,25 @@ public class AuthorReg implements Author {
         this.proxyIconUrl = proxyIconUrl;
     }
 
+    @NotNull
     @Override
     public Optional<String> getName() {
         return Optional.ofNullable(name);
     }
 
+    @NotNull
     @Override
     public Optional<String> getUrl() {
         return Optional.ofNullable(url);
     }
 
+    @NotNull
     @Override
     public Optional<String> getIconUrl() {
         return Optional.ofNullable(iconUrl);
     }
 
+    @NotNull
     @Override
     public Optional<String> getProxyIconUrl() {
         return Optional.ofNullable(proxyIconUrl);

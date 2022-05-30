@@ -17,6 +17,8 @@
 
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.message;
 
+import org.jetbrains.annotations.NotNull;
+
 public enum MessageActivityType {
     JOIN(1),
     SPECTATE(2),
@@ -30,6 +32,7 @@ public enum MessageActivityType {
         this.value = value;
     }
 
+    @NotNull
     public static MessageActivityType fromInt(int i) {
         for (MessageActivityType type : values()) {
             if (type.getValue() == i) {

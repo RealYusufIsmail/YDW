@@ -32,12 +32,15 @@ import java.util.List;
 public class TeamMemberReg implements TeamMember {
     private final YDL ydl;
 
+    @NotNull
     private final Integer membershipState;
     private final List<String> permissions = new ArrayList<>();
+    @NotNull
     private final Long teamId;
+    @NotNull
     private final User user;
 
-    public TeamMemberReg(JsonNode team, YDL ydl) {
+    public TeamMemberReg(@NotNull JsonNode team, @NotNull YDL ydl) {
         this.ydl = ydl;
 
         this.membershipState = team.get("membership_state").asInt();
@@ -61,6 +64,7 @@ public class TeamMemberReg implements TeamMember {
         return MembershipState.getMembershipState(membershipState);
     }
 
+    @NotNull
     @Override
     public List<String> getPermissions() {
         return permissions;

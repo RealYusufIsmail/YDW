@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.channel.threads.ThreadMetadata;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.util.Verify;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.ZonedDateTime;
 
@@ -49,6 +50,7 @@ public class ThreadMetadataReg implements ThreadMetadata {
         return isArchived;
     }
 
+    @NotNull
     public ThreadMetadataReg setArchived(boolean archived) {
         isArchived = archived;
         return this;
@@ -59,6 +61,7 @@ public class ThreadMetadataReg implements ThreadMetadata {
         return autoArchiveDuration;
     }
 
+    @NotNull
     public ThreadMetadataReg setAutoArchiveDuration(int autoArchiveDuration) {
         this.autoArchiveDuration = autoArchiveDuration;
         return this;
@@ -74,6 +77,7 @@ public class ThreadMetadataReg implements ThreadMetadata {
         return isLocked;
     }
 
+    @NotNull
     public ThreadMetadataReg setLocked(boolean locked) {
         isLocked = locked;
         return this;
@@ -84,6 +88,7 @@ public class ThreadMetadataReg implements ThreadMetadata {
         return isInvitable;
     }
 
+    @NotNull
     public ThreadMetadataReg setInvitable(boolean invitable) {
         isInvitable = invitable;
         return this;
@@ -95,11 +100,13 @@ public class ThreadMetadataReg implements ThreadMetadata {
         return creationTimestamp;
     }
 
+    @NotNull
     public ThreadMetadataReg setCreationTimestamp(ZonedDateTime creationTimestamp) {
         this.creationTimestamp = creationTimestamp;
         return this;
     }
 
+    @NotNull
     public ThreadMetadataReg setAutoArchiveTimeStamp(ZonedDateTime autoArchiveTimeStamp) {
         this.autoArchiveTimeStamp = autoArchiveTimeStamp;
         return this;

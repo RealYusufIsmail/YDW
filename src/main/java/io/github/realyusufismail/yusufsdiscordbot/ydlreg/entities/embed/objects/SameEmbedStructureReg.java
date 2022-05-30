@@ -9,9 +9,13 @@ import java.util.Optional;
 
 public class SameEmbedStructureReg implements SameEmbedStructure {
 
+    @Nullable
     private String url;
+    @Nullable
     private String proxyUrl;
+    @Nullable
     private Integer height;
+    @Nullable
     private Integer width;
 
     public SameEmbedStructureReg(@NotNull JsonNode embed) {
@@ -29,21 +33,25 @@ public class SameEmbedStructureReg implements SameEmbedStructure {
         this.width = width;
     }
 
+    @NotNull
     @Override
     public Optional<String> getUrl() {
         return Optional.empty();
     }
 
+    @NotNull
     @Override
     public Optional<String> getProxyUrl() {
         return Optional.empty();
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getHeight() {
         return Optional.empty();
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getWidth() {
         return Optional.empty();

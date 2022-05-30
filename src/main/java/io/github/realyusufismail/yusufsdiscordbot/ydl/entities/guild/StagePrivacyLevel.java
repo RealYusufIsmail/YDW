@@ -17,6 +17,8 @@
 
 package io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild;
 
+import org.jetbrains.annotations.NotNull;
+
 public enum StagePrivacyLevel {
     PUBLIC(1),
     GUILD_ONLY(2),
@@ -28,6 +30,7 @@ public enum StagePrivacyLevel {
         this.value = value;
     }
 
+    @NotNull
     public static StagePrivacyLevel fromValue(int value) {
         return switch (value) {
             case 1 -> PUBLIC;

@@ -22,16 +22,20 @@ import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.emoji.Emoji;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.channel.Reaction;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.emoji.EmojiReg;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ReactionReg implements Reaction {
     private final YDL ydl;
 
+    @NotNull
     private final Integer count;
+    @NotNull
     private final Boolean me;
+    @NotNull
     private final Emoji emoji;
 
-    public ReactionReg(JsonNode reaction, YDL ydl) {
+    public ReactionReg(@NotNull JsonNode reaction, @NotNull YDL ydl) {
         this.ydl = ydl;
 
         this.count = reaction.get("count").asInt();

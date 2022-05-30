@@ -20,6 +20,7 @@ package io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.guild;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.Attachment;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -30,6 +31,7 @@ public class AttachmentReg implements Attachment {
     private final String fileName;
     private final String description;
     private final String cotentType;
+    @NotNull
     private final Integer size;
     private final String url;
     private final String proxyUrl;
@@ -38,7 +40,7 @@ public class AttachmentReg implements Attachment {
     private final Boolean emphemeral;
 
 
-    public AttachmentReg(JsonNode attachment, long id, YDL ydl) {
+    public AttachmentReg(@NotNull JsonNode attachment, long id, YDL ydl) {
         this.ydl = ydl;
         this.id = id;
 
@@ -63,6 +65,7 @@ public class AttachmentReg implements Attachment {
     /**
      * @return The core long of this api.
      */
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;
@@ -78,11 +81,13 @@ public class AttachmentReg implements Attachment {
         return fileName;
     }
 
+    @NotNull
     @Override
     public Optional<String> getDescription() {
         return Optional.ofNullable(description);
     }
 
+    @NotNull
     @Override
     public Optional<String> getContentType() {
         return Optional.ofNullable(cotentType);
@@ -103,16 +108,19 @@ public class AttachmentReg implements Attachment {
         return proxyUrl;
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getHeight() {
         return Optional.ofNullable(height);
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getWidth() {
         return Optional.ofNullable(width);
     }
 
+    @NotNull
     @Override
     public Optional<Boolean> isEphemeral() {
         return Optional.ofNullable(emphemeral);

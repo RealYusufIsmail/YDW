@@ -1,5 +1,7 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydl.team;
 
+import org.jetbrains.annotations.NotNull;
+
 public enum MembershipState {
     /**
      * Weather the user has been invited to the team.
@@ -24,6 +26,7 @@ public enum MembershipState {
         return value;
     }
 
+    @NotNull
     public static MembershipState getMembershipState(int value) {
         return switch (value) {
             case 1 -> INVITED;

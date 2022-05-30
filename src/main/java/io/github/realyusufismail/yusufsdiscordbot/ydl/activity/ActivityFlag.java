@@ -1,5 +1,7 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydl.activity;
 
+import org.jetbrains.annotations.NotNull;
+
 public enum ActivityFlag {
     INSTANCE(1 << 0),
     JOIN(1 << 1),
@@ -22,6 +24,7 @@ public enum ActivityFlag {
         return value;
     }
 
+    @NotNull
     public static ActivityFlag getFlag(int value) {
         for (ActivityFlag flag : values()) {
             if (flag.getValue() == value) {

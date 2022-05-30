@@ -23,12 +23,15 @@ import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.emoji.Emoji;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.Channel;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.WelcomeScreenChannel;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class WelcomeScreenChannelReg implements WelcomeScreenChannel {
+    @NotNull
     private final YDL ydl;
 
     private final Channel channel;
     private final String description;
+    @Nullable
     private final Emoji emoji;
 
     public WelcomeScreenChannelReg(@NotNull JsonNode welcome, long guildId, @NotNull YDL ydl) {

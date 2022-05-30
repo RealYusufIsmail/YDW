@@ -18,16 +18,19 @@ public class ActivitySecretReg implements ActivitySecret {
         this.match = secret.hasNonNull("match") ? secret.get("match").asText() : null;
     }
 
+    @NotNull
     @Override
     public Optional<String> getJoin() {
         return Optional.ofNullable(join);
     }
 
+    @NotNull
     @Override
     public Optional<String> getSpectate() {
         return Optional.ofNullable(spectate);
     }
 
+    @NotNull
     @Override
     public Optional<String> getMatch() {
         return Optional.ofNullable(match);

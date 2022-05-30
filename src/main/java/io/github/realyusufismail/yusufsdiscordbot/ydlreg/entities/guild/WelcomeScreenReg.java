@@ -33,7 +33,7 @@ public class WelcomeScreenReg implements WelcomeScreen {
     private final String description;
     private final List<WelcomeScreenChannel> channels = new ArrayList<>();
 
-    public WelcomeScreenReg(@NotNull JsonNode screen, YDL ydl, long guildId) {
+    public WelcomeScreenReg(@NotNull JsonNode screen, @NotNull YDL ydl, long guildId) {
         this.ydl = ydl;
 
         this.description =
@@ -51,11 +51,13 @@ public class WelcomeScreenReg implements WelcomeScreen {
         return ydl;
     }
 
+    @NotNull
     @Override
     public Optional<String> getDescription() {
         return Optional.ofNullable(description);
     }
 
+    @NotNull
     @Override
     public List<WelcomeScreenChannel> getWelcomeChannels() {
         return channels;

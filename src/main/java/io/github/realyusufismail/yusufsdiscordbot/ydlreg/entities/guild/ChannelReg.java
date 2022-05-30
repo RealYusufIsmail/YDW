@@ -35,6 +35,7 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.channel.thread
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.message.MessageFlags;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class ChannelReg implements Channel {
     private final YDL ydl;
 
     // Channel Structure
+    @NotNull
     private final ChannelType type;
     private final Guild guild;
     private final Integer position;
@@ -54,12 +56,14 @@ public class ChannelReg implements Channel {
     private final String name;
     private final String topic;
     private final Boolean nsfw;
+    @Nullable
     private final Message lastMessage;
     private final Integer bitrate;
     private final Integer userLimit;
     private final Integer rateLimitPerUser;
     private final List<User> recipients = new ArrayList<>();
     private final String icon;
+    @Nullable
     private final User owner;
     private final Long applicationId;
     private final Long parentId;
@@ -68,13 +72,17 @@ public class ChannelReg implements Channel {
     private final Integer videoQualityMode;
     private final Integer messageCount;
     private final Integer memberCount;
+    @Nullable
     private final ThreadMetadata threadMetadata;
+    @Nullable
     private final ThreadMember member;
     private final Integer defaultAutoArchiveDuration;
+    @Nullable
     private final Permission[] permissions;
+    @Nullable
     private final MessageFlags[] flags;
 
-    public ChannelReg(JsonNode channelJ, long id, YDL ydl) {
+    public ChannelReg(@NotNull JsonNode channelJ, long id, @NotNull YDL ydl) {
         this.id = id;
         this.ydl = ydl;
 
@@ -150,6 +158,7 @@ public class ChannelReg implements Channel {
     /**
      * @return The core long of this api.
      */
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;
@@ -165,31 +174,37 @@ public class ChannelReg implements Channel {
         return type;
     }
 
+    @NotNull
     @Override
     public Optional<Guild> getGuild() {
         return Optional.ofNullable(guild);
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getPosition() {
         return Optional.ofNullable(position);
     }
 
+    @NotNull
     @Override
     public List<Overwrite> getPermissionOverwrites() {
         return permissionOverwrites;
     }
 
+    @NotNull
     @Override
     public Optional<String> getName() {
         return Optional.ofNullable(name);
     }
 
+    @NotNull
     @Override
     public Optional<String> getTopic() {
         return Optional.ofNullable(topic);
     }
 
+    @NotNull
     @Override
     public Optional<Boolean> isNSFW() {
         return Optional.ofNullable(nsfw);
@@ -200,31 +215,37 @@ public class ChannelReg implements Channel {
         return Optional.ofNullable(lastMessage);
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getBitrate() {
         return Optional.ofNullable(bitrate);
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getUserLimit() {
         return Optional.ofNullable(userLimit);
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getRateLimitPerUser() {
         return Optional.ofNullable(rateLimitPerUser);
     }
 
+    @NotNull
     @Override
     public List<User> getRecipients() {
         return recipients;
     }
 
+    @NotNull
     @Override
     public Optional<String> getIcon() {
         return Optional.ofNullable(icon);
     }
 
+    @NotNull
     @Override
     public Optional<User> getOwner() {
         return Optional.ofNullable(owner);
@@ -240,26 +261,31 @@ public class ChannelReg implements Channel {
         return Optional.ofNullable(parentId).map(SnowFlake::of);
     }
 
+    @NotNull
     @Override
     public Optional<ZonedDateTime> getLastPinTimestamp() {
         return Optional.ofNullable(lastPinTimestamp);
     }
 
+    @NotNull
     @Override
     public Optional<String> getRTCRegion() {
         return Optional.ofNullable(rtcRegion);
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getVideoQualityMode() {
         return Optional.ofNullable(videoQualityMode);
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getMessageCount() {
         return Optional.ofNullable(messageCount);
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getMemberCount() {
         return Optional.ofNullable(memberCount);
@@ -275,6 +301,7 @@ public class ChannelReg implements Channel {
         return Optional.ofNullable(member);
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getDefaultAutoArchiveDuration() {
         return Optional.ofNullable(defaultAutoArchiveDuration);
@@ -285,6 +312,7 @@ public class ChannelReg implements Channel {
         return Optional.ofNullable(permissions);
     }
 
+    @NotNull
     @Override
     public Optional<MessageFlags[]> getFlags() {
         return Optional.ofNullable(flags);

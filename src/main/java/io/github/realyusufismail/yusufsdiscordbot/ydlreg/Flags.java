@@ -18,6 +18,7 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public enum Flags {
@@ -65,6 +66,7 @@ public enum Flags {
         this.value = value;
     }
 
+    @NotNull
     public static Flags[] getFlags(int value) {
         Flags[] flags = new Flags[0];
         for (Flags flag : values()) {
@@ -84,14 +86,15 @@ public enum Flags {
         return null;
     }
 
-    private static Flags[] add(Flags[] flags, Flags flag) {
+    @NotNull
+    private static Flags[] add(@NotNull Flags[] flags, Flags flag) {
         Flags[] newFlags = new Flags[flags.length + 1];
         System.arraycopy(flags, 0, newFlags, 0, flags.length);
         newFlags[flags.length] = flag;
         return newFlags;
     }
 
-    public static int getValue(Flags[] flags) {
+    public static int getValue(@NotNull Flags[] flags) {
         int value = 0;
         for (Flags flag : flags) {
             value |= flag.getValue();
@@ -100,7 +103,7 @@ public enum Flags {
     }
 
     @Contract(pure = true)
-    public static boolean contains(Flags[] flags, Flags flag) {
+    public static boolean contains(@NotNull Flags[] flags, Flags flag) {
         for (Flags f : flags) {
             if (f == flag) {
                 return true;

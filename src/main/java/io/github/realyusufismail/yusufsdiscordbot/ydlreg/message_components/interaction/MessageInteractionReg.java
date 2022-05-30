@@ -26,6 +26,7 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.application.interaction
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.UserReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.guild.MemberReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.util.Verify;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class MessageInteractionReg implements MessageInteraction {
@@ -51,6 +52,7 @@ public class MessageInteractionReg implements MessageInteraction {
     /**
      * @return The core long of this api.
      */
+    @NotNull
     @Override
     public Long getIdLong() {
         return message.get("id").asLong();
@@ -66,11 +68,13 @@ public class MessageInteractionReg implements MessageInteraction {
         return message.get("name").asText();
     }
 
+    @NotNull
     @Override
     public User getUser() {
         return new UserReg(message.get("user").getAsJsonNode(), ydl);
     }
 
+    @NotNull
     @Override
     public Member getMember() {
         var member = message.get("member");

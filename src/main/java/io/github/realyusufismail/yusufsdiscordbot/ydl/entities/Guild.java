@@ -260,7 +260,7 @@ public interface Guild extends SnowFlake, GenericEntity {
      * @param id The String id of the sticker.
      * @return The sticker.
      */
-    default Sticker getStickerById(String id) {
+    default Sticker getStickerById(@NotNull String id) {
         return getStickerById(Long.parseLong(id));
     }
 }

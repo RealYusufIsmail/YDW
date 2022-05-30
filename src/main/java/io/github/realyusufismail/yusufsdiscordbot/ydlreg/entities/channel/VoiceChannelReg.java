@@ -22,11 +22,12 @@ import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.channel.VoiceChannel;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.YDLReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.guild.ChannelReg;
+import org.jetbrains.annotations.NotNull;
 
 public class VoiceChannelReg extends ChannelReg implements VoiceChannel {
     private final YDL ydl;
 
-    public VoiceChannelReg(JsonNode json, long id, YDL ydl) {
+    public VoiceChannelReg(@NotNull JsonNode json, long id, @NotNull YDL ydl) {
         super(json, id, ydl);
         this.ydl = ydl;
     }

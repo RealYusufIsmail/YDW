@@ -58,6 +58,7 @@ public class InteractionDataReg extends ApplicationOptionDataReg implements Inte
         return interaction.get("componentType").asInt();
     }
 
+    @NotNull
     @Override
     public Long getIdLong() {
         return interaction.get("id").asLong();

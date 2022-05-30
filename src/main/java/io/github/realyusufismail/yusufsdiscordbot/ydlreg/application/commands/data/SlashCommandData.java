@@ -76,7 +76,7 @@ public class SlashCommandData {
     }
 
     public @NotNull SlashCommandData newOptions(
-            @NotNull CommandOptionData @NotNull [] commandOptionData) {
+            @NotNull CommandOptionData[] commandOptionData) {
         var commandOption = new CommandOptionData(commandOptionData[0].getOptionType(),
                 commandOptionData[0].getOptionName(), commandOptionData[0].getOptionDescription(),
                 commandOptionData[0].isRequired());

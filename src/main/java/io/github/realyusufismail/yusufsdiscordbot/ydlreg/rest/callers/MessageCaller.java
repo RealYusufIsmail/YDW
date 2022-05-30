@@ -24,12 +24,14 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.embed.builder.
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class MessageCaller {
 
     private final YDLReg ydl;
 
+    @NotNull
     private final OkHttpClient client;
 
     private final MediaType JSON;

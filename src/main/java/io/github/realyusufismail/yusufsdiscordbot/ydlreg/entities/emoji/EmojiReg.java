@@ -25,6 +25,7 @@ import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.Role;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.UserReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.guild.RoleReg;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,13 +37,14 @@ public class EmojiReg implements Emoji {
 
     private final String name;
     private final List<Role> roles = new ArrayList<>();
+    @Nullable
     private final User user;
     private final Boolean requireColons;
     private final Boolean managed;
     private final Boolean animated;
     private final Boolean available;
 
-    public EmojiReg(@NotNull JsonNode emoji, long id, YDL ydl) {
+    public EmojiReg(@NotNull JsonNode emoji, long id, @NotNull YDL ydl) {
         this.ydl = ydl;
         this.id = id;
 
@@ -64,6 +66,7 @@ public class EmojiReg implements Emoji {
     }
 
 
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;
@@ -74,6 +77,7 @@ public class EmojiReg implements Emoji {
         return ydl;
     }
 
+    @NotNull
     @Override
     public Optional<String> getName() {
         return Optional.ofNullable(name);
@@ -89,21 +93,25 @@ public class EmojiReg implements Emoji {
         return Optional.ofNullable(user);
     }
 
+    @NotNull
     @Override
     public Optional<Boolean> requiresColons() {
         return Optional.ofNullable(requireColons);
     }
 
+    @NotNull
     @Override
     public Optional<Boolean> isManaged() {
         return Optional.ofNullable(managed);
     }
 
+    @NotNull
     @Override
     public Optional<Boolean> isAnimated() {
         return Optional.ofNullable(animated);
     }
 
+    @NotNull
     @Override
     public Optional<Boolean> isAvailable() {
         return Optional.ofNullable(available);

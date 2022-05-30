@@ -31,6 +31,8 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.name.EndPoint;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -40,11 +42,12 @@ public class YDLCaller {
     private final OkHttpClient client;
 
 
-    public YDLCaller(YDL ydl) {
+    public YDLCaller(@NotNull YDL ydl) {
         this.ydl = (YDLReg) ydl;
         this.client = ((YDLReg) ydl).getHttpClient();
     }
 
+    @Nullable
     public User getUser(long id) {
         Request request =
                 new Request.Builder().url(EndPoint.GET_USER.getFullEndpoint(String.valueOf(id)))
@@ -63,6 +66,7 @@ public class YDLCaller {
         }
     }
 
+    @Nullable
     public Guild getGuild(long id) {
         Request request =
                 new Request.Builder().url(EndPoint.GET_GUILD.getFullEndpoint(String.valueOf(id)))
@@ -81,6 +85,7 @@ public class YDLCaller {
         }
     }
 
+    @Nullable
     public Channel getChannel(long id) {
         Request request =
                 new Request.Builder().url(EndPoint.GET_CHANNEL.getFullEndpoint(String.valueOf(id)))

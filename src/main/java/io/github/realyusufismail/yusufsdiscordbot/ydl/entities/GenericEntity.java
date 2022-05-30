@@ -18,7 +18,9 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydl.entities;
 
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
+import org.jetbrains.annotations.Nullable;
 
 public interface GenericEntity {
+    @Nullable
     YDL getYDL();
 }

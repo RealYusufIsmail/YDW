@@ -40,6 +40,7 @@ import java.io.IOException;
 public class GuildCaller {
     private final YDLReg ydl;
 
+    @NotNull
     private final OkHttpClient client;
 
     private final MediaType JSON;

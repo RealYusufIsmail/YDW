@@ -68,7 +68,7 @@ public class Verify {
         }
     }
 
-    public static void checkIfUrl(String url, @NotNull Pattern allowedStreamingUrls) {
+    public static void checkIfUrl(@NotNull String url, @NotNull Pattern allowedStreamingUrls) {
         if (!allowedStreamingUrls.matcher(url).matches()) {
             throw new VerifyException("The provided url is not a valid url!");
         }

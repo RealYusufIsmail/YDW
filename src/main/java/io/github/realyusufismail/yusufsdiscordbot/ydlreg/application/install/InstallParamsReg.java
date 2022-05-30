@@ -22,12 +22,14 @@ import io.github.realyusufismail.yusufsdiscordbot.ydl.application.install.Instal
 import io.github.realyusufismail.yusufsdiscordbot.ydl.oauth2.OAuth2Scopes;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.perm.Permission;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
 public class InstallParamsReg implements InstallParams {
 
     private final EnumSet<OAuth2Scopes> scopes = EnumSet.noneOf(OAuth2Scopes.class);
+    @Nullable
     private final Permission[] permissions;
 
     public InstallParamsReg(@NotNull JsonNode perm) {
@@ -43,6 +45,7 @@ public class InstallParamsReg implements InstallParams {
                         : null;
     }
 
+    @NotNull
     @Override
     public EnumSet<OAuth2Scopes> getScopes() {
         return scopes;

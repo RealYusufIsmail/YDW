@@ -21,9 +21,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.channel.PublicThread;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.guild.ChannelReg;
+import org.jetbrains.annotations.NotNull;
 
 public class PublicThreadReg extends ChannelReg implements PublicThread {
-    public PublicThreadReg(JsonNode json, long id, YDL ydl) {
+    public PublicThreadReg(@NotNull JsonNode json, long id, @NotNull YDL ydl) {
         super(json, id, ydl);
     }
 

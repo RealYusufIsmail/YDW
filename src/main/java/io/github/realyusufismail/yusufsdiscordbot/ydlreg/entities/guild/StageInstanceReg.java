@@ -27,14 +27,18 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
 
 public class StageInstanceReg implements StageInstance {
+    @NotNull
     private final YDL ydl;
     private final long id;
 
     private final Guild guild;
     private final Channel channel;
     private final String topic;
+    @NotNull
     private final StagePrivacyLevel privacyLevel;
+    @NotNull
     private final Boolean isDiscoverableDisabled;
+    @NotNull
     private final Long scheduledEventId;
 
     public StageInstanceReg(@NotNull JsonNode stage, long id, @NotNull YDL ydl) {
@@ -49,6 +53,7 @@ public class StageInstanceReg implements StageInstance {
         this.scheduledEventId = stage.get("ScheduledEvent").asLong();
     }
 
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;
@@ -79,6 +84,7 @@ public class StageInstanceReg implements StageInstance {
         return isDiscoverableDisabled;
     }
 
+    @NotNull
     @Override
     public SnowFlake getScheduledEventId() {
         return SnowFlake.of(scheduledEventId);

@@ -17,6 +17,8 @@
 
 package io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild;
 
+import org.jetbrains.annotations.NotNull;
+
 public enum SystemChannelFlags {
     /**
      * Suppress member join notifications.
@@ -42,6 +44,7 @@ public enum SystemChannelFlags {
         this.value = value;
     }
 
+    @NotNull
     public static SystemChannelFlags fromValue(int value) {
         for (SystemChannelFlags flag : values()) {
             if (flag.getValue() == value) {

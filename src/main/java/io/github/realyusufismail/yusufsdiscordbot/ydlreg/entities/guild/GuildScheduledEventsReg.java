@@ -28,6 +28,7 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.event.EventSta
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.event.EventType;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;
@@ -38,19 +39,23 @@ public class GuildScheduledEventsReg implements GuildScheduledEvents {
 
     private final Guild guild;
     private final Channel channel;
+    @Nullable
     private final User creator;
     private final String name;
     private final String description;
     private final ZonedDateTime startTime;
     private final ZonedDateTime endTime;
+    @Nullable
     private final EventPrivacyLevel privacyLevel;
+    @Nullable
     private final EventStatus status;
+    @Nullable
     private final EventType type;
     private final Long entityId;
     private final Integer userCount;
     private final String image;
 
-    public GuildScheduledEventsReg(JsonNode event, long id, YDL ydl) {
+    public GuildScheduledEventsReg(@NotNull JsonNode event, long id, @NotNull YDL ydl) {
         this.ydl = ydl;
         this.id = id;
 
@@ -82,6 +87,7 @@ public class GuildScheduledEventsReg implements GuildScheduledEvents {
     /**
      * @return The core long of this api.
      */
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;
@@ -102,6 +108,7 @@ public class GuildScheduledEventsReg implements GuildScheduledEvents {
         return channel;
     }
 
+    @NotNull
     @Override
     public Optional<User> getEventCreator() {
         return Optional.ofNullable(creator);
@@ -112,6 +119,7 @@ public class GuildScheduledEventsReg implements GuildScheduledEvents {
         return name;
     }
 
+    @NotNull
     @Override
     public Optional<String> getEventDescription() {
         return Optional.ofNullable(description);
@@ -147,11 +155,13 @@ public class GuildScheduledEventsReg implements GuildScheduledEvents {
         return SnowFlake.of(entityId);
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getUserCount() {
         return Optional.ofNullable(userCount);
     }
 
+    @NotNull
     @Override
     public Optional<String> getImage() {
         return Optional.ofNullable(image);

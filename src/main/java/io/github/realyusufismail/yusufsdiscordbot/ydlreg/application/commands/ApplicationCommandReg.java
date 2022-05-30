@@ -20,6 +20,7 @@ package io.github.realyusufismail.yusufsdiscordbot.ydlreg.application.commands;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.application.commands.ApplicationCommand;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.application.commands.option.ApplicationOptionDataReg;
+import org.jetbrains.annotations.NotNull;
 
 public class ApplicationCommandReg extends ApplicationOptionDataReg implements ApplicationCommand {
 
@@ -30,6 +31,7 @@ public class ApplicationCommandReg extends ApplicationOptionDataReg implements A
         this.id = id;
     }
 
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;

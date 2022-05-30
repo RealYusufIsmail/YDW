@@ -17,6 +17,8 @@
 
 package io.github.realyusufismail.yusufsdiscordbot.ydl.oauth2;
 
+import org.jetbrains.annotations.NotNull;
+
 public enum OAuth2Scopes {
     /**
      * allows your app to fetch data from a user's "Now Playing/Recently Played" list - requires
@@ -151,6 +153,7 @@ public enum OAuth2Scopes {
         this.name = name;
     }
 
+    @NotNull
     public static OAuth2Scopes fromString(String name) {
         for (OAuth2Scopes s : OAuth2Scopes.values()) {
             if (s.getName().equals(name)) {

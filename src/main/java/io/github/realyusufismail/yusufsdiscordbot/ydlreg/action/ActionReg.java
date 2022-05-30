@@ -22,6 +22,7 @@ import io.github.realyusufismail.yusufsdiscordbot.ydl.action.Action;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.RestApiHandler;
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -48,10 +49,12 @@ public class ActionReg implements Action {
     }
 
     @Override
-    public <T> void queue(Consumer<? super T> success, Consumer<? super Throwable> failure) {
+    public <T> void queue(@NotNull Consumer<? super T> success,
+            @NotNull Consumer<? super Throwable> failure) {
         api.queue(request, success, failure);
     }
 
+    @Nullable
     public YDL getYdl() {
         return ydl;
     }

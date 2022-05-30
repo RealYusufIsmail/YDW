@@ -36,7 +36,7 @@ public class TextChannelReg extends ChannelReg implements TextChannel {
     @NotNull
     MessageCaller apiHandler = getYDL().getRest().getMessageRestApi();
 
-    public TextChannelReg(JsonNode json, long id, YDL ydl) {
+    public TextChannelReg(@NotNull JsonNode json, long id, @NotNull YDL ydl) {
         super(json, id, ydl);
         this.ydl = ydl;
     }
@@ -82,6 +82,7 @@ public class TextChannelReg extends ChannelReg implements TextChannel {
         return null;
     }
 
+    @Nullable
     @Override
     public YDLReg getYDL() {
         return (YDLReg) ydl;

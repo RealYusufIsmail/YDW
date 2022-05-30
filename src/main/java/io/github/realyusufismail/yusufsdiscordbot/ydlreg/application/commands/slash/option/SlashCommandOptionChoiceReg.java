@@ -23,9 +23,11 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.YDLReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.application.commands.option.CommandOptionChoiceReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.callers.SlashCommandCaller;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class SlashCommandOptionChoiceReg extends CommandOptionChoiceReg
         implements SlashCommandOptionChoice {
+    @NotNull
     private final YDLReg ydl;
 
     private final SlashCommandCaller caller = getYDL().getRest().getSlashCommandCaller();
@@ -35,26 +37,31 @@ public class SlashCommandOptionChoiceReg extends CommandOptionChoiceReg
         this.ydl = ydl;
     }
 
+    @Nullable
     @Override
     public SlashCommandOptionChoice setName(String name) {
         return null;
     }
 
+    @Nullable
     @Override
     public SlashCommandOptionChoice setValue(long value) {
         return null;
     }
 
+    @Nullable
     @Override
     public SlashCommandOptionChoice setValue(String value) {
         return null;
     }
 
+    @Nullable
     @Override
     public SlashCommandOptionChoice setValue(double value) {
         return null;
     }
 
+    @Nullable
     private YDLReg getYDL() {
         return ydl;
     }

@@ -31,6 +31,7 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.exception.RestApiE
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.name.EndPoint;
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
@@ -44,19 +45,26 @@ public class VoiceStateReg implements VoiceState {
 
     private final Guild guild;
     private final Channel channel;
+    @Nullable
     private final User user;
+    @Nullable
     private final Member member;
     private final String sessionId;
+    @NotNull
     private final Boolean deaf;
+    @NotNull
     private final Boolean mute;
+    @NotNull
     private final Boolean selfDeaf;
+    @NotNull
     private final Boolean selfMute;
     private final Boolean selfStream;
+    @NotNull
     private final Boolean suppress;
     private final ZonedDateTime requestToSpeakTimeStamp;
     private final List<VoiceRegion> voiceRegions = new ArrayList<VoiceRegion>();
 
-    public VoiceStateReg(JsonNode voice, YDL ydl) {
+    public VoiceStateReg(@NotNull JsonNode voice, @NotNull YDL ydl) {
         this.ydl = ydl;
 
         this.guild =
@@ -106,21 +114,25 @@ public class VoiceStateReg implements VoiceState {
         return ydl;
     }
 
+    @NotNull
     @Override
     public Optional<Guild> getGuild() {
         return Optional.ofNullable(guild);
     }
 
+    @NotNull
     @Override
     public Optional<Channel> getChannel() {
         return Optional.ofNullable(channel);
     }
 
+    @NotNull
     @Override
     public Optional<User> getUser() {
         return Optional.ofNullable(user);
     }
 
+    @NotNull
     @Override
     public Optional<Member> getMember() {
         return Optional.ofNullable(member);
@@ -151,11 +163,13 @@ public class VoiceStateReg implements VoiceState {
         return selfMute;
     }
 
+    @NotNull
     @Override
     public Optional<Boolean> isSelfStream() {
         return Optional.ofNullable(selfStream);
     }
 
+    @NotNull
     @Override
     public Boolean isSelfVideo() {
         return !suppress;
@@ -171,6 +185,7 @@ public class VoiceStateReg implements VoiceState {
         return requestToSpeakTimeStamp;
     }
 
+    @NotNull
     @Override
     public List<VoiceRegion> getVoiceRegions() {
         return voiceRegions;

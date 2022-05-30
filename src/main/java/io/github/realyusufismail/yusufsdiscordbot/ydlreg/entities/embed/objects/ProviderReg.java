@@ -39,11 +39,13 @@ public class ProviderReg implements Provider {
         this.url = url;
     }
 
+    @NotNull
     @Override
     public Optional<String> name() {
         return Optional.ofNullable(name);
     }
 
+    @NotNull
     @Override
     public Optional<String> url() {
         return Optional.ofNullable(url);

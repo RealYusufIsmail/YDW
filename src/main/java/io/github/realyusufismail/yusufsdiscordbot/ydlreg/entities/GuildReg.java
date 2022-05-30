@@ -58,28 +58,41 @@ public class GuildReg implements Guild {
     private final String vanityUrlCode;
     private final String description;
     private final String banner;
+    @NotNull
     private final Integer premiumTier;
     private final Integer premiumSubscriptionCount;
     private final String preferredLocale;
     private final Long publicUpdateChannelId;
     private final Integer maxVideoChannelUsers;
     private final Integer approximatePresenceCount;
+    @Nullable
     private final WelcomeScreen welcomeScreen;
+    @NotNull
     private final Integer nsfwLevel;
     private final Boolean isPremiumProgressBarEnabled;
+    @NotNull
     private final Long ownerId;
+    @NotNull
     private final Long afkChannelId;
+    @NotNull
     private final Integer afkTimeout;
     private final Boolean isWidgetEnabled;
     private final String permissions;
     private final Long widgetChannelId;
+    @NotNull
     private final Integer verificationLevel;
+    @NotNull
     private final Integer defaultMessageNotifications;
+    @NotNull
     private final Integer explicitContentFilter;
+    @NotNull
     private final Integer mfaLevel;
+    @NotNull
     private final Long applicationId;
+    @NotNull
     private final Long systemChannelId;
     private final SystemChannelFlags systemChannelFlags;
+    @NotNull
     private final Long rulesChannelId;
     private final ZonedDateTime joinedAt;
     private final Boolean isLarge;
@@ -92,9 +105,10 @@ public class GuildReg implements Guild {
     private final List<Member> members = new ArrayList<>();
     private final List<Channel> channels = new ArrayList<>();
     private final List<Sticker> stickers = new ArrayList<>();
+    @NotNull
     GuildCaller restApi = getYDL().getRest().getGuildRestApi();
 
-    public GuildReg(JsonNode guildJ, long guildId, YDL ydl) {
+    public GuildReg(@NotNull JsonNode guildJ, long guildId, @NotNull YDL ydl) {
         this.ydl = ydl;
         this.id = guildId;
 
@@ -252,6 +266,7 @@ public class GuildReg implements Guild {
         return discoverySplash;
     }
 
+    @NotNull
     @Override
     public Optional<Boolean> isOwner() {
         return Optional.ofNullable(owner);
@@ -265,6 +280,7 @@ public class GuildReg implements Guild {
         return SnowFlake.of(ownerId);
     }
 
+    @NotNull
     @Override
     public Optional<String> getPermissions() {
         return Optional.ofNullable(permissions);
@@ -280,6 +296,7 @@ public class GuildReg implements Guild {
         return afkTimeout;
     }
 
+    @NotNull
     @Override
     public Optional<Boolean> isWidgetEnabled() {
         return Optional.ofNullable(isWidgetEnabled);
@@ -350,11 +367,13 @@ public class GuildReg implements Guild {
         return memberCount;
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getMaxPresences() {
         return Optional.ofNullable(maxPresences);
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getMaxMembers() {
         return Optional.ofNullable(maxMembers);
@@ -380,6 +399,7 @@ public class GuildReg implements Guild {
         return premiumTier;
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getPremiumSubscriptionCount() {
         return Optional.ofNullable(premiumSubscriptionCount);
@@ -395,11 +415,13 @@ public class GuildReg implements Guild {
         return SnowFlake.of(publicUpdateChannelId);
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getMaxVideoChannelUsers() {
         return Optional.ofNullable(maxVideoChannelUsers);
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getApproximatePresenceCount() {
         return Optional.ofNullable(approximatePresenceCount);
@@ -435,6 +457,7 @@ public class GuildReg implements Guild {
         return EnumSet.copyOf(features);
     }
 
+    @NotNull
     @Override
     public List<VoiceState> getVoiceStates() {
         return Collections.unmodifiableList(voiceStates);
@@ -450,6 +473,7 @@ public class GuildReg implements Guild {
         return Collections.unmodifiableList(channels);
     }
 
+    @Nullable
     @Override
     public Member getBot() {
         return null;
@@ -461,7 +485,7 @@ public class GuildReg implements Guild {
     }
 
     @Override
-    public @NotNull Action ban(String userId, int deleteMessageDays, String reason) {
+    public @NotNull Action ban(@NotNull String userId, int deleteMessageDays, String reason) {
         Verify.checkAmount(deleteMessageDays, 7);
         var request = restApi.ban(this.getIdLong(), userId, deleteMessageDays, reason);
         return new ActionReg(request, ydl);
@@ -474,18 +498,20 @@ public class GuildReg implements Guild {
         return new ActionReg(request, ydl);
     }
 
+    @NotNull
     @Override
     public Boolean isBanned(long userId) {
         return restApi.isBanned(this.getIdLong(), userId);
     }
 
+    @NotNull
     @Override
-    public Boolean isBanned(String userId) {
+    public Boolean isBanned(@NotNull String userId) {
         return restApi.isBanned(this.getIdLong(), userId);
     }
 
     @Override
-    public @NotNull Action unBanUser(String userId) {
+    public @NotNull Action unBanUser(@NotNull String userId) {
         var request = restApi.unBan(this.getIdLong(), userId);
         return new ActionReg(request, ydl);
     }
@@ -503,13 +529,13 @@ public class GuildReg implements Guild {
     }
 
     @Override
-    public @NotNull Action kick(String userId) {
+    public @NotNull Action kick(@NotNull String userId) {
         var request = restApi.kickMember(this.getIdLong(), userId);
         return new ActionReg(request, ydl);
     }
 
     @Override
-    public @Nullable Member getMemberById(String memberId) {
+    public @Nullable Member getMemberById(@NotNull String memberId) {
         return restApi.getMember(this.getIdLong(), memberId);
     }
 
@@ -526,11 +552,13 @@ public class GuildReg implements Guild {
     /**
      * @return The core long of this api.
      */
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;
     }
 
+    @Nullable
     @Override
     public YDLReg getYDL() {
         return (YDLReg) ydl;

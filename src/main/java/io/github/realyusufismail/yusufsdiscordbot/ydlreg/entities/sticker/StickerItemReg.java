@@ -20,6 +20,7 @@ package io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.sticker;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.sticker.StickerItem;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class StickerItemReg implements StickerItem {
@@ -44,6 +45,7 @@ public class StickerItemReg implements StickerItem {
     /**
      * @return The core long of this api.
      */
+    @NotNull
     @Override
     public Long getIdLong() {
         return item.get("id").asLong();
@@ -54,6 +56,7 @@ public class StickerItemReg implements StickerItem {
         return item.get("name").asText();
     }
 
+    @NotNull
     @Override
     public StickerFormatType getFormatType() {
         return StickerFormatType.valueOf(item.get("format").asInt());

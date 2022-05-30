@@ -25,6 +25,7 @@ import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.Role;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.perm.Permission;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.UserReg;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -35,20 +36,23 @@ import java.util.Optional;
 public class MemberReg implements Member {
     private final YDL ydl;
 
+    @Nullable
     private final User user;
     private final String nick;
     private final String avatar;
     private final List<Role> roles = new ArrayList<>();
     private final ZonedDateTime joinedAt;
     private final ZonedDateTime premiumSince;
+    @NotNull
     private final Boolean deaf;
+    @NotNull
     private final Boolean mute;
     private final Boolean pending;
     private final String permissions;
     private final ZonedDateTime timedOutUntil;
 
 
-    public MemberReg(JsonNode member, YDL ydl) {
+    public MemberReg(@NotNull JsonNode member, @NotNull YDL ydl) {
         this.ydl = ydl;
 
         this.user = member.hasNonNull("user")
@@ -86,16 +90,19 @@ public class MemberReg implements Member {
         return ydl;
     }
 
+    @NotNull
     @Override
     public Optional<User> getUser() {
         return Optional.ofNullable(user);
     }
 
+    @NotNull
     @Override
     public Optional<String> getNickname() {
         return Optional.ofNullable(nick);
     }
 
+    @NotNull
     @Override
     public Optional<String> getAvatar() {
         return Optional.ofNullable(avatar);
@@ -111,6 +118,7 @@ public class MemberReg implements Member {
         return joinedAt;
     }
 
+    @NotNull
     @Override
     public Optional<ZonedDateTime> getPremiumSince() {
         return Optional.ofNullable(premiumSince);
@@ -126,6 +134,7 @@ public class MemberReg implements Member {
         return mute;
     }
 
+    @NotNull
     @Override
     public Optional<Boolean> isPending() {
         return Optional.ofNullable(pending);
@@ -136,11 +145,13 @@ public class MemberReg implements Member {
         return permissions;
     }
 
+    @NotNull
     @Override
     public Optional<ZonedDateTime> getTimeoutEnd() {
         return Optional.ofNullable(timedOutUntil);
     }
 
+    @NotNull
     @Override
     public Boolean memberHasPermission(@NotNull Permission permission) {
         return getPermissions().contains(permission.getValueAsString());

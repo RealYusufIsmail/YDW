@@ -28,12 +28,14 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.name.EndPoint;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StickerCaller {
+    @NotNull
     private final YDLReg ydl;
 
     private final OkHttpClient client;
@@ -43,6 +45,7 @@ public class StickerCaller {
         this.client = ydl.getHttpClient();
     }
 
+    @Nullable
     public List<StickerPack> getStickerPacks() {
         Request request =
                 new Request.Builder().url(EndPoint.GET_STICKERS_AVAILABLE_FOR_NITRO.getEndpoint())
@@ -65,6 +68,7 @@ public class StickerCaller {
         return null;
     }
 
+    @NotNull
     public List<Sticker> getStickers(long guildId) {
         Request request = new Request.Builder()
             .url(EndPoint.GET_STICKERS_IN_GUILD.getFullEndpoint(String.valueOf(guildId)))
@@ -87,6 +91,7 @@ public class StickerCaller {
         return new ArrayList<>();
     }
 
+    @Nullable
     public Sticker getSticker(long guildId, long stickerId) {
         Request request = new Request.Builder()
             .url(EndPoint.GET_GUILD_STICKER.getFullEndpoint(String.valueOf(guildId),

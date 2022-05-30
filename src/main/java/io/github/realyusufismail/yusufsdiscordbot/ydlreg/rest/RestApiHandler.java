@@ -24,6 +24,7 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.function.Consumer;
@@ -122,6 +123,7 @@ public class RestApiHandler {
         return slashCommandCaller;
     }
 
+    @Nullable
     public YDL getYDL() {
         return ydl;
     }

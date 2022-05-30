@@ -36,9 +36,10 @@ public class TeamReg implements Team {
     private final String icon;
     private final List<TeamMember> members = new ArrayList<>();
     private final String name;
+    @NotNull
     private final Long ownerId;
 
-    public TeamReg(JsonNode team, long id, YDL ydl) {
+    public TeamReg(@NotNull JsonNode team, long id, YDL ydl) {
         this.id = id;
         this.ydl = ydl;
 
@@ -57,6 +58,7 @@ public class TeamReg implements Team {
         return ydl;
     }
 
+    @NotNull
     @Override
     public Optional<String> getIcon() {
         return Optional.ofNullable(icon);
@@ -79,6 +81,7 @@ public class TeamReg implements Team {
         return SnowFlake.of(ownerId);
     }
 
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;

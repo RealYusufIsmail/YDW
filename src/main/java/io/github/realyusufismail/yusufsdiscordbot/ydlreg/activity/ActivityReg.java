@@ -21,6 +21,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.activity.*;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -36,23 +38,30 @@ public class ActivityReg implements Activity {
     private final long id;
 
     private final String name;
+    @NotNull
     private final ActivityConfig type;
     private final String url;
+    @NotNull
     private final Integer createdAt;
+    @Nullable
     private final ActivityTimeStamp timeStamp;
     private final Long applicationId;
     private final String detail;
     private final String state;
+    @Nullable
     private final ActivityEmoji emoji;
+    @Nullable
     private final ActivityParty party;
+    @Nullable
     private final ActivityAsset assets;
+    @Nullable
     private final ActivitySecret secrets;
     private final Boolean instance;
     private final EnumSet<ActivityFlag> flags = EnumSet.noneOf(ActivityFlag.class);
     private final List<ActivityButton> buttons = new ArrayList<>();
 
 
-    public ActivityReg(JsonNode activity, long id, YDL ydl) {
+    public ActivityReg(@NotNull JsonNode activity, long id, YDL ydl) {
         this.ydl = ydl;
         this.id = id;
 
@@ -107,61 +116,73 @@ public class ActivityReg implements Activity {
         return type;
     }
 
+    @NotNull
     @Override
     public Optional<String> getUrl() {
         return Optional.ofNullable(url);
     }
 
+    @NotNull
     @Override
     public ZonedDateTime getCreatedAt() {
         return ZonedDateTime.ofInstant(Instant.ofEpochSecond(createdAt), ZoneId.systemDefault());
     }
 
+    @NotNull
     @Override
     public Optional<ActivityTimeStamp> getTimeStamp() {
         return Optional.ofNullable(timeStamp);
     }
 
+    @NotNull
     @Override
     public Optional<SnowFlake> getApplicationId() {
         return Optional.ofNullable(applicationId).map(SnowFlake::of);
     }
 
+    @NotNull
     @Override
     public Optional<String> getDetails() {
         return Optional.ofNullable(detail);
     }
 
+    @NotNull
     @Override
     public Optional<String> getState() {
         return Optional.ofNullable(state);
     }
 
+    @NotNull
     @Override
     public Optional<ActivityEmoji> getEmoji() {
         return Optional.ofNullable(emoji);
     }
 
+    @NotNull
     @Override
     public Optional<ActivityParty> getParty() {
         return Optional.ofNullable(party);
     }
 
+    @NotNull
     @Override
     public Optional<ActivityAsset> getAssets() {
         return Optional.ofNullable(assets);
     }
 
+    @NotNull
     @Override
     public Optional<Boolean> isInstance() {
         return Optional.ofNullable(instance);
     }
 
+    @NotNull
     @Override
     public EnumSet<ActivityFlag> getFlags() {
         return flags;
     }
 
+    @NotNull
     @Override
     public List<ActivityButton> getButtons() {
         return buttons;
@@ -172,6 +193,7 @@ public class ActivityReg implements Activity {
         return ydl;
     }
 
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;

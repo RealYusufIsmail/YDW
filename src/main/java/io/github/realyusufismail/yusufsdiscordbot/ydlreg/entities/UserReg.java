@@ -25,6 +25,7 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.YDLReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.user.PremiumTypes;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.user.UserFlags;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -38,20 +39,27 @@ public class UserReg implements User {
     private final String username;
     private final String discriminator;
     private final String avatar;
+    @NotNull
     private final Boolean isBot;
+    @NotNull
     private final Boolean isSystem;
+    @NotNull
     private final Boolean isMfaEnabled;
     private final String banner;
     private final Integer accentColor;
     private final String locale;
+    @NotNull
     private final Boolean isVerified;
     private final String email;
+    @Nullable
     private final UserFlags flags;
+    @Nullable
     private final PremiumTypes premiumType;
+    @Nullable
     private final UserFlags publicFlags;
     private final List<Guild> guilds = new ArrayList<>();
 
-    public UserReg(@NotNull JsonNode user, long userId, YDL ydl) {
+    public UserReg(@NotNull JsonNode user, long userId, @NotNull YDL ydl) {
         this.ydl = ydl;
         this.id = userId;
 
@@ -93,16 +101,19 @@ public class UserReg implements User {
         return avatar;
     }
 
+    @NotNull
     @Override
     public Optional<Boolean> isBot() {
         return Optional.ofNullable(isBot);
     }
 
+    @NotNull
     @Override
     public Optional<Boolean> isSystem() {
         return Optional.ofNullable(isSystem);
     }
 
+    @NotNull
     @Override
     public Optional<Boolean> isMFAEnabled() {
         return Optional.ofNullable(isMfaEnabled);
@@ -113,11 +124,13 @@ public class UserReg implements User {
         return Optional.ofNullable(banner);
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getAccentColor() {
         return Optional.of(Color.decode("#" + accentColor).getRGB());
     }
 
+    @NotNull
     @Override
     public Optional<String> getLocale() {
         return Optional.ofNullable(locale);
@@ -148,6 +161,7 @@ public class UserReg implements User {
         return Optional.ofNullable(publicFlags);
     }
 
+    @NotNull
     @Override
     public List<Guild> getGuilds() {
         return guilds;
@@ -157,6 +171,7 @@ public class UserReg implements User {
     /**
      * @return The core long of this api.
      */
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;

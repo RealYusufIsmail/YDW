@@ -27,8 +27,11 @@ public class VoiceRegionReg implements VoiceRegion {
     private final YDL ydl;
 
     private final String name;
+    @NotNull
     private final Boolean optimal;
+    @NotNull
     private final Boolean deprecated;
+    @NotNull
     private final Boolean custom;
 
     public VoiceRegionReg(@NotNull JsonNode voice, String id, YDL ydl) {

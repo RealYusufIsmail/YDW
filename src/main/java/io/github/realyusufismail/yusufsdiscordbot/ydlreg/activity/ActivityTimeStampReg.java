@@ -17,11 +17,13 @@ public class ActivityTimeStampReg implements ActivityTimeStamp {
     }
 
 
+    @NotNull
     @Override
     public Optional<Integer> getStart() {
         return Optional.ofNullable(start);
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getEnd() {
         return Optional.ofNullable(end);

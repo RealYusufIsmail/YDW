@@ -26,6 +26,8 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.exception.RestApiE
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.name.EndPoint;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,11 +38,12 @@ public class EmojiCaller {
 
     private final OkHttpClient client;
 
-    public EmojiCaller(YDL ydl) {
+    public EmojiCaller(@NotNull YDL ydl) {
         this.ydl = (YDLReg) ydl;
         this.client = ((YDLReg) ydl).getHttpClient();
     }
 
+    @NotNull
     public List<Emoji> getGuildEmojis(long guildId) {
         Request request =
                 new Request.Builder().url(EndPoint.GET_LIST_GUILD_EMOJI.getFullEndpoint(guildId))
@@ -63,6 +66,7 @@ public class EmojiCaller {
         return new ArrayList<>();
     }
 
+    @Nullable
     public Emoji getGuildEmoji(long guildId, long emojiId) {
         Request request = new Request.Builder()
             .url(EndPoint.GET_GUILD_EMOJI.getFullEndpoint(guildId, emojiId))

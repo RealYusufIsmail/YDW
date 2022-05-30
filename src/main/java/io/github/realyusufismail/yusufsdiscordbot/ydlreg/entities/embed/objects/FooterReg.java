@@ -19,6 +19,7 @@ package io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.embed.objects
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.embed.objects.Footer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -28,7 +29,7 @@ public class FooterReg implements Footer {
     private final String iconUrl;
     private final String proxyIconUrl;
 
-    public FooterReg(JsonNode footer) {
+    public FooterReg(@NotNull JsonNode footer) {
 
         this.text = footer.hasNonNull("text") ? footer.get("text").asText() : null;
         this.iconUrl = footer.hasNonNull("icon_url") ? footer.get("icon_url").asText() : null;
@@ -43,16 +44,19 @@ public class FooterReg implements Footer {
     }
 
 
+    @NotNull
     @Override
     public Optional<String> getText() {
         return Optional.ofNullable(text);
     }
 
+    @NotNull
     @Override
     public Optional<String> getIconUrl() {
         return Optional.ofNullable(iconUrl);
     }
 
+    @NotNull
     @Override
     public Optional<String> getProxyIconUrl() {
         return Optional.ofNullable(proxyIconUrl);

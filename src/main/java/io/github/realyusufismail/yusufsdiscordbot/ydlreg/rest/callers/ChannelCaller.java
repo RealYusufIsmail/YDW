@@ -27,6 +27,8 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.name.EndPoint;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,11 +39,12 @@ public class ChannelCaller {
     private final YDLReg ydl;
     private final OkHttpClient client;
 
-    public ChannelCaller(YDL ydl) {
+    public ChannelCaller(@NotNull YDL ydl) {
         this.ydl = (YDLReg) ydl;
         this.client = ((YDLReg) ydl).getHttpClient();
     }
 
+    @Nullable
     public Message getMessage(long channelId, long messageId) {
         Request request = new Request.Builder()
             .url(EndPoint.GET_CHANNEL_MESSAGE.getFullEndpoint(channelId, messageId))

@@ -60,6 +60,7 @@ public class RoleTagsReg implements RoleTags {
         return Optional.ofNullable(intergrationId).map(SnowFlake::of);
     }
 
+    @NotNull
     @Override
     public Optional<Boolean> isPremiumSubscriber() {
         return Optional.ofNullable(premiumSubscriber);

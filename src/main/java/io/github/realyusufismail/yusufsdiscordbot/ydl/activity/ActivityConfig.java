@@ -104,6 +104,7 @@ public enum ActivityConfig {
         return url;
     }
 
+    @NotNull
     public static ActivityConfig getActivity(int activity) {
         for (ActivityConfig config : values()) {
             if (config.getActivity() == activity) {

@@ -24,6 +24,7 @@ import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.role.RoleTa
 import io.github.realyusufismail.yusufsdiscordbot.ydl.perm.Permission;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.role.RoleTagsReg;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -32,17 +33,24 @@ public class RoleReg implements Role {
     private final long id;
 
     private final String name;
+    @NotNull
     private final Integer color;
+    @NotNull
     private final Boolean hoist;
     private final String icon;
     private final String unicodeEmoji;
+    @NotNull
     private final Integer position;
+    @NotNull
     private final Permission[] permissions;
+    @NotNull
     private final Boolean managed;
+    @NotNull
     private final Boolean mentionable;
+    @Nullable
     private final RoleTagsReg tags;
 
-    public RoleReg(JsonNode role, YDL ydl, long id) {
+    public RoleReg(@NotNull JsonNode role, YDL ydl, long id) {
         this.ydl = ydl;
         this.id = id;
 
@@ -69,6 +77,7 @@ public class RoleReg implements Role {
     }
 
 
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;
@@ -94,11 +103,13 @@ public class RoleReg implements Role {
         return hoist;
     }
 
+    @NotNull
     @Override
     public Optional<String> getIcon() {
         return Optional.ofNullable(icon);
     }
 
+    @NotNull
     @Override
     public Optional<String> getUnicodeEmoji() {
         return Optional.ofNullable(unicodeEmoji);

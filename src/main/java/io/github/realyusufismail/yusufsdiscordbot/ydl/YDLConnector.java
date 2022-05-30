@@ -23,6 +23,7 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.YDLReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.exception.*;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -37,6 +38,7 @@ public class YDLConnector {
     private ActivityConfig activity;
     private boolean compress = false;
     private int largeThreshold = 50;
+    @Nullable
     private OkHttpClient client = null;
 
     private YDLConnector(String token, int intents) {
@@ -101,7 +103,7 @@ public class YDLConnector {
 
     @CheckReturnValue
     public @NotNull YDLConnector setGatewayIntents(@NotNull GateWayIntent intent,
-            GateWayIntent... intents) {
+            @NotNull GateWayIntent... intents) {
         this.gatewayIntents = intent.getValue();
         for (GateWayIntent i : intents) {
             this.gatewayIntents |= i.getValue();
@@ -111,7 +113,7 @@ public class YDLConnector {
 
     @CheckReturnValue
     public @NotNull YDLConnector removeGatewayIntents(@NotNull GateWayIntent intent,
-            GateWayIntent... intents) {
+            @NotNull GateWayIntent... intents) {
         this.gatewayIntents = ~intent.getValue();
         for (GateWayIntent i : intents) {
             this.gatewayIntents &= ~i.getValue();
@@ -126,6 +128,7 @@ public class YDLConnector {
      * @return YDLConnector
      * @see GateWayIntent the class for more info
      */
+    @NotNull
     public YDLConnector setGatewayIntents(int gatewayIntents) {
         this.gatewayIntents = gatewayIntents;
         return this;
@@ -138,7 +141,8 @@ public class YDLConnector {
      * @return YDLConnector
      * @see Status the class for more info
      */
-    public YDLConnector setStatus(Status status) {
+    @NotNull
+    public YDLConnector setStatus(@NotNull Status status) {
         this.status = status.getStatus();
         return this;
     }
@@ -149,6 +153,7 @@ public class YDLConnector {
      * @param compress compress
      * @return YDLConnector
      */
+    @NotNull
     public YDLConnector setCompress(boolean compress) {
         this.compress = compress;
         return this;
@@ -161,6 +166,7 @@ public class YDLConnector {
      * @param largeThreshold threshold
      * @return YDLConnector
      */
+    @NotNull
     public YDLConnector setLargeThreshold(int largeThreshold) {
         this.largeThreshold = largeThreshold;
         return this;
@@ -172,6 +178,7 @@ public class YDLConnector {
      * @param activity activity
      * @return YDLConnector
      */
+    @NotNull
     public YDLConnector setActivity(ActivityConfig activity) {
         this.activity = activity;
         return this;
@@ -180,6 +187,7 @@ public class YDLConnector {
     /**
      * Used to set the guild id for the bot
      */
+    @NotNull
     public YDLConnector setGuildId(long guildId) {
         this.guildId = String.valueOf(guildId);
         return this;
@@ -188,6 +196,7 @@ public class YDLConnector {
     /**
      * Used to set the guild id for the bot
      */
+    @NotNull
     public YDLConnector setGuildId(String guildId) {
         this.guildId = guildId;
         return this;
@@ -199,6 +208,7 @@ public class YDLConnector {
      * @param httpClient http client
      * @return YDLConnector
      */
+    @NotNull
     private YDLConnector setHttpClient(OkHttpClient httpClient) {
         this.client = httpClient;
         return this;

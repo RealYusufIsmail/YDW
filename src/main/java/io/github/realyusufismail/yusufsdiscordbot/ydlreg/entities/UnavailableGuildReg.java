@@ -10,6 +10,7 @@ public class UnavailableGuildReg implements UnavailableGuild {
     private final YDL ydl;
     private final long id;
 
+    @NotNull
     private final Boolean isAvailable;
 
     public UnavailableGuildReg(YDL ydl, long id, @NotNull JsonNode json) {
@@ -29,6 +30,7 @@ public class UnavailableGuildReg implements UnavailableGuild {
         return isAvailable;
     }
 
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;

@@ -17,6 +17,8 @@
 
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.message_components;
 
+import org.jetbrains.annotations.NotNull;
+
 public enum ComponentType {
     /**
      * A container for other components.
@@ -45,6 +47,7 @@ public enum ComponentType {
         this.value = value;
     }
 
+    @NotNull
     public static ComponentType getComponentType(int type) {
         for (ComponentType c : ComponentType.values()) {
             if (c.getValue() == type) {

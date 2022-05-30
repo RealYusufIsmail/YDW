@@ -23,6 +23,7 @@ import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.channel.Ove
 import org.jetbrains.annotations.NotNull;
 
 public class OverwriteReg implements Overwrite {
+    @NotNull
     private final JsonNode json;
     private final long id;
     private final YDL ydl;
@@ -41,6 +42,7 @@ public class OverwriteReg implements Overwrite {
         this.setDeny(json.get("deny").asText());
     }
 
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;
@@ -51,6 +53,7 @@ public class OverwriteReg implements Overwrite {
         return type;
     }
 
+    @NotNull
     private OverwriteReg setType(OverwriteType type) {
         this.type = type;
         return this;
@@ -61,6 +64,7 @@ public class OverwriteReg implements Overwrite {
         return allow;
     }
 
+    @NotNull
     private OverwriteReg setAllow(String allow) {
         this.allow = allow;
         return this;
@@ -71,6 +75,7 @@ public class OverwriteReg implements Overwrite {
         return deny;
     }
 
+    @NotNull
     private OverwriteReg setDeny(String deny) {
         this.deny = deny;
         return this;

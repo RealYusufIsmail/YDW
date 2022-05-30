@@ -26,6 +26,7 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.exception.RestApiE
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.name.EndPoint;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,11 +37,12 @@ public class UserCaller {
 
     private final OkHttpClient client;
 
-    public UserCaller(YDL ydl) {
+    public UserCaller(@NotNull YDL ydl) {
         this.ydl = (YDLReg) ydl;
         this.client = ((YDLReg) ydl).getHttpClient();
     }
 
+    @NotNull
     public List<Guild> getGuilds() {
         Request request = new Request.Builder().url(EndPoint.GET_CURRENT_USER_GUILDS.getEndpoint())
             .get()

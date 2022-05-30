@@ -30,11 +30,14 @@ import java.util.function.Consumer;
 
 public class SelfUserReg extends UserReg implements SelfUser {
     private Long applicationId;
+    @NotNull
     private final Boolean isMfaEnabled;
+    @NotNull
     private final Integer allowedFileSize;
+    @NotNull
     private final Boolean isVerified;
 
-    public SelfUserReg(JsonNode user, long userId, YDL ydl) {
+    public SelfUserReg(@NotNull JsonNode user, long userId, @NotNull YDL ydl) {
         super(user, userId, ydl);
 
         applicationId = userId;
@@ -55,21 +58,25 @@ public class SelfUserReg extends UserReg implements SelfUser {
             this.applicationId = user.get("application_id").asLong();
     }
 
+    @NotNull
     @Override
     public SnowFlake getApplicationId() {
         return SnowFlake.of(applicationId);
     }
 
+    @NotNull
     @Override
     public Optional<Boolean> isVerified() {
         return Optional.ofNullable(isVerified);
     }
 
+    @NotNull
     @Override
     public Optional<Boolean> isMfaEnabled() {
         return Optional.ofNullable(isMfaEnabled);
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getAllowedFileSize() {
         return Optional.ofNullable(allowedFileSize);

@@ -68,6 +68,7 @@ public enum ApplicationFlag {
         this.value = value;
     }
 
+    @NotNull
     public static ApplicationFlag fromValue(int value) {
         for (ApplicationFlag flag : values()) {
             if (flag.getValue() == value) {
@@ -77,6 +78,7 @@ public enum ApplicationFlag {
         return UNKNOWN;
     }
 
+    @NotNull
     public static ApplicationFlag[] fromValues(int value) {
         ApplicationFlag[] flags = new ApplicationFlag[0];
         for (ApplicationFlag flag : values()) {

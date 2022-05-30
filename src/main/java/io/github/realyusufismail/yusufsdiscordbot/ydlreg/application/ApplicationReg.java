@@ -29,6 +29,8 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.application.install.Ins
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.UserReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.team.TeamReg;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +44,16 @@ public class ApplicationReg implements Application {
     private final String description;
     private final String icon;
     private final List<String> rpcRegions = new ArrayList<>();
+    @NotNull
     private final Boolean isPublic;
+    @NotNull
     private final Boolean isRequireCodeGrant;
     private final String termsOfServiceUrl;
     private final String privacyPolicyUrl;
+    @Nullable
     private final User owner;
     private final String verifyKey;
+    @Nullable
     private final Team team;
     private final Guild guild;
     private final Long primarySkuId;
@@ -55,10 +61,11 @@ public class ApplicationReg implements Application {
     private final String coverImage;
     private final ApplicationFlag[] flags;
     private final String tags;
+    @Nullable
     private final InstallParams install;
     private final String installUrl;
 
-    public ApplicationReg(JsonNode application, long id, YDL ydl) {
+    public ApplicationReg(@NotNull JsonNode application, long id, @NotNull YDL ydl) {
         this.ydl = ydl;
         this.id = id;
 
@@ -109,6 +116,7 @@ public class ApplicationReg implements Application {
         }
     }
 
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;
@@ -129,6 +137,7 @@ public class ApplicationReg implements Application {
         return icon;
     }
 
+    @NotNull
     @Override
     public List<String> getRPCRegions() {
         return rpcRegions;
@@ -144,16 +153,19 @@ public class ApplicationReg implements Application {
         return isRequireCodeGrant;
     }
 
+    @NotNull
     @Override
     public Optional<String> getTermsOfServiceUrl() {
         return Optional.ofNullable(termsOfServiceUrl);
     }
 
+    @NotNull
     @Override
     public Optional<String> getPrivacyPolicyUrl() {
         return Optional.ofNullable(privacyPolicyUrl);
     }
 
+    @NotNull
     @Override
     public Optional<User> getOwner() {
         return Optional.ofNullable(owner);
@@ -169,41 +181,49 @@ public class ApplicationReg implements Application {
         return team;
     }
 
+    @NotNull
     @Override
     public Optional<Guild> getGuild() {
         return Optional.ofNullable(guild);
     }
 
+    @NotNull
     @Override
     public Optional<SnowFlake> getPrimarySkuId() {
         return Optional.ofNullable(primarySkuId).map(SnowFlake::of);
     }
 
+    @NotNull
     @Override
     public Optional<String> getSlug() {
         return Optional.ofNullable(slug);
     }
 
+    @NotNull
     @Override
     public Optional<String> getCoverImage() {
         return Optional.ofNullable(coverImage);
     }
 
+    @NotNull
     @Override
     public Optional<ApplicationFlag[]> getFlags() {
         return Optional.ofNullable(flags);
     }
 
+    @NotNull
     @Override
     public Optional<String> getTags() {
         return Optional.ofNullable(tags);
     }
 
+    @NotNull
     @Override
     public Optional<InstallParams> getInstallParams() {
         return Optional.ofNullable(install);
     }
 
+    @NotNull
     @Override
     public Optional<String> getInstallUrl() {
         return Optional.ofNullable(installUrl);

@@ -22,11 +22,12 @@ import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.channel.NewsChannel;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.YDLReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.guild.ChannelReg;
+import org.jetbrains.annotations.NotNull;
 
 public class NewsChannelReg extends ChannelReg implements NewsChannel {
     private final YDL ydl;
 
-    public NewsChannelReg(JsonNode json, long id, YDL ydl) {
+    public NewsChannelReg(@NotNull JsonNode json, long id, @NotNull YDL ydl) {
         super(json, id, ydl);
         this.ydl = ydl;
     }

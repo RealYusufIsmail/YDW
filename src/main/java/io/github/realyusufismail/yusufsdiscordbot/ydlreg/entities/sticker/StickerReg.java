@@ -27,6 +27,7 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.GuildReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.UserReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,16 +41,21 @@ public class StickerReg implements Sticker {
     private final String description;
     private final String tags;
     private final String asset;
+    @NotNull
     private final StickerType type;
+    @NotNull
     private final StickerFormatType format;
     private final Boolean available;
+    @Nullable
     private final Guild guild;
+    @Nullable
     private final User user;
     private final Integer sortValue;
 
+    @Nullable
     private final List<StickerPack> pack;
 
-    public StickerReg(JsonNode sticker, long id, YDL ydl) {
+    public StickerReg(@NotNull JsonNode sticker, long id, @NotNull YDL ydl) {
         this.id = id;
         this.ydl = ydl;
 
@@ -75,6 +81,7 @@ public class StickerReg implements Sticker {
     }
 
 
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;
@@ -85,6 +92,7 @@ public class StickerReg implements Sticker {
         return ydl;
     }
 
+    @NotNull
     @Override
     public Optional<SnowFlake> getPackIdLong() {
         return Optional.ofNullable(packId).map(SnowFlake::of);
@@ -115,6 +123,7 @@ public class StickerReg implements Sticker {
         return format;
     }
 
+    @NotNull
     @Override
     public Optional<Boolean> isAvailable() {
         return Optional.ofNullable(available);
@@ -130,6 +139,7 @@ public class StickerReg implements Sticker {
         return Optional.ofNullable(user);
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getSortValue() {
         return Optional.ofNullable(sortValue);

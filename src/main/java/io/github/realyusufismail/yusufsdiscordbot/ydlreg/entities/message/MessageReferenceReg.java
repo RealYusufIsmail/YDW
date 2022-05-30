@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.message.MessageReference;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class MessageReferenceReg implements MessageReference {
@@ -42,16 +43,19 @@ public class MessageReferenceReg implements MessageReference {
         return ydl;
     }
 
+    @NotNull
     @Override
     public SnowFlake getMessageId() {
         return SnowFlake.of(message.get("id").asLong());
     }
 
+    @NotNull
     @Override
     public SnowFlake getChannelId() {
         return SnowFlake.of(message.get("channel_id").asLong());
     }
 
+    @NotNull
     @Override
     public SnowFlake getGuildId() {
         return SnowFlake.of(message.get("guild_id").asLong());

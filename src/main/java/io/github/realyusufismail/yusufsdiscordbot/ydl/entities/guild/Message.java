@@ -33,6 +33,7 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.message.Messag
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.message.MessageType;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.message_components.ComponentType;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.ZonedDateTime;
 import java.util.EnumSet;
@@ -76,6 +77,7 @@ public interface Message extends SnowFlake, GenericEntity {
 
     Optional<Integer> getNonceAsInt();
 
+    @NotNull
     default Optional<String> getNonce() {
         return getNonceAsInt().map(Object::toString);
     }

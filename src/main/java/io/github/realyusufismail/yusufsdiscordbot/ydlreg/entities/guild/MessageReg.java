@@ -45,6 +45,8 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.sticker.Sticke
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.sticker.StickerReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.message_components.ComponentType;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.message_components.interaction.MessageInteractionReg;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -55,12 +57,16 @@ public class MessageReg implements Message {
 
     private final Channel channel;
     private final Guild guild;
+    @NotNull
     private final User author;
+    @Nullable
     private final Member member;
     private final String content;
     private final ZonedDateTime timestamp;
     private final ZonedDateTime editedTimestamp;
+    @NotNull
     private final Boolean tts;
+    @NotNull
     private final Boolean mentionEveryone;
     private final Map<User, Member> mentions = new HashMap<>();
     private final List<Role> roles = new ArrayList<>();
@@ -72,19 +78,27 @@ public class MessageReg implements Message {
     private final EnumSet<MessageFlags> flags = EnumSet.noneOf(MessageFlags.class);
     private final List<StickerItem> stickerItems = new ArrayList<>();
     private final EnumSet<ComponentType> componentTypes = EnumSet.noneOf(ComponentType.class);
+    @NotNull
     private final MessageType type;
+    @NotNull
     private final Boolean isPinned;
     private final Integer nonce;
+    @Nullable
     private final MessageReference reference;
+    @Nullable
     private final MessageActivityType activityType;
+    @NotNull
     private final Boolean mentionsEveryone;
+    @Nullable
     private final Application application;
+    @Nullable
     private final Message referencedMessage;
+    @Nullable
     private final MessageInteraction interaction;
     private final Channel thread;
 
 
-    public MessageReg(JsonNode message, long id, YDL ydl) {
+    public MessageReg(@NotNull JsonNode message, long id, @NotNull YDL ydl) {
         this.ydl = ydl;
         this.id = id;
 
@@ -190,6 +204,7 @@ public class MessageReg implements Message {
     /**
      * @return The core long of this api.
      */
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;
@@ -210,6 +225,7 @@ public class MessageReg implements Message {
         return author;
     }
 
+    @NotNull
     @Override
     public Optional<Member> getMember() {
         return Optional.ofNullable(member);
@@ -240,36 +256,43 @@ public class MessageReg implements Message {
         return mentionsEveryone;
     }
 
+    @NotNull
     @Override
     public Map<User, Member> getMentions() {
         return mentions;
     }
 
+    @NotNull
     @Override
     public List<Role> getRoles() {
         return roles;
     }
 
+    @NotNull
     @Override
     public List<Channel> getMentionChannels() {
         return mentionedChannels;
     }
 
+    @NotNull
     @Override
     public List<Attachment> getAttachments() {
         return attachments;
     }
 
+    @NotNull
     @Override
     public List<Embed> getEmbeds() {
         return embeds;
     }
 
+    @NotNull
     @Override
     public List<Reaction> getReactions() {
         return reactions;
     }
 
+    @NotNull
     @Override
     public Optional<Integer> getNonceAsInt() {
         return Optional.ofNullable(nonce);
@@ -290,46 +313,55 @@ public class MessageReg implements Message {
         return activityType;
     }
 
+    @NotNull
     @Override
     public Optional<Application> getApplication() {
         return Optional.ofNullable(application);
     }
 
+    @NotNull
     @Override
     public Optional<MessageReference> getMessageReference() {
         return Optional.ofNullable(reference);
     }
 
+    @NotNull
     @Override
     public EnumSet<MessageFlags> getFlags() {
         return flags;
     }
 
+    @NotNull
     @Override
     public Optional<Message> getReferenceMessage() {
         return Optional.ofNullable(referencedMessage);
     }
 
+    @NotNull
     @Override
     public Optional<MessageInteraction> getMessageInteraction() {
         return Optional.ofNullable(interaction);
     }
 
+    @NotNull
     @Override
     public Optional<Channel> getThread() {
         return Optional.ofNullable(thread);
     }
 
+    @NotNull
     @Override
     public EnumSet<ComponentType> getComponentTypes() {
         return componentTypes;
     }
 
+    @NotNull
     @Override
     public List<StickerItem> getStickerItems() {
         return stickerItems;
     }
 
+    @NotNull
     @Override
     public List<Sticker> getStickers() {
         return stickers;

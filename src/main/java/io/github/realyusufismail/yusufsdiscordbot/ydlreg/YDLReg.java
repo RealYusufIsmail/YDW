@@ -32,6 +32,7 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.RestApiHandler;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.util.Verify;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,20 +44,23 @@ public class YDLReg implements YDL {
 
     // logger
     public static final Logger logger = LoggerFactory.getLogger(YDLReg.class);
+    @NotNull
     private final RestApiHandler rest;
+    @NotNull
     private final ObjectMapper mapper;
     private WebSocketManager ws;
     private long ping;
     private long sequenceNumber;
     private long gatewayPing;
     private SelfUser selfUser;
+    @NotNull
     private final OkHttpClient client;
 
     private List<UnavailableGuild> unavailableGuilds;
 
     private Boolean resumable;
 
-    public YDLReg(OkHttpClient client) {
+    public YDLReg(@Nullable OkHttpClient client) {
         rest = new RestApiHandler(this);
         mapper = new ObjectMapper();
         this.client = client == null ? new OkHttpClient() : client;
@@ -142,6 +146,7 @@ public class YDLReg implements YDL {
             logger.warn("Event listener not implemented");
     }
 
+    @Nullable
     @Override
     public List<Object> getEventListeners() {
         return null; // eventHandler.getEventListeners();
