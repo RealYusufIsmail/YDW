@@ -18,19 +18,12 @@
 package yusufsdiscordbot.ydlreg.entities.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.YDL;
-import yusufsdiscordbot.ydl.entities.guild.GuildChannel;
 import yusufsdiscordbot.ydl.entities.guild.channel.Threads;
 import yusufsdiscordbot.ydlreg.entities.guild.ChannelReg;
 
 public class ThreadsReg extends ChannelReg implements Threads {
     public ThreadsReg(JsonNode json, long id, YDL ydl) {
         super(json, id, ydl);
-    }
-
-    @Override
-    public int compareTo(@NotNull GuildChannel o) {
-        return Long.compare(getIdLong(), o.getIdLong());
     }
 }

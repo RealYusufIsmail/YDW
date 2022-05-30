@@ -20,9 +20,6 @@ package yusufsdiscordbot.ydlreg.exception;
 import java.io.Serial;
 
 public class VerifyException extends IllegalArgumentException {
-    @Serial
-    private static final long serialVersionUID = 1L;
-
     public VerifyException(final String message) {
         super(message);
     }

@@ -15,42 +15,15 @@
  * This is free software, and you are welcome to redistribute it under certain conditions
  */
 
-package io.github.realyusufismail.websocket.core;
+package yusufsdiscordbot.ydl.action;
 
-public enum Status {
-    /**
-     * The bot is online and ready to receive commands.
-     */
-    ONLINE("online"),
-    /**
-     * The bot is offline and not ready to receive commands.
-     */
-    OFFLINE("offline"),
-    /**
-     * The bot is idle
-     */
-    IDLE("idle"),
-    /**
-     * The bot is busy
-     */
-    DND("dnd"),
-    /**
-     * The bot is invisible
-     */
-    INVISIBLE("invisible"),
-    /**
-     * This will be used if future statuses are added.
-     */
-    UNKNOWN("Unknown");
+import org.jetbrains.annotations.NotNull;
 
-    private final String statusNames;
+public interface ReplyAction extends Action {
 
-    Status(String status) {
-        this.statusNames = status;
-    }
+    @NotNull
+    ReplyAction isEphemeral();
 
-    public String getStatus() {
-        return statusNames;
-    }
+    @NotNull
+    ReplyAction isTTS();
 }
-

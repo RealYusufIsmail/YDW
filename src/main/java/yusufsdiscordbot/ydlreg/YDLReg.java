@@ -20,12 +20,12 @@ package yusufsdiscordbot.ydlreg;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neovisionaries.ws.client.WebSocketException;
 import io.github.realyusufismail.websocket.WebSocketManager;
-import io.github.realyusufismail.websocket.core.GateWayIntent;
+import yusufsdiscordbot.ydl.GateWayIntent;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import yusufsdiscordbot.ydl.Activity;
+import yusufsdiscordbot.ydl.activity.ActivityConfig;
 import yusufsdiscordbot.ydl.YDL;
 import yusufsdiscordbot.ydl.entities.Guild;
 import yusufsdiscordbot.ydl.entities.SelfUser;
@@ -99,7 +99,7 @@ public class YDLReg implements YDL {
 
     @Override
     public void login(String token, int gatewayIntents, String status, int largeThreshold,
-            boolean compress, Activity activity) throws IOException, WebSocketException {
+            boolean compress, ActivityConfig activity) throws IOException, WebSocketException {
         ws = new WebSocketManager(this, token, gatewayIntents, status, largeThreshold, compress,
                 activity);
     }
@@ -193,9 +193,9 @@ public class YDLReg implements YDL {
 
     @Override
     public @NotNull SelfUser getSelfUser() {
-        Optional<SelfUser> selfUser = Optional.ofNullable(this.selfUser);
-        if (selfUser.isPresent())
-            return selfUser.get();
+        Optional<SelfUser> user = Optional.ofNullable(this.selfUser);
+        if (user.isPresent())
+            return user.get();
         else
             throw new IllegalStateException("Self user is not set");
     }

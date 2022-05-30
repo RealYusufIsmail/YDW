@@ -23,22 +23,22 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import yusufsdiscordbot.ydl.YDL;
+import yusufsdiscordbot.ydl.action.Action;
+import yusufsdiscordbot.ydl.action.MessageAction;
 import yusufsdiscordbot.ydl.entities.guild.GuildChannel;
 import yusufsdiscordbot.ydl.entities.guild.Message;
 import yusufsdiscordbot.ydl.entities.guild.channel.TextChannel;
 import yusufsdiscordbot.ydlreg.YDLReg;
-import yusufsdiscordbot.ydlreg.action.Action;
-import yusufsdiscordbot.ydlreg.action.MessageAction;
 import yusufsdiscordbot.ydlreg.entities.GuildReg;
 import yusufsdiscordbot.ydlreg.entities.embed.builder.EmbedBuilder;
 import yusufsdiscordbot.ydlreg.entities.guild.ChannelReg;
-import yusufsdiscordbot.ydlreg.rest.old.MessageRestApi;
+import yusufsdiscordbot.ydlreg.rest.callers.MessageCaller;
 
 // TODO : once rest api is done start creating the rest api for this
 public class TextChannelReg extends ChannelReg implements TextChannel {
     private final YDL ydl;
     @NotNull
-    MessageRestApi apiHandler = getYDL().getRest().getMessageRestApi();
+    MessageCaller apiHandler = getYDL().getRest().getMessageRestApi();
 
     public TextChannelReg(JsonNode json, long id, YDL ydl) {
         super(json, id, ydl);

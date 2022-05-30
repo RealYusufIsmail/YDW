@@ -17,15 +17,11 @@
 
 package yusufsdiscordbot.ydlreg.entities.channel;
 
-import api.ydl.cache.util.HookLock;
-import api.ydl.snowflake.reg.SnowFlakeCacheRetrieverReg;
+
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.YDL;
-import yusufsdiscordbot.ydl.entities.guild.GuildChannel;
 import yusufsdiscordbot.ydl.entities.guild.channel.StageChannel;
 import yusufsdiscordbot.ydlreg.YDLReg;
-import yusufsdiscordbot.ydlreg.entities.GuildReg;
 import yusufsdiscordbot.ydlreg.entities.guild.ChannelReg;
 
 public class StageChannelReg extends ChannelReg implements StageChannel {
@@ -37,38 +33,7 @@ public class StageChannelReg extends ChannelReg implements StageChannel {
     }
 
     @Override
-    public int compareTo(@NotNull GuildChannel o) {
-        return Long.compare(getIdLong(), o.getIdLong());
-    }
-
-    @Override
     public YDLReg getYDL() {
         return (YDLReg) ydl;
-    }
-
-    public StageChannel build(JsonNode object, long guildId) {
-        return build(null, object, guildId);
-    }
-
-    public StageChannel build(GuildReg guildReg, JsonNode object, long guildId) {
-        boolean playbackCache = false;
-        final long id = object.get("id").asLong();
-        StageChannelReg channelReg =
-                (StageChannelReg) getYDL().getStageChannelCacheReg().get(object.get("id").asLong());
-        if (channelReg == null) {
-            if (guildReg == null)
-                guildReg = (GuildReg) getYDL().getGuildCacheReg().get(guildId);
-            SnowFlakeCacheRetrieverReg<StageChannel> channelRetriever =
-                    guildReg.getStageChannelsReg(),
-                    textRetriever = getYDL().getStageChannelCacheReg();
-
-            try (HookLock guildLock = channelRetriever.writeLock();
-                    HookLock textLock = textRetriever.writeLock()) {
-                channelReg = new StageChannelReg(id, getYDL());
-                channelRetriever.getMap().put(id, channelReg);
-                playbackCache = textRetriever.getMap().put(id, channelReg) == null;
-            }
-        }
-        return channelReg;
     }
 }

@@ -18,96 +18,18 @@
 package yusufsdiscordbot.ydlreg.entities.activity;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.YDL;
-import yusufsdiscordbot.ydl.application.interaction.InteractionData;
-import yusufsdiscordbot.ydl.entities.User;
-import yusufsdiscordbot.ydl.entities.activity.Activity;
-import yusufsdiscordbot.ydl.entities.guild.Member;
-import yusufsdiscordbot.ydl.entities.guild.Message;
-import yusufsdiscordbot.ydlreg.application.interaction.InteractionDataReg;
-import yusufsdiscordbot.ydlreg.application.interaction.InteractionType;
-import yusufsdiscordbot.ydlreg.entities.UserReg;
-import yusufsdiscordbot.ydlreg.entities.guild.MemberReg;
-import yusufsdiscordbot.ydlreg.entities.guild.MessageReg;
-import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+import yusufsdiscordbot.ydl.activity.Activity;
 
 public class ActivityReg implements Activity {
-    private final JsonNode activity;
+
     private final YDL ydl;
+    private final long id;
 
-    public ActivityReg(JsonNode activity, YDL ydl) {
-        this.activity = activity;
+    public ActivityReg(JsonNode activity, long id, YDL ydl) {
         this.ydl = ydl;
+        this.id = id;
     }
 
-    @Override
-    public @NotNull SnowFlake getApplicationId() {
-        return SnowFlake.of(activity.get("application_id").asText());
-    }
 
-    @Override
-    public InteractionType getInteractionType() {
-        return InteractionType.fromValue(activity.get("type").asInt());
-    }
-
-    @Override
-    public @NotNull InteractionData getInteractionData() {
-        return new InteractionDataReg(activity.getAsJsonNode("data"));
-    }
-
-    @Override
-    public @NotNull SnowFlake getGuildId() {
-        return SnowFlake.of(activity.get("guild_id").asText());
-    }
-
-    @Override
-    public @NotNull SnowFlake getChannelId() {
-        return SnowFlake.of(activity.get("channel_id").asText());
-    }
-
-    @Override
-    public @NotNull Member getMember() {
-        return new MemberReg(activity.getAsJsonNode("member"), ydl);
-    }
-
-    @Override
-    public @NotNull User getUser() {
-        return new UserReg(activity.getAsJsonNode("user"), ydl);
-    }
-
-    @Override
-    public String getToken() {
-        return activity.get("token").asText();
-    }
-
-    @Override
-    public int getVersion() {
-        return activity.get("version").asInt();
-    }
-
-    @Override
-    public @NotNull Message getMessage() {
-        return new MessageReg(activity.getAsJsonNode("message"), ydl);
-    }
-
-    @Override
-    public String getLocale() {
-        return activity.get("locale").asText();
-    }
-
-    @Override
-    public String getGuildLocale() {
-        return activity.get("guild_locale").asText();
-    }
-
-    @Override
-    public Long getIdLong() {
-        return activity.get("id").asLong();
-    }
-
-    @Override
-    public YDL getYDL() {
-        return ydl;
-    }
 }

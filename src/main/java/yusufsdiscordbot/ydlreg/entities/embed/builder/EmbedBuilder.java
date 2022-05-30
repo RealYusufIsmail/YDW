@@ -18,6 +18,7 @@
 package yusufsdiscordbot.ydlreg.entities.embed.builder;
 
 import com.google.common.base.Objects;
+import com.google.errorprone.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import yusufsdiscordbot.ydl.entities.embed.Embed;
@@ -94,65 +95,77 @@ public class EmbedBuilder {
         this.fields.addAll(embed.getFields());
     }
 
+    @CheckReturnValue
     public EmbedBuilder setTitle(@NotNull String title) {
         Verify.verify(title.length() <= MAX_TITLE_LENGTH, "Title is too long");
         this.title = title;
         return this;
     }
 
+    @CheckReturnValue
     public EmbedBuilder setDescription(@NotNull String description) {
         Verify.verify(description.length() <= MAX_DESCRIPTION_LENGTH, "Description is too long");
         this.description = description;
         return this;
     }
 
+    @CheckReturnValue
     public EmbedBuilder setUrl(@NotNull String url) {
         this.url = url;
         return this;
     }
 
+    @CheckReturnValue
     public EmbedBuilder setTimestamp(@NotNull String timestamp) {
         this.timestamp = timestamp;
         return this;
     }
 
+    @CheckReturnValue
     public EmbedBuilder setColor(@NotNull Color color) {
         this.color = color;
         return this;
     }
 
+    @CheckReturnValue
     public EmbedBuilder setFooter(@NotNull String text, String iconUrl) {
         Verify.verify(text.length() <= MAX_FOOTER_LENGTH, "Footer text is too long");
         this.footer = new FooterReg(text, iconUrl, null);
         return this;
     }
 
+    @CheckReturnValue
     public EmbedBuilder setImage(String url) {
         this.image = new ImageReg(url, null, null, null);
         return this;
     }
 
+    @CheckReturnValue
     public EmbedBuilder setThumbnail(String url) {
         this.thumbnail = new ThumbnailReg(url, null, null, null);
         return this;
     }
 
+    @CheckReturnValue
     public EmbedBuilder setVideo(String url) {
         this.video = new VideoReg(url, null, null, null);
         return this;
     }
 
+    @CheckReturnValue
     public EmbedBuilder setProvider(String name, String url) {
         this.provider = new ProviderReg(name, url);
         return this;
     }
 
+    @CheckReturnValue
     public EmbedBuilder setAuthor(@NotNull String name, String url, String iconUrl) {
         Verify.verify(name.length() <= MAX_AUTHOR_NAME_LENGTH, "Author name is too long");
         this.author = new AuthorReg(name, url, iconUrl, null);
         return this;
     }
 
+    @CheckReturnValue
     public EmbedBuilder addField(@NotNull String name, @NotNull String value, boolean inline) {
         Verify.verify(name.length() <= MAX_FIELD_NAME_LENGTH, "Field name is too long");
         Verify.verify(value.length() <= MAX_FIELD_VALUE_LENGTH, "Field value is too long");
@@ -163,10 +176,12 @@ public class EmbedBuilder {
         return this;
     }
 
+    @CheckReturnValue
     public EmbedBuilder addField(String name, String value) {
         return addField(name, value, false);
     }
 
+    @CheckReturnValue
     public EmbedBuilder addFields(@NotNull List<Fields> fields) {
         for (Fields field : fields) {
             if (field.getName().isPresent() && field.getValue().isPresent()) {

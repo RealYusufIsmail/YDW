@@ -15,7 +15,7 @@
  * This is free software, and you are welcome to redistribute it under certain conditions
  */
 
-package io.github.realyusufismail.websocket.core;
+package yusufsdiscordbot.ydl;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

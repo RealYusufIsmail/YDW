@@ -21,14 +21,10 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import yusufsdiscordbot.ydl.YDL;
-import yusufsdiscordbot.ydl.YDLInfo;
 import yusufsdiscordbot.ydlreg.YDLReg;
 import yusufsdiscordbot.ydlreg.rest.callers.*;
-import yusufsdiscordbot.ydlreg.rest.old.ApplicationCommandsRestApi;
-import yusufsdiscordbot.ydlreg.rest.old.MessageRestApi;
+import yusufsdiscordbot.ydlreg.rest.callers.MessageCaller;
 
 import java.io.IOException;
 import java.util.function.Consumer;
@@ -36,9 +32,7 @@ import java.util.function.Consumer;
 @SuppressWarnings("unused")
 public class RestApiHandler {
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    private static final Logger logger = LoggerFactory.getLogger(RestApiHandler.class);
     private final YDL ydl;
-    private final String restLink = YDLInfo.DISCORD_REST_LINK;
     private final GuildCaller guildRestApi = new GuildCaller(getYDL(), JSON);
     private final UserCaller userCaller = new UserCaller(getYDL());
     private final StickerCaller stickerCaller = new StickerCaller((YDLReg) getYDL());
@@ -46,18 +40,15 @@ public class RestApiHandler {
     private final ChannelCaller channelCaller = new ChannelCaller(getYDL());
     private final YDLCaller ydlCaller = new YDLCaller(getYDL());
     private final SlashCommandCaller slashCommandCaller = new SlashCommandCaller(getYDL());
+    private final MessageCaller messageRestApi = new MessageCaller(getYDL(), JSON);
     @NotNull
     OkHttpClient client = new OkHttpClient();
     private boolean isEphemeral = false;
     private boolean isTTS = false;
     private boolean isMentionable = false;
-    private final MessageRestApi messageRestApi =
-            new MessageRestApi(restLink, JSON, client, isMentionable, isTTS);
     private boolean isGuildOnlyCommand = false;
     private String guildId;
     private String token = "";
-    private final ApplicationCommandsRestApi applicationCommandsRestApi =
-            new ApplicationCommandsRestApi(restLink, JSON, client, token, guildId);
 
     public RestApiHandler(YDL ydl) {
         this.ydl = ydl;
@@ -78,10 +69,6 @@ public class RestApiHandler {
                 success.accept(null);
             }
         });
-    }
-
-    public void setGuildOnly(boolean isGuildOnly) {
-        this.isGuildOnlyCommand = isGuildOnly;
     }
 
     public void setEphemeral(boolean ephemeral) {
@@ -112,11 +99,7 @@ public class RestApiHandler {
         return userCaller;
     }
 
-    public @NotNull ApplicationCommandsRestApi getApplicationCommandsRestApi() {
-        return applicationCommandsRestApi;
-    }
-
-    public @NotNull MessageRestApi getMessageRestApi() {
+    public @NotNull MessageCaller getMessageRestApi() {
         return messageRestApi;
     }
 

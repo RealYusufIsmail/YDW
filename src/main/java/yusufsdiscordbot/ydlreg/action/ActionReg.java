@@ -15,24 +15,24 @@
  * This is free software, and you are welcome to redistribute it under certain conditions
  */
 
-package yusufsdiscordbot.ydlreg.action.reg;
+package yusufsdiscordbot.ydlreg.action;
 
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.YDL;
-import yusufsdiscordbot.ydlreg.action.MessageAction;
+import yusufsdiscordbot.ydl.action.Action;
 import yusufsdiscordbot.ydlreg.rest.RestApiHandler;
 
 import java.util.function.Consumer;
 
-public class MessageActionReg implements MessageAction {
+public class ActionReg implements Action {
     private final Request request;
 
     private final YDL ydl;
     @NotNull
     RestApiHandler api = new RestApiHandler(getYdl());
 
-    public MessageActionReg(Request request, YDL ydl) {
+    public ActionReg(Request request, YDL ydl) {
         this.request = request;
         this.ydl = ydl;
     }
@@ -50,18 +50,6 @@ public class MessageActionReg implements MessageAction {
     @Override
     public <T> void queue(Consumer<? super T> success, Consumer<? super Throwable> failure) {
         api.queue(request, success, failure);
-    }
-
-    @Override
-    public @NotNull MessageAction isTTs() {
-        api.setTTS(true);
-        return this;
-    }
-
-    @Override
-    public @NotNull MessageAction isMentionable() {
-        api.setMentionable(true);
-        return this;
     }
 
     public YDL getYdl() {

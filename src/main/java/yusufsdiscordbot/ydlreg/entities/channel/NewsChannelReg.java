@@ -17,15 +17,10 @@
 
 package yusufsdiscordbot.ydlreg.entities.channel;
 
-import api.ydl.cache.util.HookLock;
-import api.ydl.snowflake.reg.SnowFlakeCacheRetrieverReg;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.YDL;
-import yusufsdiscordbot.ydl.entities.guild.GuildChannel;
 import yusufsdiscordbot.ydl.entities.guild.channel.NewsChannel;
 import yusufsdiscordbot.ydlreg.YDLReg;
-import yusufsdiscordbot.ydlreg.entities.GuildReg;
 import yusufsdiscordbot.ydlreg.entities.guild.ChannelReg;
 
 public class NewsChannelReg extends ChannelReg implements NewsChannel {
@@ -37,39 +32,8 @@ public class NewsChannelReg extends ChannelReg implements NewsChannel {
     }
 
     @Override
-    public int compareTo(@NotNull GuildChannel o) {
-        return Long.compare(getIdLong(), o.getIdLong());
-    }
-
-    @Override
     public YDLReg getYDL() {
         return (YDLReg) ydl;
-    }
-
-    public NewsChannel build(JsonNode object, long guildId) {
-        return build(null, object, guildId);
-    }
-
-    public NewsChannel build(GuildReg guildReg, JsonNode object, long guildId) {
-        boolean playbackCache = false;
-        final long id = object.get("id").asLong();
-        NewsChannelReg channelReg =
-                (NewsChannelReg) getYDL().getNewsChannelCacheReg().get(object.get("id").asLong());
-        if (channelReg == null) {
-            if (guildReg == null)
-                guildReg = (GuildReg) getYDL().getGuildCacheReg().get(guildId);
-            SnowFlakeCacheRetrieverReg<NewsChannel> channelRetriever =
-                    guildReg.getNewsChannelsReg(),
-                    textRetriever = getYDL().getNewsChannelCacheReg();
-
-            try (HookLock guildLock = channelRetriever.writeLock();
-                    HookLock textLock = textRetriever.writeLock()) {
-                channelReg = new NewsChannelReg(id, getYDL());
-                channelRetriever.getMap().put(id, channelReg);
-                playbackCache = textRetriever.getMap().put(id, channelReg) == null;
-            }
-        }
-        return channelReg;
     }
 
 }

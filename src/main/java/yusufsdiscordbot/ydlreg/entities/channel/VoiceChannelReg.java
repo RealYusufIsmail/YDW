@@ -18,9 +18,7 @@
 package yusufsdiscordbot.ydlreg.entities.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.YDL;
-import yusufsdiscordbot.ydl.entities.guild.GuildChannel;
 import yusufsdiscordbot.ydl.entities.guild.channel.VoiceChannel;
 import yusufsdiscordbot.ydlreg.YDLReg;
 import yusufsdiscordbot.ydlreg.entities.guild.ChannelReg;
@@ -34,14 +32,7 @@ public class VoiceChannelReg extends ChannelReg implements VoiceChannel {
     }
 
     @Override
-    public int compareTo(@NotNull GuildChannel o) {
-        return Long.compare(getIdLong(), o.getIdLong());
-    }
-
-    @Override
     public YDLReg getYDL() {
         return (YDLReg) ydl;
     }
-
-
 }

@@ -15,12 +15,12 @@
  * This is free software, and you are welcome to redistribute it under certain conditions
  */
 
-package yusufsdiscordbot.ydlreg.action.reg;
+package yusufsdiscordbot.ydlreg.action;
 
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.YDL;
-import yusufsdiscordbot.ydlreg.action.ReplyAction;
+import yusufsdiscordbot.ydl.action.ReplyAction;
 import yusufsdiscordbot.ydlreg.rest.RestApiHandler;
 
 import java.util.function.Consumer;

@@ -15,14 +15,14 @@
  * This is free software, and you are welcome to redistribute it under certain conditions
  */
 
-package io.github.realyusufismail.websocket.core;
+package yusufsdiscordbot.ydl.activity;
 
 import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydlreg.util.Verify;
 
 import java.util.regex.Pattern;
 
-public enum Activity {
+public enum ActivityConfig {
     PLAYING(0),
     STREAMING(1),
     LISTENING(2),
@@ -36,7 +36,7 @@ public enum Activity {
     private String name;
     private String url;
 
-    Activity(int activity) {
+    ActivityConfig(int activity) {
         this.activity = activity;
     }
 
@@ -49,19 +49,19 @@ public enum Activity {
         this.name = name;
         Verify.checkIfUrl(url, allowedStreamingUrls);
         this.url = url;
-        return Activity.WATCHING.getActivity();
+        return ActivityConfig.WATCHING.getActivity();
     }
 
     public int playing(@NotNull String name) {
         Verify.checkLength(name, 128);
         this.name = name;
-        return Activity.PLAYING.getActivity();
+        return ActivityConfig.PLAYING.getActivity();
     }
 
     public int listening(@NotNull String name) {
         Verify.checkLength(name, 128);
         this.name = name;
-        return Activity.LISTENING.getActivity();
+        return ActivityConfig.LISTENING.getActivity();
     }
 
     public int streaming(@NotNull String name, String url) {
@@ -69,7 +69,7 @@ public enum Activity {
         this.name = name;
         Verify.checkIfUrl(url, allowedStreamingUrls);
         this.url = url;
-        return Activity.STREAMING.getActivity();
+        return ActivityConfig.STREAMING.getActivity();
     }
 
 

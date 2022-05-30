@@ -18,9 +18,9 @@
 package yusufsdiscordbot.ydl;
 
 import com.google.errorprone.annotations.CheckReturnValue;
-import io.github.realyusufismail.websocket.core.GateWayIntent;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
+import yusufsdiscordbot.ydl.activity.ActivityConfig;
 import yusufsdiscordbot.ydlreg.YDLReg;
 import yusufsdiscordbot.ydlreg.exception.*;
 
@@ -34,7 +34,7 @@ public class YDLConnector {
     private String guildId;
     private int gatewayIntents;
     private String status = Status.ONLINE.getStatus();
-    private Activity activity;
+    private ActivityConfig activity;
     private boolean compress = false;
     private int largeThreshold = 50;
     private OkHttpClient client = null;
@@ -172,7 +172,7 @@ public class YDLConnector {
      * @param activity activity
      * @return YDLConnector
      */
-    public YDLConnector setActivity(Activity activity) {
+    public YDLConnector setActivity(ActivityConfig activity) {
         this.activity = activity;
         return this;
     }

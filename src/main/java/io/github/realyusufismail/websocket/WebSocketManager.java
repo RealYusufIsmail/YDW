@@ -4,14 +4,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.neovisionaries.ws.client.*;
-import io.github.realyusufismail.websocket.core.GateWayIntent;
+import yusufsdiscordbot.ydl.GateWayIntent;
 import io.github.realyusufismail.websocket.core.OpCode;
 import io.github.realyusufismail.websocket.handle.OnHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import yusufsdiscordbot.ydl.Activity;
+import yusufsdiscordbot.ydl.activity.ActivityConfig;
 import yusufsdiscordbot.ydl.YDLInfo;
 import yusufsdiscordbot.ydlreg.YDLReg;
 
@@ -52,7 +52,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     private final int largeThreshold;
     private final boolean compress;
     // The activity of the bot e.g. playing, streaming, listening, watching etc.
-    private final Activity activity;
+    private final ActivityConfig activity;
 
     // The inner d key of the invalid session event is a boolean that indicates whether the session
     // may be resumable. See Connecting and Resuming for more information.
@@ -60,7 +60,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
 
     public WebSocketManager(YDLReg ydl, String token, Integer intent, String status,
-            int largeThreshold, boolean compress, Activity activity)
+            int largeThreshold, boolean compress, ActivityConfig activity)
             throws IOException, WebSocketException {
         this.ydl = ydl;
         this.token = token;
@@ -74,7 +74,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     }
 
     public WebSocketManager(YDLReg ydl, String token, @NotNull GateWayIntent intent, String status,
-            int largeThreshold, boolean compress, Activity activity)
+            int largeThreshold, boolean compress, ActivityConfig activity)
             throws IOException, WebSocketException {
         this(ydl, token, intent.getValue(), status, largeThreshold, compress, activity);
     }

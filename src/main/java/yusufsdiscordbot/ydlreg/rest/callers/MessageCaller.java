@@ -19,17 +19,31 @@
  * under certain conditions
  */
 
-package yusufsdiscordbot.ydlreg.rest.old;
+package yusufsdiscordbot.ydlreg.rest.callers;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.jetbrains.annotations.Nullable;
+import yusufsdiscordbot.ydl.YDL;
+import yusufsdiscordbot.ydlreg.YDLReg;
 import yusufsdiscordbot.ydlreg.application.commands.SlashCommandReg;
 import yusufsdiscordbot.ydlreg.entities.embed.builder.EmbedBuilder;
 
-public record MessageRestApi(String restLink, MediaType JSON, OkHttpClient client, boolean isMentionable,
-                             boolean isTTS) {
+public class MessageCaller {
+
+    private final YDLReg ydl;
+
+    private final OkHttpClient client;
+
+    private final MediaType JSON;
+
+    public MessageCaller(YDL ydl, MediaType json) {
+        this.ydl = (YDLReg) ydl;
+        JSON = json;
+        this.client = new OkHttpClient();
+    }
+
     public @Nullable Request reply(String message, SlashCommandReg slashCommandReg) {
         //TODO: Implement
         return null;

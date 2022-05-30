@@ -15,14 +15,14 @@
  * This is free software, and you are welcome to redistribute it under certain conditions
  */
 
-package yusufsdiscordbot.ydlreg.action;
+package yusufsdiscordbot.ydl.action;
 
-import java.util.function.Consumer;
+import org.jetbrains.annotations.NotNull;
 
-public interface Action {
-    void queue();
+public interface MessageAction extends Action {
+    @NotNull
+    MessageAction isTTs();
 
-    <T> void queue(Consumer<? super T> success);
-
-    <T> void queue(Consumer<? super T> success, Consumer<? super Throwable> failure);
+    @NotNull
+    MessageAction isMentionable();
 }

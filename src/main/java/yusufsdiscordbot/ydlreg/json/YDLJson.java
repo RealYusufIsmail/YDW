@@ -38,15 +38,13 @@ public class YDLJson {
      */
     public static @Nullable JsonNode parseObject(String input) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode payload = mapper.readTree(input);
-        return payload;
+        return mapper.readTree(input);
     }
 
     // Used to parse a json array
     public static @Nullable JsonNode parseArray(String input) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode payload = mapper.readTree(input);
-        return payload;
+        return mapper.readTree(input);
     }
 
     public static @NotNull Reader convertInputStreamToReader(@NotNull InputStream inputStream) {

@@ -36,7 +36,7 @@ public class ThreadMemberReg implements ThreadMember {
     private final Flags[] flags;
 
 
-    public ThreadMemberReg(JsonNode json, long id, YDL ydl) {
+    public ThreadMemberReg(@NotNull JsonNode json, long id, YDL ydl) {
         this.id = id;
         this.ydl = ydl;
 

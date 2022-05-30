@@ -21,6 +21,7 @@ package yusufsdiscordbot.ydl;
 import com.neovisionaries.ws.client.WebSocketException;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import org.jetbrains.annotations.NotNull;
+import yusufsdiscordbot.ydl.activity.ActivityConfig;
 import yusufsdiscordbot.ydl.entities.Guild;
 import yusufsdiscordbot.ydl.entities.SelfUser;
 import yusufsdiscordbot.ydl.entities.UnavailableGuild;
@@ -66,7 +67,7 @@ public interface YDL {
 
 
     void login(String token, int gatewayIntents, String status, int largeThreshold,
-            boolean compress, Activity activity) throws IOException, WebSocketException;
+            boolean compress, ActivityConfig activity) throws IOException, WebSocketException;
 
 
     void setToken(String token);
