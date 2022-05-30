@@ -287,7 +287,7 @@ public class GuildReg implements Guild {
 
     @Override
     public @NotNull Optional<SnowFlake> getWidgetChannelIdLong() {
-        return Optional.of(SnowFlake.of(widgetChannelId));
+        return Optional.ofNullable(widgetChannelId).map(SnowFlake::of);;
     }
 
     @Override

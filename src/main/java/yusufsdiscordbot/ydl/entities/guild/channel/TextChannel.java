@@ -20,10 +20,10 @@ package yusufsdiscordbot.ydl.entities.guild.channel;
 import com.google.errorprone.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import yusufsdiscordbot.ydl.entities.GenericEntity;
-import yusufsdiscordbot.ydl.entities.guild.Message;
 import yusufsdiscordbot.ydl.action.Action;
 import yusufsdiscordbot.ydl.action.MessageAction;
+import yusufsdiscordbot.ydl.entities.GenericEntity;
+import yusufsdiscordbot.ydl.entities.guild.Message;
 import yusufsdiscordbot.ydlreg.entities.embed.builder.EmbedBuilder;
 import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 

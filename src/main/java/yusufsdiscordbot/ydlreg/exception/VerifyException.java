@@ -17,8 +17,6 @@
 
 package yusufsdiscordbot.ydlreg.exception;
 
-import java.io.Serial;
-
 public class VerifyException extends IllegalArgumentException {
     public VerifyException(final String message) {
         super(message);

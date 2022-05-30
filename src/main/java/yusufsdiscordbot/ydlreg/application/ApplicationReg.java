@@ -173,7 +173,7 @@ public class ApplicationReg implements Application {
 
     @Override
     public Optional<SnowFlake> getPrimarySkuId() {
-        return Optional.of(SnowFlake.of(primarySkuId));
+        return Optional.ofNullable(primarySkuId).map(SnowFlake::of);
     }
 
     @Override

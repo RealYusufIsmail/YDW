@@ -21,11 +21,11 @@ package yusufsdiscordbot.ydl.entities;
 import com.google.errorprone.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import yusufsdiscordbot.ydl.action.Action;
 import yusufsdiscordbot.ydl.entities.emoji.Emoji;
 import yusufsdiscordbot.ydl.entities.guild.*;
 import yusufsdiscordbot.ydl.entities.sticker.Sticker;
 import yusufsdiscordbot.ydl.entities.voice.VoiceState;
-import yusufsdiscordbot.ydl.action.Action;
 import yusufsdiscordbot.ydlreg.entities.guild.GuildFeatures;
 import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 

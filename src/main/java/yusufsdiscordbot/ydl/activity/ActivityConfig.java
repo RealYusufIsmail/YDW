@@ -23,11 +23,34 @@ import yusufsdiscordbot.ydlreg.util.Verify;
 import java.util.regex.Pattern;
 
 public enum ActivityConfig {
+    /**
+     * Playing {name} e.g. Playing Minecraft
+     */
     PLAYING(0),
+    /**
+     * Streaming {details} e.g. Streaming Minecraft on Twitch
+     */
     STREAMING(1),
+    /**
+     * Listening to {name} e.g. Listening to Spotify.
+     */
     LISTENING(2),
+    /**
+     * Watching {name} e.g. Watching lfc tv.
+     */
     WATCHING(3),
-    COMPETING(5);
+    /**
+     * {emoji} {name} e.g. :smiley: LFC are the best.
+     */
+    CUSTOM(4),
+    /**
+     * Competing in {name} e.g. Competing in the world cup.
+     */
+    COMPETING(5),
+    /**
+     * For future use or not implemented yet.
+     */
+    UNKNOWN(-1);
 
     private final int activity;
     private final Pattern allowedStreamingUrls =
@@ -79,5 +102,14 @@ public enum ActivityConfig {
 
     public String getUrl() {
         return url;
+    }
+
+    public static ActivityConfig getActivity(int activity) {
+        for (ActivityConfig config : values()) {
+            if (config.getActivity() == activity) {
+                return config;
+            }
+        }
+        return UNKNOWN;
     }
 }

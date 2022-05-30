@@ -87,7 +87,7 @@ public class StickerReg implements Sticker {
 
     @Override
     public Optional<SnowFlake> getPackIdLong() {
-        return Optional.of(SnowFlake.of(packId));
+        return Optional.ofNullable(packId).map(SnowFlake::of);
     }
 
     @Override

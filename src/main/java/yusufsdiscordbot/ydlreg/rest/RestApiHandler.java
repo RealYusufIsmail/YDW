@@ -24,7 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import yusufsdiscordbot.ydl.YDL;
 import yusufsdiscordbot.ydlreg.YDLReg;
 import yusufsdiscordbot.ydlreg.rest.callers.*;
-import yusufsdiscordbot.ydlreg.rest.callers.MessageCaller;
 
 import java.io.IOException;
 import java.util.function.Consumer;
