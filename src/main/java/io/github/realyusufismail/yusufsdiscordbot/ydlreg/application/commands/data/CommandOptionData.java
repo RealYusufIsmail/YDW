@@ -17,9 +17,9 @@
 
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.application.commands.data;
 
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.application.commands.option.OptionTypeEnum;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.util.Verify;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Native;
 import java.util.List;

@@ -18,9 +18,9 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.voice;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.voice.VoiceRegion;
+import org.jetbrains.annotations.NotNull;
 
 public class VoiceRegionReg implements VoiceRegion {
     private final String id;

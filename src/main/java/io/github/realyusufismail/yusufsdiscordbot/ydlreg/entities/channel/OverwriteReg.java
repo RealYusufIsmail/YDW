@@ -18,9 +18,9 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.channel.Overwrite;
+import org.jetbrains.annotations.NotNull;
 
 public class OverwriteReg implements Overwrite {
     private final JsonNode json;

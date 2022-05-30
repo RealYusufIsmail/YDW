@@ -18,8 +18,8 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.embed.objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.embed.objects.Provider;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 

@@ -17,9 +17,9 @@
 
 package io.github.realyusufismail.yusufsdiscordbot.ydl.entities.embed;
 
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.embed.objects.Image;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.embed.objects.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.time.ZonedDateTime;

@@ -1,9 +1,9 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.embed.objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.embed.objects.SameEmbedStructure;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.embed.objects.SameEmbedStructure;
 
 import java.util.Optional;
 

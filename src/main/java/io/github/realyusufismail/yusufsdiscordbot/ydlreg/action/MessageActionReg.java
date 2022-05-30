@@ -17,11 +17,11 @@
 
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.action;
 
-import okhttp3.Request;
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.action.MessageAction;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.RestApiHandler;
+import okhttp3.Request;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 

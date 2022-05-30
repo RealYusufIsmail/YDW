@@ -18,14 +18,14 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.channel;
 
 import com.google.errorprone.annotations.CheckReturnValue;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.action.Action;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.action.MessageAction;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.GenericEntity;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.Message;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.embed.builder.EmbedBuilder;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface TextChannel extends SnowFlake, GenericEntity, BaseChannel {
     @CheckReturnValue

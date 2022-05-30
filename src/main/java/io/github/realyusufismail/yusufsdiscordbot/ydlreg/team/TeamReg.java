@@ -18,13 +18,11 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.team;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.team.Team;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.team.TeamMember;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
-import io.github.realyusufismail.yusufsdiscordbot.ydlreg.util.Verify;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -17,8 +17,8 @@
 
 package io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.channel;
 
-import org.jetbrains.annotations.Nullable;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+import org.jetbrains.annotations.Nullable;
 
 public interface Overwrite extends SnowFlake {
     OverwriteType getType();

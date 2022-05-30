@@ -17,8 +17,8 @@
 
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.name;
 
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDLInfo;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 

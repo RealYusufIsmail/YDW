@@ -18,10 +18,10 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.message;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.Nullable;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.message.MessageReference;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+import org.jetbrains.annotations.Nullable;
 
 public class MessageReferenceReg implements MessageReference {
     private final JsonNode message;

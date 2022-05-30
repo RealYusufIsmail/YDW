@@ -18,11 +18,11 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.application.commands.slash;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.channel.TextChannel;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.application.commands.SlashCommandReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.channel.TextChannelReg;
+import org.jetbrains.annotations.NotNull;
 
 // TODO : once rest api is done start creating the rest api for this
 public class SlashCommandInteraction extends SlashCommandReg {

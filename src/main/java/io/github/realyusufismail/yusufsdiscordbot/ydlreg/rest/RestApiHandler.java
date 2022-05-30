@@ -17,13 +17,13 @@
 
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest;
 
+import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
+import io.github.realyusufismail.yusufsdiscordbot.ydlreg.YDLReg;
+import io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.callers.*;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
-import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
-import io.github.realyusufismail.yusufsdiscordbot.ydlreg.YDLReg;
-import io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.callers.*;
 
 import java.io.IOException;
 import java.util.function.Consumer;

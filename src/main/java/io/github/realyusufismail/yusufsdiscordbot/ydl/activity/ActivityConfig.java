@@ -17,8 +17,8 @@
 
 package io.github.realyusufismail.yusufsdiscordbot.ydl.activity;
 
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.util.Verify;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 

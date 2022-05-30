@@ -18,12 +18,12 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.guild;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.Role;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.role.RoleTags;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.perm.Permission;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.role.RoleTagsReg;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 

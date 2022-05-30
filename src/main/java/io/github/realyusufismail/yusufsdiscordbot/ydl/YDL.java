@@ -20,7 +20,6 @@ package io.github.realyusufismail.yusufsdiscordbot.ydl;
 
 import com.neovisionaries.ws.client.WebSocketException;
 import io.github.realyusufismail.websocket.WebSocketManager;
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.activity.ActivityConfig;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.Guild;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.SelfUser;
@@ -28,6 +27,7 @@ import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.UnavailableGuild;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.User;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.Channel;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.RestApiHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.List;

@@ -18,11 +18,11 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.application.commands.slash.option;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.application.commands.slash.option.SlashCommandOptionChoice;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.YDLReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.application.commands.option.CommandOptionChoiceReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.callers.SlashCommandCaller;
+import org.jetbrains.annotations.NotNull;
 
 public class SlashCommandOptionChoiceReg extends CommandOptionChoiceReg
         implements SlashCommandOptionChoice {

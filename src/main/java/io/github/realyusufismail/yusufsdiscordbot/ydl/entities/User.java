@@ -17,10 +17,10 @@
 
 package io.github.realyusufismail.yusufsdiscordbot.ydl.entities;
 
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.user.PremiumTypes;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.user.UserFlags;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;

@@ -18,9 +18,9 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.application.commands.option;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.application.commands.option.ApplicationOptionData;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.application.commands.option.OptionTypeEnum;
+import org.jetbrains.annotations.NotNull;
 
 public class ApplicationOptionDataReg implements ApplicationOptionData {
     private final JsonNode option;

@@ -18,9 +18,9 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydl.application.commands.reply;
 
 import com.google.errorprone.annotations.CheckReturnValue;
-import org.jetbrains.annotations.Nullable;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.action.ReplyAction;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.embed.builder.EmbedBuilder;
+import org.jetbrains.annotations.Nullable;
 
 public interface IReply {
     @Nullable

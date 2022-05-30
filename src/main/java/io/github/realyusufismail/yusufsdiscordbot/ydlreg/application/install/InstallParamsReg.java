@@ -18,10 +18,10 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.application.install;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.application.install.InstallParams;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.oauth2.OAuth2Scopes;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.perm.Permission;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumSet;
 

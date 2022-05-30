@@ -19,14 +19,14 @@ package io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.embed.builder
 
 import com.google.common.base.Objects;
 import com.google.errorprone.annotations.CheckReturnValue;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.embed.Embed;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.embed.objects.Image;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.embed.objects.*;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.embed.EmbedReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.embed.objects.*;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.util.Verify;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.ArrayList;

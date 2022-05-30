@@ -18,12 +18,12 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.application.interaction;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.application.commands.option.OptionTypeEnum;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.application.interaction.InteractionData;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.application.interaction.resolved.ResolvedData;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.application.commands.option.ApplicationOptionDataReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.application.interaction.resolved.ResolvedDataReg;
+import org.jetbrains.annotations.NotNull;
 
 public class InteractionDataReg extends ApplicationOptionDataReg implements InteractionData {
     private final JsonNode interaction;

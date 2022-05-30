@@ -18,19 +18,17 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.action.Action;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.action.MessageAction;
-import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.GuildChannel;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.Message;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.channel.TextChannel;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.YDLReg;
-import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.GuildReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.embed.builder.EmbedBuilder;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.guild.ChannelReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.callers.MessageCaller;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 // TODO : once rest api is done start creating the rest api for this
 public class TextChannelReg extends ChannelReg implements TextChannel {
@@ -85,44 +83,7 @@ public class TextChannelReg extends ChannelReg implements TextChannel {
     }
 
     @Override
-    public int compareTo(@NotNull GuildChannel o) {
-        return Long.compare(getIdLong(), o.getIdLong());
-    }
-
-    @Override
     public YDLReg getYDL() {
         return (YDLReg) ydl;
-    }
-
-    public TextChannel build(JsonNode object, long guildId) {
-        return build(null, object, guildId);
-    }
-
-    public TextChannel build(GuildReg guildReg, @NotNull JsonNode object, long guildId) {
-        boolean playbackCache = false;
-        final long id = object.get("id").asLong();
-        TextChannelReg channelReg = (TextChannelReg) getYDL().getTextChannelCacheReg().get(id);
-        if (channelReg == null) {
-            if (guildReg == null)
-                guildReg = (GuildReg) getYDL().getGuildCacheReg().get(guildId);
-            SnowFlakeCacheRetrieverReg<TextChannel> channelRetriever =
-                    guildReg.getTextChannelsReg(),
-                    textRetriever = getYDL().getTextChannelCacheReg();
-
-            try (HookLock guildLock = channelRetriever.writeLock();
-                    HookLock textLock = textRetriever.writeLock()) {
-                channelReg = new TextChannelReg(id, getYDL());
-                channelRetriever.getMap().put(id, channelReg);
-                playbackCache = textRetriever.getMap().put(id, channelReg) == null;
-            }
-        }
-
-        channelReg.setParentId(object.get("parent_id").asLong())
-            .setLastMessageId(object.get("last_message_id").asLong())
-            .setName(object.get("name").asText())
-            .setTopic(object.get("topic").asText())
-            .setPosition(object.get("position").asInt())
-            .setNsfw(object.get("nsfw").asBoolean());
-        return channelReg;
     }
 }

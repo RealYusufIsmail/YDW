@@ -22,8 +22,6 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.application.interaction.resolved;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.application.interaction.resolved.ResolvedData;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.Attachment;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.User;
@@ -32,6 +30,8 @@ import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.Member;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.Message;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.Role;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 

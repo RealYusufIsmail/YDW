@@ -18,11 +18,11 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.channel.thread;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.User;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.channel.threads.ThreadMember;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.Flags;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;

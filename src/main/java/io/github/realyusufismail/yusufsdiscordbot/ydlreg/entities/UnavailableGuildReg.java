@@ -1,9 +1,9 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.UnavailableGuild;
+import org.jetbrains.annotations.NotNull;
 
 public class UnavailableGuildReg implements UnavailableGuild {
 

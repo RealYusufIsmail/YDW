@@ -18,11 +18,11 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydl;
 
 import com.google.errorprone.annotations.CheckReturnValue;
-import okhttp3.OkHttpClient;
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.activity.ActivityConfig;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.YDLReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.exception.*;
+import okhttp3.OkHttpClient;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -1,8 +1,8 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.activity;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.activity.ActivityButton;
+import org.jetbrains.annotations.NotNull;
 
 public class ActivityButtonReg implements ActivityButton {
 

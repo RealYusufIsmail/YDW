@@ -17,9 +17,9 @@
 
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.callers;
 
-import okhttp3.OkHttpClient;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.YDLReg;
+import okhttp3.OkHttpClient;
 
 public class SlashCommandCaller {
     private final YDLReg ydl;

@@ -76,7 +76,7 @@ public enum MessageFlags {
         return UNKNOWN;
     }
 
-    public static @NotNull MessageFlags @NotNull [] fromValues(int @NotNull... values) {
+    public static @NotNull MessageFlags[] fromValues(int... values) {
         MessageFlags[] flags = new MessageFlags[values.length];
         for (int i = 0; i < values.length; i++) {
             flags[i] = fromValue(values[i]);

@@ -17,7 +17,6 @@
 
 package io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild;
 
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.GenericEntity;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.Guild;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.User;
@@ -25,6 +24,7 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.event.EventPri
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.event.EventStatus;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.event.EventType;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;

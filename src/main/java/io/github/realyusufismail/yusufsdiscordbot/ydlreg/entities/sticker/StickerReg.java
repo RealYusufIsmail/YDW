@@ -18,7 +18,6 @@
 package io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.sticker;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.Guild;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.User;
@@ -27,6 +26,7 @@ import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.sticker.StickerPa
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.GuildReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.UserReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;

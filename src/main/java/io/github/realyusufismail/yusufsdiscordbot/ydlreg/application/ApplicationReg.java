@@ -22,13 +22,13 @@ import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.application.Application;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.application.flags.ApplicationFlag;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.application.install.InstallParams;
-import io.github.realyusufismail.yusufsdiscordbot.ydl.team.Team;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.Guild;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.User;
+import io.github.realyusufismail.yusufsdiscordbot.ydl.team.Team;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.application.install.InstallParamsReg;
-import io.github.realyusufismail.yusufsdiscordbot.ydlreg.team.TeamReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.UserReg;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+import io.github.realyusufismail.yusufsdiscordbot.ydlreg.team.TeamReg;
 
 import java.util.ArrayList;
 import java.util.List;

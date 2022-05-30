@@ -17,9 +17,9 @@
 
 package io.github.realyusufismail.yusufsdiscordbot.ydl.application;
 
-import org.jetbrains.annotations.Nullable;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.application.interaction.InteractionType;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+import org.jetbrains.annotations.Nullable;
 
 public interface Interaction extends SnowFlake {
     @Nullable

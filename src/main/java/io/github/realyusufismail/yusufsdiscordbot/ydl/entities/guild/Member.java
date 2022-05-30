@@ -17,11 +17,11 @@
 
 package io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild;
 
-import org.jetbrains.annotations.NotNull;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.GenericEntity;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.User;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.perm.Permission;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.ZonedDateTime;
 import java.util.List;

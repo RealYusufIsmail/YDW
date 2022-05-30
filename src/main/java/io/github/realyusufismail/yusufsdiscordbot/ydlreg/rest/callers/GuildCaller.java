@@ -19,12 +19,6 @@ package io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.callers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.YDL;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.GuildPreview;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.guild.Member;
@@ -34,6 +28,12 @@ import io.github.realyusufismail.yusufsdiscordbot.ydlreg.entities.guild.MemberRe
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.json.YDLJson;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.exception.InvalidJsonException;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.rest.name.EndPoint;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 

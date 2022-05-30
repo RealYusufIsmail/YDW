@@ -19,9 +19,9 @@ package io.github.realyusufismail.yusufsdiscordbot.ydl.application;
 
 import io.github.realyusufismail.yusufsdiscordbot.ydl.application.flags.ApplicationFlag;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.application.install.InstallParams;
-import io.github.realyusufismail.yusufsdiscordbot.ydl.team.Team;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.Guild;
 import io.github.realyusufismail.yusufsdiscordbot.ydl.entities.User;
+import io.github.realyusufismail.yusufsdiscordbot.ydl.team.Team;
 import io.github.realyusufismail.yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 import java.util.List;
