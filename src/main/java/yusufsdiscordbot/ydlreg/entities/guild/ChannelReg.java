@@ -232,12 +232,12 @@ public class ChannelReg implements Channel {
 
     @Override
     public @NotNull Optional<SnowFlake> getApplicationId() {
-        return Optional.ofNullable(SnowFlake.of(applicationId));
+        return Optional.ofNullable(applicationId).map(SnowFlake::of);
     }
 
     @Override
     public @NotNull Optional<SnowFlake> getParentId() {
-        return Optional.ofNullable(SnowFlake.of(parentId));
+        return Optional.ofNullable(parentId).map(SnowFlake::of);
     }
 
     @Override
