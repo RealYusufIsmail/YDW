@@ -69,7 +69,7 @@ public enum EndPoint {
         return endpoint;
     }
 
-    public @NotNull String getFullEndpoint(String @NotNull... parms) {
+    public @NotNull String getFullEndpoint(@NotNull String... parms) {
         StringBuilder sb = new StringBuilder(endpoint);
         int parmsAmount = getEndpoint().split("%s").length - (getEndpoint().endsWith("%s") ? 1 : 0);
         if (parms.length > parmsAmount) {
@@ -80,7 +80,8 @@ public enum EndPoint {
         return sb.toString();
     }
 
-    public String getFullEndpoint(Long @NotNull... parms) {
+    @NotNull
+    public String getFullEndpoint(Long... parms) {
         return getFullEndpoint(Arrays.toString(parms));
     }
 }

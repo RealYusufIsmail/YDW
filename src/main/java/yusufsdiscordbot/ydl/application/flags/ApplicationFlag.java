@@ -87,7 +87,8 @@ public enum ApplicationFlag {
         return flags;
     }
 
-    private static ApplicationFlag @NotNull [] append(ApplicationFlag @NotNull [] flags,
+    @NotNull
+    private static ApplicationFlag[] append(@NotNull ApplicationFlag[] flags,
             ApplicationFlag flag) {
         ApplicationFlag[] newFlags = new ApplicationFlag[flags.length + 1];
         System.arraycopy(flags, 0, newFlags, 0, flags.length);

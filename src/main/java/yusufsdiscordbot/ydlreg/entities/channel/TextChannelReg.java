@@ -17,8 +17,6 @@
 
 package yusufsdiscordbot.ydlreg.entities.channel;
 
-import api.ydl.cache.util.HookLock;
-import api.ydl.snowflake.reg.SnowFlakeCacheRetrieverReg;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

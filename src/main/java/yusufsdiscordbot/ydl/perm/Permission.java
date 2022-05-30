@@ -210,7 +210,7 @@ public enum Permission {
         return UNKNOWN;
     }
 
-    public static @NotNull Permission @NotNull [] getPermissions(int value) {
+    public static @NotNull Permission[] getPermissions(int value) {
         List<Permission> permissions = new ArrayList<>();
         for (Permission p : values()) {
             if ((value & p.getValue()) == p.getValue()) {

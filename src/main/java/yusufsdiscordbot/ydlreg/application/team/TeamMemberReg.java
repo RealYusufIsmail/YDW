@@ -17,7 +17,6 @@
 
 package yusufsdiscordbot.ydlreg.application.team;
 
-import api.ydl.client.object.MembershipState;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,49 +24,16 @@ import yusufsdiscordbot.ydl.YDL;
 import yusufsdiscordbot.ydl.application.team.TeamMember;
 import yusufsdiscordbot.ydl.entities.User;
 import yusufsdiscordbot.ydlreg.entities.UserReg;
-import yusufsdiscordbot.ydlreg.json.JsonUtils;
 import yusufsdiscordbot.ydlreg.snowflake.SnowFlake;
 
 import java.util.List;
 
 public class TeamMemberReg implements TeamMember {
-    private final JsonNode team;
     private final YDL ydl;
 
     public TeamMemberReg(JsonNode team, YDL ydl) {
-        this.team = team;
         this.ydl = ydl;
     }
 
-    @Override
-    public @NotNull MembershipState getMembershipState() {
-        return MembershipState.fromValue(team.get("membership_state").asInt());
-    }
 
-    @Override
-    public @NotNull List<String> getPermissions() {
-        return JsonUtils.stream(team.get("permissions").getAsArrayNode())
-            .map(Object::toString)
-            .toList();
-    }
-
-    @Override
-    public @NotNull SnowFlake getTeamIdLong() {
-        return SnowFlake.of(team.get("team_id").asText());
-    }
-
-    @Override
-    public @NotNull User getUser() {
-        return new UserReg(team.getAsJsonNode("user"), ydl);
-    }
-
-    /**
-     * Called when the bot is ready.
-     *
-     * @return The YDL instance.
-     */
-    @Override
-    public @Nullable YDL getYDL() {
-        return ydl;
-    }
 }
