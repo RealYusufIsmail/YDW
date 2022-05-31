@@ -26,7 +26,7 @@ jobs:
         uses: gradle/gradle-build-action@52e5a688fbf7cdd95b4ef421b0ad779dba1e0055
         with:
          arguments: build
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
          name: YusufModerationBot
          path: build/libs
