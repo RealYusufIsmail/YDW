@@ -1,0 +1,201 @@
+/*
+ * GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+ *
+ * Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/> Everyone is permitted to
+ * copy and distribute verbatim copies of this license document, but changing it is not allowed.
+ *
+ * Yusuf Arfan Ismail Copyright (C) 2022 - future.
+ *
+ * The GNU General Public License is a free, copyleft license for software and other kinds of works.
+ *
+ * You may copy, distribute and modify the software as long as you track changes/dates in source
+ * files. Any modifications to or software including (via compiler) GPL-licensed code must also be
+ * made available under the GPL along with build & install instructions.
+ *
+ * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
+ */
+
+package io.github.realyusufismail.ydwreg.activity;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.activity.*;
+import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+
+public class ActivityReg implements Activity {
+
+    private final YDW ydw;
+    private final long id;
+
+    private final String name;
+    @NotNull
+    private final ActivityConfig type;
+    private final String url;
+    @NotNull
+    private final Integer createdAt;
+    @Nullable
+    private final ActivityTimeStamp timeStamp;
+    private final Long applicationId;
+    private final String detail;
+    private final String state;
+    @Nullable
+    private final ActivityEmoji emoji;
+    @Nullable
+    private final ActivityParty party;
+    @Nullable
+    private final ActivityAsset assets;
+    @Nullable
+    private final ActivitySecret secrets;
+    private final Boolean instance;
+    private final EnumSet<ActivityFlag> flags = EnumSet.noneOf(ActivityFlag.class);
+    private final List<ActivityButton> buttons = new ArrayList<>();
+
+
+    public ActivityReg(@NotNull JsonNode activity, long id, YDW ydw) {
+        this.ydw = ydw;
+        this.id = id;
+
+        this.name = activity.get("name").asText();
+        this.type = ActivityConfig.getActivity(activity.get("type").asInt());
+        this.url = activity.hasNonNull("url") ? activity.get("url").asText() : null;
+        this.createdAt = activity.get("created_at").asInt();
+        this.timeStamp = activity.hasNonNull("timestamps")
+                ? new ActivityTimeStampReg(activity.get("timestamps"))
+                : null;
+        this.applicationId =
+                activity.hasNonNull("application_id") ? activity.get("application_id").asLong()
+                        : null;
+        this.detail = activity.hasNonNull("details") ? activity.get("details").asText() : null;
+        this.state = activity.hasNonNull("state") ? activity.get("state").asText() : null;
+        this.emoji =
+                activity.hasNonNull("emoji")
+                        ? new ActivityEmojiReg(activity.get("emoji"),
+                                activity.get("emoji").get("id").asLong())
+                        : null;
+        this.party =
+                activity.hasNonNull("party") ? new ActivityPartyReg(activity.get("party")) : null;
+        this.assets =
+                activity.hasNonNull("assets") ? new ActivityAssetReg(activity.get("assets")) : null;
+        this.secrets =
+                activity.hasNonNull("secrets") ? new ActivitySecretReg(activity.get("secrets"))
+                        : null;
+        this.instance =
+                activity.hasNonNull("instance") ? activity.get("instance").asBoolean() : null;
+
+        if (activity.hasNonNull("flags")) {
+            for (JsonNode flag : activity.get("flags")) {
+                this.flags.add(ActivityFlag.getFlag(flag.asInt()));
+            }
+        }
+
+        if (activity.hasNonNull("buttons")) {
+            for (JsonNode button : activity.get("buttons")) {
+                this.buttons.add(new ActivityButtonReg(button));
+            }
+        }
+    }
+
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public ActivityConfig getActivityType() {
+        return type;
+    }
+
+    @NotNull
+    @Override
+    public Optional<String> getUrl() {
+        return Optional.ofNullable(url);
+    }
+
+    @NotNull
+    @Override
+    public ZonedDateTime getCreatedAt() {
+        return ZonedDateTime.ofInstant(Instant.ofEpochSecond(createdAt), ZoneId.systemDefault());
+    }
+
+    @NotNull
+    @Override
+    public Optional<ActivityTimeStamp> getTimeStamp() {
+        return Optional.ofNullable(timeStamp);
+    }
+
+    @NotNull
+    @Override
+    public Optional<SnowFlake> getApplicationId() {
+        return Optional.ofNullable(applicationId).map(SnowFlake::of);
+    }
+
+    @NotNull
+    @Override
+    public Optional<String> getDetails() {
+        return Optional.ofNullable(detail);
+    }
+
+    @NotNull
+    @Override
+    public Optional<String> getState() {
+        return Optional.ofNullable(state);
+    }
+
+    @NotNull
+    @Override
+    public Optional<ActivityEmoji> getEmoji() {
+        return Optional.ofNullable(emoji);
+    }
+
+    @NotNull
+    @Override
+    public Optional<ActivityParty> getParty() {
+        return Optional.ofNullable(party);
+    }
+
+    @NotNull
+    @Override
+    public Optional<ActivityAsset> getAssets() {
+        return Optional.ofNullable(assets);
+    }
+
+    @NotNull
+    @Override
+    public Optional<Boolean> isInstance() {
+        return Optional.ofNullable(instance);
+    }
+
+    @NotNull
+    @Override
+    public EnumSet<ActivityFlag> getFlags() {
+        return flags;
+    }
+
+    @NotNull
+    @Override
+    public List<ActivityButton> getButtons() {
+        return buttons;
+    }
+
+    @Override
+    public YDW getYDW() {
+        return ydw;
+    }
+
+    @NotNull
+    @Override
+    public Long getIdLong() {
+        return id;
+    }
+}
