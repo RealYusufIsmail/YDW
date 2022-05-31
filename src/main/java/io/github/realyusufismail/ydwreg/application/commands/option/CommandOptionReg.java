@@ -1,17 +1,16 @@
 /*
- * GNU GENERAL PUBLIC LICENSE
- *                        Version 3, 29 June 2007
+ * GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
  *
- *  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
- *  Everyone is permitted to copy and distribute verbatim copies
- *  of this license document, but changing it is not allowed.
+ * Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/> Everyone is permitted to
+ * copy and distribute verbatim copies of this license document, but changing it is not allowed.
  *
- *                            Yusuf Arfan Ismail Copyright (C) 2022 - future.
+ * Yusuf Arfan Ismail Copyright (C) 2022 - future.
  *
- *   The GNU General Public License is a free, copyleft license for
- * software and other kinds of works.
+ * The GNU General Public License is a free, copyleft license for software and other kinds of works.
  *
- * You may copy, distribute and modify the software as long as you track changes/dates in source files. Any modifications to or software including (via compiler) GPL-licensed code must also be made available under the GPL along with build & install instructions.
+ * You may copy, distribute and modify the software as long as you track changes/dates in source
+ * files. Any modifications to or software including (via compiler) GPL-licensed code must also be
+ * made available under the GPL along with build & install instructions.
  *
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
@@ -50,7 +49,8 @@ public class CommandOptionReg implements CommandOption {
         required = option.hasNonNull("required") ? option.get("required").asBoolean() : null;
         minValue = option.hasNonNull("min_value") ? option.get("min_value").asInt() : null;
         maxValue = option.hasNonNull("max_value") ? option.get("max_value").asInt() : null;
-        autoComplete = option.hasNonNull("autocomplete") ? option.get("autocomplete").asBoolean() : null;
+        autoComplete =
+                option.hasNonNull("autocomplete") ? option.get("autocomplete").asBoolean() : null;
 
         if (option.hasNonNull("choices")) {
             for (JsonNode choice : option.get("choices")) {

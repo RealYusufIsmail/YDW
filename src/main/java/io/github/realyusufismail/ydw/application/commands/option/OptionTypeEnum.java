@@ -39,15 +39,6 @@ public enum OptionTypeEnum {
         this.value = value;
     }
 
-    public static @NotNull OptionTypeEnum getType(String value) {
-        for (OptionTypeEnum type : values()) {
-            if (type.name().equalsIgnoreCase(value)) {
-                return type;
-            }
-        }
-        return UNKNOWN;
-    }
-
     public static @NotNull OptionTypeEnum getOptionType(int options) {
         for (OptionTypeEnum type : values()) {
             if (type.getValue() == options) {

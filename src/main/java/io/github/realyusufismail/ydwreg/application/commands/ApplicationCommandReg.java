@@ -51,14 +51,21 @@ public class ApplicationCommandReg implements ApplicationCommand {
         this.id = id;
         this.ydw = ydw;
 
-        this.type = application.hasNonNull("type") ? CommandType.getCommandType(application.get("type").asInt()) : null;
+        this.type = application.hasNonNull("type")
+                ? CommandType.getCommandType(application.get("type").asInt())
+                : null;
         this.applicationId = application.get("applicationId").asLong();
-        this.guild = application.hasNonNull("guild") ? ydw.getGuild(application.get("guild").asLong()) : null;
+        this.guild =
+                application.hasNonNull("guild") ? ydw.getGuild(application.get("guild").asLong())
+                        : null;
         this.name = application.get("name").asText();
         this.description = application.get("description").asText();
-        this.defaultPermission = application.hasNonNull("defaultPermission") ? application.get("defaultPermission").asText().split(",") :
-                null;
-        this.dmVisible = application.hasNonNull("dm_permission") ? application.get("dm_permission").asBoolean() : null;
+        this.defaultPermission = application.hasNonNull("defaultPermission")
+                ? application.get("defaultPermission").asText().split(",")
+                : null;
+        this.dmVisible = application.hasNonNull("dm_permission")
+                ? application.get("dm_permission").asBoolean()
+                : null;
         this.version = application.get("version").asLong();
 
         for (JsonNode option : application.get("options")) {

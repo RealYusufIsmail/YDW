@@ -18,17 +18,46 @@
 package io.github.realyusufismail.ydwreg.rest.callers;
 
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.application.commands.option.CommandType;
 import io.github.realyusufismail.ydwreg.YDWReg;
+import io.github.realyusufismail.ydwreg.application.commands.slash.builder.Option;
+import io.github.realyusufismail.ydwreg.application.commands.slash.builder.OptionExtender;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.List;
 
 public class SlashCommandCaller {
     private final YDWReg ydw;
 
     private final OkHttpClient client;
 
+    private String name;
+    private String description;
+    private final Integer commandType = CommandType.CHAT_INPUT.getValue();
+    private Collection<Option> options;
+    private Collection<OptionExtender> optionExtenders;
+
     public SlashCommandCaller(@NotNull YDW ydw) {
         this.ydw = (YDWReg) ydw;
         this.client = ((YDWReg) ydw).getHttpClient();
+    }
+
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setOptions(Collection<Option> options) {
+        this.options = options;
+    }
+
+    public void setOptionExtenders(Collection<OptionExtender> optionExtenders) {
+        this.optionExtenders = optionExtenders;
     }
 }
