@@ -33,12 +33,15 @@ public class SlashCommandCaller {
 
     private final OkHttpClient client;
 
+    private final String token;
+
     private String name;
     private String description;
     private final Integer commandType = CommandType.CHAT_INPUT.getValue();
     private Collection<Option> options;
 
-    public SlashCommandCaller(@NotNull YDW ydw) {
+    public SlashCommandCaller(String token, @NotNull YDW ydw) {
+        this.token = token;
         this.ydw = (YDWReg) ydw;
         this.client = ((YDWReg) ydw).getHttpClient();
     }

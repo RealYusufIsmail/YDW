@@ -33,14 +33,7 @@ import java.util.function.Consumer;
 public class RestApiHandler {
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private final YDW ydw;
-    private final GuildCaller guildRestApi = new GuildCaller(getYDW(), JSON);
-    private final UserCaller userCaller = new UserCaller(getYDW());
-    private final StickerCaller stickerCaller = new StickerCaller((YDWReg) getYDW());
-    private final EmojiCaller emojiCaller = new EmojiCaller(getYDW());
-    private final ChannelCaller channelCaller = new ChannelCaller(getYDW());
-    private final YDWCaller ydwCaller = new YDWCaller(getYDW());
-    private final SlashCommandCaller slashCommandCaller = new SlashCommandCaller(getYDW());
-    private final MessageCaller messageRestApi = new MessageCaller(getYDW(), JSON);
+
     @NotNull
     OkHttpClient client = new OkHttpClient();
     private boolean isEphemeral = false;
@@ -49,6 +42,14 @@ public class RestApiHandler {
     private boolean isGuildOnlyCommand = false;
     private String guildId;
     private String token = "";
+    private final GuildCaller guildRestApi = new GuildCaller(getYDW(), JSON);
+    private final UserCaller userCaller = new UserCaller(getYDW());
+    private final StickerCaller stickerCaller = new StickerCaller((YDWReg) getYDW());
+    private final EmojiCaller emojiCaller = new EmojiCaller(getYDW());
+    private final ChannelCaller channelCaller = new ChannelCaller(getYDW());
+    private final YDWCaller ydwCaller = new YDWCaller(getYDW());
+    private final SlashCommandCaller slashCommandCaller = new SlashCommandCaller(getYDW(), getToken());
+    private final MessageCaller messageRestApi = new MessageCaller(getYDW(), JSON);
 
     public RestApiHandler(YDW ydw) {
         this.ydw = ydw;
@@ -126,5 +127,9 @@ public class RestApiHandler {
     @Nullable
     public YDW getYDW() {
         return ydw;
+    }
+
+    public String getToken() {
+        return token;
     }
 }
