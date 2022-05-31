@@ -21,7 +21,7 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.2'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.3'
     //Logger
-    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.11'
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.11'
     //google
     implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
