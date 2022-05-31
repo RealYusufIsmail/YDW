@@ -17,8 +17,9 @@
 
 package io.github.realyusufismail.ydw.application.commands;
 
-import io.github.realyusufismail.ydw.application.commands.option.ApplicationCommandOption;
+import io.github.realyusufismail.ydw.application.commands.option.CommandOption;
 import io.github.realyusufismail.ydw.application.commands.option.CommandType;
+import io.github.realyusufismail.ydw.entities.GenericEntity;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-public interface ApplicationCommand extends SnowFlake {
+public interface ApplicationCommand extends SnowFlake, GenericEntity {
 
     /**
      * @return the type of command, defaults 1 if not set
@@ -75,7 +76,7 @@ public interface ApplicationCommand extends SnowFlake {
      */
     boolean isDmVisible();
 
-    List<ApplicationCommandOption> getOptions();
+    List<CommandOption> getOptions();
 
     /**
      * @return autoincrement version identifier updated during substantial record changes

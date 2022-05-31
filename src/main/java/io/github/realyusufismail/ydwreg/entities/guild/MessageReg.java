@@ -119,7 +119,8 @@ public class MessageReg implements Message {
         this.isPinned = message.get("pinned").asBoolean();
         this.nonce = message.get("nonce") != null ? message.get("nonce").asInt() : null;
         this.reference = message.get("message_reference") != null
-                ? new MessageReferenceReg(message.get("message_reference"), message.get("message_reference").get("id").asLong(), ydw)
+                ? new MessageReferenceReg(message.get("message_reference"),
+                        message.get("message_reference").get("id").asLong(), ydw)
                 : null;
         this.activityType = message.get("activity") != null
                 ? MessageActivityType.valueOf(message.get("activity").get("type").asText())
@@ -132,8 +133,8 @@ public class MessageReg implements Message {
                 ? new MessageReg(message.get("referenced_message"),
                         message.get("referenced_message").get("id").asLong(), ydw)
                 : null;
-        this.interaction = message.get("interaction") != null
-                ? new MessageInteractionReg(message.get("interaction"), message.get("interaction").get("id").asLong(), ydw)
+        this.interaction = message.get("interaction") != null ? new MessageInteractionReg(
+                message.get("interaction"), message.get("interaction").get("id").asLong(), ydw)
                 : null;
         this.thread = message.get("thread_channel_id") != null
                 ? ydw.getChannel(message.get("thread_channel_id").asLong())

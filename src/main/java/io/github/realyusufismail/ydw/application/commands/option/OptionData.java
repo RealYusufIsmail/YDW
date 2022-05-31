@@ -17,7 +17,7 @@
 
 package io.github.realyusufismail.ydw.application.commands.option;
 
-public interface ApplicationOptionData {
+public interface OptionData {
     String getName();
 
     OptionTypeEnum getType();

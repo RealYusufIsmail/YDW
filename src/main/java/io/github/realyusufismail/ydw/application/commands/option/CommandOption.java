@@ -17,18 +17,16 @@
 
 package io.github.realyusufismail.ydw.application.commands.option;
 
-import io.github.realyusufismail.ydw.entities.Guild;
+import io.github.realyusufismail.ydw.entities.GenericEntity;
+import io.github.realyusufismail.ydw.entities.guild.channel.ChannelType;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 
-public interface ApplicationCommandOption extends SnowFlake {
+public interface CommandOption {
     CommandType getType();
-
-    SnowFlake getApplicationId();
-
-    Guild getGuild();
 
     String getName();
 
@@ -36,6 +34,23 @@ public interface ApplicationCommandOption extends SnowFlake {
 
     Optional<Boolean> isRequired();
 
+    List<CommandOptionChoice> getChoices();
 
-    List<ApplicationCommandOption> getOptions();
+    List<CommandOption> getOptions();
+
+    EnumSet<ChannelType> getChannelTypes();
+
+    /**
+     * If the option is an INTEGER or NUMBER type, the minimum value permitted.
+     * @return the minimum value
+     */
+    Optional<Integer> getMinValue();
+
+    /**
+     * If the option is an INTEGER or NUMBER type, the maximum value permitted.
+     * @return the maximum value
+     */
+    Optional<Integer> getMaxValue();
+
+    Boolean isAutoComplete();
 }

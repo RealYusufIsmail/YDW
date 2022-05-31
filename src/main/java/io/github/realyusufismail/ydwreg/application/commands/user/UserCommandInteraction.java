@@ -22,6 +22,7 @@ import io.github.realyusufismail.ydwreg.application.commands.ApplicationCommandR
 
 public class UserCommandInteraction extends ApplicationCommandReg {
     private final long id;
+
     public UserCommandInteraction(JsonNode application, long id) {
         super(application, id);
         this.id = id;

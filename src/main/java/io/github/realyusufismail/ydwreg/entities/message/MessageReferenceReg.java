@@ -41,9 +41,14 @@ public class MessageReferenceReg implements MessageReference {
         this.ydw = ydw;
 
         this.message = message.hasNonNull("message_id") ? message.get("message_id").asLong() : null;
-        this.channel = message.hasNonNull("channel_id") ? ydw.getChannel(message.get("channel_id").asLong()) : null;
-        this.guild = message.hasNonNull("guild_id") ? ydw.getGuild(message.get("guild_id").asLong()) : null;
-        this.failIfDoesNotExist = message.hasNonNull("fail_if_not_exists") ? message.get("fail_if_not_exists").asBoolean() : null;
+        this.channel = message.hasNonNull("channel_id")
+                ? ydw.getChannel(message.get("channel_id").asLong())
+                : null;
+        this.guild = message.hasNonNull("guild_id") ? ydw.getGuild(message.get("guild_id").asLong())
+                : null;
+        this.failIfDoesNotExist = message.hasNonNull("fail_if_not_exists")
+                ? message.get("fail_if_not_exists").asBoolean()
+                : null;
     }
 
     @Override

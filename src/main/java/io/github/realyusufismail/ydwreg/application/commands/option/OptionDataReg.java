@@ -18,14 +18,14 @@
 package io.github.realyusufismail.ydwreg.application.commands.option;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.github.realyusufismail.ydw.application.commands.option.ApplicationOptionData;
+import io.github.realyusufismail.ydw.application.commands.option.OptionData;
 import io.github.realyusufismail.ydw.application.commands.option.OptionTypeEnum;
 import org.jetbrains.annotations.NotNull;
 
-public class ApplicationOptionDataReg implements ApplicationOptionData {
+public class OptionDataReg implements OptionData {
     private final JsonNode option;
 
-    public ApplicationOptionDataReg(JsonNode option) {
+    public OptionDataReg(JsonNode option) {
         this.option = option;
     }
 

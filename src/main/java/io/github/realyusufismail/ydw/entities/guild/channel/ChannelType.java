@@ -40,7 +40,7 @@ public enum ChannelType {
     }
 
     // gets the value
-    public static @NotNull ChannelType valueOf(int value) {
+    public static @NotNull ChannelType getChannelType(int value) {
         for (ChannelType type : ChannelType.values()) {
             if (type.getValue() == value) {
                 return type;

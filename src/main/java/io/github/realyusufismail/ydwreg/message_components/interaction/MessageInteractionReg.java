@@ -45,8 +45,8 @@ public class MessageInteractionReg implements MessageInteraction {
         this.type = InteractionType.getValue(message.get("type").asInt());
         this.name = message.get("name").asText();
         this.user = new UserReg(message.get("user"), message.get("user").get("id").asLong(), ydw);
-        this.member = message.hasNonNull("member") ? new MemberReg(message.get("member")
-                , ydw) : null;
+        this.member =
+                message.hasNonNull("member") ? new MemberReg(message.get("member"), ydw) : null;
     }
 
     @Nullable
