@@ -3,6 +3,25 @@ plugins {
     id "com.diffplug.spotless" version "6.6.1"
 }
 
+ext {
+    dev_id = 'yusuf'
+    dev_name = 'Yusuf Ismail'
+    dev_email = 'yusufgamer222@gmail.com'
+    dev_organization = 'RealYusufIsmail'
+    dev_organizationUrl = 'https://github.com/RealYusufIsmail'
+
+    gpl_name = 'GNU Library General Public License version 3'
+    gpl_url = 'https://github.com/RealYusufIsmail/YDW/blob/Master/LICENSE'
+
+    // Make sure we have a default for initial configuration evaluation
+    isReleaseVersion = false
+}
+
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+archivesBaseName = "YDW"
+description = "YDW (Yusuf's Discord Wrapper) My own Discord Wrapper"
 group 'io.github.realyusufismail.ydw'
 version '1.0-SNAPSHOT'
 
@@ -63,4 +82,71 @@ javadoc {
 java {
     withJavadocJar()
     withSourcesJar()
+}
+
+afterEvaluate { project ->
+    ext.isReleaseVersion = !version.endsWith("RELEASE")
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            //artifactId = project.artifactId // or maybe archiveBaseName?
+            from components.java
+            pom {
+                name = project.archivesBaseName
+                description = project.description
+                url = "https://github.com/RealYusufIsmail/YDW"
+                packaging = "jar"
+
+                licenses {
+                    license {
+                        name = "${gpl_name}"
+                        url = "${gpl_url}"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "${dev_id}"
+                        name = "${dev_name}"
+                        email = "${dev_email}"
+                        organization = "${dev_organization}"
+                        organizationUrl = "${dev_organizationUrl}"
+                    }
+                }
+                scm {
+                    connection = 'https://github.com/YusufsDiscordbot/YDL.git'
+                    developerConnection = 'scm:git:ssh://git@github.com/YusufsDiscordbot/YDL.git'
+                    url = 'github.com/YusufsDiscordbot/YDL'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            afterEvaluate { project ->
+                def releaseRepo = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                def snapshotRepo = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                url = (isReleaseVersion) ? releaseRepo : snapshotRepo
+
+                //println "repos: " + version
+                //println "repos: " + isReleaseVersion
+                //println url
+
+                credentials {
+                    username = project.hasProperty('ossrhUsername') ? ossrhUsername : "Unknown user"
+                    password = project.hasProperty('ossrhPassword') ? ossrhPassword : "Unknown password"
+                }
+            }
+        }
+    }
+}
+
+signing {
+    afterEvaluate { project ->
+        //println "sign: " + version
+        //println "sign: " + isReleaseVersion
+        required { isReleaseVersion && gradle.taskGraph.hasTask("publish") }
+        sign publishing.publications.mavenJava
+    }
 }
