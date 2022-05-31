@@ -15,11 +15,12 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.ydwreg.application.interaction;
+package io.github.realyusufismail.ydw.application.interaction;
 
 import org.jetbrains.annotations.NotNull;
 
 public enum InteractionType {
+
     PING(1),
     APPLICATION_COMMAND(2),
     MESSAGE_COMPONENT(3),
@@ -33,7 +34,7 @@ public enum InteractionType {
         this.value = value;
     }
 
-    public static @NotNull InteractionType fromValue(final int value) {
+    public static @NotNull InteractionType getValue(final int value) {
         for (final InteractionType interactionType : values()) {
             if (interactionType.getValue() == value) {
                 return interactionType;

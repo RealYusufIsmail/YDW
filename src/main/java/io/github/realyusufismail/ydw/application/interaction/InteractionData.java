@@ -19,18 +19,28 @@ package io.github.realyusufismail.ydw.application.interaction;
 
 import io.github.realyusufismail.ydw.application.commands.option.OptionTypeEnum;
 import io.github.realyusufismail.ydw.application.interaction.resolved.ResolvedData;
+import io.github.realyusufismail.ydw.entities.GenericEntity;
+import io.github.realyusufismail.ydw.entities.Guild;
+import io.github.realyusufismail.ydwreg.message_components.ComponentType;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 
-public interface InteractionData extends SnowFlake {
+import java.util.Optional;
+
+/// TODO: add values and components. see here
+/// https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
+public interface InteractionData extends SnowFlake, GenericEntity {
     String getName();
 
     OptionTypeEnum getType();
 
-    ResolvedData getResolvedData();
+    Optional<ResolvedData> getResolvedData();
 
-    String getCustomId();
+    Optional<Guild> getGuild();
 
-    int getComponentType();
+    Optional<String> getCustomId();
 
+    Optional<ComponentType> getComponentType();
+
+    Optional<SnowFlake> getTargetId();
 
 }

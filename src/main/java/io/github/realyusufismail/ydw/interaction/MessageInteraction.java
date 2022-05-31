@@ -20,7 +20,7 @@ package io.github.realyusufismail.ydw.interaction;
 import io.github.realyusufismail.ydw.entities.GenericEntity;
 import io.github.realyusufismail.ydw.entities.User;
 import io.github.realyusufismail.ydw.entities.guild.Member;
-import io.github.realyusufismail.ydwreg.application.interaction.InteractionType;
+import io.github.realyusufismail.ydw.application.interaction.InteractionType;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 
 

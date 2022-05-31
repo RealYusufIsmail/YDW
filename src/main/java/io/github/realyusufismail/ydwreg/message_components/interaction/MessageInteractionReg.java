@@ -22,7 +22,7 @@ import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.User;
 import io.github.realyusufismail.ydw.entities.guild.Member;
 import io.github.realyusufismail.ydw.interaction.MessageInteraction;
-import io.github.realyusufismail.ydwreg.application.interaction.InteractionType;
+import io.github.realyusufismail.ydw.application.interaction.InteractionType;
 import io.github.realyusufismail.ydwreg.entities.UserReg;
 import io.github.realyusufismail.ydwreg.entities.guild.MemberReg;
 import io.github.realyusufismail.ydwreg.util.Verify;

@@ -18,49 +18,98 @@
 package io.github.realyusufismail.ydwreg.application.interaction;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.application.commands.option.OptionTypeEnum;
 import io.github.realyusufismail.ydw.application.interaction.InteractionData;
 import io.github.realyusufismail.ydw.application.interaction.resolved.ResolvedData;
+import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydwreg.application.commands.option.ApplicationOptionDataReg;
 import io.github.realyusufismail.ydwreg.application.interaction.resolved.ResolvedDataReg;
+import io.github.realyusufismail.ydwreg.message_components.ComponentType;
+import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class InteractionDataReg extends ApplicationOptionDataReg implements InteractionData {
-    private final JsonNode interaction;
+import java.util.Optional;
 
-    public InteractionDataReg(JsonNode interaction) {
-        super(interaction);
-        this.interaction = interaction;
+public class InteractionDataReg implements InteractionData {
+
+    private final YDW ydw;
+    private final long id;
+
+    private final String name;
+    private final OptionTypeEnum type;
+    private final ResolvedData resolvedData;
+    private final Guild guild;
+    private final String customId;
+    private final ComponentType componentType;
+    private final Long targetId;
+
+    public InteractionDataReg(JsonNode interaction, long id, YDW ydw) {
+        this.ydw = ydw;
+        this.id = id;
+
+        this.name = interaction.get("name").asText();
+        this.type = OptionTypeEnum.valueOf(interaction.get("type").asText());
+        this.resolvedData = interaction.hasNonNull("resolved")
+                ? new ResolvedDataReg(interaction.get("resolved"), ydw)
+                : null;
+        this.guild = interaction.hasNonNull("guild_id")
+                ? ydw.getGuild(interaction.get("guild_id").asLong())
+                : null;
+        this.customId =
+                interaction.hasNonNull("custom_id") ? interaction.get("custom_id").asText() : null;
+        this.componentType = interaction.hasNonNull("component_type")
+                ? ComponentType.getComponentType(interaction.get("component_type").asInt())
+                : null;
+        this.targetId =
+                interaction.hasNonNull("target_id") ? interaction.get("target_id").asLong() : null;
     }
 
     @Override
     public String getName() {
-        return interaction.get("name").asText();
+        return name;
     }
 
     @Override
-    public @NotNull OptionTypeEnum getType() {
-        return OptionTypeEnum.getOptionType(interaction.get("type").asInt());
+    public OptionTypeEnum getType() {
+        return type;
     }
 
     @Override
-    public @NotNull ResolvedData getResolvedData() {
-        return new ResolvedDataReg(interaction.getAsJsonNode("resolved"));
+    public Optional<ResolvedData> getResolvedData() {
+        return Optional.ofNullable(resolvedData);
     }
 
     @Override
-    public String getCustomId() {
-        return interaction.get("customId").asText();
+    public Optional<Guild> getGuild() {
+        return Optional.ofNullable(guild);
     }
 
     @Override
-    public int getComponentType() {
-        return interaction.get("componentType").asInt();
+    public Optional<String> getCustomId() {
+        return Optional.ofNullable(customId);
     }
 
-    @NotNull
+    @Override
+    public Optional<ComponentType> getComponentType() {
+        return Optional.ofNullable(componentType);
+    }
+
+    @Override
+    public Optional<SnowFlake> getTargetId() {
+        return Optional.ofNullable(targetId).map(SnowFlake::of);
+    }
+
+    @Nullable
+    @Override
+    public YDW getYDW() {
+        return ydw;
+    }
+
+    @Nullable
     @Override
     public Long getIdLong() {
-        return interaction.get("id").asLong();
+        return id;
     }
 }
