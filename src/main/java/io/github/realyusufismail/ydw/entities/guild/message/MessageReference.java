@@ -17,15 +17,21 @@
 
 package io.github.realyusufismail.ydw.entities.guild.message;
 
+import io.github.realyusufismail.ydw.entities.Guild;
+import io.github.realyusufismail.ydw.entities.guild.Channel;
+import io.github.realyusufismail.ydw.entities.guild.Message;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
+
+import java.util.Optional;
 
 
 public interface MessageReference extends SnowFlake {
-    SnowFlake getMessageId();
 
-    SnowFlake getChannelId();
+    Optional<SnowFlake> getMessage();
 
-    SnowFlake getGuildId();
+    Optional<Channel> getChannel();
+
+    Optional<Guild> getGuild();
 
     /**
      * when sending, whether to error if the referenced message doesn't exist instead of sending as
@@ -33,5 +39,5 @@ public interface MessageReference extends SnowFlake {
      *
      * @return if found false, if not found true
      */
-    boolean failIfNotFound();
+    Optional<Boolean> shouldFailIfDoesNotExist();
 }

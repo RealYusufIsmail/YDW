@@ -21,7 +21,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydwreg.application.commands.ApplicationCommandReg;
 
 public class UserCommandInteraction extends ApplicationCommandReg {
-    public UserCommandInteraction(JsonNode application) {
-        super(application);
+    private final long id;
+    public UserCommandInteraction(JsonNode application, long id) {
+        super(application, id);
+        this.id = id;
     }
 }

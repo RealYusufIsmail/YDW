@@ -29,56 +29,57 @@ import io.github.realyusufismail.ydwreg.util.Verify;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 public class MessageInteractionReg implements MessageInteraction {
-    private final JsonNode message;
     private final YDW ydw;
+    private final long id;
 
-    public MessageInteractionReg(JsonNode message, YDW ydw) {
-        this.message = message;
+    private final InteractionType type;
+    private final String name;
+    private final User user;
+    private final Member member;
+
+    public MessageInteractionReg(JsonNode message, long id, YDW ydw) {
+        this.id = id;
         this.ydw = ydw;
+
+        this.type = InteractionType.getValue(message.get("type").asInt());
+        this.name = message.get("name").asText();
+        this.user = new UserReg(message.get("user"), message.get("user").get("id").asLong(), ydw);
+        this.member = message.hasNonNull("member") ? new MemberReg(message.get("member")
+                , ydw) : null;
     }
 
-
-    /**
-     * Called when the bot is ready.
-     *
-     * @return The ydw instance.
-     */
+    @Nullable
     @Override
-    public @Nullable YDW getYDW() {
+    public YDW getYDW() {
         return ydw;
-    }
-
-    /**
-     * @return The core long of this api.
-     */
-    @NotNull
-    @Override
-    public Long getIdLong() {
-        return message.get("id").asLong();
     }
 
     @Override
     public InteractionType getType() {
-        return InteractionType.fromInt(message.get("type").asInt());
+        return type;
     }
 
     @Override
     public String getName() {
-        return message.get("name").asText();
+        return name;
     }
 
-    @NotNull
     @Override
     public User getUser() {
-        return new UserReg(message.get("user").getAsJsonNode(), ydw);
+        return user;
     }
 
-    @NotNull
     @Override
-    public Member getMember() {
-        var member = message.get("member");
-        Verify.checkIfNull(member, "Member is null");
-        return new MemberReg(member.getAsJsonNode(), ydw);
+    public Optional<Member> getMember() {
+        return Optional.ofNullable(member);
+    }
+
+    @Nullable
+    @Override
+    public Long getIdLong() {
+        return id;
     }
 }

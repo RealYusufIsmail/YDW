@@ -30,12 +30,4 @@ public class SlashCommandReg extends SlashCommandOptionReg implements SlashComma
         this.ydw = ydw;
     }
 
-
-    /**
-     * @return The core long of this api.
-     */
-    @Override
-    public Long getIdLong() {
-        return id;
-    }
 }

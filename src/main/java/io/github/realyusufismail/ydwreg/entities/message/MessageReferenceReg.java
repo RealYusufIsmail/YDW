@@ -19,56 +19,58 @@ package io.github.realyusufismail.ydwreg.entities.message;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.entities.Guild;
+import io.github.realyusufismail.ydw.entities.guild.Channel;
+import io.github.realyusufismail.ydw.entities.guild.Message;
 import io.github.realyusufismail.ydw.entities.guild.message.MessageReference;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 public class MessageReferenceReg implements MessageReference {
-    private final JsonNode message;
+    private final long id;
     private final YDW ydw;
 
-    public MessageReferenceReg(JsonNode message, YDW ydw) {
-        this.message = message;
+    private final Long message;
+    private final Channel channel;
+    private final Guild guild;
+    private final Boolean failIfDoesNotExist;
+
+    public MessageReferenceReg(JsonNode message, long id, YDW ydw) {
+        this.id = id;
         this.ydw = ydw;
+
+        this.message = message.hasNonNull("message_id") ? message.get("message_id").asLong() : null;
+        this.channel = message.hasNonNull("channel_id") ? ydw.getChannel(message.get("channel_id").asLong()) : null;
+        this.guild = message.hasNonNull("guild_id") ? ydw.getGuild(message.get("guild_id").asLong()) : null;
+        this.failIfDoesNotExist = message.hasNonNull("fail_if_not_exists") ? message.get("fail_if_not_exists").asBoolean() : null;
     }
 
-    /**
-     * Called when the bot is ready.
-     *
-     * @return The ydw instance.
-     */
     @Override
-    public @Nullable YDW getYDW() {
-        return ydw;
+    public Optional<SnowFlake> getMessage() {
+        return Optional.ofNullable(message).map(SnowFlake::of);
     }
 
-    @NotNull
     @Override
-    public SnowFlake getMessageId() {
-        return SnowFlake.of(message.get("id").asLong());
+    public Optional<Channel> getChannel() {
+        return Optional.ofNullable(channel);
     }
 
-    @NotNull
     @Override
-    public SnowFlake getChannelId() {
-        return SnowFlake.of(message.get("channel_id").asLong());
+    public Optional<Guild> getGuild() {
+        return Optional.ofNullable(guild);
     }
 
-    @NotNull
     @Override
-    public SnowFlake getGuildId() {
-        return SnowFlake.of(message.get("guild_id").asLong());
+    public Optional<Boolean> shouldFailIfDoesNotExist() {
+        return Optional.ofNullable(failIfDoesNotExist);
     }
 
-    /**
-     * when sending, whether to error if the referenced message doesn't exist instead of sending as
-     * a normal (non-reply) message, default true
-     *
-     * @return if found false, if not found true
-     */
+    @Nullable
     @Override
-    public boolean failIfNotFound() {
-        return message.get("fail_if_not_exists").asBoolean();
+    public Long getIdLong() {
+        return id;
     }
 }

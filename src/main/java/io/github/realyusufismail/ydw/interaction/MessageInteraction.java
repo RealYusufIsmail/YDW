@@ -23,13 +23,16 @@ import io.github.realyusufismail.ydw.entities.guild.Member;
 import io.github.realyusufismail.ydw.application.interaction.InteractionType;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 
+import java.util.Optional;
+
 
 public interface MessageInteraction extends SnowFlake, GenericEntity {
+
     InteractionType getType();
 
     String getName();
 
     User getUser();
 
-    Member getMember();
+    Optional<Member> getMember();
 }
