@@ -115,8 +115,8 @@ publishing {
                     }
                 }
                 scm {
-                    connection = 'https://github.com/YusufsDiscordbot/YDL.git'
-                    developerConnection = 'scm:git:ssh://git@github.com/YusufsDiscordbot/YDL.git'
+                    connection = 'https://github.com/RealYusufIsmail/YDW.git'
+                    developerConnection = 'scm:git:ssh://git@github.com/RealYusufIsmail/YDW.git'
                     url = 'github.com/YusufsDiscordbot/YDL'
                 }
             }
