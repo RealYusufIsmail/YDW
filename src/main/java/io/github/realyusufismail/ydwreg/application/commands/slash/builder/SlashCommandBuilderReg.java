@@ -42,8 +42,8 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
 
     @Override
     public SlashCommandBuilder setName(String name) {
-       caller.setName(name);
-       return this;
+        caller.setName(name);
+        return this;
     }
 
     @Override
@@ -53,7 +53,8 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
     }
 
     @Override
-    public SlashCommandBuilder setOption(OptionTypeEnum optionType, String name, String description, boolean required) {
+    public SlashCommandBuilder setOption(OptionTypeEnum optionType, String name, String description,
+            boolean required) {
         caller.setOptions(List.of(new Option(optionType, name, description, required)));
         return this;
     }
@@ -72,8 +73,8 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
 
     @Override
     public SlashCommandBuilder setExtendedOptions(OptionExtender... optionExtenders) {
-       caller.setOptionExtenders(List.of(optionExtenders));
-       return this;
+        caller.setOptionExtenders(List.of(optionExtenders));
+        return this;
     }
 
     @Override
@@ -96,5 +97,21 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
 
     public static void setOptionRequired(boolean optionRequired) {
         SlashCommandBuilderReg.optionRequired = optionRequired;
+    }
+
+    public static String getOptionName() {
+        return optionName;
+    }
+
+    public static String getOptionDescription() {
+        return optionDescription;
+    }
+
+    public static OptionTypeEnum getOptionType() {
+        return optionType;
+    }
+
+    public static boolean isOptionRequired() {
+        return optionRequired;
     }
 }

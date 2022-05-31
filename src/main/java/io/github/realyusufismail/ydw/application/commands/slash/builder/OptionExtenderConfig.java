@@ -1,7 +1,5 @@
 package io.github.realyusufismail.ydw.application.commands.slash.builder;
 
-import io.github.realyusufismail.ydwreg.application.commands.slash.builder.OptionExtender;
-
 public interface OptionExtenderConfig {
     OptionExtenderConfig addChoice(String name, Object value);
 

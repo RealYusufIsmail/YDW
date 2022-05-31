@@ -5,12 +5,12 @@ import io.github.realyusufismail.ydwreg.application.commands.slash.builder.Optio
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.OptionExtender;
 
 import java.util.Collection;
-import java.util.List;
 
 public interface SlashCommandBuilder {
 
     /**
      * Used to set the command name.
+     * 
      * @param name The name of the command.
      * @return The builder.
      */
@@ -18,14 +18,17 @@ public interface SlashCommandBuilder {
 
     /**
      * Used to set the command description.
+     * 
      * @param description What the command does.
      * @return The builder.
      */
     SlashCommandBuilder setDescription(String description);
 
-    SlashCommandBuilder setOption(OptionTypeEnum optionType, String name, String description, boolean required);
+    SlashCommandBuilder setOption(OptionTypeEnum optionType, String name, String description,
+            boolean required);
 
-    default SlashCommandBuilder setOption(OptionTypeEnum optionType, String name, String description) {
+    default SlashCommandBuilder setOption(OptionTypeEnum optionType, String name,
+            String description) {
         return setOption(optionType, name, description, false);
     }
 

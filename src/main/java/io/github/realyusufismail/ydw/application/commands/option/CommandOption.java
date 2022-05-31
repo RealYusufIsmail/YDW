@@ -17,9 +17,7 @@
 
 package io.github.realyusufismail.ydw.application.commands.option;
 
-import io.github.realyusufismail.ydw.entities.GenericEntity;
 import io.github.realyusufismail.ydw.entities.guild.channel.ChannelType;
-import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 
 import java.util.EnumSet;
 import java.util.List;

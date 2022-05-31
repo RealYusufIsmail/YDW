@@ -20,10 +20,8 @@ package io.github.realyusufismail.websocket;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.YDWConnector;
 
-public class WebSocketTest {
+class WebSocketTest {
     public static void main(String[] args) throws Exception {
-        YDW ydw =
-                YDWConnector.setUpBot("OTMxOTE1NjYxNTMyMzYwNzA0.YeLYFw.IPXJqKyLKnE-SpcPqsr5Vn7d148")
-                    .build();
+        YDW ydw = YDWConnector.setUpBot(System.getenv("token")).build();
     }
 }

@@ -5,7 +5,8 @@ import io.github.realyusufismail.ydw.application.commands.slash.builder.OptionEx
 
 public class OptionExtender extends Option implements OptionExtenderConfig {
 
-    public OptionExtender(OptionTypeEnum type, String name, String description, boolean isRequired) {
+    public OptionExtender(OptionTypeEnum type, String name, String description,
+            boolean isRequired) {
         super(type, name, description, isRequired);
     }
 

@@ -17,6 +17,7 @@
 
 package io.github.realyusufismail.ydwreg.rest.callers;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.application.commands.option.CommandType;
 import io.github.realyusufismail.ydwreg.YDWReg;
@@ -26,7 +27,6 @@ import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.List;
 
 public class SlashCommandCaller {
     private final YDWReg ydw;
@@ -37,13 +37,20 @@ public class SlashCommandCaller {
     private String description;
     private final Integer commandType = CommandType.CHAT_INPUT.getValue();
     private Collection<Option> options;
-    private Collection<OptionExtender> optionExtenders;
 
     public SlashCommandCaller(@NotNull YDW ydw) {
         this.ydw = (YDWReg) ydw;
         this.client = ((YDWReg) ydw).getHttpClient();
     }
 
+    private String slashCommandJson() {
+        return JsonNodeFactory.instance.objectNode()
+            .put("name", name)
+            .put("description", description)
+            .put("type", commandType)
+            .set("options", Option.toJsonArray(options))
+            .toString();
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -58,6 +65,6 @@ public class SlashCommandCaller {
     }
 
     public void setOptionExtenders(Collection<OptionExtender> optionExtenders) {
-        this.optionExtenders = optionExtenders;
+        this.options.addAll(optionExtenders);
     }
 }

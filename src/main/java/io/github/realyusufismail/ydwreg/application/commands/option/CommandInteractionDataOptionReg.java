@@ -20,7 +20,6 @@ package io.github.realyusufismail.ydwreg.application.commands.option;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.application.commands.option.CommandInteractionDataOption;
 import io.github.realyusufismail.ydw.application.commands.option.OptionTypeEnum;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
