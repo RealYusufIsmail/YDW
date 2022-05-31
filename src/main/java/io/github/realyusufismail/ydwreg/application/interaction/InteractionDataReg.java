@@ -23,11 +23,9 @@ import io.github.realyusufismail.ydw.application.commands.option.OptionTypeEnum;
 import io.github.realyusufismail.ydw.application.interaction.InteractionData;
 import io.github.realyusufismail.ydw.application.interaction.resolved.ResolvedData;
 import io.github.realyusufismail.ydw.entities.Guild;
-import io.github.realyusufismail.ydwreg.application.commands.option.ApplicationOptionDataReg;
 import io.github.realyusufismail.ydwreg.application.interaction.resolved.ResolvedDataReg;
 import io.github.realyusufismail.ydwreg.message_components.ComponentType;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
