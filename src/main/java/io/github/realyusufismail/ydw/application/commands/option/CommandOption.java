@@ -18,13 +18,14 @@
 package io.github.realyusufismail.ydw.application.commands.option;
 
 import io.github.realyusufismail.ydw.entities.guild.channel.ChannelType;
+import io.github.realyusufismail.ydwreg.application.commands.option.CommandOptionMapping;
 
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 
 public interface CommandOption {
-    CommandType getType();
+    OptionType getType();
 
     String getName();
 
@@ -34,7 +35,7 @@ public interface CommandOption {
 
     List<CommandOptionChoice> getChoices();
 
-    List<CommandOption> getOptions();
+    List<CommandOptionMapping> getOptions();
 
     EnumSet<ChannelType> getChannelTypes();
 

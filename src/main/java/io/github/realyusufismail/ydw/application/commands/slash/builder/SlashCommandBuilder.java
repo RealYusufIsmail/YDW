@@ -1,6 +1,6 @@
 package io.github.realyusufismail.ydw.application.commands.slash.builder;
 
-import io.github.realyusufismail.ydw.application.commands.option.OptionTypeEnum;
+import io.github.realyusufismail.ydw.application.commands.option.OptionType;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.Option;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.OptionExtender;
 
@@ -24,11 +24,11 @@ public interface SlashCommandBuilder {
      */
     SlashCommandBuilder setDescription(String description);
 
-    SlashCommandBuilder setOption(OptionTypeEnum optionType, String name, String description,
-            boolean required);
+    SlashCommandBuilder setOption(OptionType optionType, String name, String description,
+                                  boolean required);
 
-    default SlashCommandBuilder setOption(OptionTypeEnum optionType, String name,
-            String description) {
+    default SlashCommandBuilder setOption(OptionType optionType, String name,
+                                          String description) {
         return setOption(optionType, name, description, false);
     }
 

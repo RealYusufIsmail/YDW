@@ -20,7 +20,7 @@ package io.github.realyusufismail.ydwreg.application.commands.option;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.application.commands.option.CommandOption;
 import io.github.realyusufismail.ydw.application.commands.option.CommandOptionChoice;
-import io.github.realyusufismail.ydw.application.commands.option.CommandType;
+import io.github.realyusufismail.ydw.application.commands.option.OptionType;
 import io.github.realyusufismail.ydw.entities.guild.channel.ChannelType;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,19 +31,19 @@ import java.util.Optional;
 
 public class CommandOptionReg implements CommandOption {
 
-    private final CommandType commandType;
+    private final OptionType optionType;
     private final String name;
     private final String description;
     private final Boolean required;
     private final List<CommandOptionChoice> choices = new ArrayList<>();
-    private final List<CommandOption> options = new ArrayList<>();
+    private final List<CommandOptionMapping> options = new ArrayList<>();
     private final EnumSet<ChannelType> channelTypes = EnumSet.noneOf(ChannelType.class);
     private final Integer minValue;
     private final Integer maxValue;
     private final Boolean autoComplete;
 
     public CommandOptionReg(@NotNull JsonNode option) {
-        this.commandType = CommandType.getCommandType(option.get("type").asInt());
+        optionType = OptionType.getOptionType(option.get("type").asInt());
         name = option.get("name").asText();
         description = option.get("description").asText();
         required = option.hasNonNull("required") ? option.get("required").asBoolean() : null;
@@ -60,7 +60,7 @@ public class CommandOptionReg implements CommandOption {
 
         if (option.hasNonNull("options")) {
             for (JsonNode optionNode : option.get("options")) {
-                options.add(new CommandOptionReg(optionNode));
+                options.add(new CommandOptionMapping(optionNode, optionType));
             }
         }
 
@@ -72,8 +72,8 @@ public class CommandOptionReg implements CommandOption {
     }
 
     @Override
-    public CommandType getType() {
-        return commandType;
+    public OptionType getType() {
+        return optionType;
     }
 
     @Override
@@ -97,7 +97,7 @@ public class CommandOptionReg implements CommandOption {
     }
 
     @Override
-    public List<CommandOption> getOptions() {
+    public List<CommandOptionMapping> getOptions() {
         return options;
     }
 

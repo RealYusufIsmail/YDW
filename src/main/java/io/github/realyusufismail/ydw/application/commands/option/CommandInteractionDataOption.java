@@ -17,10 +17,26 @@
 
 package io.github.realyusufismail.ydw.application.commands.option;
 
+import io.github.realyusufismail.ydw.entities.User;
+import io.github.realyusufismail.ydw.entities.guild.Channel;
+import io.github.realyusufismail.ydw.entities.guild.Member;
+import io.github.realyusufismail.ydw.entities.guild.Role;
+import io.github.realyusufismail.ydw.entities.guild.channel.NewsChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.TextChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.VoiceChannel;
+
 import java.util.List;
 import java.util.Optional;
 
 public interface CommandInteractionDataOption {
+
+    /**
+     * Gets the type of the option.
+     *
+     * @return the type of the option.
+     */
+    OptionType getType();
+
 
     /**
      * Gets the name of the parameter.
@@ -30,28 +46,31 @@ public interface CommandInteractionDataOption {
     String getName();
 
     /**
-     * Gets the type of the option.
-     * 
-     * @return the type of the option.
-     */
-    OptionTypeEnum getType();
-
-    /**
-     * Gets the value of the option used by the user. Can be String, Integer, and Double.
-     *
-     * @return the value of the option used by the user.
-     */
-    Optional<Object> getValue();
-
-    /**
-     * If this option is a group or subcommand it will be present. Otherwise, it will be empty.
-     * 
-     * @return the subcommand or group of this option.
-     */
-    List<CommandInteractionDataOption> getOptions();
-
-    /**
      * @return true if this option is the currently focused option for autocomplete
      */
     Optional<Boolean> isFocused();
+
+    Optional<String> getAsString();
+
+    Optional<Integer> getAsInt();
+
+    Optional<Double> getAsDouble();
+
+    Optional<Long> getAsLong();
+
+    Optional<Boolean> getAsBoolean();
+
+    Member getAsMember();
+
+    User getAsUser();
+
+    Channel getAsChannel();
+
+    TextChannel getAsTextChannel();
+
+    VoiceChannel getAsVoiceChannel();
+
+    NewsChannel getAsNewsChannel();
+
+    Role getAsRole();
 }

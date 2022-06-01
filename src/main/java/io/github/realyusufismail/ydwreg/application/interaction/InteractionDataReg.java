@@ -19,7 +19,7 @@ package io.github.realyusufismail.ydwreg.application.interaction;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.application.commands.option.OptionTypeEnum;
+import io.github.realyusufismail.ydw.application.commands.option.OptionType;
 import io.github.realyusufismail.ydw.application.interaction.InteractionData;
 import io.github.realyusufismail.ydw.application.interaction.resolved.ResolvedData;
 import io.github.realyusufismail.ydw.entities.Guild;
@@ -36,7 +36,7 @@ public class InteractionDataReg implements InteractionData {
     private final long id;
 
     private final String name;
-    private final OptionTypeEnum type;
+    private final OptionType type;
     private final ResolvedData resolvedData;
     private final Guild guild;
     private final String customId;
@@ -48,7 +48,7 @@ public class InteractionDataReg implements InteractionData {
         this.id = id;
 
         this.name = interaction.get("name").asText();
-        this.type = OptionTypeEnum.valueOf(interaction.get("type").asText());
+        this.type = OptionType.valueOf(interaction.get("type").asText());
         this.resolvedData = interaction.hasNonNull("resolved")
                 ? new ResolvedDataReg(interaction.get("resolved"), ydw)
                 : null;
@@ -70,7 +70,7 @@ public class InteractionDataReg implements InteractionData {
     }
 
     @Override
-    public OptionTypeEnum getType() {
+    public OptionType getType() {
         return type;
     }
 

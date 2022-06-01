@@ -29,5 +29,7 @@ public class SlashOptionGetterReg extends SlashCommandConfig implements SlashOpt
     public SlashOptionGetterReg(@NotNull JsonNode application, long id, YDW ydw) {
         super(application, id, ydw);
     }
+
+
 }
 

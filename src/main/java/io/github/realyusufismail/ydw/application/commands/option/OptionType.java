@@ -19,7 +19,7 @@ package io.github.realyusufismail.ydw.application.commands.option;
 
 import org.jetbrains.annotations.NotNull;
 
-public enum OptionTypeEnum {
+public enum OptionType {
     SUB_COMMAND(1),
     SUB_COMMAND_GROUP(2),
     STRING(3),
@@ -35,12 +35,12 @@ public enum OptionTypeEnum {
 
     private final int value;
 
-    OptionTypeEnum(int value) {
+    OptionType(int value) {
         this.value = value;
     }
 
-    public static @NotNull OptionTypeEnum getOptionType(int options) {
-        for (OptionTypeEnum type : values()) {
+    public static @NotNull OptionType getOptionType(int options) {
+        for (OptionType type : values()) {
             if (type.getValue() == options) {
                 return type;
             }
@@ -52,8 +52,8 @@ public enum OptionTypeEnum {
         return value;
     }
 
-    public @NotNull OptionTypeEnum getType(int value) {
-        for (OptionTypeEnum type : values()) {
+    public @NotNull OptionType getType(int value) {
+        for (OptionType type : values()) {
             if (type.getValue() == value) {
                 return type;
             }

@@ -3,7 +3,7 @@ package io.github.realyusufismail.ydwreg.application.commands.slash.builder;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.github.realyusufismail.ydw.application.commands.option.OptionTypeEnum;
+import io.github.realyusufismail.ydw.application.commands.option.OptionType;
 import io.github.realyusufismail.ydw.application.commands.slash.builder.OptionExtenderConfig;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,15 +11,15 @@ import java.util.Collection;
 
 public class OptionExtender extends Option implements OptionExtenderConfig {
 
-    private final OptionTypeEnum type;
+    private final OptionType type;
     private final String name;
     private final String description;
     private final Boolean required;
 
     private Collection<Choice> choices;
 
-    public OptionExtender(OptionTypeEnum type, String name, String description,
-            boolean isRequired) {
+    public OptionExtender(OptionType type, String name, String description,
+                          boolean isRequired) {
         super(type, name, description, isRequired);
         this.type = type;
         this.name = name;
@@ -27,7 +27,7 @@ public class OptionExtender extends Option implements OptionExtenderConfig {
         this.required = isRequired;
     }
 
-    public OptionExtender(OptionTypeEnum type, String name, String description) {
+    public OptionExtender(OptionType type, String name, String description) {
         this(type, name, description, false);
     }
 

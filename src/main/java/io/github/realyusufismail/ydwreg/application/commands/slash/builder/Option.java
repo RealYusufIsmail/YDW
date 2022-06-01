@@ -3,20 +3,20 @@ package io.github.realyusufismail.ydwreg.application.commands.slash.builder;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.github.realyusufismail.ydw.application.commands.option.OptionTypeEnum;
+import io.github.realyusufismail.ydw.application.commands.option.OptionType;
 
 import java.util.Collection;
 
 public class Option {
 
-    public Option(OptionTypeEnum type, String name, String description, boolean isRequired) {
+    public Option(OptionType type, String name, String description, boolean isRequired) {
         SlashCommandBuilderReg.setOptionType(type);
         SlashCommandBuilderReg.setOptionName(name);
         SlashCommandBuilderReg.setOptionDescription(description);
         SlashCommandBuilderReg.setOptionRequired(isRequired);
     }
 
-    public Option(OptionTypeEnum type, String name, String description) {
+    public Option(OptionType type, String name, String description) {
         this(type, name, description, false);
     }
 

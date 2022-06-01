@@ -17,7 +17,7 @@
 
 package io.github.realyusufismail.ydwreg.application.commands.slash.builder;
 
-import io.github.realyusufismail.ydw.application.commands.option.OptionTypeEnum;
+import io.github.realyusufismail.ydw.application.commands.option.OptionType;
 import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.rest.callers.SlashCommandCaller;
@@ -32,7 +32,7 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
 
     private static String optionName;
     private static String optionDescription;
-    private static OptionTypeEnum optionType;
+    private static OptionType optionType;
     private static boolean optionRequired;
 
     public SlashCommandBuilderReg(@NotNull YDWReg ydw) {
@@ -53,8 +53,8 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
     }
 
     @Override
-    public SlashCommandBuilder setOption(OptionTypeEnum optionType, String name, String description,
-            boolean required) {
+    public SlashCommandBuilder setOption(OptionType optionType, String name, String description,
+                                         boolean required) {
         caller.setOptions(List.of(new Option(optionType, name, description, required)));
         return this;
     }
@@ -91,7 +91,7 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
         SlashCommandBuilderReg.optionDescription = optionDescription;
     }
 
-    public static void setOptionType(OptionTypeEnum optionType) {
+    public static void setOptionType(OptionType optionType) {
         SlashCommandBuilderReg.optionType = optionType;
     }
 
@@ -107,7 +107,7 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
         return optionDescription;
     }
 
-    public static OptionTypeEnum getOptionType() {
+    public static OptionType getOptionType() {
         return optionType;
     }
 
