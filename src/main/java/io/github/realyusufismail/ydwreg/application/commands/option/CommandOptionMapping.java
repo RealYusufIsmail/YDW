@@ -19,16 +19,18 @@ public class CommandOptionMapping implements CommandInteractionDataOption {
     private final OptionType type;
 
     private final String name;
+    private final Boolean focused;
 
     public CommandOptionMapping(JsonNode config, OptionType type) {
         this.config = config;
         this.type = type;
         name = config.get("name").asText();
+        focused = config.hasNonNull("focused") ? config.get("focused").asBoolean() : null;
     }
 
     @Override
     public OptionType getType() {
-        return null;
+        return type;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class CommandOptionMapping implements CommandInteractionDataOption {
 
     @Override
     public Optional<Boolean> isFocused() {
-        return Optional.empty();
+        return Optional.ofNullable(focused);
     }
 
     @Override

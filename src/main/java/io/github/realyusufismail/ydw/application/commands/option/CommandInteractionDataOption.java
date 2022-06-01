@@ -25,7 +25,6 @@ import io.github.realyusufismail.ydw.entities.guild.channel.NewsChannel;
 import io.github.realyusufismail.ydw.entities.guild.channel.TextChannel;
 import io.github.realyusufismail.ydw.entities.guild.channel.VoiceChannel;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface CommandInteractionDataOption {

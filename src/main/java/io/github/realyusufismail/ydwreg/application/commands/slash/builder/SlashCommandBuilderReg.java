@@ -54,7 +54,7 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
 
     @Override
     public SlashCommandBuilder setOption(OptionType optionType, String name, String description,
-                                         boolean required) {
+            boolean required) {
         caller.setOptions(List.of(new Option(optionType, name, description, required)));
         return this;
     }

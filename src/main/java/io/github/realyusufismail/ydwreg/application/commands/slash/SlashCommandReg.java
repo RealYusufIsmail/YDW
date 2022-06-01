@@ -19,9 +19,6 @@ package io.github.realyusufismail.ydwreg.application.commands.slash;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.application.commands.reply.IReply;
-import io.github.realyusufismail.ydw.application.commands.slash.SlashCommand;
-import io.github.realyusufismail.ydwreg.application.commands.ApplicationCommandReg;
 import io.github.realyusufismail.ydwreg.application.commands.slash.config.SlashCommandConfig;
 
 public class SlashCommandReg extends SlashCommandConfig {

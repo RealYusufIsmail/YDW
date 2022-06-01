@@ -22,12 +22,7 @@ import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.rest.callers.*;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.IOException;
-import java.util.function.Consumer;
 
 @SuppressWarnings("unused")
 public class RestApiHandler {

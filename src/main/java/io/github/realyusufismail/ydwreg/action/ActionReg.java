@@ -20,7 +20,6 @@ package io.github.realyusufismail.ydwreg.action;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.action.Action;
 import io.github.realyusufismail.ydwreg.YDWReg;
-import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import io.github.realyusufismail.ydwreg.rest.queue.Queue;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

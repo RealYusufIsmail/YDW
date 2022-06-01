@@ -18,8 +18,7 @@ public class OptionExtender extends Option implements OptionExtenderConfig {
 
     private Collection<Choice> choices;
 
-    public OptionExtender(OptionType type, String name, String description,
-                          boolean isRequired) {
+    public OptionExtender(OptionType type, String name, String description, boolean isRequired) {
         super(type, name, description, isRequired);
         this.type = type;
         this.name = name;

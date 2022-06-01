@@ -19,7 +19,6 @@ package io.github.realyusufismail.ydwreg.action;
 
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.action.MessageAction;
-import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import io.github.realyusufismail.ydwreg.rest.callers.MessageCaller;
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;

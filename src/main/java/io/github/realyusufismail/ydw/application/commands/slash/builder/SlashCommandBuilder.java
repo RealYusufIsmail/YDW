@@ -25,10 +25,9 @@ public interface SlashCommandBuilder {
     SlashCommandBuilder setDescription(String description);
 
     SlashCommandBuilder setOption(OptionType optionType, String name, String description,
-                                  boolean required);
+            boolean required);
 
-    default SlashCommandBuilder setOption(OptionType optionType, String name,
-                                          String description) {
+    default SlashCommandBuilder setOption(OptionType optionType, String name, String description) {
         return setOption(optionType, name, description, false);
     }
 
