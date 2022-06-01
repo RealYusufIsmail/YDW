@@ -14,6 +14,6 @@ public abstract class YDWCallback implements Callback {
     @Override
     public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
         // In most cases, this method is not needed as it can cause spammed messages in the console.
-        // But if you want to use this method, just override it and do whatever you want,
+        // But if you want to use this method, just override it and do whatever you want here.
     }
 }

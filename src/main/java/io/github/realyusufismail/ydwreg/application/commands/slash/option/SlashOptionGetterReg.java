@@ -15,16 +15,19 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.ydwreg.application.commands.user;
+package io.github.realyusufismail.ydwreg.application.commands.slash.option;
+
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.github.realyusufismail.ydwreg.application.commands.ApplicationCommandReg;
+import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.application.commands.slash.option.SlashOptionGetter;
+import io.github.realyusufismail.ydwreg.application.commands.slash.config.SlashCommandConfig;
+import org.jetbrains.annotations.NotNull;
 
-public class UserCommandInteraction extends ApplicationCommandReg {
-    private final long id;
+public class SlashOptionGetterReg extends SlashCommandConfig implements SlashOptionGetter {
 
-    public UserCommandInteraction(JsonNode application, long id) {
-        super(application, id);
-        this.id = id;
+    public SlashOptionGetterReg(@NotNull JsonNode application, long id, YDW ydw) {
+        super(application, id, ydw);
     }
 }
+

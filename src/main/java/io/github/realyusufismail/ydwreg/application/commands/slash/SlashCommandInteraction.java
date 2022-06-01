@@ -19,23 +19,13 @@ package io.github.realyusufismail.ydwreg.application.commands.slash;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.entities.guild.channel.TextChannel;
-import io.github.realyusufismail.ydwreg.application.commands.SlashCommandReg;
-import io.github.realyusufismail.ydwreg.entities.channel.TextChannelReg;
-import org.jetbrains.annotations.NotNull;
 
 // TODO : once rest api is done start creating the rest api for this
 public class SlashCommandInteraction extends SlashCommandReg {
-    private final JsonNode JsonNode;
     private final YDW ydw;
 
-    public SlashCommandInteraction(JsonNode slashCommand, JsonNode JsonNode, YDW ydw) {
-        super(ydw, slashCommand);
-        this.JsonNode = JsonNode;
+    public SlashCommandInteraction(JsonNode slashCommand, YDW ydw) {
+        super(slashCommand, slashCommand.get("id").asLong(), ydw);
         this.ydw = ydw;
-    }
-
-    public @NotNull TextChannel getTextChannel() {
-        return new TextChannelReg(JsonNode.getAsJsonNode("channel"), ydw);
     }
 }

@@ -19,7 +19,7 @@ package io.github.realyusufismail.ydwreg.rest.callers;
 
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydwreg.YDWReg;
-import io.github.realyusufismail.ydwreg.application.commands.SlashCommandReg;
+import io.github.realyusufismail.ydwreg.application.commands.slash.SlashCommandReg;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 import io.github.realyusufismail.ydwreg.rest.queue.Queue;
 import okhttp3.MediaType;
@@ -28,7 +28,6 @@ import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.util.function.Consumer;
 
 public class MessageCaller {

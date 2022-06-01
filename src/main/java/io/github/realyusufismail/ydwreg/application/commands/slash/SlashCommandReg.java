@@ -15,24 +15,23 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.ydwreg.application.commands.data;
+package io.github.realyusufismail.ydwreg.application.commands.slash;
 
-public class UserCommandData {
-    private final String commandName;
-    private final boolean isGuildOnly;
+import com.fasterxml.jackson.databind.JsonNode;
+import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.application.commands.reply.IReply;
+import io.github.realyusufismail.ydw.application.commands.slash.SlashCommand;
+import io.github.realyusufismail.ydwreg.application.commands.ApplicationCommandReg;
+import io.github.realyusufismail.ydwreg.application.commands.slash.config.SlashCommandConfig;
 
-    public UserCommandData(String commandName, boolean isGuildOnly) {
-        this.commandName = commandName;
-        this.isGuildOnly = isGuildOnly;
-    }
+public class SlashCommandReg extends SlashCommandConfig {
+    private final YDW ydw;
+    private final long id;
 
-    public String getCommandName() {
-        return commandName;
-    }
-
-
-    public boolean isGuildOnly() {
-        return isGuildOnly;
+    public SlashCommandReg(JsonNode option, long id, YDW ydw) {
+        super(option, option.get("id").asLong(), ydw);
+        this.ydw = ydw;
+        this.id = id;
     }
 
 }
