@@ -1,17 +1,17 @@
 package io.github.realyusufismail.ydw.application.commands.slash.builder;
 
+import io.github.realyusufismail.ydwreg.application.commands.slash.builder.Choice;
+
+import java.util.Collection;
+
 public interface OptionExtenderConfig {
-    OptionExtenderConfig addChoice(String name, Object value);
+    OptionExtenderConfig addChoice(String name, String value);
 
-    default OptionExtenderConfig addChoice(String name, int value) {
-        return addChoice(name, (Object) value);
-    }
+    OptionExtenderConfig addChoice(String name, int value);
 
-    default OptionExtenderConfig addChoice(String name, double value) {
-        return addChoice(name, (Object) value);
-    }
+    OptionExtenderConfig addChoice(String name, double value);
 
-    OptionExtenderConfig setRequired(boolean required);
+    OptionExtenderConfig addChoices(Collection<Choice> choices);
 
     OptionExtenderConfig setMaxAndMin(Integer max, Integer min);
 

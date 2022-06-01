@@ -20,6 +20,7 @@ package io.github.realyusufismail.ydwreg.action;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.action.MessageAction;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
+import io.github.realyusufismail.ydwreg.rest.callers.MessageCaller;
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,12 +31,13 @@ public class MessageActionReg implements MessageAction {
     private final Request request;
 
     private final YDW ydw;
-    @NotNull
-    RestApiHandler api = new RestApiHandler(getYDW());
+
+    private final MessageCaller messageCaller;
 
     public MessageActionReg(Request request, YDW ydw) {
         this.request = request;
         this.ydw = ydw;
+        this.messageCaller = ydw.getRest().getMessageCaller();
     }
 
     @Override
@@ -51,18 +53,18 @@ public class MessageActionReg implements MessageAction {
     @Override
     public <T> void queue(@Nullable Consumer<? super T> success,
             @Nullable Consumer<? super Throwable> failure) {
-        api.queue(request, success, failure);
+        messageCaller.queue(request, success, failure);
     }
 
     @Override
     public @NotNull MessageAction isTTs() {
-        api.setTTS(true);
+        messageCaller.setTTS(true);
         return this;
     }
 
     @Override
     public @NotNull MessageAction isMentionable() {
-        api.setMentionable(true);
+        messageCaller.setMentionable(true);
         return this;
     }
 

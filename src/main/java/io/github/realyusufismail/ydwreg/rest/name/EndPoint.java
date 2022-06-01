@@ -57,7 +57,11 @@ public enum EndPoint {
 
     // emoji
     GET_LIST_GUILD_EMOJI(YDWInfo.DISCORD_REST_LINK + "/guilds/%s/emojis"),
-    GET_GUILD_EMOJI(YDWInfo.DISCORD_REST_LINK + "/guilds/%s/emojis/%s"),;
+    GET_GUILD_EMOJI(YDWInfo.DISCORD_REST_LINK + "/guilds/%s/emojis/%s"),
+
+    // Slash command.
+    GLOBAL_SLASH_COMMAND("https://discord.com/api/v10/applications/%s/commands"),
+    GUILD_SLASH_COMMAND("https://discord.com/api/v10/applications/%s/guilds/%s/commands"),;
 
     private final String endpoint;
 

@@ -48,41 +48,16 @@ public class RestApiHandler {
     private final EmojiCaller emojiCaller = new EmojiCaller(getYDW());
     private final ChannelCaller channelCaller = new ChannelCaller(getYDW());
     private final YDWCaller ydwCaller = new YDWCaller(getYDW());
-    private final SlashCommandCaller slashCommandCaller = new SlashCommandCaller(getYDW(), getToken());
-    private final MessageCaller messageRestApi = new MessageCaller(getYDW(), JSON);
+    private final SlashCommandCaller slashCommandCaller =
+            new SlashCommandCaller(getToken(), getYDW(), JSON);
+    private final MessageCaller messageCaller = new MessageCaller(getYDW(), JSON);
 
     public RestApiHandler(YDW ydw) {
         this.ydw = ydw;
     }
 
     // I want a queue system were once the queue is called it executes the method
-    public <T> void queue(@NotNull Request request, @NotNull Consumer<? super T> success,
-            @Nullable Consumer<? super Throwable> failure) {
-        client.newCall(request).enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(@NotNull okhttp3.Call call, @NotNull IOException e) {
-                failure.accept(e);
-            }
 
-            @Override
-            public void onResponse(@NotNull okhttp3.Call call, @NotNull okhttp3.Response response)
-                    throws IOException {
-                success.accept(null);
-            }
-        });
-    }
-
-    public void setEphemeral(boolean ephemeral) {
-        isEphemeral = ephemeral;
-    }
-
-    public void setTTS(boolean tts) {
-        isTTS = tts;
-    }
-
-    public void setMentionable(boolean mentionable) {
-        isMentionable = mentionable;
-    }
 
     public void setToken(String token) {
         this.token = token;
@@ -100,8 +75,8 @@ public class RestApiHandler {
         return userCaller;
     }
 
-    public @NotNull MessageCaller getMessageRestApi() {
-        return messageRestApi;
+    public @NotNull MessageCaller getMessageCaller() {
+        return messageCaller;
     }
 
     public @NotNull StickerCaller getStickerCaller() {
@@ -124,7 +99,6 @@ public class RestApiHandler {
         return slashCommandCaller;
     }
 
-    @Nullable
     public YDW getYDW() {
         return ydw;
     }

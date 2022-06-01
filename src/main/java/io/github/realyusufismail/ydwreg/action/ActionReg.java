@@ -19,7 +19,10 @@ package io.github.realyusufismail.ydwreg.action;
 
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.action.Action;
+import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
+import io.github.realyusufismail.ydwreg.rest.queue.Queue;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,13 +32,14 @@ import java.util.function.Consumer;
 public class ActionReg implements Action {
     private final Request request;
 
-    private final YDW ydw;
-    @NotNull
-    RestApiHandler api = new RestApiHandler(getYDW());
+    private final YDWReg ydw;
+
+    private final OkHttpClient client;
 
     public ActionReg(Request request, YDW ydw) {
         this.request = request;
-        this.ydw = ydw;
+        this.ydw = (YDWReg) ydw;
+        this.client = this.ydw.getHttpClient();
     }
 
     @Override
@@ -51,7 +55,7 @@ public class ActionReg implements Action {
     @Override
     public <T> void queue(@Nullable Consumer<? super T> success,
             @Nullable Consumer<? super Throwable> failure) {
-        api.queue(request, success, failure);
+        new Queue(client, request, success, failure).queue();
     }
 
     @Nullable

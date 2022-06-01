@@ -16,21 +16,27 @@ public class Option {
         SlashCommandBuilderReg.setOptionRequired(isRequired);
     }
 
-    public static ArrayNode toJsonArray(Collection<Option> options) {
+    public Option(OptionTypeEnum type, String name, String description) {
+        this(type, name, description, false);
+    }
+
+    public static ArrayNode toJsonArray(Collection<Option> options,
+            Collection<OptionExtender> optionExtenders) {
         ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
         for (Option option : options) {
-            arrayNode.add(option.toJson());
+            arrayNode.add(option.toJson(optionExtenders));
         }
         return arrayNode;
     }
 
-    private String toJson() {
+    private String toJson(Collection<OptionExtender> optionExtenders) {
         ObjectNode factory = JsonNodeFactory.instance.objectNode();
         return factory.objectNode()
             .put("name", SlashCommandBuilderReg.getOptionName())
             .put("description", SlashCommandBuilderReg.getOptionDescription())
             .put("type", SlashCommandBuilderReg.getOptionType().getValue())
             .put("required", SlashCommandBuilderReg.isOptionRequired())
+            .set("extenders", OptionExtender.toJsonArray(optionExtenders))
             .toString();
     }
 }

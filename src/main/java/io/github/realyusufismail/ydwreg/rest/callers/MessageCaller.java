@@ -21,11 +21,15 @@ import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.application.commands.SlashCommandReg;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
+import io.github.realyusufismail.ydwreg.rest.queue.Queue;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.IOException;
+import java.util.function.Consumer;
 
 public class MessageCaller {
 
@@ -33,8 +37,10 @@ public class MessageCaller {
 
     @NotNull
     private final OkHttpClient client;
-
     private final MediaType JSON;
+
+    private Boolean tts;
+    private Boolean mentionable;
 
     public MessageCaller(YDW ydw, MediaType json) {
         this.ydw = (YDWReg) ydw;
@@ -50,5 +56,18 @@ public class MessageCaller {
     public @Nullable Request replyEmbed(EmbedBuilder embed, SlashCommandReg slashCommandReg) {
         // TODO: Implement
         return null;
+    }
+
+    public void setTTS(boolean tts) {
+        this.tts = tts;
+    }
+
+    public void setMentionable(boolean mentionable) {
+        this.mentionable = mentionable;
+    }
+
+    public <T> void queue(@NotNull Request request, @Nullable Consumer<? super T> success,
+            @Nullable Consumer<? super Throwable> failure) {
+        new Queue(client, request, success, failure).queue();
     }
 }

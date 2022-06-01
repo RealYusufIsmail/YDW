@@ -20,6 +20,8 @@ package io.github.realyusufismail.ydwreg.action;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.action.ReplyAction;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
+import io.github.realyusufismail.ydwreg.rest.callers.MessageCaller;
+import io.github.realyusufismail.ydwreg.rest.callers.SlashCommandCaller;
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,12 +32,13 @@ public class ReplyActionReg implements ReplyAction {
     private final Request request;
 
     private final YDW ydw;
-    @NotNull
-    RestApiHandler api = new RestApiHandler(getYDW());
+
+    private final SlashCommandCaller slashCommandCaller;
 
     public ReplyActionReg(Request request, YDW ydw) {
         this.request = request;
         this.ydw = ydw;
+        this.slashCommandCaller = ydw.getRest().getSlashCommandCaller();
     }
 
     @Override
@@ -51,18 +54,18 @@ public class ReplyActionReg implements ReplyAction {
     @Override
     public <T> void queue(@Nullable Consumer<? super T> success,
             @Nullable Consumer<? super Throwable> failure) {
-        api.queue(request, success, failure);
+        slashCommandCaller.queue(request, success, failure);
     }
 
     @Override
     public @NotNull ReplyAction isEphemeral() {
-        api.setEphemeral(true);
+        slashCommandCaller.setEphemeral(true);
         return this;
     }
 
     @Override
     public @NotNull ReplyAction isTTS() {
-        api.setTTS(true);
+        slashCommandCaller.setTTS(true);
         return this;
     }
 
