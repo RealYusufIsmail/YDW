@@ -1,11 +1,11 @@
 package io.github.realyusufismail.ydwreg.application.commands.slash.builder;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import io.github.realyusufismail.ydwreg.util.Verify;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Native;
-import java.util.Collection;
 
 public class Choice {
     /**
@@ -71,7 +71,13 @@ public class Choice {
         }
     }
 
-    public static ArrayNode toJsonArray(Collection<Choice> choices) {
-
+    public JsonNode getValueAsJson() {
+        if (intValue != 0) {
+            return JsonNodeFactory.instance.numberNode(intValue);
+        } else if (doubleValue != 0) {
+            return JsonNodeFactory.instance.numberNode(doubleValue);
+        } else {
+            return JsonNodeFactory.instance.textNode(stringValue);
+        }
     }
 }

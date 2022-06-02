@@ -2,7 +2,6 @@ package io.github.realyusufismail.ydwreg.application.commands.slash.builder;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.application.commands.option.OptionType;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +20,7 @@ public class Option {
         this(type, name, description, false);
     }
 
-    public static ArrayNode toJsonArray(Collection<Option> options,
+    public static ArrayNode toJsonArray(@NotNull Collection<Option> options,
             Collection<OptionExtender> optionExtenders) {
         ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
         for (Option option : options) {
@@ -35,30 +34,38 @@ public class Option {
 
     String optionToJson() {
         return JsonNodeFactory.instance.arrayNode()
-                .add(JsonNodeFactory.instance.objectNode()
-                        .put("name", SlashCommandBuilderReg.getOptionName())
-                        .put("description", SlashCommandBuilderReg.getOptionDescription())
-                        .put("type", SlashCommandBuilderReg.getOptionType().name())
-                        .put("required", SlashCommandBuilderReg.isOptionRequired()))
-                .toString();
+            .add(JsonNodeFactory.instance.objectNode()
+                .put("name", SlashCommandBuilderReg.getOptionName())
+                .put("description", SlashCommandBuilderReg.getOptionDescription())
+                .put("type", SlashCommandBuilderReg.getOptionType().name())
+                .put("required", SlashCommandBuilderReg.isOptionRequired()))
+            .toString();
     }
 
-    String optionExtenderToJson(OptionExtender optionExtender) {
+    String optionExtenderToJson(@NotNull OptionExtender optionExtender) {
         return JsonNodeFactory.instance.arrayNode()
-                .add(JsonNodeFactory.instance.objectNode()
-                        .put("name", SlashCommandBuilderReg.getOptionName())
-                        .put("description", SlashCommandBuilderReg.getOptionDescription())
-                        .put("type", SlashCommandBuilderReg.getOptionType().name())
-                        .put("required", SlashCommandBuilderReg.isOptionRequired())
-                        .put("choices", optionExtender.getChoices()))
-                .toString();
+            .add(JsonNodeFactory.instance.objectNode()
+                .put("name", SlashCommandBuilderReg.getOptionName())
+                .put("description", SlashCommandBuilderReg.getOptionDescription())
+                .put("type", SlashCommandBuilderReg.getOptionType().name())
+                .put("required", SlashCommandBuilderReg.isOptionRequired())
+                .set("choices", choiceToJsonArray(optionExtender.getChoices())))
+            .toString();
     }
 
-    String choicesToJson(Choice choices) {
+    public static ArrayNode choiceToJsonArray(@NotNull Collection<Choice> choices) {
+        ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
+        for (Choice choice : choices) {
+            arrayNode.add(choicesToJson(choice));
+        }
+        return arrayNode;
+    }
+
+    static String choicesToJson(@NotNull Choice choices) {
         return JsonNodeFactory.instance.arrayNode()
-                .add(JsonNodeFactory.instance.objectNode()
-                        .put("name", choices.getName())
-                        .put("value", choices.getValue()))
-                .toString();
+            .add(JsonNodeFactory.instance.objectNode()
+                .put("name", choices.getName())
+                .set("value", choices.getValueAsJson()))
+            .toString();
     }
 }

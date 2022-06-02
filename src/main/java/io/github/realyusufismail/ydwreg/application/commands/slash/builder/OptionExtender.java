@@ -1,11 +1,7 @@
 package io.github.realyusufismail.ydwreg.application.commands.slash.builder;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.application.commands.option.OptionType;
 import io.github.realyusufismail.ydw.application.commands.slash.builder.OptionExtenderConfig;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
