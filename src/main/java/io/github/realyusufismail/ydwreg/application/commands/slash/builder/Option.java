@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.application.commands.option.OptionType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
@@ -24,19 +25,40 @@ public class Option {
             Collection<OptionExtender> optionExtenders) {
         ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
         for (Option option : options) {
-            arrayNode.add(option.toJson(optionExtenders));
+            arrayNode.add(option.optionToJson());
+        }
+        for (OptionExtender optionExtender : optionExtenders) {
+            arrayNode.add(optionExtender.optionExtenderToJson(optionExtender));
         }
         return arrayNode;
     }
 
-    private String toJson(Collection<OptionExtender> optionExtenders) {
-        ObjectNode factory = JsonNodeFactory.instance.objectNode();
-        return factory.objectNode()
-            .put("name", SlashCommandBuilderReg.getOptionName())
-            .put("description", SlashCommandBuilderReg.getOptionDescription())
-            .put("type", SlashCommandBuilderReg.getOptionType().getValue())
-            .put("required", SlashCommandBuilderReg.isOptionRequired())
-            .set("extenders", OptionExtender.toJsonArray(optionExtenders))
-            .toString();
+    String optionToJson() {
+        return JsonNodeFactory.instance.arrayNode()
+                .add(JsonNodeFactory.instance.objectNode()
+                        .put("name", SlashCommandBuilderReg.getOptionName())
+                        .put("description", SlashCommandBuilderReg.getOptionDescription())
+                        .put("type", SlashCommandBuilderReg.getOptionType().name())
+                        .put("required", SlashCommandBuilderReg.isOptionRequired()))
+                .toString();
+    }
+
+    String optionExtenderToJson(OptionExtender optionExtender) {
+        return JsonNodeFactory.instance.arrayNode()
+                .add(JsonNodeFactory.instance.objectNode()
+                        .put("name", SlashCommandBuilderReg.getOptionName())
+                        .put("description", SlashCommandBuilderReg.getOptionDescription())
+                        .put("type", SlashCommandBuilderReg.getOptionType().name())
+                        .put("required", SlashCommandBuilderReg.isOptionRequired())
+                        .put("choices", optionExtender.getChoices()))
+                .toString();
+    }
+
+    String choicesToJson(Choice choices) {
+        return JsonNodeFactory.instance.arrayNode()
+                .add(JsonNodeFactory.instance.objectNode()
+                        .put("name", choices.getName())
+                        .put("value", choices.getValue()))
+                .toString();
     }
 }

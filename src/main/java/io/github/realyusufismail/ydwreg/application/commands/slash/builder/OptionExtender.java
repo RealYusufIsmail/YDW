@@ -65,21 +65,7 @@ public class OptionExtender extends Option implements OptionExtenderConfig {
         return null;
     }
 
-    public static ArrayNode toJsonArray(@NotNull Collection<OptionExtender> options) {
-        ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
-        for (OptionExtender option : options) {
-            arrayNode.add(option.toJson());
-        }
-        return arrayNode;
-    }
-
-    private String toJson() {
-        ObjectNode factory = JsonNodeFactory.instance.objectNode();
-        return factory.put("name", name)
-            .put("description", description)
-            .put("type", type.getValue())
-            .put("required", required)
-            .set("choices", Choice.toJsonArray(choices))
-            .toString();
+    public Collection<Choice> getChoices() {
+        return choices;
     }
 }
