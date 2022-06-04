@@ -20,6 +20,8 @@ package io.github.realyusufismail.ydwreg;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neovisionaries.ws.client.WebSocketException;
 import io.github.realyusufismail.websocket.WebSocketManager;
+import io.github.realyusufismail.websocket.event.Event;
+import io.github.realyusufismail.websocket.event.EventInterface;
 import io.github.realyusufismail.ydw.GateWayIntent;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
@@ -203,6 +205,14 @@ public class YDWReg implements YDW {
             return user.get();
         else
             throw new IllegalStateException("Self user is not set");
+    }
+
+    @Override
+    public <EventName extends Event> YDW onEvent(@NotNull EventName event, EventInterface<EventName> eventInterface) {
+        if (!event.getClass().isAssignableFrom(Event.class))
+            throw new IllegalArgumentException("Event class must be assignable from event interface");
+
+        return this;
     }
 
     public void setSelfUser(@NotNull SelfUser selfUser) {

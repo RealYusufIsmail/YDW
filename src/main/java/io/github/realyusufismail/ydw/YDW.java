@@ -20,6 +20,8 @@ package io.github.realyusufismail.ydw;
 
 import com.neovisionaries.ws.client.WebSocketException;
 import io.github.realyusufismail.websocket.WebSocketManager;
+import io.github.realyusufismail.websocket.event.Event;
+import io.github.realyusufismail.websocket.event.EventInterface;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.SelfUser;
@@ -98,4 +100,6 @@ public interface YDW {
     boolean needsToAutoReconnect();
 
     SelfUser getSelfUser();
+
+    <EventName extends Event> YDW onEvent(EventName event, EventInterface<EventName> eventInterface);
 }
