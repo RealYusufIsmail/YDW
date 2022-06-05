@@ -25,6 +25,10 @@ import io.github.realyusufismail.ydw.action.Action;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.emoji.Emoji;
 import io.github.realyusufismail.ydw.entities.guild.*;
+import io.github.realyusufismail.ydw.entities.guild.channel.NewsChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.StageChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.TextChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.VoiceChannel;
 import io.github.realyusufismail.ydw.entities.sticker.Sticker;
 import io.github.realyusufismail.ydw.entities.voice.VoiceState;
 import io.github.realyusufismail.ydwreg.YDWReg;
@@ -105,6 +109,10 @@ public class GuildReg implements Guild {
     private final List<Member> members = new ArrayList<>();
     private final List<Channel> channels = new ArrayList<>();
     private final List<Sticker> stickers = new ArrayList<>();
+    private final List<TextChannel> textChannels = new ArrayList<>();
+    private final List<NewsChannel> newsChannels = new ArrayList<>();
+    private final List<StageChannel> stageChannels = new ArrayList<>();
+    private final List<VoiceChannel> voiceChannels = new ArrayList<>();
     @NotNull
     GuildCaller restApi = getYDW().getRest().getGuildRestApi();
 
@@ -547,6 +555,26 @@ public class GuildReg implements Guild {
     @Override
     public Sticker getStickerById(long id) {
         return ydw.getRest().getStickerCaller().getSticker(this.getIdLong(), id);
+    }
+
+    @Override
+    public List<TextChannel> getTextChannels() {
+        return textChannels;
+    }
+
+    @Override
+    public List<VoiceChannel> getVoiceChannels() {
+        return voiceChannels;
+    }
+
+    @Override
+    public List<NewsChannel> getNewsChannels() {
+        return newsChannels;
+    }
+
+    @Override
+    public List<StageChannel> getStageChannels() {
+        return stageChannels;
     }
 
     /**

@@ -86,7 +86,7 @@ public class ChannelReg implements Channel {
         this.id = id;
         this.ydw = ydw;
 
-        this.type = ChannelType.valueOf(channelJ.get("type").asInt());
+        this.type = ChannelType.getChannelType(channelJ.get("type").asInt());
         this.guild =
                 channelJ.has("guild_id") ? ydw.getGuild(channelJ.get("guild_id").asLong()) : null;
         this.position = channelJ.has("position") ? channelJ.get("position").asInt() : null;

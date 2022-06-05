@@ -208,16 +208,17 @@ public class EmbedBuilder {
     }
 
     public boolean isEmpty() {
-        return title == null && description == null && url == null && timestamp == null
-                && color == null && footer == null && image == null && thumbnail == null
-                && video == null && provider == null && author == null && fields.isEmpty();
+        return (title == null || title.trim().isEmpty()) && description.length() == 0 && url == null
+                && timestamp == null && color == null && footer == null && image == null
+                && thumbnail == null && video == null && provider == null && author == null
+                && fields.isEmpty();
     }
 
     public @NotNull Embed build() {
         if (isEmpty())
             throw new IllegalArgumentException("Embed cannot be empty.");
-        return new EmbedReg(title, description, url, timestamp, color, footer, image, thumbnail,
-                video, provider, author, fields);
+        return new EmbedReg(title, description, Embed.EmbedType.RICH, url, timestamp, color, footer,
+                image, thumbnail, video, provider, author, fields);
     }
 
 

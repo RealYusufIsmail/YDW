@@ -101,5 +101,6 @@ public interface YDW {
 
     SelfUser getSelfUser();
 
-    <EventName extends Event> YDW onEvent(EventName event, EventInterface<EventName> eventInterface);
+    <EventName extends Event> YDW onEvent(EventName event,
+            EventInterface<EventName> eventInterface);
 }

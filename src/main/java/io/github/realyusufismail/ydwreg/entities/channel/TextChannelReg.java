@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 public class TextChannelReg extends ChannelReg implements TextChannel {
     private final YDW ydw;
     @NotNull
-    MessageCaller apiHandler = getYDW().getRest().getMessageRestApi();
+    MessageCaller apiHandler = getYDW().getRest().getMessageCaller();
 
     public TextChannelReg(@NotNull JsonNode json, long id, @NotNull YDW ydw) {
         super(json, id, ydw);

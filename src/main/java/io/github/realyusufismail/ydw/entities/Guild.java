@@ -22,6 +22,10 @@ import com.google.errorprone.annotations.CheckReturnValue;
 import io.github.realyusufismail.ydw.action.Action;
 import io.github.realyusufismail.ydw.entities.emoji.Emoji;
 import io.github.realyusufismail.ydw.entities.guild.*;
+import io.github.realyusufismail.ydw.entities.guild.channel.NewsChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.StageChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.TextChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.VoiceChannel;
 import io.github.realyusufismail.ydw.entities.sticker.Sticker;
 import io.github.realyusufismail.ydw.entities.voice.VoiceState;
 import io.github.realyusufismail.ydwreg.entities.guild.GuildFeatures;
@@ -263,4 +267,13 @@ public interface Guild extends SnowFlake, GenericEntity {
     default Sticker getStickerById(@NotNull String id) {
         return getStickerById(Long.parseLong(id));
     }
+
+
+    List<TextChannel> getTextChannels();
+
+    List<VoiceChannel> getVoiceChannels();
+
+    List<NewsChannel> getNewsChannels();
+
+    List<StageChannel> getStageChannels();
 }

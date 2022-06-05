@@ -79,11 +79,11 @@ public class EmbedReg implements Embed {
         }
     }
 
-    public EmbedReg(String title, String description, String url, String timestamp, Color color,
-            Footer footer, Image image, Thumbnail thumbnail, Video video, Provider provider,
-            Author author, @NotNull List<Fields> fields) {
+    public EmbedReg(String title, String description, EmbedType type, String url, String timestamp,
+            Color color, Footer footer, Image image, Thumbnail thumbnail, Video video,
+            Provider provider, Author author, @NotNull List<Fields> fields) {
         this.title = title;
-        this.type = null;
+        this.type = type;
         this.description = description;
         this.url = url;
         this.timestamp = timestamp;

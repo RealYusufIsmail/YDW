@@ -208,9 +208,12 @@ public class YDWReg implements YDW {
     }
 
     @Override
-    public <EventName extends Event> YDW onEvent(@NotNull EventName event, EventInterface<EventName> eventInterface) {
+    public <EventName extends Event> YDW onEvent(@NotNull EventName event,
+            EventInterface<EventName> eventInterface) {
         if (!event.getClass().isAssignableFrom(Event.class))
-            throw new IllegalArgumentException("Event class must be assignable from event interface");
+            throw new IllegalArgumentException(
+                    "Event class must be assignable from event interface");
+
 
         return this;
     }
