@@ -43,7 +43,7 @@ public enum EndPoint {
     GET_CHANNEL_MESSAGES(YDWInfo.DISCORD_REST_LINK + "/channels/%s/messages"),
     GET_CHANNEL_MESSAGE(YDWInfo.DISCORD_REST_LINK + "/channels/%s/messages/%s"),
     CREATE_MESSAGE(YDWInfo.DISCORD_REST_LINK + "/channels/%s/messages"),
-    //does not include threads
+    // does not include threads
     GET_GUILD_CHANNELS(YDWInfo.DISCORD_REST_LINK + "/guilds/%s/channels"),
 
     // user
