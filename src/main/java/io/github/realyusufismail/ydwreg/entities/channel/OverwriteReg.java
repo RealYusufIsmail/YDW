@@ -19,7 +19,7 @@ package io.github.realyusufismail.ydwreg.entities.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.entities.guild.channel.Overwrite;
+import io.github.realyusufismail.ydw.entities.channel.Overwrite;
 import org.jetbrains.annotations.NotNull;
 
 public class OverwriteReg implements Overwrite {

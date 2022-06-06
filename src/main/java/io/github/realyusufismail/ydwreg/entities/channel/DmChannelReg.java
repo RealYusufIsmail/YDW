@@ -17,7 +17,7 @@
 
 package io.github.realyusufismail.ydwreg.entities.channel;
 
-import io.github.realyusufismail.ydw.entities.guild.channel.DmChannel;
+import io.github.realyusufismail.ydw.entities.channel.DmChannel;
 
 public class DmChannelReg implements DmChannel {
 }

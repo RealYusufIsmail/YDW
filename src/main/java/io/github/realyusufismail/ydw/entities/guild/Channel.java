@@ -17,17 +17,22 @@
 
 package io.github.realyusufismail.ydw.entities.guild;
 
+import com.google.errorprone.annotations.CheckReturnValue;
+import io.github.realyusufismail.ydw.action.Action;
+import io.github.realyusufismail.ydw.action.MessageAction;
 import io.github.realyusufismail.ydw.entities.GenericEntity;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.User;
-import io.github.realyusufismail.ydw.entities.guild.channel.ChannelType;
-import io.github.realyusufismail.ydw.entities.guild.channel.Overwrite;
-import io.github.realyusufismail.ydw.entities.guild.channel.threads.ThreadMember;
-import io.github.realyusufismail.ydw.entities.guild.channel.threads.ThreadMetadata;
+import io.github.realyusufismail.ydw.entities.channel.ChannelType;
+import io.github.realyusufismail.ydw.entities.channel.Overwrite;
+import io.github.realyusufismail.ydw.entities.channel.threads.ThreadMember;
+import io.github.realyusufismail.ydw.entities.channel.threads.ThreadMetadata;
 import io.github.realyusufismail.ydw.perm.Permission;
+import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 import io.github.realyusufismail.ydwreg.entities.message.MessageFlags;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -64,10 +69,8 @@ public interface Channel extends SnowFlake, GenericEntity {
 
     Optional<User> getOwner();
 
-    @NotNull
     Optional<SnowFlake> getApplicationId();
 
-    @NotNull
     Optional<SnowFlake> getParentId();
 
     Optional<ZonedDateTime> getLastPinTimestamp();
@@ -92,4 +95,29 @@ public interface Channel extends SnowFlake, GenericEntity {
     Optional<Permission[]> getPermissions();
 
     Optional<MessageFlags[]> getFlags();
+
+    Optional<ChannelCategory> getCategory();
+
+    @CheckReturnValue
+    @NotNull
+    MessageAction sendMessage(String message);
+
+    @CheckReturnValue
+    @NotNull
+    MessageAction sendEmbedMessage(EmbedBuilder embedBuilder);
+
+    @NotNull
+    Message getMessage(@NotNull String messageId);
+
+    @NotNull
+    Message getMessage(long messageId);
+
+    @Nullable
+    Action deleteMessage(@NotNull String messageId);
+
+    @Nullable
+    Action deleteMessage(long messageId);
+
+    @Nullable
+    Action deleteMessages(int min, int max);
 }

@@ -15,7 +15,7 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.ydw.entities.guild.channel;
+package io.github.realyusufismail.ydw.entities.channel;
 
-public interface PublicThread extends BaseChannel {
+public interface Threads extends BaseChannel {
 }

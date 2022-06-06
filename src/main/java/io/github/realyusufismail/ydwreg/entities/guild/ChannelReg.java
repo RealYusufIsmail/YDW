@@ -19,19 +19,23 @@ package io.github.realyusufismail.ydwreg.entities.guild;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.action.Action;
+import io.github.realyusufismail.ydw.action.MessageAction;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.User;
+import io.github.realyusufismail.ydw.entities.channel.ChannelType;
+import io.github.realyusufismail.ydw.entities.channel.Overwrite;
+import io.github.realyusufismail.ydw.entities.channel.threads.ThreadMember;
+import io.github.realyusufismail.ydw.entities.channel.threads.ThreadMetadata;
 import io.github.realyusufismail.ydw.entities.guild.Channel;
+import io.github.realyusufismail.ydw.entities.guild.ChannelCategory;
 import io.github.realyusufismail.ydw.entities.guild.Message;
-import io.github.realyusufismail.ydw.entities.guild.channel.ChannelType;
-import io.github.realyusufismail.ydw.entities.guild.channel.Overwrite;
-import io.github.realyusufismail.ydw.entities.guild.channel.threads.ThreadMember;
-import io.github.realyusufismail.ydw.entities.guild.channel.threads.ThreadMetadata;
 import io.github.realyusufismail.ydw.perm.Permission;
 import io.github.realyusufismail.ydwreg.entities.UserReg;
 import io.github.realyusufismail.ydwreg.entities.channel.OverwriteReg;
 import io.github.realyusufismail.ydwreg.entities.channel.thread.ThreadMemberReg;
 import io.github.realyusufismail.ydwreg.entities.channel.thread.ThreadMetadataReg;
+import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 import io.github.realyusufismail.ydwreg.entities.message.MessageFlags;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
@@ -56,7 +60,6 @@ public class ChannelReg implements Channel {
     private final String name;
     private final String topic;
     private final Boolean nsfw;
-    @Nullable
     private final Message lastMessage;
     private final Integer bitrate;
     private final Integer userLimit;
@@ -81,6 +84,8 @@ public class ChannelReg implements Channel {
     private final Permission[] permissions;
     @Nullable
     private final MessageFlags[] flags;
+    @Nullable
+    private final ChannelCategory category;
 
     public ChannelReg(@NotNull JsonNode channelJ, long id, @NotNull YDW ydw) {
         this.id = id;
@@ -138,6 +143,9 @@ public class ChannelReg implements Channel {
                 ? Permission.getPermissions(channelJ.get("permissions").asInt())
                 : null;
         this.flags = channelJ.has("flags") ? MessageFlags.fromValues(channelJ.get("flags").asInt())
+                : null;
+        this.category = channelJ.has("category_id")
+                ? new ChannelCategoryReg(channelJ, parentId, ydw)
                 : null;
 
         if (channelJ.has("permission_overwrites")) {
@@ -316,5 +324,52 @@ public class ChannelReg implements Channel {
     @Override
     public Optional<MessageFlags[]> getFlags() {
         return Optional.ofNullable(flags);
+    }
+
+    @Override
+    public Optional<ChannelCategory> getCategory() {
+        return Optional.ofNullable(category);
+    }
+
+    @NotNull
+    @Override
+    public MessageAction sendMessage(String message) {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public MessageAction sendEmbedMessage(EmbedBuilder embedBuilder) {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public Message getMessage(@NotNull String messageId) {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public Message getMessage(long messageId) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public Action deleteMessage(@NotNull String messageId) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public Action deleteMessage(long messageId) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public Action deleteMessages(int min, int max) {
+        return null;
     }
 }

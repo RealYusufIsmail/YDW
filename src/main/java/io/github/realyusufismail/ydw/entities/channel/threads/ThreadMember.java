@@ -15,9 +15,22 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.ydw.entities.guild.channel;
+package io.github.realyusufismail.ydw.entities.channel.threads;
 
-import io.github.realyusufismail.ydw.entities.guild.Channel;
+import io.github.realyusufismail.ydw.entities.GenericEntity;
+import io.github.realyusufismail.ydw.entities.User;
+import io.github.realyusufismail.ydwreg.Flags;
+import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
+import org.jetbrains.annotations.NotNull;
 
-public interface BaseChannel extends Channel {
+import java.time.ZonedDateTime;
+import java.util.Optional;
+
+public interface ThreadMember extends SnowFlake, GenericEntity {
+    @NotNull
+    Optional<User> getUser();
+
+    ZonedDateTime getJoinTimeStamp();
+
+    Flags[] getFlags();
 }

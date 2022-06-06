@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.application.commands.option.CommandOption;
 import io.github.realyusufismail.ydw.application.commands.option.CommandOptionChoice;
 import io.github.realyusufismail.ydw.application.commands.option.OptionType;
-import io.github.realyusufismail.ydw.entities.guild.channel.ChannelType;
+import io.github.realyusufismail.ydw.entities.channel.ChannelType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

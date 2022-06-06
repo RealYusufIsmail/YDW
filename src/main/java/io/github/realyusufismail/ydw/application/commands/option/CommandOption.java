@@ -17,7 +17,7 @@
 
 package io.github.realyusufismail.ydw.application.commands.option;
 
-import io.github.realyusufismail.ydw.entities.guild.channel.ChannelType;
+import io.github.realyusufismail.ydw.entities.channel.ChannelType;
 import io.github.realyusufismail.ydwreg.application.commands.option.CommandOptionMapping;
 
 import java.util.EnumSet;

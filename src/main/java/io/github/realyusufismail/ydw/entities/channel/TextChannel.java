@@ -15,22 +15,48 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.ydw.entities.guild.channel.threads;
+package io.github.realyusufismail.ydw.entities.channel;
 
 import io.github.realyusufismail.ydw.entities.GenericEntity;
-import io.github.realyusufismail.ydw.entities.User;
-import io.github.realyusufismail.ydwreg.Flags;
+import io.github.realyusufismail.ydw.entities.guild.ChannelCategory;
+import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
+import io.github.realyusufismail.ydw.entities.guild.Message;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
 
-import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
 
-public interface ThreadMember extends SnowFlake, GenericEntity {
+public interface TextChannel extends SnowFlake, GenericEntity, GuildChannel {
+
+    @Override
+    List<Overwrite> getPermissionOverwrites();
+
+    @Override
+    Optional<String> getName();
+
+    @Override
+    Optional<Boolean> isNSFW();
+
+    @Override
+    Optional<Integer> getPosition();
+
+    @Override
+    Optional<Integer> getRateLimitPerUser();
+
+    @Override
+    Optional<String> getTopic();
+
     @NotNull
-    Optional<User> getUser();
+    @Override
+    Optional<Message> getLastMessage();
 
-    ZonedDateTime getJoinTimeStamp();
+    @Override
+    Optional<SnowFlake> getParentId();
 
-    Flags[] getFlags();
+    @Override
+    Optional<Integer> getDefaultAutoArchiveDuration();
+
+    @Override
+    Optional<ChannelCategory> getCategory();
 }

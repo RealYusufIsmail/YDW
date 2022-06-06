@@ -19,7 +19,7 @@ package io.github.realyusufismail.ydwreg.entities.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.entities.guild.channel.NewsThread;
+import io.github.realyusufismail.ydw.entities.channel.NewsThread;
 import io.github.realyusufismail.ydwreg.entities.guild.ChannelReg;
 import org.jetbrains.annotations.NotNull;
 

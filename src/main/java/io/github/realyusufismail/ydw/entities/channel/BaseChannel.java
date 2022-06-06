@@ -15,20 +15,9 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.ydw.entities.guild.channel.threads;
+package io.github.realyusufismail.ydw.entities.channel;
 
-import java.time.ZonedDateTime;
+import io.github.realyusufismail.ydw.entities.guild.Channel;
 
-public interface ThreadMetadata {
-    boolean isArchived();
-
-    int getAutoArchiveDuration();
-
-    ZonedDateTime getArchivedTimestamp();
-
-    boolean isLocked();
-
-    boolean isInvitable();
-
-    ZonedDateTime getCreationTimestamp();
+public interface BaseChannel extends Channel {
 }
