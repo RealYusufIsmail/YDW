@@ -94,4 +94,8 @@ public interface YDW {
 
     <EventName extends Event> YDW onEvent(EventName event,
             EventInterface<EventName> eventInterface);
+
+    boolean isResumed();
+
+    boolean hasReconnected();
 }

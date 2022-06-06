@@ -19,9 +19,7 @@ package io.github.realyusufismail.websocket.handle;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.websocket.EventNames;
-import io.github.realyusufismail.websocket.handle.handles.ApplicationCommandPermissionsUpdateHandler;
-import io.github.realyusufismail.websocket.handle.handles.InvalidSessionHandler;
-import io.github.realyusufismail.websocket.handle.handles.ReadyHandler;
+import io.github.realyusufismail.websocket.handle.handles.*;
 import io.github.realyusufismail.websocket.handle.handles.channel.ChannelCreateHandler;
 import io.github.realyusufismail.websocket.handle.handles.channel.ChannelDeleteHandler;
 import io.github.realyusufismail.websocket.handle.handles.channel.ChannelPinsUpdateHandler;
@@ -53,8 +51,8 @@ public class OnHandler {
     public void fire(@NotNull EventNames event, JsonNode json) {
         switch (event) {
             case READY -> new ReadyHandler(json, ydw).start();
-            case RESUMED -> ydw.getLogger().info("Resumed");
-            case RECONNECT -> ydw.getLogger().info("Reconnected");
+            case RESUMED -> new ResumedHandler(json, ydw).start();
+            case RECONNECT -> new ReconnectHandler(json, ydw).start();
             case INVALID_SESSION -> new InvalidSessionHandler(json, ydw).start();
             case APPLICATION_COMMAND_PERMISSIONS_UPDATE -> new ApplicationCommandPermissionsUpdateHandler(
                     json, ydw).start();

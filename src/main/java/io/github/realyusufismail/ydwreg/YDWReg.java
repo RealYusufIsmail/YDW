@@ -63,6 +63,10 @@ public class YDWReg implements YDW {
 
     private Boolean resumable;
 
+    private Boolean reconnected;
+
+    private Boolean resumed;
+
     public YDWReg(@Nullable OkHttpClient client) {
         rest = new RestApiHandler(this);
         mapper = new ObjectMapper();
@@ -205,6 +209,10 @@ public class YDWReg implements YDW {
             throw new IllegalStateException("Self user is not set");
     }
 
+    public void setSelfUser(@NotNull SelfUser selfUser) {
+        this.selfUser = selfUser;
+    }
+
     @Override
     public <EventName extends Event> YDW onEvent(@NotNull EventName event,
             EventInterface<EventName> eventInterface) {
@@ -216,9 +224,32 @@ public class YDWReg implements YDW {
         return this;
     }
 
-    public void setSelfUser(@NotNull SelfUser selfUser) {
-        this.selfUser = selfUser;
+    public Boolean isResumable() {
+        return resumable;
     }
+
+    public void setResumable(Boolean resumable) {
+        this.resumable = resumable;
+    }
+
+    @Override
+    public boolean isResumed() {
+        return resumed;
+    }
+
+    @Override
+    public boolean hasReconnected() {
+        return reconnected;
+    }
+
+    public void setResumed(boolean b) {
+        this.resumed = b;
+    }
+
+    public void setReconnected(boolean b) {
+        this.reconnected = b;
+    }
+
 
     public ObjectMapper getMapper() {
         return mapper;
@@ -231,14 +262,4 @@ public class YDWReg implements YDW {
     public Logger getLogger() {
         return logger;
     }
-
-    public Boolean isResumable() {
-        return resumable;
-    }
-
-    public void setResumable(Boolean resumable) {
-        this.resumable = resumable;
-    }
-
-
 }
