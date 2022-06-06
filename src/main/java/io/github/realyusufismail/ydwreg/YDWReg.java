@@ -25,10 +25,7 @@ import io.github.realyusufismail.websocket.event.EventInterface;
 import io.github.realyusufismail.ydw.GateWayIntent;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
-import io.github.realyusufismail.ydw.entities.Guild;
-import io.github.realyusufismail.ydw.entities.SelfUser;
-import io.github.realyusufismail.ydw.entities.UnavailableGuild;
-import io.github.realyusufismail.ydw.entities.User;
+import io.github.realyusufismail.ydw.entities.*;
 import io.github.realyusufismail.ydw.entities.guild.Channel;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import io.github.realyusufismail.ydwreg.util.Verify;
@@ -58,7 +55,11 @@ public class YDWReg implements YDW {
     @NotNull
     private final OkHttpClient client;
 
+    private List<Guild> guilds;
+
     private List<UnavailableGuild> unavailableGuilds;
+
+    private List<AvailableGuild> availableGuilds;
 
     private Boolean resumable;
 
@@ -66,6 +67,16 @@ public class YDWReg implements YDW {
         rest = new RestApiHandler(this);
         mapper = new ObjectMapper();
         this.client = client == null ? new OkHttpClient() : client;
+    }
+
+    @NotNull
+    @Override
+    public List<Guild> getGuilds() {
+        return guilds;
+    }
+
+    public void setGuilds(List<Guild> guilds) {
+        this.guilds = guilds;
     }
 
     @Override
@@ -80,6 +91,15 @@ public class YDWReg implements YDW {
 
     public void setUnavailableGuilds(List<UnavailableGuild> unavailableGuilds) {
         this.unavailableGuilds = unavailableGuilds;
+    }
+
+    @Override
+    public List<AvailableGuild> getAvailableGuilds() {
+        return availableGuilds;
+    }
+
+    public void setAvailableGuilds(List<AvailableGuild> availableGuilds) {
+        this.availableGuilds = availableGuilds;
     }
 
     @Override
@@ -140,28 +160,6 @@ public class YDWReg implements YDW {
         this.sequenceNumber = sequenceNumber;
     }
 
-    @Override
-    public void removeEventListeners(@NotNull Object... eventListener) {
-        Verify.checkIfNull(eventListener, "Event listener cannot be null");
-        for (Object listener : eventListener)
-            // eventHandler.unregister(listener);
-            logger.warn("Event listener not implemented");
-    }
-
-    @Nullable
-    @Override
-    public List<Object> getEventListeners() {
-        return null; // eventHandler.getEventListeners();
-    }
-
-    @Override
-    public void setEventListeners(@NotNull Object... eventListener) {
-        Verify.checkIfNull(eventListener, "The event listener cannot be null");
-        for (Object listener : eventListener)
-            // eventHandler.register(listener);
-            logger.warn("Event listener not implemented");
-
-    }
 
     @Override
     public long getGatewayPing() {
@@ -241,4 +239,6 @@ public class YDWReg implements YDW {
     public void setResumable(Boolean resumable) {
         this.resumable = resumable;
     }
+
+
 }

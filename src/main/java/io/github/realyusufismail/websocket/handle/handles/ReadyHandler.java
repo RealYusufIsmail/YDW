@@ -22,8 +22,11 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.websocket.handle.Handle;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.entities.AvailableGuild;
+import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.SelfUser;
 import io.github.realyusufismail.ydw.entities.UnavailableGuild;
+import io.github.realyusufismail.ydwreg.entities.AvailableGuildReg;
 import io.github.realyusufismail.ydwreg.entities.SelfUserReg;
 import io.github.realyusufismail.ydwreg.entities.UnavailableGuildReg;
 
@@ -50,7 +53,27 @@ public class ReadyHandler extends Handle {
                 unavailableGuilds.add(unavailableGuild);
             }
         }
+
         ydw.setUnavailableGuilds(unavailableGuilds);
+
+        List<AvailableGuild> availableGuilds = new ArrayList<>();
+        for (JsonNode guild : guilds) {
+            if (!guild.get("unavailable").asBoolean()) {
+                AvailableGuild availableGuild =
+                        new AvailableGuildReg(ydw, guild.get("id").asLong(), guild);
+                availableGuilds.add(availableGuild);
+            }
+        }
+
+        ydw.setAvailableGuilds(availableGuilds);
+
+        List<Guild> guildsList = new ArrayList<>();
+        for (JsonNode guild : guilds) {
+            Guild guild1 = ydw.getGuild(guild.get("id").asLong());
+            guildsList.add(guild1);
+        }
+
+        ydw.setGuilds(guildsList);
 
         SelfUser selfUser =
                 new SelfUserReg(json.get("user"), json.get("user").get("id").asLong(), ydw);

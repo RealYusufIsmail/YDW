@@ -21,7 +21,30 @@ import io.github.realyusufismail.websocket.event.Event;
 import io.github.realyusufismail.ydw.YDW;
 
 public class ReadyEvent extends Event {
+
+    private final long numberOfUnavailableGuilds;
+
+    private final long numberOfAvailableGuilds;
+
+    private final long numberOfGuilds;
+
     public ReadyEvent(YDW ydw) {
         super(ydw);
+
+        this.numberOfUnavailableGuilds = ydw.getUnavailableGuilds().size();
+        this.numberOfAvailableGuilds = ydw.getAvailableGuilds().size();
+        this.numberOfGuilds = numberOfAvailableGuilds + numberOfUnavailableGuilds;
+    }
+
+    public long getNumberOfUnavailableGuilds() {
+        return numberOfUnavailableGuilds;
+    }
+
+    public long getNumberOfAvailableGuilds() {
+        return numberOfAvailableGuilds;
+    }
+
+    public long getNumberOfGuilds() {
+        return numberOfGuilds;
     }
 }

@@ -144,9 +144,9 @@ public class ChannelReg implements Channel {
                 : null;
         this.flags = channelJ.has("flags") ? MessageFlags.fromValues(channelJ.get("flags").asInt())
                 : null;
-        this.category = channelJ.has("category_id")
-                ? new ChannelCategoryReg(channelJ, parentId, ydw)
-                : null;
+        this.category =
+                channelJ.has("category_id") ? new ChannelCategoryReg(channelJ, parentId, ydw)
+                        : null;
 
         if (channelJ.has("permission_overwrites")) {
             for (JsonNode permission : channelJ.get("permission_overwrites")) {

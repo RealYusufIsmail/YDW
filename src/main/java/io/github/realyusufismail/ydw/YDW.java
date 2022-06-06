@@ -23,10 +23,7 @@ import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.websocket.event.Event;
 import io.github.realyusufismail.websocket.event.EventInterface;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
-import io.github.realyusufismail.ydw.entities.Guild;
-import io.github.realyusufismail.ydw.entities.SelfUser;
-import io.github.realyusufismail.ydw.entities.UnavailableGuild;
-import io.github.realyusufismail.ydw.entities.User;
+import io.github.realyusufismail.ydw.entities.*;
 import io.github.realyusufismail.ydw.entities.guild.Channel;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import org.jetbrains.annotations.NotNull;
@@ -36,9 +33,7 @@ import java.util.List;
 
 public interface YDW {
     @NotNull
-    default List<Guild> getGuilds() {
-        return null;
-    }
+    List<Guild> getGuilds();
 
     Guild getGuild(long guildId);
 
@@ -47,6 +42,8 @@ public interface YDW {
     }
 
     List<UnavailableGuild> getUnavailableGuilds();
+
+    List<AvailableGuild> getAvailableGuilds();
 
     boolean isSpecifiedGuildAvailable(long guildId);
 
@@ -82,12 +79,6 @@ public interface YDW {
     void setPing(long ping);
 
     long getSequenceNumber();
-
-    void removeEventListeners(@NotNull Object... eventListener);
-
-    List<Object> getEventListeners();
-
-    void setEventListeners(@NotNull Object... eventListener);
 
     long getGatewayPing();
 

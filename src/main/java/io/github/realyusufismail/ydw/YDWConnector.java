@@ -31,7 +31,6 @@ import java.util.Optional;
 
 public class YDWConnector {
     private final String token;
-    private final List<Object> eventListener = new LinkedList<>();
     private String guildId;
     private int gatewayIntents;
     private String status = Status.ONLINE.getStatus();
@@ -243,7 +242,6 @@ public class YDWConnector {
         }
 
         YDWReg ydw = new YDWReg(httpClient.get());
-        eventListener.forEach(ydw::setEventListeners);
         ydw.setToken(token);
         ydw.setGuildId(guildId);
         ydw.login(token, gatewayIntents, status, largeThreshold, compress, activity);

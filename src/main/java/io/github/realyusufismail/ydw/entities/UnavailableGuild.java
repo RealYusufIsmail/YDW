@@ -26,5 +26,5 @@ public interface UnavailableGuild extends SnowFlake, GenericEntity {
      * 
      * @return false if available, true if not.
      */
-    Boolean isAvailable();
+    Boolean isUnAvailable();
 }

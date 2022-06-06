@@ -28,13 +28,13 @@ public class UnavailableGuildReg implements UnavailableGuild {
     private final long id;
 
     @NotNull
-    private final Boolean isAvailable;
+    private final Boolean isUnAvailable;
 
     public UnavailableGuildReg(YDW ydw, long id, @NotNull JsonNode json) {
         this.ydw = ydw;
         this.id = id;
 
-        this.isAvailable = !json.get("unavailable").asBoolean();
+        this.isUnAvailable = json.get("unavailable").asBoolean();
     }
 
     @Override
@@ -43,8 +43,8 @@ public class UnavailableGuildReg implements UnavailableGuild {
     }
 
     @Override
-    public Boolean isAvailable() {
-        return isAvailable;
+    public Boolean isUnAvailable() {
+        return isUnAvailable;
     }
 
     @NotNull
