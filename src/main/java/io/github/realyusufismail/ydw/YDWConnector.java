@@ -182,7 +182,7 @@ public class YDWConnector {
     }
 
     /**
-     * Used to set the guild id for the bot
+     * Used to set the guild id for the bot. This will be used for guild only commands.
      */
     @NotNull
     public YDWConnector setGuildId(long guildId) {
@@ -191,7 +191,7 @@ public class YDWConnector {
     }
 
     /**
-     * Used to set the guild id for the bot
+     * Used to set the guild id for the bot. This will be used for guild only commands.
      */
     @NotNull
     public YDWConnector setGuildId(String guildId) {
