@@ -57,7 +57,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     // The core class of the wrapper,
     private final YDWReg ydw;
     // Create a WebSocketFactory instance.
-    private static WebSocket ws;
+    private WebSocket ws;
     @NotNull
     ObjectMapper mapper = new ObjectMapper();
     // The sequence number, used for resuming sessions and heartbeats.
@@ -74,9 +74,6 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     // The inner d key of the invalid session event is a boolean that indicates whether the session
     // may be resumable. See Connecting and Resuming for more information.
     private Boolean isResumable;
-
-    // This indicates that the ready gateway intent has been received.
-    private boolean isReady;
 
 
     public WebSocketManager(YDWReg ydw) {
@@ -133,9 +130,6 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         Optional<String> t = Optional.of(payload.get("t").asText());
         logger.debug("Received event: {}", t.orElse(""));
         t.ifPresent(text -> new OnHandler(ydw, text, payload).start());
-        if (t.get().equals("READY")) {
-            isReady = true;
-        }
     }
 
     public void onOpcode(Integer opcode, @NotNull JsonNode d) {
@@ -178,7 +172,11 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
      * </p>
      */
     public void sendHeartbeat() {
-        JsonNode json = JsonNodeFactory.instance.objectNode().put("op", 1).put("d", seq);
+
+        Integer sequence = seq == null ? null : seq;
+
+        JsonNode heartbeat = JsonNodeFactory.instance.objectNode().put("op", 1).put("d", sequence);
+
 
         if (missedHeartbeats >= 2) {
             missedHeartbeats = 0;
@@ -186,7 +184,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             ws.disconnect(1000, "Heartbeat missed");
         } else {
             missedHeartbeats += 1;
-            ws.sendText(json.toString());
+            ws.sendText(heartbeat.asText());
         }
     }
 
@@ -201,11 +199,19 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
      * @param heartbeatInterval the interval in milliseconds between heartbeats
      */
     public void sendHeartbeat(int heartbeatInterval) {
-        JsonNode json = JsonNodeFactory.instance.objectNode().put("op", 1).put("d", seq);
+
+        try {
+            Socket rawSocket = this.ws.getSocket();
+            if (rawSocket != null)
+                rawSocket.setSoTimeout(heartbeatInterval + 10000); // setup a timeout when we miss
+                                                                   // heartbeats
+        } catch (SocketException ex) {
+            logger.warn("Failed to setup timeout for socket", ex);
+        }
 
         scheduler.scheduleAtFixedRate(() -> {
             try {
-                ws.sendText(json.toString());
+                sendHeartbeat();
             } catch (Exception e) {
                 logger.error("Error sending heartbeat", e);
             }
@@ -260,16 +266,16 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     }
 
     public void resume() {
-        JsonNode json = JsonNodeFactory.instance.objectNode()
-            .put("op", 6)
-            .set("d",
-                    JsonNodeFactory.instance.objectNode()
-                        .put("token", token)
-                        .put("session_id", sessionId)
-                        .put("seq", seq));
+        JsonNode payload = JsonNodeFactory.instance.objectNode()
+            .put("token", token)
+            .put("session_id", sessionId)
+            .put("seq", seq);
 
+        JsonNode identify = JsonNodeFactory.instance.objectNode()
+            .put("op", OpCode.RESUME.getCode())
+            .set("d", payload);
 
-        ws.sendText(json.toString());
+        ws.sendText(identify.asText());
         logger.info("Reconnected");
     }
 
