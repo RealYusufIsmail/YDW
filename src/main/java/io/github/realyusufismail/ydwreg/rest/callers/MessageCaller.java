@@ -41,10 +41,10 @@ public class MessageCaller {
     private Boolean tts;
     private Boolean mentionable;
 
-    public MessageCaller(YDW ydw, MediaType json) {
+    public MessageCaller(YDW ydw, MediaType json, OkHttpClient client) {
         this.ydw = (YDWReg) ydw;
         JSON = json;
-        this.client = new OkHttpClient();
+        this.client = client;
     }
 
     public @Nullable Request reply(String message, SlashCommandReg slashCommandReg) {

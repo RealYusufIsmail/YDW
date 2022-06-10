@@ -38,9 +38,9 @@ public class EmojiCaller {
 
     private final OkHttpClient client;
 
-    public EmojiCaller(@NotNull YDW ydw) {
+    public EmojiCaller(@Nullable YDW ydw, OkHttpClient client) {
         this.ydw = (YDWReg) ydw;
-        this.client = ((YDWReg) ydw).getHttpClient();
+        this.client = client;
     }
 
     @NotNull

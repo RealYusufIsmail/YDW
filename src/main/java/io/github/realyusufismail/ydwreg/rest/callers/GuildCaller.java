@@ -45,10 +45,10 @@ public class GuildCaller {
 
     private final MediaType JSON;
 
-    public GuildCaller(YDW ydw, MediaType json) {
+    public GuildCaller(@Nullable YDW ydw, MediaType json, OkHttpClient client) {
         this.ydw = (YDWReg) ydw;
         JSON = json;
-        this.client = new OkHttpClient();
+        this.client = client;
     }
 
     public @Nullable GuildPreview getGuildPreview(long guildId) {

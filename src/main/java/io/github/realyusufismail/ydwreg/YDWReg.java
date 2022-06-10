@@ -71,10 +71,10 @@ public class YDWReg implements YDW {
 
     private EventInterface eventInterface;
 
-    public YDWReg(@Nullable OkHttpClient client) {
-        rest = new RestApiHandler(this);
+    public YDWReg(@NotNull OkHttpClient client, @NotNull RestApiHandler rest) {
+        this.rest = rest;
         mapper = new ObjectMapper();
-        this.client = client == null ? new OkHttpClient() : client;
+        this.client = client;
     }
 
     @NotNull

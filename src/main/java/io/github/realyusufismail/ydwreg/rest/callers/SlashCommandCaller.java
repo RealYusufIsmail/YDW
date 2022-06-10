@@ -18,6 +18,7 @@
 package io.github.realyusufismail.ydwreg.rest.callers;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.application.commands.option.CommandType;
 import io.github.realyusufismail.ydwreg.YDWReg;
@@ -53,19 +54,24 @@ public class SlashCommandCaller {
     private Boolean tts;
     private Boolean mentionable;
 
-    public SlashCommandCaller(String token, @NotNull YDW ydw, MediaType json) {
+    public SlashCommandCaller(String token, YDW ydw, MediaType json, OkHttpClient client) {
         this.token = token;
         this.ydw = (YDWReg) ydw;
-        this.client = ((YDWReg) ydw).getHttpClient();
+        this.client = client;
         JSON = json;
     }
 
     public void callGlobalCommand() {
-        if (name == null || description == null || options == null) {
+        if (name == null || description == null) {
             throw new IllegalStateException("Name, Description, and Options are required to call");
         }
 
-        RequestBody body = RequestBody.create(slashCommandJson(), JSON);
+        if (options != null) {
+            slashCommandJson().set("options", Option.toJsonArray(options, extender));
+        }
+
+
+        RequestBody body = RequestBody.create(slashCommandJson().toString(), JSON);
 
         Request request = new Request.Builder()
             .url(EndPoint.GLOBAL_SLASH_COMMAND.getFullEndpoint(ydw.getSelfUser().getIdLong()))
@@ -82,12 +88,16 @@ public class SlashCommandCaller {
     }
 
     public void callGuildOnlyCommand() {
-        if (name == null || description == null || options == null || guildId == null) {
+        if (name == null || description == null || guildId == null) {
             throw new IllegalStateException(
                     "Name, Description, Guild ID, and Options are required to call");
         }
 
-        RequestBody body = RequestBody.create(slashCommandJson(), JSON);
+        if (options != null) {
+            slashCommandJson().set("options", Option.toJsonArray(options, extender));
+        }
+
+        RequestBody body = RequestBody.create(slashCommandJson().toString(), JSON);
 
         Request request = new Request.Builder()
             .url(EndPoint.GUILD_SLASH_COMMAND.getFullEndpoint(ydw.getSelfUser().getIdLong()))
@@ -103,13 +113,11 @@ public class SlashCommandCaller {
         });
     }
 
-    private String slashCommandJson() {
+    private ObjectNode slashCommandJson() {
         return JsonNodeFactory.instance.objectNode()
             .put("name", name)
             .put("description", description)
-            .put("type", commandType)
-            .set("options", Option.toJsonArray(options, extender))
-            .toString();
+            .put("type", commandType);
     }
 
     public void setName(String name) {

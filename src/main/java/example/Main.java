@@ -5,12 +5,15 @@ import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.YDWConnector;
 import io.github.realyusufismail.ydw.entities.embed.Embed;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
+import io.github.yusufsdiscordbot.config.Config;
 
 import java.awt.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        YDW ydw = YDWConnector.setUpBot("").setGuildId("").build();
+        YDW ydw = YDWConnector.setUpBot(Config.getString("TOKEN"))
+            .setGuildId(Config.getLong("GUILD_ID"))
+            .build();
 
         ydw.newSlashCommand("ping", "replays with pong");
 

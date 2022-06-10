@@ -27,6 +27,7 @@ import io.github.realyusufismail.ydwreg.rest.name.EndPoint;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,9 +38,9 @@ public class UserCaller {
 
     private final OkHttpClient client;
 
-    public UserCaller(@NotNull YDW ydw) {
-        this.ydw = (YDWReg) ydw;
-        this.client = ((YDWReg) ydw).getHttpClient();
+    public UserCaller(@Nullable YDWReg ydw, OkHttpClient client) {
+        this.ydw = ydw;
+        this.client = client;
     }
 
     @NotNull

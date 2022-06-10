@@ -17,42 +17,42 @@
 
 package io.github.realyusufismail.ydwreg.rest;
 
-import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.rest.callers.*;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
 
+import java.net.http.HttpClient;
+
 @SuppressWarnings("unused")
 public class RestApiHandler {
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    private final YDW ydw;
+    private YDWReg ydw;
 
-    @NotNull
-    OkHttpClient client = new OkHttpClient();
-    private boolean isEphemeral = false;
-    private boolean isTTS = false;
-    private boolean isMentionable = false;
-    private boolean isGuildOnlyCommand = false;
+    private final OkHttpClient client;
+
     private String guildId;
     private String token = "";
-    private final GuildCaller guildRestApi = new GuildCaller(getYDW(), JSON);
-    private final UserCaller userCaller = new UserCaller(getYDW());
-    private final StickerCaller stickerCaller = new StickerCaller((YDWReg) getYDW());
-    private final EmojiCaller emojiCaller = new EmojiCaller(getYDW());
-    private final ChannelCaller channelCaller = new ChannelCaller(getYDW());
-    private final YDWCaller ydwCaller = new YDWCaller(getYDW());
+    private final GuildCaller guildRestApi = new GuildCaller(getYDW(), JSON, getHttpClient());
+    private final UserCaller userCaller = new UserCaller(getYDW(), getHttpClient());
+    private final StickerCaller stickerCaller = new StickerCaller(getYDW(), getHttpClient());
+    private final EmojiCaller emojiCaller = new EmojiCaller(getYDW(), getHttpClient());
+    private final ChannelCaller channelCaller = new ChannelCaller(getYDW(), getHttpClient());
+    private final YDWCaller ydwCaller = new YDWCaller(getYDW(), getHttpClient());
     private final SlashCommandCaller slashCommandCaller =
-            new SlashCommandCaller(getToken(), getYDW(), JSON);
-    private final MessageCaller messageCaller = new MessageCaller(getYDW(), JSON);
+            new SlashCommandCaller(getToken(), getYDW(), JSON, getHttpClient());
+    private final MessageCaller messageCaller = new MessageCaller(getYDW(), JSON, getHttpClient());
 
-    public RestApiHandler(YDW ydw) {
-        this.ydw = ydw;
+    public RestApiHandler(OkHttpClient client) {
+        this.client = client;
     }
 
     // I want a queue system were once the queue is called it executes the method
 
+    public void setYDW(YDWReg ydw) {
+        this.ydw = ydw;
+    }
 
     public void setToken(String token) {
         this.token = token;
@@ -94,11 +94,16 @@ public class RestApiHandler {
         return slashCommandCaller;
     }
 
-    public YDW getYDW() {
+    public YDWReg getYDW() {
         return ydw;
+    }
+
+    public OkHttpClient getHttpClient() {
+        return client;
     }
 
     public String getToken() {
         return token;
     }
+
 }

@@ -40,9 +40,9 @@ public class StickerCaller {
 
     private final OkHttpClient client;
 
-    public StickerCaller(@NotNull YDWReg ydw) {
+    public StickerCaller(YDWReg ydw, OkHttpClient client) {
         this.ydw = ydw;
-        this.client = ydw.getHttpClient();
+        this.client = client;
     }
 
     @Nullable

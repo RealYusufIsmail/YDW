@@ -42,9 +42,9 @@ public class YDWCaller {
     private final OkHttpClient client;
 
 
-    public YDWCaller(@NotNull YDW ydw) {
+    public YDWCaller(YDW ydw, OkHttpClient client) {
         this.ydw = (YDWReg) ydw;
-        this.client = ((YDWReg) ydw).getHttpClient();
+        this.client = client;
     }
 
     @Nullable

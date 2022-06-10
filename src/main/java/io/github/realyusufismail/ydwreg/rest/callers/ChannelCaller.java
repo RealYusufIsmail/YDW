@@ -39,9 +39,9 @@ public class ChannelCaller {
     private final YDWReg ydw;
     private final OkHttpClient client;
 
-    public ChannelCaller(@NotNull YDW ydw) {
+    public ChannelCaller(@Nullable YDW ydw, OkHttpClient client) {
         this.ydw = (YDWReg) ydw;
-        this.client = ((YDWReg) ydw).getHttpClient();
+        this.client = client;
     }
 
     @Nullable

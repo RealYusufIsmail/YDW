@@ -21,11 +21,11 @@ import com.google.errorprone.annotations.CheckReturnValue;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.exception.*;
+import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
+import java.util.Objects;
 
 public class YDWConnector {
     private final String token;
@@ -35,8 +35,8 @@ public class YDWConnector {
     private ActivityConfig activity;
     private boolean compress = false;
     private int largeThreshold = 50;
-    @Nullable
     private OkHttpClient client = null;
+    private RestApiHandler rest = null;
 
     private YDWConnector(String token, int intents) {
         this.token = token;
@@ -211,6 +211,18 @@ public class YDWConnector {
         return this;
     }
 
+    /**
+     * Used to set a custom rest api handler
+     *
+     * @param rest rest api handler
+     * @return ydwConnector
+     */
+    @NotNull
+    private YDWConnector setRest(RestApiHandler rest) {
+        this.rest = rest;
+        return this;
+    }
+
     public @NotNull YDW build() throws Exception {
         if (token == null || token.isEmpty() || token.isBlank()) {
             throw new InvalidTokenException("The token is invalid or empty or blank");
@@ -233,13 +245,17 @@ public class YDWConnector {
                     "Large threshold can not be less than 50 or greater than 250");
         }
 
-        Optional<OkHttpClient> httpClient = Optional.ofNullable(this.client);
+        OkHttpClient httpClient;
 
-        if (httpClient.isEmpty()) {
-            httpClient = Optional.of(new OkHttpClient());
-        }
+        httpClient =
+                Objects.requireNonNullElseGet(client, () -> new OkHttpClient.Builder().build());
 
-        YDWReg ydw = new YDWReg(httpClient.get());
+        RestApiHandler restApiHandler;
+
+        restApiHandler = Objects.requireNonNullElseGet(rest, () -> new RestApiHandler(client));
+
+        YDWReg ydw = new YDWReg(httpClient, restApiHandler);
+        restApiHandler.setYDW(ydw);
         ydw.setToken(token);
         ydw.setGuildId(guildId);
         ydw.login(token, gatewayIntents, status, largeThreshold, compress, activity);
