@@ -35,7 +35,7 @@ dependencies {
     //config
     implementation group: 'io.github.yusufsdiscordbot', name: 'config', version: '1.0.4'
     //https and ws
-    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '5.0.0-alpha.7'
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '5.0.0-alpha.8'
     implementation group: 'com.neovisionaries', name: 'nv-websocket-client', version: '2.14'
     //json
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.3'
