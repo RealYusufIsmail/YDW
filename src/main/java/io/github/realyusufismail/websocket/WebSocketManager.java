@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.neovisionaries.ws.client.*;
+import io.github.realyusufismail.websocket.core.CloseCode;
 import io.github.realyusufismail.websocket.core.OpCode;
 import io.github.realyusufismail.websocket.handle.OnHandler;
 import io.github.realyusufismail.ydw.GateWayIntent;
@@ -74,6 +75,9 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     // The inner d key of the invalid session event is a boolean that indicates whether the session
     // may be resumable. See Connecting and Resuming for more information.
     private Boolean isResumable;
+
+    // Used to indicate that the bot has connected to the gateway.
+    private boolean connected = false;
 
 
     public WebSocketManager(YDWReg ydw) {
@@ -211,7 +215,8 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
         scheduler.scheduleAtFixedRate(() -> {
             try {
-                sendHeartbeat();
+                if (connected)
+                    sendHeartbeat();
             } catch (Exception e) {
                 logger.error("Error sending heartbeat", e);
             }
@@ -235,8 +240,8 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     }
 
     @Override
-    public void onConnected(WebSocket websocket, Map<String, List<String>> headers)
-            throws Exception {
+    public void onConnected(WebSocket websocket, Map<String, List<String>> headers) {
+        connected = true;
         if (sessionId == null) {
             identify();
         } else {
@@ -279,8 +284,15 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         logger.info("Reconnected");
     }
 
+    @Override
+    public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame,
+            WebSocketFrame clientCloseFrame, boolean closedByServer) {
+        connected = false;
+        logger.error("Disconnected with the close code {}", serverCloseFrame.getCloseCode());
+        CloseCode closeCode = CloseCode.fromCode(serverCloseFrame.getCloseCode());
+    }
+
     public int getGatewayIntents() {
         return intent;
     }
-
 }
