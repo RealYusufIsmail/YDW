@@ -32,7 +32,6 @@ import io.github.realyusufismail.ydwreg.entities.guild.manager.GuildManager;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
@@ -70,6 +69,8 @@ public class YDWReg implements YDW {
     private Boolean resumed;
 
     private EventInterface eventInterface;
+
+    private boolean ready;
 
     public YDWReg(@NotNull OkHttpClient client, @NotNull RestApiHandler rest) {
         this.rest = rest;
@@ -134,8 +135,8 @@ public class YDWReg implements YDW {
     @Override
     public void login(String token, int gatewayIntents, String status, int largeThreshold,
             boolean compress, ActivityConfig activity) throws IOException, WebSocketException {
-        ws = new WebSocketManager(this, token, gatewayIntents, status, largeThreshold, compress,
-                activity);
+        ws = new WebSocketManager(this).setRequiredDetails(token, gatewayIntents, status,
+                largeThreshold, compress, activity);
     }
 
 
@@ -180,6 +181,7 @@ public class YDWReg implements YDW {
         // apiHandler(new GatewayPingEvent(this, oldGatewayPing));
     }
 
+    @NotNull
     @Override
     public RestApiHandler getRest() {
         return rest;
@@ -279,4 +281,6 @@ public class YDWReg implements YDW {
     public Logger getLogger() {
         return logger;
     }
+
+
 }

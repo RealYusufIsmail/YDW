@@ -113,6 +113,7 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
     }
 
     public SlashCommandBuilder call() {
+
         if (guildOnly) {
             caller.callGuildOnlyCommand();
         } else {

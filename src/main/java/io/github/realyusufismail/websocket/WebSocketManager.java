@@ -50,9 +50,9 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     private final Logger logger = LoggerFactory.getLogger(WebSocketManager.class);
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     // The bots token.
-    private final String token;
+    private String token;
     // The gateway intents
-    private final int intent;
+    private int intent;
     // The core class of the wrapper,
     private final YDWReg ydw;
     // Create a WebSocketFactory instance.
@@ -65,46 +65,48 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     // Used to determine if any heart beats hve been missed.
     private int missedHeartbeats = 0;
     // The status of the bot e.g. online, idle, dnd, invisible etc.
-    private final String status;
-    private final int largeThreshold;
-    private final boolean compress;
+    private String status;
+    private int largeThreshold;
+    private boolean compress;
     // The activity of the bot e.g. playing, streaming, listening, watching etc.
-    private final ActivityConfig activity;
+    private ActivityConfig activity;
 
     // The inner d key of the invalid session event is a boolean that indicates whether the session
     // may be resumable. See Connecting and Resuming for more information.
-    private final Boolean isResumable;
+    private Boolean isResumable;
+
+    // This indicates that the ready gateway intent has been received.
+    private boolean isReady;
 
 
-    public WebSocketManager(YDWReg ydw, String token, Integer intent, String status,
-            int largeThreshold, boolean compress, ActivityConfig activity)
-            throws IOException, WebSocketException {
+    public WebSocketManager(YDWReg ydw) {
         this.ydw = ydw;
+        this.isResumable = ydw.isResumable();
+    }
+
+    public WebSocketManager setRequiredDetails(String token, Integer intent, String status,
+            int largeThreshold, boolean compress, ActivityConfig activity)
+            throws WebSocketException, IOException {
         this.token = token;
         this.intent = intent;
         this.status = status;
         this.largeThreshold = largeThreshold;
         this.compress = compress;
         this.activity = activity;
-        this.isResumable = ydw.isResumable();
         connect();
-    }
-
-    public WebSocketManager(YDWReg ydw, String token, @NotNull GateWayIntent intent, String status,
-            int largeThreshold, boolean compress, ActivityConfig activity)
-            throws IOException, WebSocketException {
-        this(ydw, token, intent.getValue(), status, largeThreshold, compress, activity);
+        return this;
     }
 
     public static void setSessionId(String sessionId) {
         WebSocketManager.sessionId = sessionId;
     }
 
-    public synchronized void connect() throws IOException, WebSocketException {
+    private synchronized void connect() throws IOException, WebSocketException {
         ws = new WebSocketFactory().createSocket(YDWInfo.DISCORD_GATEWAY_LINK);
         ws.addHeader("Accept-Encoding", "gzip");
         ws.addListener(this);
         ws.connect();
+        logger.info("Connecting to Discord Gateway...");
     }
 
     @Override
@@ -131,6 +133,9 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
         Optional<String> t = Optional.of(payload.get("t").asText());
         t.ifPresent(text -> new OnHandler(ydw, text, payload).start());
+        if (t.get().equals("READY")) {
+            isReady = true;
+        }
     }
 
     public void onOpcode(Integer opcode, @NotNull JsonNode d) {
@@ -274,4 +279,5 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     public int getGatewayIntents() {
         return intent;
     }
+
 }
