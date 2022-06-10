@@ -21,6 +21,7 @@ package io.github.realyusufismail.ydw;
 import com.neovisionaries.ws.client.WebSocketException;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.websocket.event.Event;
+import io.github.realyusufismail.websocket.event.EventInterface;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
 import io.github.realyusufismail.ydw.entities.*;
@@ -109,4 +110,6 @@ public interface YDW {
     default SlashCommandBuilder newSlashCommand(String name, String description) {
         return new SlashCommandBuilderReg(this, name, description).call();
     }
+
+    EventInterface getEventInterface();
 }

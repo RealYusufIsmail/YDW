@@ -250,6 +250,15 @@ public class YDWReg implements YDW {
         return new GuildManager(this);
     }
 
+    @Override
+    public EventInterface getEventInterface() {
+        return eventInterface;
+    }
+
+    public void setEventInterface(EventInterface eventInterface) {
+        this.eventInterface = eventInterface;
+    }
+
     public void setResumed(boolean b) {
         this.resumed = b;
     }
