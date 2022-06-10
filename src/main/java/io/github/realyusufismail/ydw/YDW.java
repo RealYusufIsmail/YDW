@@ -23,8 +23,12 @@ import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.websocket.event.Event;
 import io.github.realyusufismail.websocket.event.EventInterface;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
+import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
 import io.github.realyusufismail.ydw.entities.*;
 import io.github.realyusufismail.ydw.entities.guild.Channel;
+import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandBuilderReg;
+import io.github.realyusufismail.ydwreg.application.interaction.InteractionManager;
+import io.github.realyusufismail.ydwreg.entities.guild.manager.GuildManager;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -98,4 +102,12 @@ public interface YDW {
     boolean isResumed();
 
     boolean hasReconnected();
+
+    InteractionManager getInteractionManager();
+
+    GuildManager getGuildManager();
+
+    default SlashCommandBuilder newSlashCommand(String name, String description) {
+        return new SlashCommandBuilderReg(this, name, description).call();
+    }
 }

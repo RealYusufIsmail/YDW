@@ -26,7 +26,7 @@ public abstract class Handle {
     protected final YDWReg ydw;
 
     protected Handle(JsonNode json, YDW ydw) {
-        this.json = json;
+        this.json = json.get("d");
         this.ydw = (YDWReg) ydw;
     }
 

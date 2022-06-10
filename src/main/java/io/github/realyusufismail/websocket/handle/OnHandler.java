@@ -24,9 +24,11 @@ import io.github.realyusufismail.websocket.handle.handles.channel.ChannelCreateH
 import io.github.realyusufismail.websocket.handle.handles.channel.ChannelDeleteHandler;
 import io.github.realyusufismail.websocket.handle.handles.channel.ChannelPinsUpdateHandler;
 import io.github.realyusufismail.websocket.handle.handles.channel.ChannelUpdateHandler;
+import io.github.realyusufismail.websocket.handle.handles.interaction.InteractionCreateHandler;
 import io.github.realyusufismail.websocket.handle.handles.thread.ThreadCreateHandler;
 import io.github.realyusufismail.websocket.handle.handles.thread.ThreadDeleteHandler;
 import io.github.realyusufismail.websocket.handle.handles.thread.ThreadUpdateHandler;
+import io.github.realyusufismail.ydw.application.Interaction;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import org.jetbrains.annotations.NotNull;
 
@@ -54,6 +56,7 @@ public class OnHandler {
             case RESUMED -> new ResumedHandler(json, ydw).start();
             case RECONNECT -> new ReconnectHandler(json, ydw).start();
             case INVALID_SESSION -> new InvalidSessionHandler(json, ydw).start();
+            case INTERACTION_CREATE -> new InteractionCreateHandler(json, ydw).start();
             case APPLICATION_COMMAND_PERMISSIONS_UPDATE -> new ApplicationCommandPermissionsUpdateHandler(
                     json, ydw).start();
             case CHANNEL_CREATE -> new ChannelCreateHandler(json, ydw).start();

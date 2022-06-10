@@ -9,20 +9,12 @@ import java.util.Collection;
 public interface SlashCommandBuilder {
 
     /**
-     * Used to set the command name.
+     * Weather the command should be available in specified guild or available for all guilds.
      * 
-     * @param name The name of the command.
-     * @return The builder.
+     * @return true if the command should be available in specified guild or false were it is
+     *         available for all guilds.
      */
-    SlashCommandBuilder setName(String name);
-
-    /**
-     * Used to set the command description.
-     * 
-     * @param description What the command does.
-     * @return The builder.
-     */
-    SlashCommandBuilder setDescription(String description);
+    Boolean isGuildOnly();
 
     SlashCommandBuilder setOption(OptionType optionType, String name, String description,
             boolean required);

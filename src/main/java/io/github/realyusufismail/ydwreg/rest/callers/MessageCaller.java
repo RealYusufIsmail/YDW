@@ -67,6 +67,6 @@ public class MessageCaller {
 
     public <T> void queue(@NotNull Request request, @Nullable Consumer<? super T> success,
             @Nullable Consumer<? super Throwable> failure) {
-        new Queue(client, request, success, failure).queue();
+        new Queue<T>(client, request, success, failure).queue();
     }
 }

@@ -28,7 +28,9 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 public class YDWJson {
-    private YDWJson() {}
+    private YDWJson() {
+        throw new IllegalStateException("Utility class");
+    }
 
     /**
      * Parses a String into a {@link JsonNode}.
@@ -39,15 +41,5 @@ public class YDWJson {
     public static @Nullable JsonNode parseObject(String input) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readTree(input);
-    }
-
-    // Used to parse a json array
-    public static @Nullable JsonNode parseArray(String input) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readTree(input);
-    }
-
-    public static @NotNull Reader convertInputStreamToReader(@NotNull InputStream inputStream) {
-        return new InputStreamReader(inputStream);
     }
 }

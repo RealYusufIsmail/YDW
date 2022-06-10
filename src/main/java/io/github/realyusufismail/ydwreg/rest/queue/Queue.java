@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.function.Consumer;
 
 public class Queue<T> {
-
     private final OkHttpClient client;
     private final Request request;
     private final Consumer<? super T> success;

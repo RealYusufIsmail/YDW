@@ -130,7 +130,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         op.ifPresent(integer -> onOpcode(op.get(), d.get()));
 
         Optional<String> t = Optional.of(payload.get("t").asText());
-        t.ifPresent(text -> new OnHandler((YDWReg) ydw, text, payload).start());
+        t.ifPresent(text -> new OnHandler(ydw, text, payload).start());
     }
 
     public void onOpcode(Integer opcode, @NotNull JsonNode d) {

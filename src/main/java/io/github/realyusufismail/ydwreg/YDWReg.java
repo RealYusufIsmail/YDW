@@ -27,6 +27,8 @@ import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.entities.*;
 import io.github.realyusufismail.ydw.entities.guild.Channel;
+import io.github.realyusufismail.ydwreg.application.interaction.InteractionManager;
+import io.github.realyusufismail.ydwreg.entities.guild.manager.GuildManager;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import io.github.realyusufismail.ydwreg.util.Verify;
 import okhttp3.OkHttpClient;
@@ -240,6 +242,16 @@ public class YDWReg implements YDW {
     @Override
     public boolean hasReconnected() {
         return reconnected;
+    }
+
+    @Override
+    public InteractionManager getInteractionManager() {
+        return new InteractionManager(this);
+    }
+
+    @Override
+    public GuildManager getGuildManager() {
+        return new GuildManager(this);
     }
 
     public void setResumed(boolean b) {

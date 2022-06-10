@@ -17,9 +17,9 @@
 
 package io.github.realyusufismail.ydwreg.application.commands.slash.builder;
 
+import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.application.commands.option.OptionType;
 import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
-import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.rest.callers.SlashCommandCaller;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,29 +27,26 @@ import java.util.Collection;
 import java.util.List;
 
 public class SlashCommandBuilderReg implements SlashCommandBuilder {
-    private final YDWReg ydw;
+
     private final SlashCommandCaller caller;
 
     private static String optionName;
     private static String optionDescription;
+
     private static OptionType optionType;
     private static boolean optionRequired;
 
-    public SlashCommandBuilderReg(@NotNull YDWReg ydw) {
-        this.ydw = ydw;
+    private static boolean guildOnly;
+
+    public SlashCommandBuilderReg(@NotNull YDW ydw, String name, String description) {
         this.caller = ydw.getRest().getSlashCommandCaller();
-    }
-
-    @Override
-    public SlashCommandBuilder setName(String name) {
         caller.setName(name);
-        return this;
+        caller.setDescription(description);
     }
 
     @Override
-    public SlashCommandBuilder setDescription(String description) {
-        caller.setDescription(description);
-        return this;
+    public Boolean isGuildOnly() {
+        return guildOnly;
     }
 
     @Override
@@ -113,5 +110,14 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
 
     public static boolean isOptionRequired() {
         return optionRequired;
+    }
+
+    public SlashCommandBuilder call() {
+        if (guildOnly) {
+            caller.callGuildOnlyCommand();
+        } else {
+            caller.callGlobalCommand();
+        }
+        return this;
     }
 }
