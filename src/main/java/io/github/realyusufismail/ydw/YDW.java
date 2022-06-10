@@ -21,7 +21,6 @@ package io.github.realyusufismail.ydw;
 import com.neovisionaries.ws.client.WebSocketException;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.websocket.event.Event;
-import io.github.realyusufismail.websocket.event.EventInterface;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
 import io.github.realyusufismail.ydw.entities.*;
@@ -31,6 +30,7 @@ import io.github.realyusufismail.ydwreg.application.interaction.InteractionManag
 import io.github.realyusufismail.ydwreg.entities.guild.manager.GuildManager;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import org.jetbrains.annotations.NotNull;
+import reactor.core.publisher.Flux;
 
 import java.io.IOException;
 import java.util.List;
@@ -96,8 +96,7 @@ public interface YDW {
 
     SelfUser getSelfUser();
 
-    <EventName extends Event> YDW onEvent(EventName event,
-            EventInterface<EventName> eventInterface);
+    <EventClass extends Event> Flux<EventClass> onEvent(Class<EventClass> event);
 
     boolean isResumed();
 

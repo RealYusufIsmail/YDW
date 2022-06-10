@@ -20,9 +20,7 @@ package io.github.realyusufismail.websocket.handle.handles;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.websocket.handle.Handle;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.application.commands.ApplicationCommand;
 import io.github.realyusufismail.ydw.entities.guild.GuildApplicationCommandPermission;
-import io.github.realyusufismail.ydwreg.application.commands.ApplicationCommandReg;
 
 public class ApplicationCommandPermissionsUpdateHandler extends Handle {
     public ApplicationCommandPermissionsUpdateHandler(JsonNode json, YDW ydw) {

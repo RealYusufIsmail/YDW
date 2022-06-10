@@ -28,7 +28,6 @@ import io.github.realyusufismail.websocket.handle.handles.interaction.Interactio
 import io.github.realyusufismail.websocket.handle.handles.thread.ThreadCreateHandler;
 import io.github.realyusufismail.websocket.handle.handles.thread.ThreadDeleteHandler;
 import io.github.realyusufismail.websocket.handle.handles.thread.ThreadUpdateHandler;
-import io.github.realyusufismail.ydw.application.Interaction;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import org.jetbrains.annotations.NotNull;
 

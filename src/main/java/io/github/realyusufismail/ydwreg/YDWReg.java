@@ -30,12 +30,12 @@ import io.github.realyusufismail.ydw.entities.guild.Channel;
 import io.github.realyusufismail.ydwreg.application.interaction.InteractionManager;
 import io.github.realyusufismail.ydwreg.entities.guild.manager.GuildManager;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
-import io.github.realyusufismail.ydwreg.util.Verify;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Flux;
 
 import java.io.IOException;
 import java.util.List;
@@ -68,6 +68,8 @@ public class YDWReg implements YDW {
     private Boolean reconnected;
 
     private Boolean resumed;
+
+    private EventInterface eventInterface;
 
     public YDWReg(@Nullable OkHttpClient client) {
         rest = new RestApiHandler(this);
@@ -216,14 +218,8 @@ public class YDWReg implements YDW {
     }
 
     @Override
-    public <EventName extends Event> YDW onEvent(@NotNull EventName event,
-            EventInterface<EventName> eventInterface) {
-        if (!event.getClass().isAssignableFrom(Event.class))
-            throw new IllegalArgumentException(
-                    "Event class must be assignable from event interface");
-
-
-        return this;
+    public <EventClass extends Event> Flux<EventClass> onEvent(Class<EventClass> event) {
+        return eventInterface.onEvent(event);
     }
 
     public Boolean isResumable() {

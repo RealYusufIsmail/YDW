@@ -2,7 +2,6 @@ package io.github.realyusufismail.ydwreg.application.interaction;
 
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.application.Interaction;
-import io.github.realyusufismail.ydwreg.application.InteractionReg;
 
 public class InteractionManager {
 

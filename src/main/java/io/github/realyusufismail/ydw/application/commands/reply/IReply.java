@@ -19,15 +19,12 @@ package io.github.realyusufismail.ydw.application.commands.reply;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 import io.github.realyusufismail.ydw.action.ReplyAction;
-import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
-import org.jetbrains.annotations.Nullable;
+import io.github.realyusufismail.ydw.entities.embed.Embed;
 
 public interface IReply {
-    @Nullable
     @CheckReturnValue
     ReplyAction reply(String message);
 
-    @Nullable
     @CheckReturnValue
-    ReplyAction replyEmbed(EmbedBuilder embed);
+    ReplyAction replyEmbed(Embed embed);
 }

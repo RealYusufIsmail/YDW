@@ -3,7 +3,6 @@ package io.github.realyusufismail.ydwreg.entities;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.AvailableGuild;
-import io.github.realyusufismail.ydw.entities.UnavailableGuild;
 import org.jetbrains.annotations.NotNull;
 
 public class AvailableGuildReg implements AvailableGuild {

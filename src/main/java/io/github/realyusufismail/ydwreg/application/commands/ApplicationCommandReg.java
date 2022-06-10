@@ -18,6 +18,7 @@
 package io.github.realyusufismail.ydwreg.application.commands;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.github.realyusufismail.websocket.event.Event;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.application.commands.ApplicationCommand;
 import io.github.realyusufismail.ydw.application.commands.option.CommandOption;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ApplicationCommandReg implements ApplicationCommand {
+public class ApplicationCommandReg extends Event implements ApplicationCommand {
 
     private final long id;
     private final YDW ydw;
@@ -48,6 +49,7 @@ public class ApplicationCommandReg implements ApplicationCommand {
     private final Long version;
 
     public ApplicationCommandReg(@NotNull JsonNode application, long id, YDW ydw) {
+        super(ydw);
         this.id = id;
         this.ydw = ydw;
 
