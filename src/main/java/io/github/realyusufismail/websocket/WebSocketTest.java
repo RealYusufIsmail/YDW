@@ -19,9 +19,10 @@ package io.github.realyusufismail.websocket;
 
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.YDWConnector;
+import io.github.yusufsdiscordbot.config.Config;
 
 class WebSocketTest {
     public static void main(String[] args) throws Exception {
-        YDW ydw = YDWConnector.setUpBot(System.getenv("token")).build();
+        YDW ydw = YDWConnector.setUpBot(Config.getString("TOKEN")).build();
     }
 }

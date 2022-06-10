@@ -30,7 +30,7 @@ import java.util.Objects;
 public class YDWConnector {
     private final String token;
     private String guildId;
-    private int gatewayIntents;
+    private int gatewayIntents = GateWayIntent.DEFAULT_INTENTS;
     private String status = Status.ONLINE.getStatus();
     private ActivityConfig activity;
     private boolean compress = false;
@@ -228,10 +228,6 @@ public class YDWConnector {
             throw new InvalidTokenException("The token is invalid or empty or blank");
         }
 
-        if (guildId == null || guildId.isEmpty() || guildId.isBlank()) {
-            throw new InvalidGuildIdException("The guild id is invalid  or empty or blank");
-        }
-
         if (gatewayIntents == 0 || gatewayIntents == -1) {
             throw new InvalidGateWayIntents("Gateway intents can not be empty or null");
         }
@@ -252,12 +248,16 @@ public class YDWConnector {
 
         RestApiHandler restApiHandler;
 
-        restApiHandler = Objects.requireNonNullElseGet(rest, () -> new RestApiHandler(client));
+        restApiHandler = Objects.requireNonNullElseGet(rest, () -> new RestApiHandler(httpClient));
 
         YDWReg ydw = new YDWReg(httpClient, restApiHandler);
         restApiHandler.setYDW(ydw);
         ydw.setToken(token);
-        ydw.setGuildId(guildId);
+
+        if (guildId != null) {
+            ydw.setGuildId(guildId);
+        }
+
         ydw.login(token, gatewayIntents, status, largeThreshold, compress, activity);
         return ydw;
     }

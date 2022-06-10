@@ -1,35 +1,14 @@
-/*
- * GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- * Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/> Everyone is permitted to
- * copy and distribute verbatim copies of this license document, but changing it is not allowed.
- *
- * Yusuf Arfan Ismail Copyright (C) 2022 - future.
- *
- * The GNU General Public License is a free, copyleft license for software and other kinds of works.
- *
- * You may copy, distribute and modify the software as long as you track changes/dates in source
- * files. Any modifications to or software including (via compiler) GPL-licensed code must also be
- * made available under the GPL along with build & install instructions.
- *
- * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
- */
-
-package io.github.realyusufismail.websocket;
+package websocket;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.JsonSerializable;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.util.concurrent.AbstractScheduledService;
 import com.neovisionaries.ws.client.*;
 import io.github.realyusufismail.websocket.core.OpCode;
-import io.github.realyusufismail.websocket.handle.OnHandler;
 import io.github.realyusufismail.ydw.GateWayIntent;
-import io.github.realyusufismail.ydw.YDWInfo;
-import io.github.realyusufismail.ydw.activity.ActivityConfig;
-import io.github.realyusufismail.ydwreg.YDWReg;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,66 +24,47 @@ import java.util.concurrent.TimeUnit;
 
 public class WebSocketManager extends WebSocketAdapter implements WebSocketListener {
 
-    // The session id. This is basically a key that stores the past activity of the bot.
-    @Nullable
-    private static volatile String sessionId = null;
     private final Logger logger = LoggerFactory.getLogger(WebSocketManager.class);
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    // The bots token.
-    private String token;
-    // The gateway intents
-    private int intent;
-    // The core class of the wrapper,
-    private final YDWReg ydw;
+
     // Create a WebSocketFactory instance.
-    private static WebSocket ws;
-    @NotNull
+    WebSocket ws;
+
     ObjectMapper mapper = new ObjectMapper();
+
     // The sequence number, used for resuming sessions and heartbeats.
-    @Nullable
     private Integer seq = null;
+
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
     // Used to determine if any heart beats hve been missed.
     private int missedHeartbeats = 0;
-    // The status of the bot e.g. online, idle, dnd, invisible etc.
-    private String status;
-    private int largeThreshold;
-    // The activity of the bot e.g. playing, streaming, listening, watching etc.
-    private ActivityConfig activity;
 
-    // The inner d key of the invalid session event is a boolean that indicates whether the session
-    // may be resumable. See Connecting and Resuming for more information.
-    private Boolean isResumable;
+    // The bots token.
+    private final String token;
 
-    // This indicates that the ready gateway intent has been received.
-    private boolean isReady;
+    // The gateway intents
+    private final int intent;
+
+    // The session id. This is basically a key that stores the past activity of the bot.
+    private volatile String sessionId = null;
 
 
-    public WebSocketManager(YDWReg ydw) {
-        this.ydw = ydw;
-        this.isResumable = ydw.isResumable();
-    }
 
-    public WebSocketManager setRequiredDetails(String token, Integer intent, String status,
-            int largeThreshold, ActivityConfig activity) throws WebSocketException, IOException {
+    public WebSocketManager(String token, Integer intent) throws IOException, WebSocketException {
         this.token = token;
         this.intent = intent;
-        this.status = status;
-        this.largeThreshold = largeThreshold;
-        this.activity = activity;
-
-        ws = new WebSocketFactory().createSocket(YDWInfo.DISCORD_GATEWAY_LINK);
+        String gatewayUrl = "wss://gateway.discord.gg/?v=9&encoding=json";
+        ws = new WebSocketFactory().createSocket(gatewayUrl);
         ws.addHeader("Accept-Encoding", "gzip");
         ws.addListener(this);
         ws.connect();
-
-        // TODO: Find out why it does not connect.
-
-        return this;
     }
 
-    public static void setSessionId(String sessionId) {
-        WebSocketManager.sessionId = sessionId;
+    public WebSocketManager(String token, @NotNull GateWayIntent intent)
+            throws IOException, WebSocketException {
+        this(token, intent.getValue());
     }
+
 
     @Override
     public void onTextMessage(WebSocket websocket, String message) throws Exception {
@@ -112,33 +72,35 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     }
 
     public void onHandelMessage(String message) throws Exception {
-        logger.debug("Received message: {}", message);
-
         try {
             JsonNode payload = mapper.readTree(message);
-            onEvent(payload);
+            onHandel(payload);
         } catch (Exception e) {
             logger.error("Error while handling message", e);
         }
     }
 
-    public void onEvent(@NotNull JsonNode payload) {
+    public void onHandel(JsonNode payload) throws Exception {
+
+    }
+
+    public void onEvent(JsonNode payload) {
         Optional<Integer> s = Optional.of(payload.get("s").asInt());
         s.ifPresent(integer -> this.seq = integer);
+
+        Optional<String> t = Optional.of(payload.get("t").asText());
+        t.ifPresent(text -> {
+            if (text.equals("READY")) {
+                this.sessionId = payload.get("d").get("session_id").asText();
+            }
+        });
 
         Optional<JsonNode> d = Optional.of(payload.get("d"));
         Optional<Integer> op = Optional.of(payload.get("op").asInt());
         op.ifPresent(integer -> onOpcode(op.get(), d.get()));
-
-        Optional<String> t = Optional.of(payload.get("t").asText());
-        logger.debug("Received event: {}", t.orElse(""));
-        t.ifPresent(text -> new OnHandler(ydw, text, payload).start());
-        if (t.get().equals("READY")) {
-            isReady = true;
-        }
     }
 
-    public void onOpcode(Integer opcode, @NotNull JsonNode d) {
+    public void onOpcode(Integer opcode, JsonNode d) {
         OpCode op = OpCode.fromCode(opcode);
         switch (op) {
             case HEARTBEAT -> sendHeartbeat();
@@ -197,7 +159,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
      * interval elapses, but you should avoid doing so unless necessary. here is already tolerance
      * in the heartbeat_interval that will cover network latency, so you do not need to account for
      * it in your own implementation - waiting the precise interval will suffice.
-     *
+     * 
      * @param heartbeatInterval the interval in milliseconds between heartbeats
      */
     public void sendHeartbeat(int heartbeatInterval) {
@@ -211,6 +173,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             }
         }, 0, heartbeatInterval, TimeUnit.MILLISECONDS);
     }
+
 
     /**
      * This was taken from JDA's WebSocket. <a href=
@@ -228,6 +191,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         }
     }
 
+
     @Override
     public void onConnected(WebSocket websocket, Map<String, List<String>> headers)
             throws Exception {
@@ -239,23 +203,19 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     }
 
     public void identify() {
-        ObjectNode properties = JsonNodeFactory.instance.objectNode()
-            .put("os", System.getProperty("os.name"))
-            .put("browser", "YDW")
-            .put("device", "YDW");
+        JsonNode json = JsonNodeFactory.instance.objectNode()
+            .put("op", 2)
+            .set("d",
+                    JsonNodeFactory.instance.objectNode()
+                        .put("token", token)
+                        .put("intents", intent)
+                        .set("properties",
+                                JsonNodeFactory.instance.objectNode()
+                                    .put("$os", "mac")
+                                    .put("$browser", "YDL")
+                                    .put("$device", "YDL")));
 
-        ObjectNode payload = JsonNodeFactory.instance.objectNode()
-            .put("status", status)
-            .put("token", token)
-            .set("properties", properties);
-
-        payload.put("large_threshold", largeThreshold).put("intents", intent);
-
-        JsonNode identify = JsonNodeFactory.instance.objectNode()
-            .put("op", OpCode.IDENTIFY.getCode())
-            .set("d", payload);
-
-        ws.sendText(identify.asText());
+        ws.sendText(json.toString());
         logger.info("Connected");
     }
 
@@ -272,9 +232,4 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         ws.sendText(json.toString());
         logger.info("Reconnected");
     }
-
-    public int getGatewayIntents() {
-        return intent;
-    }
-
 }
