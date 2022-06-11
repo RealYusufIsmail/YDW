@@ -37,6 +37,83 @@ import java.io.IOException;
 import java.util.List;
 
 public interface YDW {
+
+    /**
+     * Used to indicate the connection status.
+     */
+    enum ApiStatus {
+        /**
+         * Indicates that the api is starting.
+         */
+        STARTING(true),
+        /**
+         * Indicates that the api has started.
+         */
+        STARTED(true),
+        /**
+         * Indicates the bot is logging in.
+         */
+        LOGGING_IN(true),
+        /**
+         * Indicates that the bot is trying to connect to the websocket.
+         */
+        CONNECTING_TO_WEBSOCKET(true),
+        /**
+         * Indicates the bot has logged in but is not trying to identify.
+         */
+        LOGGED_IN_AND_IDENTIFYING(true),
+        /**
+         * The required info has been sent but YDW is not awaiting confirmation.
+         */
+        AWAITING_CONFIRMATION(true),
+        /**
+         * This indicates that YDW is preparing the backend.
+         */
+        PREPARING_BACKEND(true),
+        /**
+         * Everything has gone well and YDW has received the right information from Discord.
+         */
+        READY(true),
+        /**
+         * Indicates that the websocket has disconnected, will try to resume.
+         */
+        WEBSOCKET_DISCONNECTED,
+        /**
+         * Indicates that a reconnection attempt has been queued.
+         */
+        RECONNECTING,
+        /**
+         * Indicates that the bot is reconnecting.
+         */
+        RECONNECTING_TO_WEBSOCKET,
+        /**
+         * Indicates that the bot is shutting down.
+         */
+        SHUTTING_DOWN,
+        /**
+         * Indicates that the bot has shut down.
+         */
+        SHUT_DOWN,
+        /**
+         * Indicates that that login attempt has failed.
+         */
+        LOGIN_FAILED;
+
+        private final boolean isInitialized;
+
+        ApiStatus(boolean isInitialized) {
+            this.isInitialized = isInitialized;
+        }
+
+        ApiStatus() {
+            this(false);
+        }
+
+        public boolean isInitialized() {
+            return isInitialized;
+        }
+    }
+
     @NotNull
     List<Guild> getGuilds();
 
@@ -72,7 +149,7 @@ public interface YDW {
 
 
     void login(String token, int gatewayIntents, String status, int largeThreshold,
-            boolean compress, ActivityConfig activity) throws IOException, WebSocketException;
+            ActivityConfig activity) throws IOException, WebSocketException;
 
 
     void setToken(String token);

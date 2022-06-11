@@ -33,7 +33,6 @@ public class YDWConnector {
     private int gatewayIntents = GateWayIntent.DEFAULT_INTENTS;
     private String status = Status.ONLINE.getStatus();
     private ActivityConfig activity;
-    private boolean compress = false;
     private int largeThreshold = 50;
     private OkHttpClient client = null;
     private RestApiHandler rest = null;
@@ -145,18 +144,6 @@ public class YDWConnector {
     }
 
     /**
-     * whether this connection supports compression of packets default is false
-     *
-     * @param compress compress
-     * @return ydwConnector
-     */
-    @NotNull
-    public YDWConnector setCompress(boolean compress) {
-        this.compress = compress;
-        return this;
-    }
-
-    /**
      * value between 50 and 250, total number of members where the gateway will stop sending offline
      * members in the guild member list default is 50
      *
@@ -258,7 +245,7 @@ public class YDWConnector {
             ydw.setGuildId(guildId);
         }
 
-        ydw.login(token, gatewayIntents, status, largeThreshold, compress, activity);
+        ydw.login(token, gatewayIntents, status, largeThreshold, activity);
         return ydw;
     }
 }

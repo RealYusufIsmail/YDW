@@ -26,6 +26,7 @@ import io.github.realyusufismail.websocket.core.CloseCode;
 import io.github.realyusufismail.websocket.core.OpCode;
 import io.github.realyusufismail.websocket.handle.OnHandler;
 import io.github.realyusufismail.ydw.GateWayIntent;
+import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.YDWInfo;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydwreg.YDWReg;
@@ -41,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -78,6 +80,9 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
     // Used to indicate that the bot has connected to the gateway.
     private boolean connected = false;
+
+    // The thread used for the heartbeat. Needed in cases such as disconnect.
+    private volatile Future<?> heartbeatThread;
 
 
     public WebSocketManager(YDWReg ydw) {
@@ -213,7 +218,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             logger.warn("Failed to setup timeout for socket", ex);
         }
 
-        scheduler.scheduleAtFixedRate(() -> {
+        heartbeatThread = scheduler.scheduleAtFixedRate(() -> {
             try {
                 if (connected)
                     sendHeartbeat();
@@ -241,12 +246,14 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
     @Override
     public void onConnected(WebSocket websocket, Map<String, List<String>> headers) {
+        ydw.setApiStatus(YDW.ApiStatus.LOGGED_IN_AND_IDENTIFYING);
+        prepareClose();
         connected = true;
-        if (sessionId == null) {
+        if (sessionId == null)
             identify();
-        } else {
+        else
             resume();
-        }
+
     }
 
     public void identify() {
@@ -288,8 +295,37 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame,
             WebSocketFrame clientCloseFrame, boolean closedByServer) {
         connected = false;
-        logger.error("Disconnected with the close code {}", serverCloseFrame.getCloseCode());
-        CloseCode closeCode = CloseCode.fromCode(serverCloseFrame.getCloseCode());
+        if (Thread.currentThread().isInterrupted()) {
+            Thread thread = new Thread(() -> handleDisconnect(websocket, serverCloseFrame,
+                    clientCloseFrame, closedByServer));
+            thread.setName("reconnect-thread");
+            thread.start();
+        } else {
+            handleDisconnect(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
+        }
+    }
+
+    private void handleDisconnect(WebSocket websocket, WebSocketFrame serverCloseFrame,
+            WebSocketFrame clientCloseFrame, boolean closedByServer) {
+        ydw.setApiStatus(YDW.ApiStatus.WEBSOCKET_DISCONNECTED);
+        CloseCode closeCode = null;
+        String closeReason = null;
+        int rawCloseCode = 1005;
+
+        //Done to make sure no more heartbeats are sent
+        if (heartbeatThread != null) {
+            heartbeatThread.cancel(false);
+            heartbeatThread = null;
+        }
+
+        if (closedByServer && serverCloseFrame != null) {
+
+        }
+    }
+
+    @Override
+    public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
+
     }
 
     public int getGatewayIntents() {

@@ -22,6 +22,7 @@ import com.neovisionaries.ws.client.WebSocketException;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.websocket.event.Event;
 import io.github.realyusufismail.websocket.event.EventInterface;
+import io.github.realyusufismail.websocket.event.events.ApiStatusChangeEvent;
 import io.github.realyusufismail.ydw.GateWayIntent;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
@@ -31,6 +32,7 @@ import io.github.realyusufismail.ydwreg.application.interaction.InteractionManag
 import io.github.realyusufismail.ydwreg.entities.guild.manager.GuildManager;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import okhttp3.OkHttpClient;
+import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +73,8 @@ public class YDWReg implements YDW {
     private EventInterface eventInterface;
 
     private boolean ready;
+
+    private ApiStatus status = ApiStatus.STARTING;
 
     public YDWReg(@NotNull OkHttpClient client, @NotNull RestApiHandler rest) {
         this.rest = rest;
@@ -134,10 +138,10 @@ public class YDWReg implements YDW {
 
     @Override
     public void login(String token, int gatewayIntents, String status, int largeThreshold,
-            boolean compress, ActivityConfig activity) throws IOException, WebSocketException {
+            ActivityConfig activity) throws IOException, WebSocketException {
         logger.info("Received login request");
         ws = new WebSocketManager(this).setRequiredDetails(token, gatewayIntents, status,
-                largeThreshold, compress, activity);
+                largeThreshold, activity);
     }
 
 
@@ -270,6 +274,17 @@ public class YDWReg implements YDW {
         this.reconnected = b;
     }
 
+    public void setApiStatus(YDW.ApiStatus apiStatus) {
+        synchronized (this.status) {
+            ApiStatus oldStatus = this.status;
+            this.status = apiStatus;
+
+            onEvent(ApiStatusChangeEvent.class).subscribe(event -> {
+                event.setOldStatus(oldStatus);
+                event.setNewStatus(apiStatus);
+            });
+        }
+    }
 
     public ObjectMapper getMapper() {
         return mapper;
@@ -282,6 +297,4 @@ public class YDWReg implements YDW {
     public Logger getLogger() {
         return logger;
     }
-
-
 }
