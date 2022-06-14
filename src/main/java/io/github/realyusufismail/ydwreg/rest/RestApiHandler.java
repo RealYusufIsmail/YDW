@@ -6,23 +6,59 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
+
 public class RestApiHandler {
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
-    private final YDWReg ydw;
-    private final OkHttpClient client; // This is the client that will be used to make the requests
-                                       // to the API
+    private YDWReg ydw;
+    private OkHttpClient client; // This is the client that will be used to make the requests
+                                 // to the API
 
     private final String guildId;
 
     private final String token;
 
-    public RestApiHandler(@NotNull YDWReg ydw) {
-        this.ydw = ydw;
-        this.client = ydw.getHttpClient();
+    private RestApiStatus status = RestApiStatus.INITIALISING;
+
+    public RestApiHandler(@Nullable YDWReg ydw) {
+
+        // see if ydw is null and wait for it to be ready
+        while (ydw == null) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            this.ydw = ydw;
+        }
+
+        // see if client is null and wait for it to be ready
+        while (client == null) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            this.client = ydw.getHttpClient();
+        }
+
         ydw.setRest(this);
         this.token = ydw.getToken();
         this.guildId = ydw.getGuildId();
+
+        // after 1000ms, set the status to ready
+        new Thread(() -> {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            status = RestApiStatus.CONNECTED;
+        }).start();
     }
 
     private final GuildCaller guildRestApi = new GuildCaller(getYDW(), JSON, getHttpClient());
@@ -90,4 +126,32 @@ public class RestApiHandler {
     public @NotNull SlashCommandCaller getSlashCommandCaller() {
         return slashCommandCaller;
     }
+
+    public RestApiHandler awaitStatus(RestApiStatus status) {
+        if (status == this.status)
+            return this;
+
+        while (this.status != status) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return this;
+    }
+
+    public RestApiHandler awaitReady() {
+        return awaitStatus(RestApiStatus.CONNECTED);
+    }
+
+    public RestApiStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(RestApiStatus status) {
+        this.status = status;
+    }
 }
+

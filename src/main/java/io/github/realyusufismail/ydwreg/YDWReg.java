@@ -91,7 +91,7 @@ public class YDWReg implements YDW {
 
     @Override
     public Guild getGuild(long guildId) {
-        return getRest().getYDWCaller().getGuild(guildId);
+        return getRest().awaitReady().getYDWCaller().getGuild(guildId);
     }
 
     @Override
