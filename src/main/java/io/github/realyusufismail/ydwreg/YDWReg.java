@@ -71,6 +71,8 @@ public class YDWReg implements YDW {
     private boolean ready;
 
     private ApiStatus status = ApiStatus.STARTING;
+    private String guildId;
+    private String token;
 
     public YDWReg(@NotNull OkHttpClient client) {
         mapper = new ObjectMapper();
@@ -136,17 +138,20 @@ public class YDWReg implements YDW {
             ActivityConfig activity) throws Exception {
         logger.info("Received login request");
         ws = new WebSocketManager(this, token, gatewayIntents, status, largeThreshold, activity);
+        this.token = token;
     }
 
-
-    @Override
-    public void setToken(String token) {
-        rest.setToken(token);
+    public String getToken() {
+        return token;
     }
 
     @Override
     public void setGuildId(String guildId) {
-        rest.setGuildId(guildId);
+        this.guildId = guildId;
+    }
+
+    public String getGuildId() {
+        return guildId;
     }
 
     @Override
@@ -182,7 +187,7 @@ public class YDWReg implements YDW {
 
     @NotNull
     @Override
-    public RestApiHandler1 getRest() {
+    public RestApiHandler getRest() {
         return rest;
     }
 

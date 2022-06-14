@@ -28,6 +28,7 @@ import io.github.realyusufismail.ydw.entities.guild.Channel;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandBuilderReg;
 import io.github.realyusufismail.ydwreg.application.interaction.InteractionManager;
 import io.github.realyusufismail.ydwreg.entities.guild.manager.GuildManager;
+import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import org.jetbrains.annotations.NotNull;
 import reactor.core.publisher.Flux;
 
@@ -149,8 +150,6 @@ public interface YDW {
             ActivityConfig activity) throws Exception;
 
 
-    void setToken(String token);
-
     void setGuildId(String guildId);
 
     long getPing();
@@ -161,7 +160,7 @@ public interface YDW {
 
     long getGatewayPing();
 
-    RestApiHandler1 getRest();
+    RestApiHandler getRest();
 
     WebSocketManager getWebSocket();
 

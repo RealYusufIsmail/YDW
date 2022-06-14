@@ -106,7 +106,7 @@ public class YDwConfig {
         OkHttpClient client;
 
         if (this.client == null) {
-            client = new OkHttpClient();
+            client = new OkHttpClient().newBuilder().build();
         } else {
             client = this.client;
         }

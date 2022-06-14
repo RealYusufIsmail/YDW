@@ -42,7 +42,7 @@ public class SlashCommandCaller {
 
     private final MediaType JSON;
     private final String token;
-    private String guildId;
+    private final String guildId;
 
     private String name;
     private String description;
@@ -54,8 +54,10 @@ public class SlashCommandCaller {
     private Boolean tts;
     private Boolean mentionable;
 
-    public SlashCommandCaller(String token, YDW ydw, MediaType json, OkHttpClient client) {
+    public SlashCommandCaller(String token, String guildId, YDW ydw, MediaType json,
+            OkHttpClient client) {
         this.token = token;
+        this.guildId = guildId;
         this.ydw = (YDWReg) ydw;
         this.client = client;
         JSON = json;
@@ -134,10 +136,6 @@ public class SlashCommandCaller {
 
     public void setOptionExtenders(Collection<OptionExtender> optionExtenders) {
         this.extender = optionExtenders;
-    }
-
-    public void setGuildId(String guildId) {
-        this.guildId = guildId;
     }
 
     public void setEphemeral(boolean ephemeral) {
