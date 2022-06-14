@@ -77,13 +77,11 @@ public class YDWCaller {
                     .get()
                     .build();
         try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful())
+                throw new IOException("Unexpected code " + response);
             var body = response.body();
-            if (body == null) {
-                return null;
-            } else {
-                JsonNode jsonNode = ydw.getMapper().readTree(body.string());
-                return new GuildReg(jsonNode, jsonNode.get("id").asLong(), ydw);
-            }
+            JsonNode jsonNode = ydw.getMapper().readTree(body.string());
+            return new GuildReg(jsonNode, jsonNode.get("id").asLong(), ydw);
         } catch (IOException e) {
             throw new RestApiException(e);
         }
