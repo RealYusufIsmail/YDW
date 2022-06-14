@@ -8,6 +8,6 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws WebSocketException, IOException {
-        new WebSocketManager(Config.getString("TOKEN"), GateWayIntent.DEFAULT_INTENTS);
+
     }
 }

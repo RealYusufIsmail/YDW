@@ -38,6 +38,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.nio.channels.ClosedChannelException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -98,7 +100,8 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         this.largeThreshold = largeThreshold;
         this.activity = activity;
 
-        ws = new WebSocketFactory().createSocket(YDWInfo.DISCORD_GATEWAY_LINK);
+        String gatewayUrl = "wss://gateway.discord.gg/?v=9&encoding=json";
+        ws = new WebSocketFactory().createSocket(gatewayUrl);
         ws.addHeader("Accept-Encoding", "gzip");
         ws.addListener(this);
         ws.connect();
@@ -309,23 +312,43 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             WebSocketFrame clientCloseFrame, boolean closedByServer) {
         ydw.setApiStatus(YDW.ApiStatus.WEBSOCKET_DISCONNECTED);
         CloseCode closeCode = null;
-        String closeReason = null;
         int rawCloseCode = 1005;
 
-        //Done to make sure no more heartbeats are sent
+        // Done to make sure no more heartbeats are sent
         if (heartbeatThread != null) {
             heartbeatThread.cancel(false);
             heartbeatThread = null;
         }
 
         if (closedByServer && serverCloseFrame != null) {
+            rawCloseCode = serverCloseFrame.getCloseCode();
+            closeCode = CloseCode.fromCode(rawCloseCode);
 
+            if (closeCode == CloseCode.RATE_LIMITED) {
+                logger.error("'{}'", closeCode.getReason());
+            } else {
+                logger.error("'{}'", closeCode.getReason());
+            }
+        } else if (clientCloseFrame != null) {
+            rawCloseCode = clientCloseFrame.getCloseCode();
+            closeCode = CloseCode.fromCode(rawCloseCode);
+            logger.error("'{}'", closeCode.getReason());
+        } else {
+            logger.error("Disconnected");
         }
     }
 
     @Override
-    public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
-
+    public void onError(WebSocket websocket, @NotNull WebSocketException cause) throws Exception {
+        if (cause.getCause() instanceof SocketTimeoutException) {
+            logger.error("Socket timeout");
+        } else if (cause.getCause() instanceof IOException) {
+            logger.error("IO error");
+        } else if (cause.getCause() instanceof ClosedChannelException) {
+            logger.error("Closed channel");
+        } else {
+            logger.error("Unknown error", cause);
+        }
     }
 
     public int getGatewayIntents() {

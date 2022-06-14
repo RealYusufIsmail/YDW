@@ -8,7 +8,9 @@ import com.google.common.util.concurrent.AbstractScheduledService;
 import com.neovisionaries.ws.client.*;
 import io.github.realyusufismail.websocket.core.OpCode;
 import io.github.realyusufismail.ydw.GateWayIntent;
+import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,14 +47,24 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     // The gateway intents
     private final int intent;
 
+    // The sequence number, used for resuming sessions and heartbeats.
+    // The status of the bot e.g. online, idle, dnd, invisible etc.
+    private String status;
+    private int largeThreshold;
+    // The activity of the bot e.g. playing, streaming, listening, watching etc.
+    private ActivityConfig activity;
+
     // The session id. This is basically a key that stores the past activity of the bot.
     private volatile String sessionId = null;
 
 
 
-    public WebSocketManager(String token, Integer intent) throws IOException, WebSocketException {
+    public WebSocketManager(String token, Integer intent, String status, int largeThreshold, ActivityConfig activity) throws IOException, WebSocketException {
         this.token = token;
         this.intent = intent;
+        this.status = status;
+        this.largeThreshold = largeThreshold;
+        this.activity = activity;
         String gatewayUrl = "wss://gateway.discord.gg/?v=9&encoding=json";
         ws = new WebSocketFactory().createSocket(gatewayUrl);
         ws.addHeader("Accept-Encoding", "gzip");
@@ -60,9 +72,9 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         ws.connect();
     }
 
-    public WebSocketManager(String token, @NotNull GateWayIntent intent)
+    public WebSocketManager(String token, @NotNull GateWayIntent intent, String status, int largeThreshold, ActivityConfig activity)
             throws IOException, WebSocketException {
-        this(token, intent.getValue());
+        this(token, intent.getValue(), status, largeThreshold, activity);
     }
 
 
