@@ -45,7 +45,7 @@ dependencies {
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.11'
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.11'
     //reactor core
-    implementation group: 'io.projectreactor', name: 'reactor-core', version: '3.4.18'
+    implementation group: 'io.projectreactor', name: 'reactor-core', version: '3.4.19'
     //google
     implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
 }
