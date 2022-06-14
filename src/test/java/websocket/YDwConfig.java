@@ -1,17 +1,92 @@
 package websocket;
 
-import org.jetbrains.annotations.Contract;
+import com.google.errorprone.annotations.CheckReturnValue;
+import com.neovisionaries.ws.client.WebSocketException;
+import io.github.realyusufismail.ydw.GateWayIntent;
+import io.github.realyusufismail.ydw.Status;
+import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.activity.ActivityConfig;
+import io.github.realyusufismail.ydwreg.YDWReg;
+import io.github.realyusufismail.ydwreg.exception.InvalidStatusException;
 import org.jetbrains.annotations.NotNull;
 
-public class YDwConfig {
-    public final String token;
+import java.io.IOException;
 
-    private YDwConfig(String token) {
+public class YDwConfig {
+    private final String token;
+    private final int gatewayIntents;
+
+    private String status;
+    private int largeThreshold = 250;
+    private ActivityConfig activity = null;
+
+    private YDwConfig(String token, int gatewayIntents) {
         this.token = token;
+        this.gatewayIntents = 1 | gatewayIntents;
     }
 
     @NotNull
-    public static YDwConfig setToken(String token) {
-        return new YDwConfig(token);
+    public static YDwConfig setDefault(String token) {
+        return new YDwConfig(token, GateWayIntent.DEFAULT_INTENTS);
+    }
+
+    /**
+     * Used to register the bots token and also used to set the intents of the bot.
+     *
+     * @param token The bot token which is used to start the bot
+     * @param intent The intents which the bot should have
+     * @return The builder
+     */
+    @CheckReturnValue
+    public static @NotNull YDwConfig setUpBot(String token, @NotNull GateWayIntent intent) {
+        return new YDwConfig(token, intent.getValue());
+    }
+
+    /**
+     * the status you wish to set
+     *
+     * @param status status
+     * @return ydwConnector
+     * @see Status the class for more info
+     */
+    @NotNull
+    public YDwConfig setStatus(@NotNull Status status) {
+        this.status = status.getStatus();
+        return this;
+    }
+
+    /**
+     * value between 50 and 250, total number of members where the gateway will stop sending offline
+     * members in the guild member list default is 50
+     *
+     * @param largeThreshold threshold
+     * @return ydwConnector
+     */
+    @NotNull
+    public YDwConfig setLargeThreshold(int largeThreshold) {
+        this.largeThreshold = largeThreshold;
+        return this;
+    }
+
+    /**
+     * presence structure for initial presence information
+     *
+     * @param activity activity
+     * @return ydwConnector
+     */
+    @NotNull
+    public YDwConfig setActivity(ActivityConfig activity) {
+        this.activity = activity;
+        return this;
+    }
+
+    public WebSocketManager build() throws WebSocketException, IOException, InvalidStatusException {
+
+        if (token == null || token.isEmpty()) {
+            throw new InvalidStatusException("Token is null");
+        }
+
+
+        return new WebSocketManager(token, gatewayIntents, status, largeThreshold, activity);
     }
 }

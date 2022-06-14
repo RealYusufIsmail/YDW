@@ -3,11 +3,16 @@ package websocket;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.JsonSerializable;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.util.concurrent.AbstractScheduledService;
 import com.neovisionaries.ws.client.*;
+import io.github.realyusufismail.websocket.core.CloseCode;
 import io.github.realyusufismail.websocket.core.OpCode;
+import io.github.realyusufismail.websocket.handle.OnHandler;
 import io.github.realyusufismail.ydw.GateWayIntent;
+import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,10 +22,11 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.net.SocketTimeoutException;
+import java.nio.channels.ClosedChannelException;
+import java.util.*;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -29,7 +35,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     private final Logger logger = LoggerFactory.getLogger(WebSocketManager.class);
 
     // Create a WebSocketFactory instance.
-    WebSocket ws;
+    static WebSocket ws;
 
     ObjectMapper mapper = new ObjectMapper();
 
@@ -50,16 +56,22 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     // The sequence number, used for resuming sessions and heartbeats.
     // The status of the bot e.g. online, idle, dnd, invisible etc.
     private String status;
-    private int largeThreshold;
+    private Integer largeThreshold;
     // The activity of the bot e.g. playing, streaming, listening, watching etc.
     private ActivityConfig activity;
 
     // The session id. This is basically a key that stores the past activity of the bot.
     private volatile String sessionId = null;
+    // Used to indicate that the bot has connected to the gateway.
+    private boolean connected = false;
+
+    // The thread used for the heartbeat. Needed in cases such as disconnect.
+    private volatile Future<?> heartbeatThread;
 
 
 
-    public WebSocketManager(String token, Integer intent, String status, int largeThreshold, ActivityConfig activity) throws IOException, WebSocketException {
+    public WebSocketManager(String token, Integer intent, String status, int largeThreshold,
+            ActivityConfig activity) throws IOException, WebSocketException {
         this.token = token;
         this.intent = intent;
         this.status = status;
@@ -72,8 +84,8 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         ws.connect();
     }
 
-    public WebSocketManager(String token, @NotNull GateWayIntent intent, String status, int largeThreshold, ActivityConfig activity)
-            throws IOException, WebSocketException {
+    public WebSocketManager(String token, @NotNull GateWayIntent intent, String status,
+            int largeThreshold, ActivityConfig activity) throws IOException, WebSocketException {
         this(token, intent.getValue(), status, largeThreshold, activity);
     }
 
@@ -93,23 +105,21 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     }
 
     public void onHandel(JsonNode payload) throws Exception {
-
+        onEvent(payload);
     }
 
-    public void onEvent(JsonNode payload) {
+    public void onEvent(@NotNull JsonNode payload) {
         Optional<Integer> s = Optional.of(payload.get("s").asInt());
         s.ifPresent(integer -> this.seq = integer);
 
-        Optional<String> t = Optional.of(payload.get("t").asText());
-        t.ifPresent(text -> {
-            if (text.equals("READY")) {
-                this.sessionId = payload.get("d").get("session_id").asText();
-            }
-        });
 
         Optional<JsonNode> d = Optional.of(payload.get("d"));
         Optional<Integer> op = Optional.of(payload.get("op").asInt());
         op.ifPresent(integer -> onOpcode(op.get(), d.get()));
+
+        Optional<String> t = Optional.of(payload.get("t").asText());
+        logger.debug("Received event: {}", t.orElse(""));
+        t.ifPresent(text -> new OnHandler(null, text, payload).start());
     }
 
     public void onOpcode(Integer opcode, JsonNode d) {
@@ -118,6 +128,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             case HEARTBEAT -> sendHeartbeat();
             case HELLO -> {
                 int heartbeatInterval = d.get("heartbeat_interval").asInt();
+                logger.info("Received heartbeat interval of {}ms", heartbeatInterval);
                 // Send heartbeat
                 sendHeartbeat(heartbeatInterval);
             }
@@ -152,16 +163,22 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
      * </p>
      */
     public void sendHeartbeat() {
-        JsonNode json = JsonNodeFactory.instance.objectNode().put("op", 1).put("d", seq);
 
-        if (missedHeartbeats >= 2) {
-            missedHeartbeats = 0;
-            prepareClose();
-            ws.disconnect(1000, "Heartbeat missed");
+        Integer d;
+
+        if (seq != null) {
+            d = seq;
         } else {
-            missedHeartbeats += 1;
-            ws.sendText(json.toString());
+            d = null;
         }
+
+
+        JsonNode heartbeat = JsonNodeFactory.instance.objectNode()
+            .put("op", OpCode.HEARTBEAT.getCode())
+            .put("d", d);
+
+
+        ws.sendText(heartbeat.toString());
     }
 
     /**
@@ -171,20 +188,23 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
      * interval elapses, but you should avoid doing so unless necessary. here is already tolerance
      * in the heartbeat_interval that will cover network latency, so you do not need to account for
      * it in your own implementation - waiting the precise interval will suffice.
-     * 
+     *
      * @param heartbeatInterval the interval in milliseconds between heartbeats
      */
     public void sendHeartbeat(int heartbeatInterval) {
-        JsonNode json = JsonNodeFactory.instance.objectNode().put("op", 1).put("d", seq);
 
-        scheduler.scheduleAtFixedRate(() -> {
+
+        heartbeatThread = scheduler.scheduleAtFixedRate(() -> {
             try {
-                ws.sendText(json.toString());
+                if(connected)
+                    sendHeartbeat();
+                logger.info("Sending heartbeat");
             } catch (Exception e) {
                 logger.error("Error sending heartbeat", e);
             }
         }, 0, heartbeatInterval, TimeUnit.MILLISECONDS);
     }
+
 
 
     /**
@@ -207,6 +227,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     @Override
     public void onConnected(WebSocket websocket, Map<String, List<String>> headers)
             throws Exception {
+        connected = true;
         if (sessionId == null) {
             identify();
         } else {
@@ -215,33 +236,107 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     }
 
     public void identify() {
-        JsonNode json = JsonNodeFactory.instance.objectNode()
-            .put("op", 2)
-            .set("d",
+
+        ObjectNode d = JsonNodeFactory.instance.objectNode()
+            .put("token", token)
+            .put("intents", intent)
+            .set("properties",
                     JsonNodeFactory.instance.objectNode()
-                        .put("token", token)
-                        .put("intents", intent)
-                        .set("properties",
-                                JsonNodeFactory.instance.objectNode()
-                                    .put("$os", "mac")
-                                    .put("$browser", "YDL")
-                                    .put("$device", "YDL")));
+                        .put("$os", "mac")
+                        .put("$browser", "YDL")
+                        .put("$device", "YDL"));
+
+        ObjectNode presence = JsonNodeFactory.instance.objectNode();
+
+        if (activity != null) {
+            ArrayNode activities = JsonNodeFactory.instance.arrayNode();
+            activities.add(JsonNodeFactory.instance.objectNode()
+                .put("name", activity.getName())
+                .put("type", activity.getActivity()));
+            presence.set("activities", activities);
+        }
+
+        if (status != null) {
+            presence.put("status", status);
+        }
+
+        if (largeThreshold != null) {
+            d.put("large_threshold", largeThreshold);
+        }
+
+        JsonNode json = JsonNodeFactory.instance.objectNode().put("op", 2).set("d", d);
 
         ws.sendText(json.toString());
         logger.info("Connected");
     }
 
     public void resume() {
-        JsonNode json = JsonNodeFactory.instance.objectNode()
-            .put("op", 6)
-            .set("d",
-                    JsonNodeFactory.instance.objectNode()
-                        .put("token", token)
-                        .put("session_id", sessionId)
-                        .put("seq", seq));
+        JsonNode payload = JsonNodeFactory.instance.objectNode()
+            .put("token", token)
+            .put("session_id", sessionId)
+            .put("seq", seq);
 
+        JsonNode identify = JsonNodeFactory.instance.objectNode()
+            .put("op", OpCode.RESUME.getCode())
+            .set("d", payload);
 
-        ws.sendText(json.toString());
+        ws.sendText(identify.asText());
         logger.info("Reconnected");
+    }
+
+    @Override
+    public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame,
+            WebSocketFrame clientCloseFrame, boolean closedByServer) {
+        connected = false;
+        if (Thread.currentThread().isInterrupted()) {
+            Thread thread = new Thread(() -> handleDisconnect(websocket, serverCloseFrame,
+                    clientCloseFrame, closedByServer));
+            thread.setName("reconnect-thread");
+            thread.start();
+        } else {
+            handleDisconnect(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
+        }
+    }
+
+    private void handleDisconnect(WebSocket websocket, WebSocketFrame serverCloseFrame,
+            WebSocketFrame clientCloseFrame, boolean closedByServer) {
+        CloseCode closeCode = null;
+        int rawCloseCode = 1005;
+
+        // Done to make sure no more heartbeats are sent
+        if (heartbeatThread != null) {
+            heartbeatThread.cancel(false);
+            heartbeatThread = null;
+        }
+
+        if (closedByServer && serverCloseFrame != null) {
+            rawCloseCode = serverCloseFrame.getCloseCode();
+            closeCode = CloseCode.fromCode(rawCloseCode);
+
+            if (closeCode == CloseCode.RATE_LIMITED) {
+                logger.error("'{}'", closeCode.getReason());
+            } else {
+                logger.error("'{}'", closeCode.getReason());
+            }
+        } else if (clientCloseFrame != null) {
+            rawCloseCode = clientCloseFrame.getCloseCode();
+            closeCode = CloseCode.fromCode(rawCloseCode);
+            logger.error("'{}'", closeCode.getReason());
+        } else {
+            logger.error("Disconnected");
+        }
+    }
+
+    @Override
+    public void onError(WebSocket websocket, @NotNull WebSocketException cause) throws Exception {
+        if (cause.getCause() instanceof SocketTimeoutException) {
+            logger.error("Socket timeout");
+        } else if (cause.getCause() instanceof IOException) {
+            logger.error("IO error");
+        } else if (cause.getCause() instanceof ClosedChannelException) {
+            logger.error("Closed channel");
+        } else {
+            logger.error("Unknown error", cause);
+        }
     }
 }

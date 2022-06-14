@@ -19,6 +19,7 @@ package io.github.realyusufismail.websocket;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.neovisionaries.ws.client.*;
@@ -72,7 +73,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     private int missedHeartbeats = 0;
     // The status of the bot e.g. online, idle, dnd, invisible etc.
     private String status;
-    private int largeThreshold;
+    private Integer largeThreshold;
     // The activity of the bot e.g. playing, streaming, listening, watching etc.
     private ActivityConfig activity;
 
@@ -87,29 +88,27 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     private volatile Future<?> heartbeatThread;
 
 
-    public WebSocketManager(YDWReg ydw) {
+    public WebSocketManager(YDWReg ydw, String token, Integer intent, String status, int largeThreshold,
+                            ActivityConfig activity) throws Exception {
         this.ydw = ydw;
         this.isResumable = ydw.isResumable();
-    }
-
-    public WebSocketManager setRequiredDetails(String token, Integer intent, String status,
-            int largeThreshold, ActivityConfig activity) throws WebSocketException, IOException {
         this.token = token;
         this.intent = intent;
         this.status = status;
         this.largeThreshold = largeThreshold;
         this.activity = activity;
-
-        String gatewayUrl = "wss://gateway.discord.gg/?v=9&encoding=json";
-        ws = new WebSocketFactory().createSocket(gatewayUrl);
+        ws = new WebSocketFactory().createSocket(YDWInfo.DISCORD_GATEWAY_LINK);
         ws.addHeader("Accept-Encoding", "gzip");
         ws.addListener(this);
         ws.connect();
-
-        // TODO: Find out why it does not connect.
-
-        return this;
     }
+
+    public WebSocketManager(YDWReg ydw, String token, @NotNull GateWayIntent intent, String status,
+                            int largeThreshold, ActivityConfig activity) throws Exception {
+        this(ydw, token, intent.getValue(), status, largeThreshold, activity);
+    }
+
+
 
     public static void setSessionId(String sessionId) {
         WebSocketManager.sessionId = sessionId;
@@ -121,14 +120,16 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     }
 
     public void onHandelMessage(String message) throws Exception {
-        logger.debug("Received message: {}", message);
-
         try {
             JsonNode payload = mapper.readTree(message);
-            onEvent(payload);
+            onHandel(payload);
         } catch (Exception e) {
             logger.error("Error while handling message", e);
         }
+    }
+
+    public void onHandel(JsonNode payload) throws Exception {
+        onEvent(payload);
     }
 
     public void onEvent(@NotNull JsonNode payload) {
@@ -150,6 +151,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             case HEARTBEAT -> sendHeartbeat();
             case HELLO -> {
                 int heartbeatInterval = d.get("heartbeat_interval").asInt();
+                logger.info("Received heartbeat interval of {}ms", heartbeatInterval);
                 // Send heartbeat
                 sendHeartbeat(heartbeatInterval);
             }
@@ -185,10 +187,18 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
      */
     public void sendHeartbeat() {
 
-        Integer sequence = seq == null ? null : seq;
+        Integer d;
 
-        JsonNode heartbeat = JsonNodeFactory.instance.objectNode().put("op", 1).put("d", sequence);
+        if (seq != null) {
+            d = seq;
+        } else {
+            d = null;
+        }
 
+
+        JsonNode heartbeat = JsonNodeFactory.instance.objectNode()
+                .put("op", OpCode.HEARTBEAT.getCode())
+                .put("d", d);
 
         if (missedHeartbeats >= 2) {
             missedHeartbeats = 0;
@@ -196,11 +206,12 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             ws.disconnect(1000, "Heartbeat missed");
         } else {
             missedHeartbeats += 1;
-            ws.sendText(heartbeat.asText());
+            ws.sendText(heartbeat.toString());
         }
     }
 
     /**
+     /**
      * After receiving Opcode 10 Hello, the client may begin sending Opcode 1 Heartbeat payloads
      * after heartbeat_interval * jitter milliseconds (where jitter is a random value between 0 and
      * 1), and every heartbeat_interval milliseconds thereafter. You may send heartbeats before this
@@ -212,19 +223,12 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
      */
     public void sendHeartbeat(int heartbeatInterval) {
 
-        try {
-            Socket rawSocket = this.ws.getSocket();
-            if (rawSocket != null)
-                rawSocket.setSoTimeout(heartbeatInterval + 10000); // setup a timeout when we miss
-                                                                   // heartbeats
-        } catch (SocketException ex) {
-            logger.warn("Failed to setup timeout for socket", ex);
-        }
 
         heartbeatThread = scheduler.scheduleAtFixedRate(() -> {
             try {
-                if (connected)
+                if(connected)
                     sendHeartbeat();
+                logger.info("Sending heartbeat");
             } catch (Exception e) {
                 logger.error("Error sending heartbeat", e);
             }
@@ -260,23 +264,37 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     }
 
     public void identify() {
-        ObjectNode properties = JsonNodeFactory.instance.objectNode()
-            .put("os", System.getProperty("os.name"))
-            .put("browser", "YDW")
-            .put("device", "YDW");
 
-        ObjectNode payload = JsonNodeFactory.instance.objectNode()
-            .put("status", status)
-            .put("token", token)
-            .set("properties", properties);
+        ObjectNode d = JsonNodeFactory.instance.objectNode()
+                .put("token", token)
+                .put("intents", intent)
+                .set("properties",
+                        JsonNodeFactory.instance.objectNode()
+                                .put("$os", "mac")
+                                .put("$browser", "YDL")
+                                .put("$device", "YDL"));
 
-        payload.put("large_threshold", largeThreshold).put("intents", intent);
+        ObjectNode presence = JsonNodeFactory.instance.objectNode();
 
-        JsonNode identify = JsonNodeFactory.instance.objectNode()
-            .put("op", OpCode.IDENTIFY.getCode())
-            .set("d", payload);
+        if (activity != null) {
+            ArrayNode activities = JsonNodeFactory.instance.arrayNode();
+            activities.add(JsonNodeFactory.instance.objectNode()
+                    .put("name", activity.getName())
+                    .put("type", activity.getActivity()));
+            presence.set("activities", activities);
+        }
 
-        ws.sendText(identify.asText());
+        if (status != null) {
+            presence.put("status", status);
+        }
+
+        if (largeThreshold != null) {
+            d.put("large_threshold", largeThreshold);
+        }
+
+        JsonNode json = JsonNodeFactory.instance.objectNode().put("op", 2).set("d", d);
+
+        ws.sendText(json.toString());
         logger.info("Connected");
     }
 
@@ -290,7 +308,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             .put("op", OpCode.RESUME.getCode())
             .set("d", payload);
 
-        ws.sendText(identify.asText());
+        ws.sendText(identify.toString());
         logger.info("Reconnected");
     }
 

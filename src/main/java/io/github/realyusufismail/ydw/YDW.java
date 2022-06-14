@@ -149,7 +149,7 @@ public interface YDW {
 
 
     void login(String token, int gatewayIntents, String status, int largeThreshold,
-            ActivityConfig activity) throws IOException, WebSocketException;
+            ActivityConfig activity) throws Exception;
 
 
     void setToken(String token);

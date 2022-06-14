@@ -138,9 +138,9 @@ public class YDWReg implements YDW {
 
     @Override
     public void login(String token, int gatewayIntents, String status, int largeThreshold,
-            ActivityConfig activity) throws IOException, WebSocketException {
+            ActivityConfig activity) throws Exception {
         logger.info("Received login request");
-        ws = new WebSocketManager(this).setRequiredDetails(token, gatewayIntents, status,
+        ws = new WebSocketManager(this, token, gatewayIntents, status,
                 largeThreshold, activity);
     }
 
