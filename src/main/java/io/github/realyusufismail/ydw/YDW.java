@@ -18,7 +18,6 @@
 package io.github.realyusufismail.ydw;
 
 
-import com.neovisionaries.ws.client.WebSocketException;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.websocket.event.Event;
 import io.github.realyusufismail.websocket.event.EventInterface;
@@ -29,11 +28,9 @@ import io.github.realyusufismail.ydw.entities.guild.Channel;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandBuilderReg;
 import io.github.realyusufismail.ydwreg.application.interaction.InteractionManager;
 import io.github.realyusufismail.ydwreg.entities.guild.manager.GuildManager;
-import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import org.jetbrains.annotations.NotNull;
 import reactor.core.publisher.Flux;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface YDW {
@@ -164,7 +161,7 @@ public interface YDW {
 
     long getGatewayPing();
 
-    RestApiHandler getRest();
+    RestApiHandler1 getRest();
 
     WebSocketManager getWebSocket();
 

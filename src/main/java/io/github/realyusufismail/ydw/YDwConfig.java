@@ -1,13 +1,12 @@
-package websocket;
+package io.github.realyusufismail.ydw;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 import com.neovisionaries.ws.client.WebSocketException;
-import io.github.realyusufismail.ydw.GateWayIntent;
-import io.github.realyusufismail.ydw.Status;
-import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.exception.InvalidStatusException;
+import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,6 +21,7 @@ public class YDwConfig {
     private ActivityConfig activity = null;
 
     private OkHttpClient client;
+
 
     private YDwConfig(String token, int gatewayIntents) {
         this.token = token;
@@ -96,6 +96,7 @@ public class YDwConfig {
         return this;
     }
 
+
     public YDW build() throws WebSocketException, IOException, InvalidStatusException {
 
         if (token == null || token.isEmpty()) {
@@ -110,7 +111,8 @@ public class YDwConfig {
             client = this.client;
         }
 
-        YDW ydw = new YDWReg(client);
+        YDWReg ydw = new YDWReg(client);
+        new RestApiHandler(ydw);
         new WebSocketManager(ydw, token, gatewayIntents, status, largeThreshold, activity);
         return ydw;
     }

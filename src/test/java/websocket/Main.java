@@ -1,8 +1,8 @@
 package websocket;
 
 import com.neovisionaries.ws.client.WebSocketException;
-import io.github.realyusufismail.ydw.GateWayIntent;
 import io.github.realyusufismail.ydw.Status;
+import io.github.realyusufismail.ydw.YDwConfig;
 import io.github.realyusufismail.ydwreg.exception.InvalidStatusException;
 import io.github.yusufsdiscordbot.config.Config;
 

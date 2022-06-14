@@ -18,7 +18,6 @@
 package io.github.realyusufismail.ydwreg;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.neovisionaries.ws.client.WebSocketException;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.websocket.event.Event;
 import io.github.realyusufismail.websocket.event.EventInterface;
@@ -32,13 +31,11 @@ import io.github.realyusufismail.ydwreg.application.interaction.InteractionManag
 import io.github.realyusufismail.ydwreg.entities.guild.manager.GuildManager;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import okhttp3.OkHttpClient;
-import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,8 +43,7 @@ public class YDWReg implements YDW {
 
     // logger
     public static final Logger logger = LoggerFactory.getLogger(YDWReg.class);
-    @NotNull
-    private final RestApiHandler rest;
+    private RestApiHandler rest;
     @NotNull
     private final ObjectMapper mapper;
     private WebSocketManager ws;
@@ -77,7 +73,6 @@ public class YDWReg implements YDW {
     private ApiStatus status = ApiStatus.STARTING;
 
     public YDWReg(@NotNull OkHttpClient client) {
-        this.rest = new RestApiHandler(client);
         mapper = new ObjectMapper();
         this.client = client;
     }
@@ -187,7 +182,7 @@ public class YDWReg implements YDW {
 
     @NotNull
     @Override
-    public RestApiHandler getRest() {
+    public RestApiHandler1 getRest() {
         return rest;
     }
 
@@ -283,6 +278,10 @@ public class YDWReg implements YDW {
                 event.setNewStatus(apiStatus);
             });
         }
+    }
+
+    public void setRest(RestApiHandler rest) {
+        this.rest = rest;
     }
 
     public ObjectMapper getMapper() {
