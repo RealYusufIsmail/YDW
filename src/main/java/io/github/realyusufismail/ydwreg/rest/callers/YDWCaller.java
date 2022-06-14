@@ -33,6 +33,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -40,6 +42,8 @@ public class YDWCaller {
     private final YDWReg ydw;
 
     private final OkHttpClient client;
+
+    private final Logger logger = LoggerFactory.getLogger(YDWCaller.class);
 
 
     public YDWCaller(YDW ydw, OkHttpClient client) {

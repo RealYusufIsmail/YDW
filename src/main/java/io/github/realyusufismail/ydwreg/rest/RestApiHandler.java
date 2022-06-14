@@ -21,30 +21,9 @@ public class RestApiHandler {
 
     private RestApiStatus status = RestApiStatus.INITIALISING;
 
-    public RestApiHandler(@Nullable YDWReg ydw) {
-
-        // see if ydw is null and wait for it to be ready
-        while (ydw == null) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            this.ydw = ydw;
-        }
-
-        // see if client is null and wait for it to be ready
-        while (client == null) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            this.client = ydw.getHttpClient();
-        }
-
+    public RestApiHandler(@NotNull YDWReg ydw) {
+        this.ydw = ydw;
+        this.client = ydw.getHttpClient();
         ydw.setRest(this);
         this.token = ydw.getToken();
         this.guildId = ydw.getGuildId();
@@ -52,7 +31,7 @@ public class RestApiHandler {
         // after 1000ms, set the status to ready
         new Thread(() -> {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -80,10 +59,16 @@ public class RestApiHandler {
 
 
     public OkHttpClient getHttpClient() {
+        if (client == null) {
+            client = new OkHttpClient();
+        }
         return client;
     }
 
     public YDWReg getYDW() {
+        if (ydw == null) {
+            ydw = new YDWReg(getHttpClient());
+        }
         return ydw;
     }
 
