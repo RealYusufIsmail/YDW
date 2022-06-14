@@ -77,11 +77,9 @@ public enum EndPoint {
 
     public @NotNull String getFullEndpoint(@NotNull String... parms) {
         StringBuilder sb = new StringBuilder(endpoint);
-        int parmsAmount = getEndpoint().split("%s").length - (getEndpoint().endsWith("%s") ? 1 : 0);
-        if (parms.length > parmsAmount) {
-            for (int i = parmsAmount; i < parms.length; i++) {
-                sb.append("/").append(parms[i]);
-            }
+        // replaces %s with parms
+        for (String parm : parms) {
+            sb.replace(sb.indexOf("%s"), sb.indexOf("%s") + 2, parm);
         }
         return sb.toString();
     }
