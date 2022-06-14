@@ -237,7 +237,7 @@ public class YDWConnector {
 
         restApiHandler = Objects.requireNonNullElseGet(rest, () -> new RestApiHandler(httpClient));
 
-        YDWReg ydw = new YDWReg(httpClient, restApiHandler);
+        YDWReg ydw = new YDWReg(httpClient);
         restApiHandler.setYDW(ydw);
         ydw.setToken(token);
 

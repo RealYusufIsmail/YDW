@@ -14,6 +14,7 @@ import io.github.realyusufismail.websocket.handle.OnHandler;
 import io.github.realyusufismail.ydw.GateWayIntent;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
+import io.github.realyusufismail.ydwreg.YDWReg;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -68,10 +69,13 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     // The thread used for the heartbeat. Needed in cases such as disconnect.
     private volatile Future<?> heartbeatThread;
 
+    private final YDWReg ydwReg;
 
 
-    public WebSocketManager(String token, Integer intent, String status, int largeThreshold,
-            ActivityConfig activity) throws IOException, WebSocketException {
+
+    public WebSocketManager(YDW ydw, String token, Integer intent, String status,
+            int largeThreshold, ActivityConfig activity) throws IOException, WebSocketException {
+        this.ydwReg = (YDWReg) ydw;
         this.token = token;
         this.intent = intent;
         this.status = status;
@@ -84,9 +88,9 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         ws.connect();
     }
 
-    public WebSocketManager(String token, @NotNull GateWayIntent intent, String status,
+    public WebSocketManager(YDW ydw, String token, @NotNull GateWayIntent intent, String status,
             int largeThreshold, ActivityConfig activity) throws IOException, WebSocketException {
-        this(token, intent.getValue(), status, largeThreshold, activity);
+        this(ydw, token, intent.getValue(), status, largeThreshold, activity);
     }
 
 
@@ -119,7 +123,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
         Optional<String> t = Optional.of(payload.get("t").asText());
         logger.debug("Received event: {}", t.orElse(""));
-        t.ifPresent(text -> new OnHandler(null, text, payload).start());
+        t.ifPresent(text -> new OnHandler(ydwReg, text, payload).start());
     }
 
     public void onOpcode(Integer opcode, JsonNode d) {
@@ -196,7 +200,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
         heartbeatThread = scheduler.scheduleAtFixedRate(() -> {
             try {
-                if(connected)
+                if (connected)
                     sendHeartbeat();
                 logger.info("Sending heartbeat");
             } catch (Exception e) {
@@ -300,6 +304,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
     private void handleDisconnect(WebSocket websocket, WebSocketFrame serverCloseFrame,
             WebSocketFrame clientCloseFrame, boolean closedByServer) {
+        ydwReg.setApiStatus(YDW.ApiStatus.WEBSOCKET_DISCONNECTED);
         CloseCode closeCode = null;
         int rawCloseCode = 1005;
 

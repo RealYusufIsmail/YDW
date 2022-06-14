@@ -8,6 +8,7 @@ import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.exception.InvalidStatusException;
+import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -19,6 +20,8 @@ public class YDwConfig {
     private String status;
     private int largeThreshold = 250;
     private ActivityConfig activity = null;
+
+    private OkHttpClient client;
 
     private YDwConfig(String token, int gatewayIntents) {
         this.token = token;
@@ -80,13 +83,35 @@ public class YDwConfig {
         return this;
     }
 
-    public WebSocketManager build() throws WebSocketException, IOException, InvalidStatusException {
+    /**
+     * the client used to connect to the websocket
+     * 
+     * @param client client
+     *
+     * @return ydwConnector
+     */
+    @NotNull
+    public YDwConfig setClient(OkHttpClient client) {
+        this.client = client;
+        return this;
+    }
+
+    public YDW build() throws WebSocketException, IOException, InvalidStatusException {
 
         if (token == null || token.isEmpty()) {
             throw new InvalidStatusException("Token is null");
         }
 
+        OkHttpClient client;
 
-        return new WebSocketManager(token, gatewayIntents, status, largeThreshold, activity);
+        if (this.client == null) {
+            client = new OkHttpClient();
+        } else {
+            client = this.client;
+        }
+
+        YDW ydw = new YDWReg(client);
+        new WebSocketManager(ydw, token, gatewayIntents, status, largeThreshold, activity);
+        return ydw;
     }
 }

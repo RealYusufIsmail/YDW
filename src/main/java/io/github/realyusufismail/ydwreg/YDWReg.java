@@ -76,8 +76,8 @@ public class YDWReg implements YDW {
 
     private ApiStatus status = ApiStatus.STARTING;
 
-    public YDWReg(@NotNull OkHttpClient client, @NotNull RestApiHandler rest) {
-        this.rest = rest;
+    public YDWReg(@NotNull OkHttpClient client) {
+        this.rest = new RestApiHandler(client);
         mapper = new ObjectMapper();
         this.client = client;
     }
@@ -140,8 +140,7 @@ public class YDWReg implements YDW {
     public void login(String token, int gatewayIntents, String status, int largeThreshold,
             ActivityConfig activity) throws Exception {
         logger.info("Received login request");
-        ws = new WebSocketManager(this, token, gatewayIntents, status,
-                largeThreshold, activity);
+        ws = new WebSocketManager(this, token, gatewayIntents, status, largeThreshold, activity);
     }
 
 

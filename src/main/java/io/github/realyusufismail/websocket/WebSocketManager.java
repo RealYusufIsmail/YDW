@@ -88,8 +88,8 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     private volatile Future<?> heartbeatThread;
 
 
-    public WebSocketManager(YDWReg ydw, String token, Integer intent, String status, int largeThreshold,
-                            ActivityConfig activity) throws Exception {
+    public WebSocketManager(YDWReg ydw, String token, Integer intent, String status,
+            int largeThreshold, ActivityConfig activity) throws Exception {
         this.ydw = ydw;
         this.isResumable = ydw.isResumable();
         this.token = token;
@@ -104,7 +104,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     }
 
     public WebSocketManager(YDWReg ydw, String token, @NotNull GateWayIntent intent, String status,
-                            int largeThreshold, ActivityConfig activity) throws Exception {
+            int largeThreshold, ActivityConfig activity) throws Exception {
         this(ydw, token, intent.getValue(), status, largeThreshold, activity);
     }
 
@@ -197,8 +197,8 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
 
         JsonNode heartbeat = JsonNodeFactory.instance.objectNode()
-                .put("op", OpCode.HEARTBEAT.getCode())
-                .put("d", d);
+            .put("op", OpCode.HEARTBEAT.getCode())
+            .put("d", d);
 
         if (missedHeartbeats >= 2) {
             missedHeartbeats = 0;
@@ -211,8 +211,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     }
 
     /**
-     /**
-     * After receiving Opcode 10 Hello, the client may begin sending Opcode 1 Heartbeat payloads
+     * /** After receiving Opcode 10 Hello, the client may begin sending Opcode 1 Heartbeat payloads
      * after heartbeat_interval * jitter milliseconds (where jitter is a random value between 0 and
      * 1), and every heartbeat_interval milliseconds thereafter. You may send heartbeats before this
      * interval elapses, but you should avoid doing so unless necessary. here is already tolerance
@@ -226,7 +225,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
         heartbeatThread = scheduler.scheduleAtFixedRate(() -> {
             try {
-                if(connected)
+                if (connected)
                     sendHeartbeat();
                 logger.info("Sending heartbeat");
             } catch (Exception e) {
@@ -266,21 +265,21 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     public void identify() {
 
         ObjectNode d = JsonNodeFactory.instance.objectNode()
-                .put("token", token)
-                .put("intents", intent)
-                .set("properties",
-                        JsonNodeFactory.instance.objectNode()
-                                .put("$os", "mac")
-                                .put("$browser", "YDL")
-                                .put("$device", "YDL"));
+            .put("token", token)
+            .put("intents", intent)
+            .set("properties",
+                    JsonNodeFactory.instance.objectNode()
+                        .put("$os", "mac")
+                        .put("$browser", "YDL")
+                        .put("$device", "YDL"));
 
         ObjectNode presence = JsonNodeFactory.instance.objectNode();
 
         if (activity != null) {
             ArrayNode activities = JsonNodeFactory.instance.arrayNode();
             activities.add(JsonNodeFactory.instance.objectNode()
-                    .put("name", activity.getName())
-                    .put("type", activity.getActivity()));
+                .put("name", activity.getName())
+                .put("type", activity.getActivity()));
             presence.set("activities", activities);
         }
 
