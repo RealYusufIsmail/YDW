@@ -26,8 +26,10 @@ import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.entities.GuildReg;
 import io.github.realyusufismail.ydwreg.entities.UserReg;
 import io.github.realyusufismail.ydwreg.entities.guild.ChannelReg;
+import io.github.realyusufismail.ydwreg.rest.error.RestApiError;
 import io.github.realyusufismail.ydwreg.rest.exception.RestApiException;
 import io.github.realyusufismail.ydwreg.rest.name.EndPoint;
+import io.github.realyusufismail.ydwreg.rest.request.YDWRequest;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -45,26 +47,27 @@ public class YDWCaller {
 
     private final Logger logger = LoggerFactory.getLogger(YDWCaller.class);
 
+    private final String token;
 
-    public YDWCaller(YDW ydw, OkHttpClient client) {
+
+    public YDWCaller(String token, YDW ydw, OkHttpClient client) {
         this.ydw = (YDWReg) ydw;
         this.client = client;
+        this.token = token;
     }
 
     @Nullable
     public User getUser(long id) {
-        Request request =
-                new Request.Builder().url(EndPoint.GET_USER.getFullEndpoint(String.valueOf(id)))
-                    .get()
-                    .build();
+        Request request = new YDWRequest()
+            .request(token, EndPoint.GET_USER.getFullEndpoint(String.valueOf(id)))
+            .get()
+            .build();
         try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful())
+                throw new IOException("Unexpected code " + response);
             var body = response.body();
-            if (body == null) {
-                return null;
-            } else {
-                JsonNode jsonNode = ydw.getMapper().readTree(body.string());
-                return new UserReg(jsonNode, jsonNode.get("id").asLong(), ydw);
-            }
+            JsonNode jsonNode = ydw.getMapper().readTree(body.string());
+            return new UserReg(jsonNode, jsonNode.get("id").asLong(), ydw);
         } catch (IOException e) {
             throw new RestApiException(e);
         }
@@ -72,13 +75,16 @@ public class YDWCaller {
 
     @Nullable
     public Guild getGuild(long id) {
-        Request request =
-                new Request.Builder().url(EndPoint.GET_GUILD.getFullEndpoint(String.valueOf(id)))
-                    .get()
-                    .build();
+        Request request = new YDWRequest()
+            .request(token, EndPoint.GET_GUILD.getFullEndpoint(String.valueOf(id)))
+            .get()
+            .build();
+
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful())
-                throw new IOException("Unexpected code " + response);
+                throw new IOException("Unexpected code " + RestApiError.fromCode(response.code())
+                        + " " + RestApiError.fromCode(response.code()).getMessage() + " "
+                        + response);
             var body = response.body();
             JsonNode jsonNode = ydw.getMapper().readTree(body.string());
             return new GuildReg(jsonNode, jsonNode.get("id").asLong(), ydw);
@@ -89,18 +95,16 @@ public class YDWCaller {
 
     @Nullable
     public Channel getChannel(long id) {
-        Request request =
-                new Request.Builder().url(EndPoint.GET_CHANNEL.getFullEndpoint(String.valueOf(id)))
-                    .get()
-                    .build();
+        Request request = new YDWRequest()
+            .request(token, EndPoint.GET_CHANNEL.getFullEndpoint(String.valueOf(id)))
+            .get()
+            .build();
         try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful())
+                throw new IOException("Unexpected code " + response);
             var body = response.body();
-            if (body == null) {
-                return null;
-            } else {
-                JsonNode jsonNode = ydw.getMapper().readTree(body.string());
-                return new ChannelReg(jsonNode, jsonNode.get("id").asLong(), ydw);
-            }
+            JsonNode jsonNode = ydw.getMapper().readTree(body.string());
+            return new ChannelReg(jsonNode, jsonNode.get("id").asLong(), ydw);
         } catch (IOException e) {
             throw new RestApiException(e);
         }

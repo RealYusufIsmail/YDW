@@ -28,6 +28,7 @@ import io.github.realyusufismail.ydwreg.entities.guild.MemberReg;
 import io.github.realyusufismail.ydwreg.json.YDWJson;
 import io.github.realyusufismail.ydwreg.rest.exception.InvalidJsonException;
 import io.github.realyusufismail.ydwreg.rest.name.EndPoint;
+import io.github.realyusufismail.ydwreg.rest.request.YDWRequest;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -45,15 +46,18 @@ public class GuildCaller {
 
     private final MediaType JSON;
 
-    public GuildCaller(@Nullable YDW ydw, MediaType json, OkHttpClient client) {
+    private final String token;
+
+    public GuildCaller(String token, @Nullable YDW ydw, MediaType json, OkHttpClient client) {
         this.ydw = (YDWReg) ydw;
         JSON = json;
         this.client = client;
+        this.token = token;
     }
 
     public @Nullable GuildPreview getGuildPreview(long guildId) {
         Request request =
-                new Request.Builder().url(EndPoint.GET_GUILD_PREVIEW.getFullEndpoint(guildId))
+                new YDWRequest().request(token, EndPoint.GET_GUILD_PREVIEW.getFullEndpoint(guildId))
                     .get()
                     .build();
         try {
@@ -78,7 +82,7 @@ public class GuildCaller {
 
         RequestBody body = RequestBody.create(json.toString(), JSON);
         String url = EndPoint.BAN_USER.getFullEndpoint(guildId, userId);
-        return new Request.Builder().url(url).post(body).build();
+        return new YDWRequest().request(token, url).post(body).build();
     }
 
     public @NotNull Request ban(long guildId, @NotNull String userId, Integer deleteMessageDays,
@@ -88,7 +92,7 @@ public class GuildCaller {
 
     public boolean isBanned(long guildId, long userId) {
         String url = EndPoint.GET_BAN.getFullEndpoint(guildId, userId);
-        Request request = new Request.Builder().url(url).get().build();
+        Request request = new YDWRequest().request(token, url).get().build();
         try {
             client.newCall(request).execute();
             return true;
@@ -103,7 +107,7 @@ public class GuildCaller {
 
     public @NotNull Request unBan(long guildId, long userId) {
         String url = EndPoint.UNBAN_USER.getFullEndpoint(guildId, userId);
-        return new Request.Builder().url(url).delete().build();
+        return new YDWRequest().request(token, url).delete().build();
     }
 
     public @NotNull Request unBan(long guildId, @NotNull String userId) {
@@ -112,7 +116,7 @@ public class GuildCaller {
 
     public @NotNull Request kickMember(long guildId, long userId) {
         String url = EndPoint.KICK_MEMBER.getFullEndpoint(guildId, userId);
-        return new Request.Builder().url(url).delete().build();
+        return new YDWRequest().request(token, url).delete().build();
     }
 
     public @NotNull Request kickMember(long guildId, @NotNull String userId) {
@@ -121,7 +125,7 @@ public class GuildCaller {
 
     public @Nullable Member getMember(long guildId, long memberId) {
         String url = EndPoint.GET_MEMBER.getFullEndpoint(guildId, memberId);
-        var request = new Request.Builder().url(url).get().build();
+        var request = new YDWRequest().request(token, url).get().build();
 
         try {
             var response = client.newCall(request).execute();

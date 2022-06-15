@@ -134,13 +134,15 @@ public class YDWReg implements YDW {
 
 
     @Override
-    public void login(String token, int gatewayIntents, String status, int largeThreshold,
-            ActivityConfig activity) throws Exception {
+    public void login(RestApiHandler handler, String token, int gatewayIntents, String status,
+            int largeThreshold, ActivityConfig activity) throws Exception {
         logger.info("Received login request");
-        ws = new WebSocketManager(this, token, gatewayIntents, status, largeThreshold, activity);
         this.token = token;
+        this.rest = handler;
+        ws = new WebSocketManager(this, token, gatewayIntents, status, largeThreshold, activity);
     }
 
+    @Override
     public String getToken() {
         return token;
     }

@@ -22,8 +22,10 @@ import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.entities.GuildReg;
+import io.github.realyusufismail.ydwreg.rest.error.RestApiError;
 import io.github.realyusufismail.ydwreg.rest.exception.RestApiException;
 import io.github.realyusufismail.ydwreg.rest.name.EndPoint;
+import io.github.realyusufismail.ydwreg.rest.request.YDWRequest;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
@@ -38,26 +40,29 @@ public class UserCaller {
 
     private final OkHttpClient client;
 
-    public UserCaller(@Nullable YDWReg ydw, OkHttpClient client) {
+    private final String token;
+
+    public UserCaller(String token, @Nullable YDWReg ydw, OkHttpClient client) {
         this.ydw = ydw;
         this.client = client;
+        this.token = token;
     }
 
     @NotNull
     public List<Guild> getGuilds() {
-        Request request = new Request.Builder().url(EndPoint.GET_CURRENT_USER_GUILDS.getEndpoint())
-            .get()
-            .build();
+        Request request =
+                new YDWRequest().request(token, EndPoint.GET_CURRENT_USER_GUILDS.getEndpoint())
+                    .get()
+                    .build();
         try (var response = client.newCall(request).execute()) {
+            if (!response.isSuccessful())
+                throw new IOException("Unexpected code " + RestApiError.fromCode(response.code())
+                        + " " + RestApiError.fromCode(response.code()).getMessage());
             var body = response.body();
-            if (body == null) {
-                return new ArrayList<>();
-            } else {
-                JsonNode json = ydw.getMapper().readTree(body.string());
-                List<Guild> guilds = new ArrayList<>();
-                for (JsonNode node : json) {
-                    guilds.add(new GuildReg(node, node.get("id").asLong(), ydw));
-                }
+            JsonNode json = ydw.getMapper().readTree(body.string());
+            List<Guild> guilds = new ArrayList<>();
+            for (JsonNode node : json) {
+                guilds.add(new GuildReg(node, node.get("id").asLong(), ydw));
             }
         } catch (IOException e) {
             throw new RestApiException(e);

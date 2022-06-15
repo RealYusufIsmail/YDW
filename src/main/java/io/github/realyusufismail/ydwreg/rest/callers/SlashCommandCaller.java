@@ -77,7 +77,7 @@ public class SlashCommandCaller {
 
         Request request = new Request.Builder()
             .url(EndPoint.GLOBAL_SLASH_COMMAND.getFullEndpoint(ydw.getSelfUser().getIdLong()))
-            .header("Authorization", "Bot  " + token)
+            .header("Authorization", "Bot " + token)
             .post(body)
             .build();
 
@@ -103,7 +103,7 @@ public class SlashCommandCaller {
 
         Request request = new Request.Builder()
             .url(EndPoint.GUILD_SLASH_COMMAND.getFullEndpoint(ydw.getSelfUser().getIdLong()))
-            .header("Authorization", "Bot  " + token)
+            .header("Authorization", "Bot " + token)
             .post(body)
             .build();
 

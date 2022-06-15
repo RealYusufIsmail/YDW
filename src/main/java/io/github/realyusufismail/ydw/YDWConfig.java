@@ -1,18 +1,17 @@
 package io.github.realyusufismail.ydw;
 
 import com.google.errorprone.annotations.CheckReturnValue;
-import com.neovisionaries.ws.client.WebSocketException;
-import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.exception.InvalidStatusException;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
+import io.github.realyusufismail.ydwreg.rest.RestApiStatus;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-
-public class YDwConfig {
+public class YDWConfig {
     private final String token;
     private final int gatewayIntents;
 
@@ -22,15 +21,18 @@ public class YDwConfig {
 
     private OkHttpClient client;
 
+    // logger
+    private static final Logger logger = LoggerFactory.getLogger(YDWConfig.class);
 
-    private YDwConfig(String token, int gatewayIntents) {
+
+    private YDWConfig(String token, int gatewayIntents) {
         this.token = token;
         this.gatewayIntents = 1 | gatewayIntents;
     }
 
     @NotNull
-    public static YDwConfig setDefault(String token) {
-        return new YDwConfig(token, GateWayIntent.DEFAULT_INTENTS);
+    public static YDWConfig setDefault(String token) {
+        return new YDWConfig(token, GateWayIntent.DEFAULT_INTENTS);
     }
 
     /**
@@ -41,8 +43,8 @@ public class YDwConfig {
      * @return The builder
      */
     @CheckReturnValue
-    public static @NotNull YDwConfig setUpBot(String token, @NotNull GateWayIntent intent) {
-        return new YDwConfig(token, intent.getValue());
+    public static @NotNull YDWConfig setUpBot(String token, @NotNull GateWayIntent intent) {
+        return new YDWConfig(token, intent.getValue());
     }
 
     /**
@@ -53,7 +55,7 @@ public class YDwConfig {
      * @see Status the class for more info
      */
     @NotNull
-    public YDwConfig setStatus(@NotNull Status status) {
+    public YDWConfig setStatus(@NotNull Status status) {
         this.status = status.getStatus();
         return this;
     }
@@ -66,7 +68,7 @@ public class YDwConfig {
      * @return ydwConnector
      */
     @NotNull
-    public YDwConfig setLargeThreshold(int largeThreshold) {
+    public YDWConfig setLargeThreshold(int largeThreshold) {
         this.largeThreshold = largeThreshold;
         return this;
     }
@@ -78,7 +80,7 @@ public class YDwConfig {
      * @return ydwConnector
      */
     @NotNull
-    public YDwConfig setActivity(ActivityConfig activity) {
+    public YDWConfig setActivity(ActivityConfig activity) {
         this.activity = activity;
         return this;
     }
@@ -91,13 +93,13 @@ public class YDwConfig {
      * @return ydwConnector
      */
     @NotNull
-    public YDwConfig setClient(OkHttpClient client) {
+    public YDWConfig setClient(OkHttpClient client) {
         this.client = client;
         return this;
     }
 
 
-    public YDW build() throws WebSocketException, IOException, InvalidStatusException {
+    public YDW build() throws Exception {
 
         if (token == null || token.isEmpty()) {
             throw new InvalidStatusException("Token is null");
@@ -106,14 +108,14 @@ public class YDwConfig {
         OkHttpClient client;
 
         if (this.client == null) {
-            client = new OkHttpClient().newBuilder().build();
+            client = new OkHttpClient();
         } else {
             client = this.client;
         }
 
         YDWReg ydw = new YDWReg(client);
-        new RestApiHandler(ydw);
-        new WebSocketManager(ydw, token, gatewayIntents, status, largeThreshold, activity);
+        var restApiHandler = new RestApiHandler(ydw, token);
+        ydw.login(restApiHandler, token, gatewayIntents, status, largeThreshold, activity);
         return ydw;
     }
 }

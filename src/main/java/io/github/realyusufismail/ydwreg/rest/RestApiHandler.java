@@ -1,12 +1,17 @@
 package io.github.realyusufismail.ydwreg.rest;
 
 import io.github.realyusufismail.ydwreg.YDWReg;
+import io.github.realyusufismail.ydwreg.exception.InvalidStatusException;
 import io.github.realyusufismail.ydwreg.rest.callers.*;
+import io.github.yusufsdiscordbot.config.Config;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
+import java.io.IOException;
 
 public class RestApiHandler {
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
@@ -17,40 +22,44 @@ public class RestApiHandler {
 
     private final String guildId;
 
+    private static RestApiStatus status = RestApiStatus.INITIALISING;
+
     private final String token;
 
-    private RestApiStatus status = RestApiStatus.INITIALISING;
+    // logger
+    private static final Logger logger = LoggerFactory.getLogger(RestApiHandler.class);
 
-    public RestApiHandler(@NotNull YDWReg ydw) {
+    public RestApiHandler(@NotNull YDWReg ydw, @NotNull String token) {
         this.ydw = ydw;
         this.client = ydw.getHttpClient();
-        ydw.setRest(this);
-        this.token = ydw.getToken();
         this.guildId = ydw.getGuildId();
+        this.token = token;
 
-        // after 1000ms, set the status to ready
-        new Thread(() -> {
+        // while ydw and token are null, we wait for them to be set
+        while (ydw == null || token == null) {
             try {
-                Thread.sleep(1000);
+                System.out.println("Waiting for ydw and token to be set");
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            status = RestApiStatus.CONNECTED;
-        }).start();
+        }
     }
 
-    private final GuildCaller guildRestApi = new GuildCaller(getYDW(), JSON, getHttpClient());
+    private final GuildCaller guildRestApi =
+            new GuildCaller(getToken(), getYDW(), JSON, getHttpClient());
 
-    private final UserCaller userCaller = new UserCaller(getYDW(), getHttpClient());
+    private final UserCaller userCaller = new UserCaller(getToken(), getYDW(), getHttpClient());
 
-    private final StickerCaller stickerCaller = new StickerCaller(getYDW(), getHttpClient());
+    private final StickerCaller stickerCaller =
+            new StickerCaller(getToken(), getYDW(), getHttpClient());
 
-    private final EmojiCaller emojiCaller = new EmojiCaller(getYDW(), getHttpClient());
+    private final EmojiCaller emojiCaller = new EmojiCaller(getToken(), getYDW(), getHttpClient());
 
-    private final ChannelCaller channelCaller = new ChannelCaller(getYDW(), getHttpClient());
+    private final ChannelCaller channelCaller =
+            new ChannelCaller(getToken(), getYDW(), getHttpClient());
 
-    private final YDWCaller ydwCaller = new YDWCaller(getYDW(), getHttpClient());
+    private final YDWCaller ydwCaller = new YDWCaller(getToken(), getYDW(), getHttpClient());
 
     private final SlashCommandCaller slashCommandCaller =
             new SlashCommandCaller(getToken(), getGuildId(), getYDW(), JSON, getHttpClient());
@@ -70,10 +79,6 @@ public class RestApiHandler {
             ydw = new YDWReg(getHttpClient());
         }
         return ydw;
-    }
-
-    public String getToken() {
-        return token;
     }
 
     public String getGuildId() {
@@ -135,8 +140,12 @@ public class RestApiHandler {
         return status;
     }
 
-    public void setStatus(RestApiStatus status) {
-        this.status = status;
+    public static void setStatus(RestApiStatus status) {
+        RestApiHandler.status = status;
+    }
+
+    public @Nullable String getToken() {
+        return token;
     }
 }
 

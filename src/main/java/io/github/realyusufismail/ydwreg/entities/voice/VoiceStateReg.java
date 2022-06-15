@@ -27,8 +27,10 @@ import io.github.realyusufismail.ydw.entities.voice.VoiceRegion;
 import io.github.realyusufismail.ydw.entities.voice.VoiceState;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.entities.guild.MemberReg;
+import io.github.realyusufismail.ydwreg.rest.error.RestApiError;
 import io.github.realyusufismail.ydwreg.rest.exception.RestApiException;
 import io.github.realyusufismail.ydwreg.rest.name.EndPoint;
+import io.github.realyusufismail.ydwreg.rest.request.YDWRequest;
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -89,18 +91,19 @@ public class VoiceStateReg implements VoiceState {
 
     private @NotNull List<VoiceRegion> getRegion() {
         Request request =
-                new Request.Builder().url(EndPoint.LIST_VOICE_REGIONS.getEndpoint()).get().build();
+                new YDWRequest().request(ydw.getToken(), EndPoint.LIST_VOICE_REGIONS.getEndpoint())
+                    .get()
+                    .build();
         var ydwReg = (YDWReg) ydw;
         try (var response = ydwReg.getHttpClient().newCall(request).execute()) {
+            if (!response.isSuccessful())
+                throw new IOException("Unexpected code " + RestApiError.fromCode(response.code())
+                        + " " + RestApiError.fromCode(response.code()).getMessage());
             var body = response.body();
-            if (body == null) {
-                return new ArrayList<>();
-            } else {
-                JsonNode json = ydwReg.getMapper().readTree(body.string());
-                List<VoiceRegion> voiceRegions = new ArrayList<>();
-                for (JsonNode node : json) {
-                    voiceRegions.add(new VoiceRegionReg(node, node.get("id").asText(), ydw));
-                }
+            JsonNode json = ydwReg.getMapper().readTree(body.string());
+            List<VoiceRegion> voiceRegions = new ArrayList<>();
+            for (JsonNode node : json) {
+                voiceRegions.add(new VoiceRegionReg(node, node.get("id").asText(), ydw));
             }
         } catch (IOException e) {
             throw new RestApiException(e);

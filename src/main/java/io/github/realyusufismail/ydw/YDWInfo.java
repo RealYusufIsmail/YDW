@@ -20,7 +20,8 @@ package io.github.realyusufismail.ydw;
 public class YDWInfo {
     public static final int DISCORD_REST_VERSION = 10;
     public static final int DISCORD_GATEWAY_VERSION = 9;
-    public static final int ydw_VERSION = 1;
+    public static final String ydw_VERSION = "0.0.1";
+
     public static final String DISCORD_GATEWAY_LINK =
             "wss://gateway.discord.gg/?v=" + DISCORD_GATEWAY_VERSION + "&encoding=json";
     public static final String DISCORD_REST_LINK =

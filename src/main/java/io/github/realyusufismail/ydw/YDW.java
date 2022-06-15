@@ -146,8 +146,8 @@ public interface YDW {
     }
 
 
-    void login(String token, int gatewayIntents, String status, int largeThreshold,
-            ActivityConfig activity) throws Exception;
+    void login(RestApiHandler handler, String token, int gatewayIntents, String status,
+            int largeThreshold, ActivityConfig activity) throws Exception;
 
 
     void setGuildId(String guildId);
@@ -185,4 +185,6 @@ public interface YDW {
     }
 
     EventInterface getEventInterface();
+
+    String getToken();
 }
