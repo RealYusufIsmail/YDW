@@ -36,6 +36,7 @@ import java.util.List;
 
 public interface YDW {
 
+
     /**
      * Used to indicate the connection status.
      */
@@ -146,8 +147,10 @@ public interface YDW {
     }
 
 
-    void login(RestApiHandler handler, String token, int gatewayIntents, String status,
-            int largeThreshold, ActivityConfig activity) throws Exception;
+    void login(String token, int gatewayIntents, String status, int largeThreshold,
+            ActivityConfig activity) throws Exception;
+
+    void loginForRest(String token);
 
 
     void setGuildId(String guildId);

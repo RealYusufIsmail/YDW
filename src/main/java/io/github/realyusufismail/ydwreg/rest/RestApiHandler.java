@@ -29,42 +29,20 @@ public class RestApiHandler {
     // logger
     private static final Logger logger = LoggerFactory.getLogger(RestApiHandler.class);
 
-    public RestApiHandler(@NotNull YDWReg ydw, @NotNull String token) {
+    public RestApiHandler(@NotNull YDWReg ydw, String token, OkHttpClient client) {
         this.ydw = ydw;
-        this.client = ydw.getHttpClient();
-        this.guildId = ydw.getGuildId();
+        this.client = client;
         this.token = token;
+        this.guildId = ydw.getGuildId();
 
-        // while ydw and token are null, we wait for them to be set
-        while (ydw == null || token == null) {
-            try {
-                System.out.println("Waiting for ydw and token to be set");
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        /*
+         * // while ydw and token are null, we wait for them to be set while (ydw == null || token
+         * == null) { try { System.out.println("Waiting for ydw and token to be set");
+         * Thread.sleep(100); } catch (InterruptedException e) { e.printStackTrace(); } }
+         * 
+         */
     }
 
-    private final GuildCaller guildRestApi =
-            new GuildCaller(getToken(), getYDW(), JSON, getHttpClient());
-
-    private final UserCaller userCaller = new UserCaller(getToken(), getYDW(), getHttpClient());
-
-    private final StickerCaller stickerCaller =
-            new StickerCaller(getToken(), getYDW(), getHttpClient());
-
-    private final EmojiCaller emojiCaller = new EmojiCaller(getToken(), getYDW(), getHttpClient());
-
-    private final ChannelCaller channelCaller =
-            new ChannelCaller(getToken(), getYDW(), getHttpClient());
-
-    private final YDWCaller ydwCaller = new YDWCaller(getToken(), getYDW(), getHttpClient());
-
-    private final SlashCommandCaller slashCommandCaller =
-            new SlashCommandCaller(getToken(), getGuildId(), getYDW(), JSON, getHttpClient());
-
-    private final MessageCaller messageCaller = new MessageCaller(getYDW(), JSON, getHttpClient());
 
 
     public OkHttpClient getHttpClient() {
@@ -85,67 +63,36 @@ public class RestApiHandler {
         return guildId;
     }
 
-    public @NotNull GuildCaller getGuildRestApi() {
-        return guildRestApi;
+    public @NotNull GuildCaller getGuildCaller() {
+        return new GuildCaller(token, ydw, JSON, client);
     }
 
     public @NotNull UserCaller getUseCaller() {
-        return userCaller;
+        return new UserCaller(token, ydw, client);
     }
 
     public @NotNull MessageCaller getMessageCaller() {
-        return messageCaller;
+        return new MessageCaller(ydw, JSON, client);
     }
 
     public @NotNull StickerCaller getStickerCaller() {
-        return stickerCaller;
+        return new StickerCaller(token, ydw, client);
     }
 
     public @NotNull YDWCaller getYDWCaller() {
-        return ydwCaller;
+        return new YDWCaller(token, ydw, client);
     }
 
     public @NotNull ChannelCaller getChannelCaller() {
-        return channelCaller;
+        return new ChannelCaller(token, ydw, client);
     }
 
     public @NotNull EmojiCaller getEmojiCaller() {
-        return emojiCaller;
+        return new EmojiCaller(token, ydw, client);
     }
 
     public @NotNull SlashCommandCaller getSlashCommandCaller() {
-        return slashCommandCaller;
-    }
-
-    public RestApiHandler awaitStatus(RestApiStatus status) {
-        if (status == this.status)
-            return this;
-
-        while (this.status != status) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return this;
-    }
-
-    public RestApiHandler awaitReady() {
-        return awaitStatus(RestApiStatus.CONNECTED);
-    }
-
-    public RestApiStatus getStatus() {
-        return status;
-    }
-
-    public static void setStatus(RestApiStatus status) {
-        RestApiHandler.status = status;
-    }
-
-    public @Nullable String getToken() {
-        return token;
+        return new SlashCommandCaller(token, guildId, ydw, JSON, client);
     }
 }
 

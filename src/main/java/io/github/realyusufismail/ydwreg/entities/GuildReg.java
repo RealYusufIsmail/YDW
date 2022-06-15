@@ -113,8 +113,6 @@ public class GuildReg implements Guild {
     private final List<NewsChannel> newsChannels = new ArrayList<>();
     private final List<StageChannel> stageChannels = new ArrayList<>();
     private final List<VoiceChannel> voiceChannels = new ArrayList<>();
-    @NotNull
-    GuildCaller restApi = getYDW().getRest().getGuildRestApi();
 
     public GuildReg(@NotNull JsonNode guildJ, long guildId, @NotNull YDW ydw) {
         this.ydw = ydw;
@@ -495,61 +493,61 @@ public class GuildReg implements Guild {
     @Override
     public @NotNull Action ban(@NotNull String userId, int deleteMessageDays, String reason) {
         Verify.checkAmount(deleteMessageDays, 7);
-        var request = restApi.ban(this.getIdLong(), userId, deleteMessageDays, reason);
+        var request = getGuildCaller().ban(this.getIdLong(), userId, deleteMessageDays, reason);
         return new ActionReg(request, ydw);
     }
 
     @Override
     public @NotNull Action ban(long userId, int deleteMessageDays, String reason) {
         Verify.checkAmount(deleteMessageDays, 7);
-        var request = restApi.ban(this.getIdLong(), userId, deleteMessageDays, reason);
+        var request = getGuildCaller().ban(this.getIdLong(), userId, deleteMessageDays, reason);
         return new ActionReg(request, ydw);
     }
 
     @NotNull
     @Override
     public Boolean isBanned(long userId) {
-        return restApi.isBanned(this.getIdLong(), userId);
+        return getGuildCaller().isBanned(this.getIdLong(), userId);
     }
 
     @NotNull
     @Override
     public Boolean isBanned(@NotNull String userId) {
-        return restApi.isBanned(this.getIdLong(), userId);
+        return getGuildCaller().isBanned(this.getIdLong(), userId);
     }
 
     @Override
     public @NotNull Action unBanUser(@NotNull String userId) {
-        var request = restApi.unBan(this.getIdLong(), userId);
+        var request = getGuildCaller().unBan(this.getIdLong(), userId);
         return new ActionReg(request, ydw);
     }
 
     @Override
     public @NotNull Action unBanUser(long userId) {
-        var request = restApi.unBan(this.getIdLong(), userId);
+        var request = getGuildCaller().unBan(this.getIdLong(), userId);
         return new ActionReg(request, ydw);
     }
 
     @Override
     public @NotNull Action kick(long userId) {
-        var request = restApi.kickMember(this.getIdLong(), userId);
+        var request = getGuildCaller().kickMember(this.getIdLong(), userId);
         return new ActionReg(request, ydw);
     }
 
     @Override
     public @NotNull Action kick(@NotNull String userId) {
-        var request = restApi.kickMember(this.getIdLong(), userId);
+        var request = getGuildCaller().kickMember(this.getIdLong(), userId);
         return new ActionReg(request, ydw);
     }
 
     @Override
     public @Nullable Member getMemberById(@NotNull String memberId) {
-        return restApi.getMember(this.getIdLong(), memberId);
+        return getGuildCaller().getMember(this.getIdLong(), memberId);
     }
 
     @Override
     public @NotNull Member getMemberById(long id) {
-        return restApi.getMember(this.getIdLong(), id);
+        return getGuildCaller().getMember(this.getIdLong(), id);
     }
 
     @Override
@@ -592,4 +590,8 @@ public class GuildReg implements Guild {
         return (YDWReg) ydw;
     }
 
+    @NotNull
+    private GuildCaller getGuildCaller() {
+        return ydw.getRest().getGuildCaller();
+    }
 }

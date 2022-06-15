@@ -21,9 +21,7 @@ public class YDWConfig {
 
     private OkHttpClient client;
 
-    // logger
-    private static final Logger logger = LoggerFactory.getLogger(YDWConfig.class);
-
+    private String guildId;
 
     private YDWConfig(String token, int gatewayIntents) {
         this.token = token;
@@ -98,6 +96,15 @@ public class YDWConfig {
         return this;
     }
 
+    /**
+     * the guild id for global Commands
+     *
+     * @param guildId guildId
+     */
+    public void setGuildId(String guildId) {
+        this.guildId = guildId;
+    }
+
 
     public YDW build() throws Exception {
 
@@ -114,8 +121,9 @@ public class YDWConfig {
         }
 
         YDWReg ydw = new YDWReg(client);
-        var restApiHandler = new RestApiHandler(ydw, token);
-        ydw.login(restApiHandler, token, gatewayIntents, status, largeThreshold, activity);
+        ydw.loginForRest(token);
+        ydw.setGuildId(guildId);
+        ydw.login(token, gatewayIntents, status, largeThreshold, activity);
         return ydw;
     }
 }

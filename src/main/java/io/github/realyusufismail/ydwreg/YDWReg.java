@@ -91,7 +91,7 @@ public class YDWReg implements YDW {
 
     @Override
     public Guild getGuild(long guildId) {
-        return getRest().awaitReady().getYDWCaller().getGuild(guildId);
+        return getRest().getYDWCaller().getGuild(guildId);
     }
 
     @Override
@@ -134,12 +134,16 @@ public class YDWReg implements YDW {
 
 
     @Override
-    public void login(RestApiHandler handler, String token, int gatewayIntents, String status,
-            int largeThreshold, ActivityConfig activity) throws Exception {
+    public void login(String token, int gatewayIntents, String status, int largeThreshold,
+            ActivityConfig activity) throws Exception {
         logger.info("Received login request");
         this.token = token;
-        this.rest = handler;
         ws = new WebSocketManager(this, token, gatewayIntents, status, largeThreshold, activity);
+    }
+
+    @Override
+    public void loginForRest(String token) {
+        rest = new RestApiHandler(this, token, client);
     }
 
     @Override

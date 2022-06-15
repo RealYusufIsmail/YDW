@@ -11,8 +11,10 @@ import io.github.realyusufismail.websocket.core.OpCode;
 import io.github.realyusufismail.websocket.handle.OnHandler;
 import io.github.realyusufismail.ydw.GateWayIntent;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.YDWInfo;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydwreg.YDWReg;
+import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,8 +80,8 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         this.status = status;
         this.largeThreshold = largeThreshold;
         this.activity = activity;
-        String gatewayUrl = "wss://gateway.discord.gg/?v=9&encoding=json";
-        ws = new WebSocketFactory().createSocket(gatewayUrl);
+        // Create a WebSocketFactory instance.
+        ws = new WebSocketFactory().createSocket(YDWInfo.DISCORD_GATEWAY_LINK);
         ws.addHeader("Accept-Encoding", "gzip");
         ws.addListener(this);
         ws.connect();
