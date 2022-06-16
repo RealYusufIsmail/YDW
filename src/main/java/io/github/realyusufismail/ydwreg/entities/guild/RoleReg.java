@@ -66,7 +66,7 @@ public class RoleReg implements Role {
         this.tags = role.hasNonNull("tags") ? new RoleTagsReg(role.get("tags"), ydw) : null;
 
         var perms = "permissions";
-        if (role.has(perms)) {
+        if (role.hasNonNull(perms)) {
             this.permissions = new Permission[role.get(perms).size()];
             for (int i = 0; i < role.get(perms).size(); i++) {
                 this.permissions[i] = Permission.getPermission(role.get(perms).get(i).asInt());

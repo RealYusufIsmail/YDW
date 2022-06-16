@@ -42,7 +42,7 @@ public class ChannelCaller {
     private final OkHttpClient client;
     private final String token;
 
-    public ChannelCaller(String token, @Nullable YDW ydw, OkHttpClient client) {
+    public ChannelCaller(String token, @NotNull YDW ydw, OkHttpClient client) {
         this.ydw = (YDWReg) ydw;
         this.client = client;
         this.token = token;

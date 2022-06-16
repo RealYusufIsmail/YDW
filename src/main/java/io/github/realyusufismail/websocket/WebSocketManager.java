@@ -105,7 +105,8 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     public void onHandelMessage(String message) throws Exception {
         try {
             JsonNode payload = mapper.readTree(message);
-            logger.debug("Received payload: {}", payload.toPrettyString());
+            // TODO: remember to remove this when done testing
+            System.out.println(payload.toPrettyString());
             onHandel(payload);
         } catch (Exception e) {
             logger.error("Error while handling message", e);
@@ -308,7 +309,6 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
     private void handleDisconnect(WebSocket websocket, WebSocketFrame serverCloseFrame,
             WebSocketFrame clientCloseFrame, boolean closedByServer) {
-        ydwReg.setApiStatus(YDW.ApiStatus.WEBSOCKET_DISCONNECTED);
         CloseCode closeCode = null;
         int rawCloseCode = 1005;
 

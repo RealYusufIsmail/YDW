@@ -34,15 +34,15 @@ public class InstallParamsReg implements InstallParams {
 
     public InstallParamsReg(@NotNull JsonNode perm) {
 
-        if (perm.has("scopes")) {
+        if (perm.hasNonNull("scopes")) {
             for (JsonNode scope : perm.get("scopes")) {
                 scopes.add(OAuth2Scopes.valueOf(scope.asText()));
             }
         }
 
-        permissions =
-                perm.has("permissions") ? Permission.getPermissions(perm.get("permissions").asInt())
-                        : null;
+        permissions = perm.hasNonNull("permissions")
+                ? Permission.getPermissions(perm.get("permissions").asInt())
+                : null;
     }
 
     @NotNull

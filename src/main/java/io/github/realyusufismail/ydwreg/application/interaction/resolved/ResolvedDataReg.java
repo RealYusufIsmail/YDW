@@ -47,7 +47,7 @@ public class ResolvedDataReg implements ResolvedData {
 
     public ResolvedDataReg(JsonNode data, YDW ydw) {
 
-        if (data.has("users")) {
+        if (data.hasNonNull("users")) {
             JsonNode users = data.get("users");
             for (JsonNode user : users) {
                 this.users.put(SnowFlake.of(user.get("id").asLong()),
@@ -55,7 +55,7 @@ public class ResolvedDataReg implements ResolvedData {
             }
         }
 
-        if (data.has("members")) {
+        if (data.hasNonNull("members")) {
             JsonNode members = data.get("members");
             for (JsonNode member : members) {
                 this.members.put(SnowFlake.of(member.get("id").asLong()),
@@ -63,7 +63,7 @@ public class ResolvedDataReg implements ResolvedData {
             }
         }
 
-        if (data.has("roles")) {
+        if (data.hasNonNull("roles")) {
             JsonNode roles = data.get("roles");
             for (JsonNode role : roles) {
                 this.roles.put(SnowFlake.of(role.get("id").asLong()),
@@ -71,7 +71,7 @@ public class ResolvedDataReg implements ResolvedData {
             }
         }
 
-        if (data.has("channels")) {
+        if (data.hasNonNull("channels")) {
             JsonNode channels = data.get("channels");
             for (JsonNode channel : channels) {
                 this.channels.put(SnowFlake.of(channel.get("id").asLong()),
@@ -79,7 +79,7 @@ public class ResolvedDataReg implements ResolvedData {
             }
         }
 
-        if (data.has("messages")) {
+        if (data.hasNonNull("messages")) {
             JsonNode messages = data.get("messages");
             for (JsonNode message : messages) {
                 this.messages.put(SnowFlake.of(message.get("id").asLong()),
@@ -87,7 +87,7 @@ public class ResolvedDataReg implements ResolvedData {
             }
         }
 
-        if (data.has("attachments")) {
+        if (data.hasNonNull("attachments")) {
             JsonNode attachments = data.get("attachments");
             for (JsonNode attachment : attachments) {
                 this.attachments.put(SnowFlake.of(attachment.get("id").asLong()),

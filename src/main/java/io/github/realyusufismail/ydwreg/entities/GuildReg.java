@@ -202,49 +202,49 @@ public class GuildReg implements Guild {
         final ArrayNode channels = (ArrayNode) guildJ.get("channels");
         final ArrayNode stickers = (ArrayNode) guildJ.get("stickers");
 
-        if (guildJ.has("roles")) {
+        if (guildJ.hasNonNull("roles")) {
             for (JsonNode roleJ : roles) {
                 Role role = new RoleReg(roleJ, ydw, roleJ.get("id").asLong());
                 this.roles.add(role);
             }
         }
 
-        if (guildJ.has("emojis")) {
+        if (guildJ.hasNonNull("emojis")) {
             for (JsonNode emojiJ : emojis) {
                 Emoji emoji = new EmojiReg(emojiJ, emojiJ.get("id").asLong(), ydw);
                 this.emoji.add(emoji);
             }
         }
 
-        if (guildJ.has("features")) {
+        if (guildJ.hasNonNull("features")) {
             for (JsonNode featureJ : features) {
                 GuildFeatures feature = GuildFeatures.getFeature(featureJ.asText());
                 this.features.add(feature);
             }
         }
 
-        if (guildJ.has("voice_states")) {
+        if (guildJ.hasNonNull("voice_states")) {
             for (JsonNode voiceStateJ : voiceStates) {
                 VoiceState voiceState = new VoiceStateReg(voiceStateJ, ydw);
                 this.voiceStates.add(voiceState);
             }
         }
 
-        if (guildJ.has("members")) {
+        if (guildJ.hasNonNull("members")) {
             for (JsonNode memberJ : members) {
                 Member member = new MemberReg(memberJ, ydw);
                 this.members.add(member);
             }
         }
 
-        if (guildJ.has("channels")) {
+        if (guildJ.hasNonNull("channels")) {
             for (JsonNode channelJ : channels) {
                 Channel channel = new ChannelReg(channelJ, channelJ.get("id").asLong(), ydw);
                 this.channels.add(channel);
             }
         }
 
-        if (guildJ.has("stickers")) {
+        if (guildJ.hasNonNull("stickers")) {
             for (JsonNode stickerJ : stickers) {
                 Sticker sticker = new StickerReg(stickerJ, stickerJ.get("id").asLong(), ydw);
                 this.stickers.add(sticker);

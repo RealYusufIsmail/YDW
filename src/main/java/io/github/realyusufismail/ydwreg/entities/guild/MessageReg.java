@@ -140,56 +140,56 @@ public class MessageReg implements Message {
                 ? ydw.getChannel(message.get("thread_channel_id").asLong())
                 : null;
 
-        if (message.has("mentions")) {
+        if (message.hasNonNull("mentions")) {
             for (JsonNode mention : message.get("mentions")) {
                 mentions.put(new UserReg(mention, mention.get("id").asLong(), ydw),
                         new MemberReg(mention, ydw));
             }
         }
 
-        if (message.has("mention_roles")) {
+        if (message.hasNonNull("mention_roles")) {
             for (JsonNode role : message.get("mention_roles")) {
                 roles.add(new RoleReg(role, ydw, role.get("id").asLong()));
             }
         }
 
-        if (message.has("mention_channels")) {
+        if (message.hasNonNull("mention_channels")) {
             for (JsonNode channel : message.get("mention_channels")) {
                 mentionedChannels.add(new ChannelReg(channel, channel.get("id").asLong(), ydw));
             }
         }
 
-        if (message.has("attachments")) {
+        if (message.hasNonNull("attachments")) {
             for (JsonNode attachment : message.get("attachments")) {
                 attachments.add(new AttachmentReg(attachment, attachment.get("id").asLong(), ydw));
             }
         }
 
-        if (message.has("embeds")) {
+        if (message.hasNonNull("embeds")) {
             for (JsonNode embed : message.get("embeds")) {
                 embeds.add(new EmbedReg(embed));
             }
         }
 
-        if (message.has("reactions")) {
+        if (message.hasNonNull("reactions")) {
             for (JsonNode reaction : message.get("reactions")) {
                 reactions.add(new ReactionReg(reaction, ydw));
             }
         }
 
-        if (message.has("stickers")) {
+        if (message.hasNonNull("stickers")) {
             for (JsonNode sticker : message.get("stickers")) {
                 stickers.add(new StickerReg(sticker, sticker.get("id").asLong(), ydw));
             }
         }
 
-        if (message.has("sticker_items")) {
+        if (message.hasNonNull("sticker_items")) {
             for (JsonNode sticker : message.get("sticker_items")) {
                 stickerItems.add(new StickerItemReg(sticker, ydw));
             }
         }
 
-        if (message.has("components")) {
+        if (message.hasNonNull("components")) {
             for (JsonNode component : message.get("components")) {
                 ComponentType type = ComponentType.valueOf(component.get("type").asText());
                 componentTypes.add(type);

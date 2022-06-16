@@ -55,24 +55,26 @@ public class TextChannelReg extends ChannelReg implements TextChannel {
         this.ydw = ydw;
         this.textChannelId = id;
 
-        this.guild =
-                messageJson.has("guild_id") ? ydw.getGuild(messageJson.get("guild_id").asLong())
-                        : null;
-        this.name = messageJson.has("name") ? messageJson.get("name").asText() : null;
-        this.topic = messageJson.has("topic") ? messageJson.get("topic").asText() : null;
-        this.nsfw = messageJson.has("nsfw") ? messageJson.get("nsfw").asBoolean() : null;
-        this.lastMessage = messageJson.has("last_message_id")
+        this.guild = messageJson.hasNonNull("guild_id")
+                ? ydw.getGuild(messageJson.get("guild_id").asLong())
+                : null;
+        this.name = messageJson.hasNonNull("name") ? messageJson.get("name").asText() : null;
+        this.topic = messageJson.hasNonNull("topic") ? messageJson.get("topic").asText() : null;
+        this.nsfw = messageJson.hasNonNull("nsfw") ? messageJson.get("nsfw").asBoolean() : null;
+        this.lastMessage = messageJson.hasNonNull("last_message_id")
                 ? ydw.getRest()
                     .getChannelCaller()
                     .getMessage(this.textChannelId, messageJson.get("last_message_id").asLong())
                 : null;
-        this.position = messageJson.has("position") ? messageJson.get("position").asInt() : null;
-        this.rateLimitPerUser = messageJson.has("rate_limit_per_user")
+        this.position =
+                messageJson.hasNonNull("position") ? messageJson.get("position").asInt() : null;
+        this.rateLimitPerUser = messageJson.hasNonNull("rate_limit_per_user")
                 ? messageJson.get("rate_limit_per_user").asInt()
                 : null;
-        this.parentId = messageJson.has("parent_id") ? messageJson.get("parent_id").asLong() : null;
+        this.parentId =
+                messageJson.hasNonNull("parent_id") ? messageJson.get("parent_id").asLong() : null;
 
-        if (messageJson.has("permission_overwrites")) {
+        if (messageJson.hasNonNull("permission_overwrites")) {
             for (JsonNode permission : messageJson.get("permission_overwrites")) {
                 permissionOverwrites
                     .add(new OverwriteReg(permission, permission.get("id").asLong(), ydw));
