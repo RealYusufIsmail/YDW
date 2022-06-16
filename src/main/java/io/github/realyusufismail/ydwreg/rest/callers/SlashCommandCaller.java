@@ -81,6 +81,8 @@ public class SlashCommandCaller {
             .post(body)
             .build();
 
+        System.out.println("Calling Global Slash Command");
+
         client.newCall(request).enqueue(new YDWCallback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -106,6 +108,8 @@ public class SlashCommandCaller {
             .header("Authorization", "Bot " + token)
             .post(body)
             .build();
+
+        System.out.println("Calling guild only slash command");
 
         client.newCall(request).enqueue(new YDWCallback() {
             @Override

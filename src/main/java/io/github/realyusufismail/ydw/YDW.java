@@ -30,6 +30,7 @@ import io.github.realyusufismail.ydwreg.application.interaction.InteractionManag
 import io.github.realyusufismail.ydwreg.entities.guild.manager.GuildManager;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
@@ -160,10 +161,7 @@ public interface YDW {
     void login(String token, int gatewayIntents, String status, int largeThreshold,
             ActivityConfig activity) throws Exception;
 
-    void loginForRest(String token);
-
-
-    void setGuildId(String guildId);
+    void loginForRest(String token, @Nullable String guildId);
 
     long getPing();
 

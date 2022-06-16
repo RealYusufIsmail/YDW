@@ -14,7 +14,7 @@ public interface SlashCommandBuilder {
      * @return true if the command should be available in specified guild or false were it is
      *         available for all guilds.
      */
-    Boolean isGuildOnly();
+    boolean setToGuildOnly(boolean toGuildOnly);
 
     SlashCommandBuilder setOption(OptionType optionType, String name, String description,
             boolean required);

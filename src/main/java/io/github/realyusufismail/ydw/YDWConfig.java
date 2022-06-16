@@ -101,8 +101,9 @@ public class YDWConfig {
      *
      * @param guildId guildId
      */
-    public void setGuildId(String guildId) {
+    public YDWConfig setGuildId(String guildId) {
         this.guildId = guildId;
+        return this;
     }
 
 
@@ -121,8 +122,7 @@ public class YDWConfig {
         }
 
         YDWReg ydw = new YDWReg(client);
-        ydw.loginForRest(token);
-        ydw.setGuildId(guildId);
+        ydw.loginForRest(token, guildId);
         ydw.login(token, gatewayIntents, status, largeThreshold, activity);
         return ydw;
     }

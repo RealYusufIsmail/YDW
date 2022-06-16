@@ -29,11 +29,12 @@ public class RestApiHandler {
     // logger
     private static final Logger logger = LoggerFactory.getLogger(RestApiHandler.class);
 
-    public RestApiHandler(@NotNull YDWReg ydw, String token, OkHttpClient client) {
+    public RestApiHandler(@NotNull YDWReg ydw, String token, OkHttpClient client,
+            @Nullable String guildId) {
         this.ydw = ydw;
         this.client = client;
         this.token = token;
-        this.guildId = ydw.getGuildId();
+        this.guildId = guildId;
 
         /*
          * // while ydw and token are null, we wait for them to be set while (ydw == null || token
@@ -57,10 +58,6 @@ public class RestApiHandler {
             ydw = new YDWReg(getHttpClient());
         }
         return ydw;
-    }
-
-    public String getGuildId() {
-        return guildId;
     }
 
     public @NotNull GuildCaller getGuildCaller() {

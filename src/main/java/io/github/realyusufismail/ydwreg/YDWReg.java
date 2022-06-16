@@ -36,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
@@ -167,18 +168,13 @@ public class YDWReg implements YDW {
     }
 
     @Override
-    public void loginForRest(String token) {
-        rest = new RestApiHandler(this, token, client);
+    public void loginForRest(String token, @Nullable String guildId) {
+        rest = new RestApiHandler(this, token, client, guildId);
     }
 
     @Override
     public String getToken() {
         return token;
-    }
-
-    @Override
-    public void setGuildId(String guildId) {
-        this.guildId = guildId;
     }
 
     public String getGuildId() {

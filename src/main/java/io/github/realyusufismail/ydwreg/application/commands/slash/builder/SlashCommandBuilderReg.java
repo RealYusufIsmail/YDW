@@ -36,7 +36,7 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
     private static OptionType optionType;
     private static boolean optionRequired;
 
-    private static boolean guildOnly;
+    private final Boolean guildOnly = false;
 
     public SlashCommandBuilderReg(@NotNull YDW ydw, String name, String description) {
         this.caller = ydw.getRest().getSlashCommandCaller();
@@ -44,9 +44,10 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
         caller.setDescription(description);
     }
 
+
     @Override
-    public Boolean isGuildOnly() {
-        return guildOnly;
+    public boolean setToGuildOnly(boolean toGuildOnly) {
+        return guildOnly.equals(toGuildOnly);
     }
 
     @Override
@@ -113,12 +114,13 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
     }
 
     public SlashCommandBuilder call() {
-
+        System.out.println("guildOnly: " + guildOnly);
         if (guildOnly) {
             caller.callGuildOnlyCommand();
         } else {
             caller.callGlobalCommand();
         }
+
         return this;
     }
 }
