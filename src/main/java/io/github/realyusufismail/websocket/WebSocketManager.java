@@ -105,6 +105,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     public void onHandelMessage(String message) throws Exception {
         try {
             JsonNode payload = mapper.readTree(message);
+            logger.debug("Received payload: {}", payload.toPrettyString());
             onHandel(payload);
         } catch (Exception e) {
             logger.error("Error while handling message", e);

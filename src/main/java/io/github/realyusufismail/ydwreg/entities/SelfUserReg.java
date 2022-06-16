@@ -30,11 +30,8 @@ import java.util.function.Consumer;
 
 public class SelfUserReg extends UserReg implements SelfUser {
     private Long applicationId;
-    @NotNull
     private final Boolean isMfaEnabled;
-    @NotNull
     private final Integer allowedFileSize;
-    @NotNull
     private final Boolean isVerified;
 
     public SelfUserReg(@NotNull JsonNode user, long userId, @NotNull YDW ydw) {
@@ -42,7 +39,8 @@ public class SelfUserReg extends UserReg implements SelfUser {
 
         applicationId = userId;
         isMfaEnabled = user.get("mfa_enabled").asBoolean();
-        allowedFileSize = user.get("max_file_size").asInt();
+        allowedFileSize =
+                user.hasNonNull("allowed_file_size") ? user.get("allowed_file_size").asInt() : null;
         isVerified = user.get("verified").asBoolean();
 
         SelfUserReg bot =

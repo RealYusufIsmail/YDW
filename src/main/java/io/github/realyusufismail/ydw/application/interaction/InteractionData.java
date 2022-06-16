@@ -17,7 +17,7 @@
 
 package io.github.realyusufismail.ydw.application.interaction;
 
-import io.github.realyusufismail.ydw.application.commands.option.OptionType;
+import io.github.realyusufismail.ydw.application.commands.CommandTypes;
 import io.github.realyusufismail.ydw.application.interaction.resolved.ResolvedData;
 import io.github.realyusufismail.ydw.entities.GenericEntity;
 import io.github.realyusufismail.ydw.entities.Guild;
@@ -31,7 +31,7 @@ import java.util.Optional;
 public interface InteractionData extends SnowFlake, GenericEntity {
     String getName();
 
-    OptionType getType();
+    CommandTypes getType();
 
     Optional<ResolvedData> getResolvedData();
 
