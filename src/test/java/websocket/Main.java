@@ -14,6 +14,8 @@ public class Main {
 
         ydw.awaitReady().newSlashCommand("ping", "responds with pong");
 
+        ydw.awaitReady().newSlashCommand("guild", "A guild only command").isGuildOnly();
+
         // ydw.onEvent(ReadyEvent.class).subscribe(event -> {
         // System.out.println("Ready!");
         // });

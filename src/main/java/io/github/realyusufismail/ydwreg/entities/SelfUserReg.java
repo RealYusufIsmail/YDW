@@ -34,7 +34,7 @@ public class SelfUserReg extends UserReg implements SelfUser {
     private final Integer allowedFileSize;
     private final Boolean isVerified;
 
-    public SelfUserReg(@NotNull JsonNode user, long userId, @NotNull YDW ydw) {
+    public SelfUserReg(@NotNull JsonNode user, long userId, @NotNull YDWReg ydw) {
         super(user, userId, ydw);
 
         applicationId = userId;
@@ -43,18 +43,7 @@ public class SelfUserReg extends UserReg implements SelfUser {
                 user.hasNonNull("allowed_file_size") ? user.get("allowed_file_size").asInt() : null;
         isVerified = user.get("verified").asBoolean();
 
-        SelfUserReg bot = null;
-        try {
-            bot = (SelfUserReg) (getYDWReg().isSelfUserThere() ? getYDW().getSelfUser() : null);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        if (bot == null) {
-            long id = user.get("id").asLong();
-            bot = new SelfUserReg(user, id, getYDW());
-            getYDWReg().setSelfUser(bot);
-        }
+        ydw.setSelfUserId(userId);
 
         if (!user.get("application_id").isNull())
             this.applicationId = user.get("application_id").asLong();

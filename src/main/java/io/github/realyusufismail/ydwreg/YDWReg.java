@@ -74,6 +74,8 @@ public class YDWReg implements YDW {
     private String guildId;
     private String token;
 
+    private long selfUserId;
+
     public YDWReg(@NotNull OkHttpClient client) {
         mapper = new ObjectMapper();
         this.client = client;
@@ -242,8 +244,6 @@ public class YDWReg implements YDW {
     @Override
     public @NotNull SelfUser getSelfUser() throws InterruptedException {
         Optional<SelfUser> user = Optional.ofNullable(this.selfUser);
-        // wait for the status to be ready
-        awaitStatus(ApiStatus.READY_EVENT);
         return user.orElseThrow(() -> new IllegalStateException("Self user is not set"));
     }
 
@@ -327,5 +327,13 @@ public class YDWReg implements YDW {
 
     public Logger getLogger() {
         return logger;
+    }
+
+    public void setSelfUserId(long userId) {
+        this.selfUserId = userId;
+    }
+
+    public long getSelfUserId() {
+        return selfUserId;
     }
 }

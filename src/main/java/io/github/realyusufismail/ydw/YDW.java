@@ -193,11 +193,16 @@ public interface YDW {
 
     GuildManager getGuildManager();
 
-    default SlashCommandBuilder newSlashCommand(String name, String description) {
+    default SlashCommandBuilder newSlashCommand(String name, String description)
+            throws InterruptedException {
+        // wait until the api is ready
+        awaitReady();
         return new SlashCommandBuilderReg(this, name, description).call();
     }
 
     EventInterface getEventInterface();
 
     String getToken();
+
+    long getSelfUserId();
 }
