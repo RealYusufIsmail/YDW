@@ -50,7 +50,7 @@ public enum EndPoint {
     GET_CURRENT_USER(YDWInfo.DISCORD_REST_LINK + "/users/@me"),
     GET_USER(YDWInfo.DISCORD_REST_LINK + "/users/%s"),
     GET_CURRENT_USER_GUILD_MEMBER(YDWInfo.DISCORD_REST_LINK + "/users/@me/guilds/%s/member"),
-    GET_CURRENT_USER_GUILDS(YDWInfo.DISCORD_REST_LINK + "/users/@me/guilds/%s"),
+    GET_CURRENT_USER_GUILDS(YDWInfo.DISCORD_REST_LINK + "/users/@me/guilds"),
     LEAVE_GUILD(YDWInfo.DISCORD_REST_LINK + "/users/@me/guilds/%s"),
     CREATE_DM(YDWInfo.DISCORD_REST_LINK + "/users/@me/channels"),
 
