@@ -10,9 +10,9 @@ public class Main {
     public static void main(String[] args) throws Exception {
         YDW ydw = YDWConfig.setDefault(Config.getString("TOKEN")).setStatus(Status.ONLINE).build();
 
-        // ydw.setGuildId("938122131949097052");
+        ydw.setGuildId("938122131949097052");
 
-        // ydw.awaitReady().newSlashCommand("ping", "responds with pong");
+        ydw.awaitReady().newSlashCommand("ping", "responds with pong");
 
         // ydw.onEvent(ReadyEvent.class).subscribe(event -> {
         // System.out.println("Ready!");

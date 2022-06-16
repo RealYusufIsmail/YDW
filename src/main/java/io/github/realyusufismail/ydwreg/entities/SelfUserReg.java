@@ -43,8 +43,12 @@ public class SelfUserReg extends UserReg implements SelfUser {
                 user.hasNonNull("allowed_file_size") ? user.get("allowed_file_size").asInt() : null;
         isVerified = user.get("verified").asBoolean();
 
-        SelfUserReg bot =
-                (SelfUserReg) (getYDWReg().isSelfUserThere() ? getYDW().getSelfUser() : null);
+        SelfUserReg bot = null;
+        try {
+            bot = (SelfUserReg) (getYDWReg().isSelfUserThere() ? getYDW().getSelfUser() : null);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         if (bot == null) {
             long id = user.get("id").asLong();

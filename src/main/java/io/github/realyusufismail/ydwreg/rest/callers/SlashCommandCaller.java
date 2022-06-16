@@ -75,11 +75,16 @@ public class SlashCommandCaller {
 
         RequestBody body = RequestBody.create(slashCommandJson().toString(), JSON);
 
-        Request request = new Request.Builder()
-            .url(EndPoint.GLOBAL_SLASH_COMMAND.getFullEndpoint(ydw.getSelfUser().getIdLong()))
-            .header("Authorization", "Bot " + token)
-            .post(body)
-            .build();
+        Request request = null;
+        try {
+            request = new Request.Builder()
+                .url(EndPoint.GLOBAL_SLASH_COMMAND.getFullEndpoint(ydw.getSelfUser().getIdLong()))
+                .header("Authorization", "Bot " + token)
+                .post(body)
+                .build();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         client.newCall(request).enqueue(new YDWCallback() {
             @Override
@@ -101,11 +106,16 @@ public class SlashCommandCaller {
 
         RequestBody body = RequestBody.create(slashCommandJson().toString(), JSON);
 
-        Request request = new Request.Builder()
-            .url(EndPoint.GUILD_SLASH_COMMAND.getFullEndpoint(ydw.getSelfUser().getIdLong()))
-            .header("Authorization", "Bot " + token)
-            .post(body)
-            .build();
+        Request request = null;
+        try {
+            request = new Request.Builder()
+                .url(EndPoint.GUILD_SLASH_COMMAND.getFullEndpoint(ydw.getSelfUser().getIdLong()))
+                .header("Authorization", "Bot " + token)
+                .post(body)
+                .build();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         client.newCall(request).enqueue(new YDWCallback() {
             @Override

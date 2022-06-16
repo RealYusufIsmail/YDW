@@ -36,7 +36,6 @@ import java.util.List;
 
 public interface YDW {
 
-
     /**
      * Used to indicate the connection status.
      */
@@ -73,6 +72,10 @@ public interface YDW {
          * Everything has gone well and YDW has received the right information from Discord.
          */
         READY(true),
+        /**
+         * Indicates that you have received the ready event.
+         */
+        READY_EVENT(true),
         /**
          * Indicates that the websocket has disconnected, will try to resume.
          */
@@ -111,6 +114,13 @@ public interface YDW {
         public boolean isInitialized() {
             return isInitialized;
         }
+    }
+
+
+    YDW awaitStatus(ApiStatus status) throws InterruptedException;
+
+    default YDW awaitReady() throws InterruptedException {
+        return awaitStatus(ApiStatus.READY_EVENT);
     }
 
     @NotNull
@@ -171,7 +181,7 @@ public interface YDW {
 
     boolean needsToAutoReconnect();
 
-    SelfUser getSelfUser();
+    SelfUser getSelfUser() throws InterruptedException;
 
     <EventClass extends Event> Flux<EventClass> onEvent(Class<EventClass> event);
 

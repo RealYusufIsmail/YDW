@@ -79,6 +79,29 @@ public class YDWReg implements YDW {
         this.client = client;
     }
 
+    @Override
+    public YDW awaitStatus(ApiStatus status) throws InterruptedException {
+        if (!status.isInitialized()) {
+            throw new IllegalArgumentException("Status is not part of the initialising state");
+        }
+
+        if (this.status == status)
+            return this;
+        List<ApiStatus> statuses = List.of(status);
+        while (!getStatus().isInitialized() || getStatus().ordinal() < status.ordinal()) {
+            if (getStatus() == ApiStatus.SHUT_DOWN)
+                throw new IllegalStateException("Bot is shut down");
+            else if (statuses.contains(getStatus()))
+                return this;
+            Thread.sleep(100);
+        }
+        return this;
+    }
+
+    public ApiStatus getStatus() {
+        return status;
+    }
+
     @NotNull
     @Override
     public List<Guild> getGuilds() {
@@ -217,12 +240,11 @@ public class YDWReg implements YDW {
     }
 
     @Override
-    public @NotNull SelfUser getSelfUser() {
+    public @NotNull SelfUser getSelfUser() throws InterruptedException {
         Optional<SelfUser> user = Optional.ofNullable(this.selfUser);
-        if (user.isPresent())
-            return user.get();
-        else
-            throw new IllegalStateException("Self user is not set");
+        // wait for the status to be ready
+        awaitStatus(ApiStatus.READY_EVENT);
+        return user.orElseThrow(() -> new IllegalStateException("Self user is not set"));
     }
 
     public void setSelfUser(@NotNull SelfUser selfUser) {

@@ -41,6 +41,7 @@ public class ReadyHandler extends Handle {
 
     @Override
     public void start() {
+        ydw.setApiStatus(YDW.ApiStatus.READY_EVENT);
         String sessionId = json.get("session_id").asText();
         WebSocketManager.setSessionId(sessionId);
 
