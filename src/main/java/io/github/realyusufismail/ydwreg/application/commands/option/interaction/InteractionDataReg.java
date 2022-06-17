@@ -15,7 +15,7 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.ydwreg.application.interaction;
+package io.github.realyusufismail.ydwreg.application.commands.option.interaction;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
@@ -23,7 +23,7 @@ import io.github.realyusufismail.ydw.application.commands.CommandTypes;
 import io.github.realyusufismail.ydw.application.interaction.InteractionData;
 import io.github.realyusufismail.ydw.application.interaction.resolved.ResolvedData;
 import io.github.realyusufismail.ydw.entities.Guild;
-import io.github.realyusufismail.ydwreg.application.interaction.resolved.ResolvedDataReg;
+import io.github.realyusufismail.ydwreg.application.commands.option.interaction.resolved.ResolvedDataReg;
 import io.github.realyusufismail.ydwreg.message_components.ComponentType;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.Nullable;

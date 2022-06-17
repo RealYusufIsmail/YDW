@@ -13,20 +13,20 @@ public class EventSystem implements EventSender {
 
     @Override
     public void register(Object consumer) {
-        if (consumer instanceof BasicEvent) {
-            listeners.add((EventHandler) consumer);
-        } else {
-            throw new IllegalArgumentException("Consumer must be an instance of Event");
+        if (!(consumer instanceof EventHandler)) {
+            throw new IllegalArgumentException("Consumer must implement EventHandler");
         }
+
+        listeners.add((EventHandler) consumer);
     }
 
     @Override
     public void unregister(Object consumer) {
-        if (consumer instanceof BasicEvent) {
-            listeners.remove(consumer);
-        } else {
-            throw new IllegalArgumentException("Consumer must be an instance of Event");
+        if (!(consumer instanceof EventHandler)) {
+            throw new IllegalArgumentException("Consumer must implement EventHandler");
         }
+
+        listeners.remove((EventHandler) consumer);
     }
 
     @Override

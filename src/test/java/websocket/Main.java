@@ -19,6 +19,5 @@ public class Main {
             .newSlashCommand("guild", "A guild only command")
             .setToGuildOnly(true)
             .call();
-
     }
 }

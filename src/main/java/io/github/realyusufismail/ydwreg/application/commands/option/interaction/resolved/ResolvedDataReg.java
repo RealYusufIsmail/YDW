@@ -15,7 +15,7 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.ydwreg.application.interaction.resolved;
+package io.github.realyusufismail.ydwreg.application.commands.option.interaction.resolved;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;

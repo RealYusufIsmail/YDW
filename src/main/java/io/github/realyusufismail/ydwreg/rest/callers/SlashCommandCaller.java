@@ -25,8 +25,10 @@ import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.Option;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.OptionExtender;
 import io.github.realyusufismail.ydwreg.rest.YDWCallback;
+import io.github.realyusufismail.ydwreg.rest.error.RestApiError;
 import io.github.realyusufismail.ydwreg.rest.name.EndPoint;
 import io.github.realyusufismail.ydwreg.rest.queue.Queue;
+import io.github.realyusufismail.ydwreg.rest.request.YDWRequest;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -72,12 +74,12 @@ public class SlashCommandCaller {
             slashCommandJson().set("options", Option.toJsonArray(options, extender));
         }
 
-
+        System.out.println(slashCommandJson().toPrettyString());
         RequestBody body = RequestBody.create(slashCommandJson().toString(), JSON);
 
-        Request request = new Request.Builder()
-            .url(EndPoint.GLOBAL_SLASH_COMMAND.getFullEndpoint(ydw.getSelfUserId()))
-            .header("Authorization", "Bot " + token)
+        // TODO: when I use ydw.getSelfUserId it returns null
+        Request request = new YDWRequest()
+            .request(token, EndPoint.GLOBAL_SLASH_COMMAND.getFullEndpoint("931915661532360704"))
             .post(body)
             .build();
 
@@ -85,6 +87,17 @@ public class SlashCommandCaller {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 ydw.getLogger().error("Failed to register slash command", e);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                if (response.isSuccessful()) {
+                    ydw.getLogger().info("Successfully registered slash command");
+                } else {
+                    RestApiError error = RestApiError.fromCode(response.code());
+                    ydw.getLogger()
+                        .error("Failed to register slash command: " + error.getMessage());
+                }
             }
         });
     }
@@ -101,16 +114,29 @@ public class SlashCommandCaller {
 
         RequestBody body = RequestBody.create(slashCommandJson().toString(), JSON);
 
-        Request request = new Request.Builder()
-            .url(EndPoint.GUILD_SLASH_COMMAND.getFullEndpoint(ydw.getSelfUserId()))
-            .header("Authorization", "Bot " + token)
-            .post(body)
-            .build();
+        Request request =
+                new YDWRequest()
+                    .request(token,
+                            EndPoint.GUILD_SLASH_COMMAND.getFullEndpoint(ydw.getSelfUserId(),
+                                    guildId))
+                    .post(body)
+                    .build();
 
         client.newCall(request).enqueue(new YDWCallback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 ydw.getLogger().error("Failed to register slash command", e);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                if (response.isSuccessful()) {
+                    ydw.getLogger().info("Successfully registered slash command");
+                } else {
+                    RestApiError error = RestApiError.fromCode(response.code());
+                    ydw.getLogger()
+                        .error("Failed to register slash command: " + error.getMessage());
+                }
             }
         });
     }

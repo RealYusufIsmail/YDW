@@ -45,8 +45,8 @@ public class SelfUserReg extends UserReg implements SelfUser {
 
         ydw.setSelfUserId(userId);
 
-        if (!user.get("application_id").isNull())
-            this.applicationId = user.get("application_id").asLong();
+        this.applicationId =
+                user.hasNonNull("application_id") ? user.get("application_id").asLong() : null;
     }
 
     @NotNull

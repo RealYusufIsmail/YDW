@@ -28,7 +28,7 @@ import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.entities.*;
 import io.github.realyusufismail.ydw.entities.guild.Channel;
-import io.github.realyusufismail.ydwreg.application.interaction.InteractionManager;
+import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
 import io.github.realyusufismail.ydwreg.entities.guild.manager.GuildManager;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import okhttp3.OkHttpClient;
@@ -74,7 +74,7 @@ public class YDWReg implements YDW {
     private String guildId;
     private String token;
 
-    private long selfUserId;
+    private Long selfUserId;
 
     private final ExecutorService executorService;
 
@@ -336,6 +336,9 @@ public class YDWReg implements YDW {
     }
 
     public long getSelfUserId() {
+        //TODO: Self user is not being set. Deal with this.
+        if (selfUserId == null)
+            throw new IllegalStateException("Self user is not set");
         return selfUserId;
     }
 

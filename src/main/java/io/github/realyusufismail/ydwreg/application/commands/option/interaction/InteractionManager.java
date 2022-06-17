@@ -1,4 +1,4 @@
-package io.github.realyusufismail.ydwreg.application.interaction;
+package io.github.realyusufismail.ydwreg.application.commands.option.interaction;
 
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.application.Interaction;

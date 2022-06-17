@@ -164,7 +164,7 @@ public class YDWConfig {
         }
 
         YDWReg ydw = new YDWReg(client, executorService);
-        ydw.setEventHandler(handlers);
+        handlers.forEach(ydw::setEventHandler);
         ydw.loginForRest(token, guildId);
         ydw.login(token, gatewayIntents, status, largeThreshold, activity);
         return ydw;

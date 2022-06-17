@@ -93,4 +93,13 @@ public enum EndPoint {
         }
         return sb.toString();
     }
+
+    public String getFullEndpoint(Object... parms) {
+        StringBuilder sb = new StringBuilder(endpoint);
+        // replaces %s with parms
+        for (Object parm : parms) {
+            sb.replace(sb.indexOf("%s"), sb.indexOf("%s") + 2, parm.toString());
+        }
+        return sb.toString();
+    }
 }
