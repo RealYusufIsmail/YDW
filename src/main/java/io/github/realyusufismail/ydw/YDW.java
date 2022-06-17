@@ -33,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import reactor.core.publisher.Flux;
 
+import javax.annotation.CheckReturnValue;
 import java.util.List;
 
 public interface YDW {
@@ -191,11 +192,13 @@ public interface YDW {
 
     GuildManager getGuildManager();
 
-    default SlashCommandBuilder newSlashCommand(String name, String description)
+    @CheckReturnValue
+
+    default SlashCommandBuilderReg newSlashCommand(String name, String description)
             throws InterruptedException {
         // wait until the api is ready
         awaitReady();
-        return new SlashCommandBuilderReg(this, name, description).call();
+        return new SlashCommandBuilderReg(this, name, description);
     }
 
     EventInterface getEventInterface();

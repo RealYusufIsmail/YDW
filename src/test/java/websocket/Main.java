@@ -13,9 +13,12 @@ public class Main {
             .setGuildId("938122131949097052")
             .build();
 
-        ydw.awaitReady().newSlashCommand("ping", "responds with pong");
+        ydw.awaitReady().newSlashCommand("ping", "responds with pong").call();
 
-        ydw.awaitReady().newSlashCommand("guild", "A guild only command").setToGuildOnly(true);
+        ydw.awaitReady()
+            .newSlashCommand("guild", "A guild only command")
+            .setToGuildOnly(true)
+            .call();
 
         // ydw.onEvent(ReadyEvent.class).subscribe(event -> {
         // System.out.println("Ready!");

@@ -36,7 +36,7 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
     private static OptionType optionType;
     private static boolean optionRequired;
 
-    private final Boolean guildOnly = false;
+    private Boolean guildOnly = false;
 
     public SlashCommandBuilderReg(@NotNull YDW ydw, String name, String description) {
         this.caller = ydw.getRest().getSlashCommandCaller();
@@ -46,37 +46,38 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
 
 
     @Override
-    public boolean setToGuildOnly(boolean toGuildOnly) {
-        return guildOnly.equals(toGuildOnly);
+    public SlashCommandBuilderReg setToGuildOnly(boolean toGuildOnly) {
+        this.guildOnly = toGuildOnly;
+        return this;
     }
 
     @Override
-    public SlashCommandBuilder setOption(OptionType optionType, String name, String description,
+    public SlashCommandBuilderReg setOption(OptionType optionType, String name, String description,
             boolean required) {
         caller.setOptions(List.of(new Option(optionType, name, description, required)));
         return this;
     }
 
     @Override
-    public SlashCommandBuilder setOptions(Collection<Option> options) {
+    public SlashCommandBuilderReg setOptions(Collection<Option> options) {
         caller.setOptions(options);
         return this;
     }
 
     @Override
-    public SlashCommandBuilder setOptions(Option... options) {
+    public SlashCommandBuilderReg setOptions(Option... options) {
         caller.setOptions(List.of(options));
         return this;
     }
 
     @Override
-    public SlashCommandBuilder setExtendedOptions(OptionExtender... optionExtenders) {
+    public SlashCommandBuilderReg setExtendedOptions(OptionExtender... optionExtenders) {
         caller.setOptionExtenders(List.of(optionExtenders));
         return this;
     }
 
     @Override
-    public SlashCommandBuilder setExtendedOptions(Collection<OptionExtender> optionExtenders) {
+    public SlashCommandBuilderReg setExtendedOptions(Collection<OptionExtender> optionExtenders) {
         caller.setOptionExtenders(optionExtenders);
         return this;
     }
@@ -113,14 +114,12 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
         return optionRequired;
     }
 
-    public SlashCommandBuilder call() {
-        System.out.println("guildOnly: " + guildOnly);
+    public void call() {
         if (guildOnly) {
             caller.callGuildOnlyCommand();
         } else {
             caller.callGlobalCommand();
         }
 
-        return this;
     }
 }
