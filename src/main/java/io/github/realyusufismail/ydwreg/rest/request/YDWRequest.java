@@ -12,4 +12,8 @@ public class YDWRequest {
             .header("accept-encoding", "json")
             .url(url);
     }
+
+    public Object login() {
+        return null;
+    }
 }

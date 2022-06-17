@@ -80,7 +80,7 @@ public class SlashCommandCaller {
             .header("Authorization", "Bot " + token)
             .post(body)
             .build();
-        
+
         client.newCall(request).enqueue(new YDWCallback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {

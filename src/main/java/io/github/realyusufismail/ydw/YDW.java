@@ -19,10 +19,7 @@ package io.github.realyusufismail.ydw;
 
 
 import io.github.realyusufismail.websocket.WebSocketManager;
-import io.github.realyusufismail.websocket.event.Event;
-import io.github.realyusufismail.websocket.event.EventInterface;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
-import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
 import io.github.realyusufismail.ydw.entities.*;
 import io.github.realyusufismail.ydw.entities.guild.Channel;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandBuilderReg;
@@ -31,7 +28,6 @@ import io.github.realyusufismail.ydwreg.entities.guild.manager.GuildManager;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import reactor.core.publisher.Flux;
 
 import javax.annotation.CheckReturnValue;
 import java.util.List;
@@ -182,7 +178,9 @@ public interface YDW {
 
     SelfUser getSelfUser() throws InterruptedException;
 
-    <EventClass extends Event> Flux<EventClass> onEvent(Class<EventClass> event);
+    void setEventHandler(@NotNull Object... eventHandler);
+
+    void removeEventHandler(@NotNull Object... eventHandler);
 
     boolean isResumed();
 
@@ -200,8 +198,6 @@ public interface YDW {
         awaitReady();
         return new SlashCommandBuilderReg(this, name, description);
     }
-
-    EventInterface getEventInterface();
 
     String getToken();
 

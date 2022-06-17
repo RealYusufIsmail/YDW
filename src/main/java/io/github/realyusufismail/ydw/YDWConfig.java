@@ -4,12 +4,14 @@ import com.google.errorprone.annotations.CheckReturnValue;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.exception.InvalidStatusException;
-import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
-import io.github.realyusufismail.ydwreg.rest.RestApiStatus;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 public class YDWConfig {
     private final String token;
@@ -22,6 +24,10 @@ public class YDWConfig {
     private OkHttpClient client;
 
     private String guildId;
+
+    private ExecutorService executorService = null;
+
+    private final List<Object> handlers = new LinkedList<>();
 
     private YDWConfig(String token, int gatewayIntents) {
         this.token = token;
@@ -106,6 +112,42 @@ public class YDWConfig {
         return this;
     }
 
+    /**
+     * the executor service used to run the tasks
+     *
+     * @param executorService executorService
+     * @return ydwConnector
+     */
+    @NotNull
+    public YDWConfig setExecutorService(ExecutorService executorService) {
+        this.executorService = executorService;
+        return this;
+    }
+
+    /**
+     * used to register the handlers
+     *
+     * @param handlers handlers
+     * @return ydwConnector
+     */
+    @NotNull
+    public YDWConfig registerHandlers(Object... handlers) {
+        Collections.addAll(this.handlers, handlers);
+        return this;
+    }
+
+    /**
+     * used to remove the handlers
+     *
+     * @param handlers the handlers to remove
+     * @return ydwConnector
+     */
+    @NotNull
+    public YDWConfig removeHandlers(Object... handlers) {
+        this.handlers.remove(Arrays.asList(handlers));
+        return this;
+    }
+
 
     public YDW build() throws Exception {
 
@@ -121,7 +163,8 @@ public class YDWConfig {
             client = this.client;
         }
 
-        YDWReg ydw = new YDWReg(client);
+        YDWReg ydw = new YDWReg(client, executorService);
+        ydw.setEventHandler(handlers);
         ydw.loginForRest(token, guildId);
         ydw.login(token, gatewayIntents, status, largeThreshold, activity);
         return ydw;

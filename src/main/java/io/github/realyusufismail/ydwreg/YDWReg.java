@@ -18,9 +18,10 @@
 package io.github.realyusufismail.ydwreg;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.realyusufismail.handler.EventSenderSystem;
+import io.github.realyusufismail.handler.EventSystem;
 import io.github.realyusufismail.websocket.WebSocketManager;
-import io.github.realyusufismail.websocket.event.Event;
-import io.github.realyusufismail.websocket.event.EventInterface;
+import io.github.realyusufismail.websocket.event.BasicEvent;
 import io.github.realyusufismail.websocket.event.events.ApiStatusChangeEvent;
 import io.github.realyusufismail.ydw.GateWayIntent;
 import io.github.realyusufismail.ydw.YDW;
@@ -34,11 +35,11 @@ import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Flux;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 
 public class YDWReg implements YDW {
 
@@ -67,8 +68,6 @@ public class YDWReg implements YDW {
 
     private Boolean resumed;
 
-    private EventInterface eventInterface;
-
     private boolean ready;
 
     private ApiStatus status = ApiStatus.STARTING;
@@ -77,9 +76,19 @@ public class YDWReg implements YDW {
 
     private long selfUserId;
 
-    public YDWReg(@NotNull OkHttpClient client) {
+    private final ExecutorService executorService;
+
+    private final EventSenderSystem eventSenderSystem;
+
+    public YDWReg(@NotNull OkHttpClient client, ExecutorService executorService) {
+        this.executorService = executorService;
         mapper = new ObjectMapper();
         this.client = client;
+        eventSenderSystem = new EventSenderSystem(new EventSystem(), executorService);
+    }
+
+    public void handelEvent(BasicEvent event) {
+        eventSenderSystem.send(event);
     }
 
     @Override
@@ -243,13 +252,22 @@ public class YDWReg implements YDW {
         return user.orElseThrow(() -> new IllegalStateException("Self user is not set"));
     }
 
-    public void setSelfUser(@NotNull SelfUser selfUser) {
-        this.selfUser = selfUser;
+    @Override
+    public void setEventHandler(@NotNull Object... eventHandler) {
+        for (Object handler : eventHandler) {
+           eventSenderSystem.register(handler);
+        }
     }
 
     @Override
-    public <EventClass extends Event> Flux<EventClass> onEvent(Class<EventClass> event) {
-        return eventInterface.onEvent(event);
+    public void removeEventHandler(@NotNull Object... eventHandler) {
+        for (Object handler : eventHandler) {
+            eventSenderSystem.unregister(handler);
+        }
+    }
+
+    public void setSelfUser(@NotNull SelfUser selfUser) {
+        this.selfUser = selfUser;
     }
 
     public Boolean isResumable() {
@@ -280,15 +298,6 @@ public class YDWReg implements YDW {
         return new GuildManager(this);
     }
 
-    @Override
-    public EventInterface getEventInterface() {
-        return eventInterface;
-    }
-
-    public void setEventInterface(EventInterface eventInterface) {
-        this.eventInterface = eventInterface;
-    }
-
     public void setResumed(boolean b) {
         this.resumed = b;
     }
@@ -302,10 +311,7 @@ public class YDWReg implements YDW {
             ApiStatus oldStatus = this.status;
             this.status = apiStatus;
 
-            onEvent(ApiStatusChangeEvent.class).subscribe(event -> {
-                event.setOldStatus(oldStatus);
-                event.setNewStatus(apiStatus);
-            });
+            handelEvent(new ApiStatusChangeEvent(this, oldStatus, apiStatus));
         }
     }
 
@@ -331,5 +337,13 @@ public class YDWReg implements YDW {
 
     public long getSelfUserId() {
         return selfUserId;
+    }
+
+    public ExecutorService getExecutorService() {
+        return executorService;
+    }
+
+    public EventSenderSystem getEventSenderSystem() {
+        return eventSenderSystem;
     }
 }

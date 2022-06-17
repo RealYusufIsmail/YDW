@@ -19,14 +19,6 @@ package io.github.realyusufismail.websocket.event;
 
 import io.github.realyusufismail.ydw.YDW;
 
-public abstract class Event {
-    private final YDW ydw;
-
-    public Event(YDW ydw) {
-        this.ydw = ydw;
-    }
-
-    public YDW getYDW() {
-        return ydw;
-    }
+public interface BasicEvent {
+    YDW getYDW();
 }

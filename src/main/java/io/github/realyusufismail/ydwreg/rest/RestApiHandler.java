@@ -1,9 +1,7 @@
 package io.github.realyusufismail.ydwreg.rest;
 
 import io.github.realyusufismail.ydwreg.YDWReg;
-import io.github.realyusufismail.ydwreg.exception.InvalidStatusException;
 import io.github.realyusufismail.ydwreg.rest.callers.*;
-import io.github.yusufsdiscordbot.config.Config;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 
 public class RestApiHandler {
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
@@ -47,16 +44,10 @@ public class RestApiHandler {
 
 
     public OkHttpClient getHttpClient() {
-        if (client == null) {
-            client = new OkHttpClient();
-        }
         return client;
     }
 
     public YDWReg getYDW() {
-        if (ydw == null) {
-            ydw = new YDWReg(getHttpClient());
-        }
         return ydw;
     }
 

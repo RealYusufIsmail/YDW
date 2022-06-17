@@ -20,8 +20,5 @@ public class Main {
             .setToGuildOnly(true)
             .call();
 
-        // ydw.onEvent(ReadyEvent.class).subscribe(event -> {
-        // System.out.println("Ready!");
-        // });
     }
 }
