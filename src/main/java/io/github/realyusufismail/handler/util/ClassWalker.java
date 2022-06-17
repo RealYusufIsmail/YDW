@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class ClassWalker implements Iterable<Class<?>>{
+public class ClassWalker implements Iterable<Class<?>> {
     private final Class<?> clazz;
     private final Class<?> interfaces;
 
@@ -13,8 +13,7 @@ public class ClassWalker implements Iterable<Class<?>>{
         this.interfaces = interfaces;
     }
 
-    public static ClassWalker range(Class<?> start, Class<?> interfaces)
-    {
+    public static ClassWalker range(Class<?> start, Class<?> interfaces) {
         return new ClassWalker(start, interfaces);
     }
 
@@ -31,18 +30,15 @@ public class ClassWalker implements Iterable<Class<?>>{
             }
 
             @Override
-            public boolean hasNext()
-            {
+            public boolean hasNext() {
                 return !work.isEmpty();
             }
 
             @Override
-            public Class<?> next()
-            {
+            public Class<?> next() {
                 Class<?> current = work.removeFirst();
                 done.add(current);
-                for (Class<?> parent : current.getInterfaces())
-                {
+                for (Class<?> parent : current.getInterfaces()) {
                     if (!done.contains(parent))
                         work.addLast(parent);
                 }

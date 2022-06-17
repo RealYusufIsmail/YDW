@@ -33,11 +33,9 @@ public abstract class EventHandlerAdapter implements EventHandler {
     private static final MethodHandles.Lookup lookup = MethodHandles.lookup();
     private static final ConcurrentMap<Class<?>, MethodHandle> methods = new ConcurrentHashMap<>();
     private static final Set<Class<?>> unresolved;
-    static
-    {
+    static {
         unresolved = ConcurrentHashMap.newKeySet();
-        Collections.addAll(unresolved,
-                Object.class, // Objects aren't events
+        Collections.addAll(unresolved, Object.class, // Objects aren't events
                 EventExtender.class, // onEvent is final and would never be found
                 UpdateEvent.class, // onBasicEvent has already been called
                 BasicEvent.class // onBasicEvent has already been called
@@ -56,14 +54,12 @@ public abstract class EventHandlerAdapter implements EventHandler {
                 continue;
 
             MethodHandle mh = methods.computeIfAbsent(clazz, EventHandlerAdapter::findMethod);
-            if (mh == null)
-            {
+            if (mh == null) {
                 unresolved.add(clazz);
                 continue;
             }
 
-            try
-            {
+            try {
                 mh.invoke(this, event);
             } catch (Throwable t) {
                 t.printStackTrace();
@@ -71,16 +67,14 @@ public abstract class EventHandlerAdapter implements EventHandler {
         }
     }
 
-    private static MethodHandle findMethod(@NotNull Class<?> clazz)
-    {
+    private static MethodHandle findMethod(@NotNull Class<?> clazz) {
         String name = clazz.getSimpleName();
         MethodType type = MethodType.methodType(Void.TYPE, clazz);
-        try
-        {
+        try {
             name = "on" + name.substring(0, name.length() - "Event".length());
             return lookup.findVirtual(EventHandlerAdapter.class, name, type);
-        }
-        catch (NoSuchMethodException | IllegalAccessException ignored) {} // this means this is probably a custom event!
+        } catch (NoSuchMethodException | IllegalAccessException ignored) {
+        } // this means this is probably a custom event!
         return null;
     }
 }

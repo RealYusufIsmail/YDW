@@ -255,7 +255,7 @@ public class YDWReg implements YDW {
     @Override
     public void setEventHandler(@NotNull Object... eventHandler) {
         for (Object handler : eventHandler) {
-           eventSenderSystem.register(handler);
+            eventSenderSystem.register(handler);
         }
     }
 

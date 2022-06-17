@@ -4,6 +4,7 @@ import io.github.realyusufismail.websocket.event.BasicEvent;
 
 /**
  * Used when updating an event.
+ * 
  * @param <E> the entity type
  * @param <V> the value type
  */
