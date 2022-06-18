@@ -155,6 +155,12 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
                 prepareClose();
                 ws.sendClose(closeCode, "Session invalidated");
             }
+            case RECONNECT -> {
+                logger.debug("Received reconnect request");
+                prepareClose();
+                if (ws != null)
+                    ws.sendClose(4900, "Received reconnect request");
+            }
             default -> logger.debug("Unhandled opcode: {}", op);
         }
     }
@@ -251,9 +257,9 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             .put("intents", intent)
             .set("properties",
                     JsonNodeFactory.instance.objectNode()
-                        .put("$os", "mac")
-                        .put("$browser", "YDL")
-                        .put("$device", "YDL"));
+                        .put("os", System.getProperty("os.name"))
+                        .put("browser", "YDL")
+                        .put("device", "YDL"));
 
         ObjectNode presence = JsonNodeFactory.instance.objectNode();
 

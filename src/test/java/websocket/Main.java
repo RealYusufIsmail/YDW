@@ -19,5 +19,9 @@ public class Main {
             .newSlashCommand("guild", "A guild only command")
             .setToGuildOnly(true)
             .call();
+
+        ydw.awaitReady().newSlashCommand("test1", "test1").setToGuildOnly(true).call();
+
+        ydw.awaitReady().setEventHandler(new TestHandler());
     }
 }

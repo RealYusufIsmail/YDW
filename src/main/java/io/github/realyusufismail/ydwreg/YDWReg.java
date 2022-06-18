@@ -336,9 +336,8 @@ public class YDWReg implements YDW {
     }
 
     public long getApplicationId() {
-        // TODO: Self user is not being set. Deal with this.
         if (applicationId == null)
-            throw new IllegalStateException("Self user is not set");
+            throw new IllegalStateException("Application id is not set");
         return applicationId;
     }
 

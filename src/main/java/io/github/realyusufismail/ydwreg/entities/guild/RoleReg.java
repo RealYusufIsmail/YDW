@@ -33,36 +33,30 @@ public class RoleReg implements Role {
     private final long id;
 
     private final String name;
-    @NotNull
     private final Integer color;
-    @NotNull
     private final Boolean hoist;
     private final String icon;
     private final String unicodeEmoji;
-    @NotNull
     private final Integer position;
-    @NotNull
     private final Permission[] permissions;
-    @NotNull
     private final Boolean managed;
-    @NotNull
     private final Boolean mentionable;
-    @Nullable
     private final RoleTagsReg tags;
 
     public RoleReg(@NotNull JsonNode role, YDW ydw, long id) {
         this.ydw = ydw;
         this.id = id;
 
-        this.name = role.get("name").asText();
-        this.color = role.get("color").asInt();
-        this.hoist = role.get("hoist").asBoolean();
+        this.name = role.hasNonNull("name") ? role.get("name").asText() : null;
+        this.color = role.hasNonNull("color") ? role.get("color").asInt() : null;
+        this.hoist = role.hasNonNull("hoist") ? role.get("hoist").asBoolean() : null;
         this.icon = role.hasNonNull("icon") ? role.get("icon").asText() : null;
         this.unicodeEmoji =
                 role.hasNonNull("unicode_emoji") ? role.get("unicode_emoji").asText() : null;
-        this.position = role.get("position").asInt();
-        this.managed = role.get("managed").asBoolean();
-        this.mentionable = role.get("mentionable").asBoolean();
+        this.position = role.hasNonNull("position") ? role.get("position").asInt() : null;
+        this.managed = role.hasNonNull("managed") ? role.get("managed").asBoolean() : null;
+        this.mentionable =
+                role.hasNonNull("mentionable") ? role.get("mentionable").asBoolean() : null;
         this.tags = role.hasNonNull("tags") ? new RoleTagsReg(role.get("tags"), ydw) : null;
 
         var perms = "permissions";

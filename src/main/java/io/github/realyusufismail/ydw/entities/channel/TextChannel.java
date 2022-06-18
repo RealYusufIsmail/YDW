@@ -20,7 +20,6 @@ package io.github.realyusufismail.ydw.entities.channel;
 import io.github.realyusufismail.ydw.entities.GenericEntity;
 import io.github.realyusufismail.ydw.entities.guild.ChannelCategory;
 import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
-import io.github.realyusufismail.ydw.entities.guild.Message;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,7 +48,7 @@ public interface TextChannel extends SnowFlake, GenericEntity, GuildChannel {
 
     @NotNull
     @Override
-    Optional<Message> getLastMessage();
+    Optional<Integer> getLastMessageId();
 
     @Override
     Optional<SnowFlake> getParentId();

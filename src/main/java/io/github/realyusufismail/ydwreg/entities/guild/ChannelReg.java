@@ -60,7 +60,7 @@ public class ChannelReg implements Channel {
     private final String name;
     private final String topic;
     private final Boolean nsfw;
-    private final Message lastMessage;
+    private final Integer lastMessageId;
     private final Integer bitrate;
     private final Integer userLimit;
     private final Integer rateLimitPerUser;
@@ -99,11 +99,8 @@ public class ChannelReg implements Channel {
         this.name = channelJ.hasNonNull("name") ? channelJ.get("name").asText() : null;
         this.topic = channelJ.hasNonNull("topic") ? channelJ.get("topic").asText() : null;
         this.nsfw = channelJ.hasNonNull("nsfw") ? channelJ.get("nsfw").asBoolean() : null;
-        this.lastMessage =
-                channelJ.hasNonNull("last_message_id")
-                        ? ydw.getRest()
-                            .getChannelCaller()
-                            .getMessage(this.id, channelJ.get("last_message_id").asLong())
+        this.lastMessageId =
+                channelJ.hasNonNull("last_message_id") ? channelJ.get("last_message_id").asInt()
                         : null;
         this.bitrate = channelJ.hasNonNull("bitrate") ? channelJ.get("bitrate").asInt() : null;
         this.userLimit =
@@ -226,8 +223,8 @@ public class ChannelReg implements Channel {
     }
 
     @Override
-    public @NotNull Optional<Message> getLastMessage() {
-        return Optional.ofNullable(lastMessage);
+    public @NotNull Optional<Integer> getLastMessageId() {
+        return Optional.ofNullable(lastMessageId);
     }
 
     @NotNull

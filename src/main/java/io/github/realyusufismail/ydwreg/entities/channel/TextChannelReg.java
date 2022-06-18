@@ -44,7 +44,7 @@ public class TextChannelReg extends ChannelReg implements TextChannel {
     private final Boolean nsfw;
     private final String name;
     private final String topic;
-    private final Message lastMessage;
+    private final Integer lastMessageId;
     private final Integer rateLimitPerUser;
     private final Guild guild;
     private final Integer position;
@@ -61,10 +61,8 @@ public class TextChannelReg extends ChannelReg implements TextChannel {
         this.name = messageJson.hasNonNull("name") ? messageJson.get("name").asText() : null;
         this.topic = messageJson.hasNonNull("topic") ? messageJson.get("topic").asText() : null;
         this.nsfw = messageJson.hasNonNull("nsfw") ? messageJson.get("nsfw").asBoolean() : null;
-        this.lastMessage = messageJson.hasNonNull("last_message_id")
-                ? ydw.getRest()
-                    .getChannelCaller()
-                    .getMessage(this.textChannelId, messageJson.get("last_message_id").asLong())
+        this.lastMessageId = messageJson.hasNonNull("last_message_id")
+                ? messageJson.get("last_message_id").asInt()
                 : null;
         this.position =
                 messageJson.hasNonNull("position") ? messageJson.get("position").asInt() : null;
@@ -126,8 +124,8 @@ public class TextChannelReg extends ChannelReg implements TextChannel {
 
     @NotNull
     @Override
-    public Optional<Message> getLastMessage() {
-        return Optional.ofNullable(lastMessage);
+    public Optional<Integer> getLastMessageId() {
+        return Optional.ofNullable(lastMessageId);
     }
 
     @NotNull

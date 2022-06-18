@@ -74,10 +74,8 @@ public class SlashCommandCaller {
             slashCommandJson().set("options", Option.toJsonArray(options, extender));
         }
 
-        System.out.println(slashCommandJson().toPrettyString());
         RequestBody body = RequestBody.create(slashCommandJson().toString(), JSON);
 
-        // TODO: when I use ydw.getSelfUserId it returns null
         Request request = new YDWRequest()
             .request(token, EndPoint.GLOBAL_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId()))
             .post(body)
