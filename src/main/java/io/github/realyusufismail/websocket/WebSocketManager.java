@@ -136,30 +136,29 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         switch (op) {
             case HEARTBEAT -> sendHeartbeat();
             case HELLO -> {
+                logger.debug("Received HELLO");
                 int heartbeatInterval = d.get("heartbeat_interval").asInt();
                 logger.info("Received heartbeat interval of {}ms", heartbeatInterval);
                 // Send heartbeat
                 sendHeartbeat(heartbeatInterval);
             }
             case HEARTBEAT_ACK -> {
+                logger.debug("Received HEARTBEAT_ACK");
                 logger.debug("Heartbeat acknowledged");
                 missedHeartbeats = 0;
             }
             case INVALID_SESSION -> {
+                logger.debug("Received INVALID_SESSION");
                 boolean shouldResume = d.asBoolean();
                 if (shouldResume)
                     logger.debug("Session invalidated, resuming session");
 
                 int closeCode = shouldResume ? 4900 : 1000;
-
-                prepareClose();
                 ws.sendClose(closeCode, "Session invalidated");
             }
             case RECONNECT -> {
-                logger.debug("Received reconnect request");
-                prepareClose();
-                if (ws != null)
-                    ws.sendClose(4900, "Received reconnect request");
+                logger.debug("Received RECONNECT");
+                ws.sendClose(4900, "Received reconnect request");
             }
             default -> logger.debug("Unhandled opcode: {}", op);
         }
