@@ -41,7 +41,6 @@ public class ReadyHandler extends Handle {
 
     @Override
     public void start() {
-        ydw.setApiStatus(YDW.ApiStatus.READY_EVENT);
         String sessionId = json.get("session_id").asText();
         WebSocketManager.setSessionId(sessionId);
 
@@ -79,5 +78,8 @@ public class ReadyHandler extends Handle {
         SelfUser selfUser =
                 new SelfUserReg(json.get("user"), json.get("user").get("id").asLong(), ydw);
         ydw.setSelfUser(selfUser);
+
+        ydw.setApplicationId(json.get("application").get("id").asLong());
+        ydw.setApiStatus(YDW.ApiStatus.READY_EVENT);
     }
 }

@@ -74,7 +74,7 @@ public class YDWReg implements YDW {
     private String guildId;
     private String token;
 
-    private Long selfUserId;
+    private Long applicationId;
 
     private final ExecutorService executorService;
 
@@ -331,15 +331,15 @@ public class YDWReg implements YDW {
         return logger;
     }
 
-    public void setSelfUserId(long userId) {
-        this.selfUserId = userId;
+    public void setApplicationId(long applicationId) {
+        this.applicationId = applicationId;
     }
 
-    public long getSelfUserId() {
-        //TODO: Self user is not being set. Deal with this.
-        if (selfUserId == null)
+    public long getApplicationId() {
+        // TODO: Self user is not being set. Deal with this.
+        if (applicationId == null)
             throw new IllegalStateException("Self user is not set");
-        return selfUserId;
+        return applicationId;
     }
 
     public ExecutorService getExecutorService() {

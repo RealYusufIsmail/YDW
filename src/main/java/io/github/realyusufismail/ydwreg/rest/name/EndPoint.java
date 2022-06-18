@@ -75,26 +75,8 @@ public enum EndPoint {
         return endpoint;
     }
 
-    public @NotNull String getFullEndpoint(@NotNull String... parms) {
-        StringBuilder sb = new StringBuilder(endpoint);
-        // replaces %s with parms
-        for (String parm : parms) {
-            sb.replace(sb.indexOf("%s"), sb.indexOf("%s") + 2, parm);
-        }
-        return sb.toString();
-    }
-
     @NotNull
-    public String getFullEndpoint(Long... parms) {
-        StringBuilder sb = new StringBuilder(endpoint);
-        // replaces %s with parms
-        for (Long parm : parms) {
-            sb.replace(sb.indexOf("%s"), sb.indexOf("%s") + 2, parm.toString());
-        }
-        return sb.toString();
-    }
-
-    public String getFullEndpoint(Object... parms) {
+    public String getFullEndpoint(@NotNull Object... parms) {
         StringBuilder sb = new StringBuilder(endpoint);
         // replaces %s with parms
         for (Object parm : parms) {

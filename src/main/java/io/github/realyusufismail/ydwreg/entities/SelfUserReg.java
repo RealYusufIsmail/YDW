@@ -29,7 +29,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 public class SelfUserReg extends UserReg implements SelfUser {
-    private Long applicationId;
+    private final Long applicationId;
     private final Boolean isMfaEnabled;
     private final Integer allowedFileSize;
     private final Boolean isVerified;
@@ -42,11 +42,6 @@ public class SelfUserReg extends UserReg implements SelfUser {
         allowedFileSize =
                 user.hasNonNull("allowed_file_size") ? user.get("allowed_file_size").asInt() : null;
         isVerified = user.get("verified").asBoolean();
-
-        ydw.setSelfUserId(userId);
-
-        this.applicationId =
-                user.hasNonNull("application_id") ? user.get("application_id").asLong() : null;
     }
 
     @NotNull

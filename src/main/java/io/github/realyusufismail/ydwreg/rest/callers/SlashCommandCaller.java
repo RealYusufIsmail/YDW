@@ -79,24 +79,22 @@ public class SlashCommandCaller {
 
         // TODO: when I use ydw.getSelfUserId it returns null
         Request request = new YDWRequest()
-            .request(token, EndPoint.GLOBAL_SLASH_COMMAND.getFullEndpoint("931915661532360704"))
+            .request(token, EndPoint.GLOBAL_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId()))
             .post(body)
             .build();
 
         client.newCall(request).enqueue(new YDWCallback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                ydw.getLogger().error("Failed to register slash command", e);
+                ydw.getLogger().error("Failed to register global slash command", e);
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) {
-                if (response.isSuccessful()) {
-                    ydw.getLogger().info("Successfully registered slash command");
-                } else {
+                if (!response.isSuccessful()) {
                     RestApiError error = RestApiError.fromCode(response.code());
                     ydw.getLogger()
-                        .error("Failed to register slash command: " + error.getMessage());
+                        .error("Failed to register global slash command: " + error.getMessage());
                 }
             }
         });
@@ -117,7 +115,7 @@ public class SlashCommandCaller {
         Request request =
                 new YDWRequest()
                     .request(token,
-                            EndPoint.GUILD_SLASH_COMMAND.getFullEndpoint(ydw.getSelfUserId(),
+                            EndPoint.GUILD_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
                                     guildId))
                     .post(body)
                     .build();
@@ -125,17 +123,16 @@ public class SlashCommandCaller {
         client.newCall(request).enqueue(new YDWCallback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                ydw.getLogger().error("Failed to register slash command", e);
+                ydw.getLogger().error("Failed to register guild only slash command", e);
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) {
-                if (response.isSuccessful()) {
-                    ydw.getLogger().info("Successfully registered slash command");
-                } else {
+                if (!response.isSuccessful()) {
                     RestApiError error = RestApiError.fromCode(response.code());
                     ydw.getLogger()
-                        .error("Failed to register slash command: " + error.getMessage());
+                        .error("Failed to register guild only slash command: "
+                                + error.getMessage());
                 }
             }
         });

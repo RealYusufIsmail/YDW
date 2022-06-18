@@ -201,5 +201,5 @@ public interface YDW {
 
     String getToken();
 
-    long getSelfUserId();
+    long getApplicationId();
 }
