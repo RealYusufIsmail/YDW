@@ -61,7 +61,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     private ActivityConfig activity;
 
     // The session id. This is basically a key that stores the past activity of the bot.
-    private static volatile String sessionId = null;
+    private volatile String sessionId = null;
     // Used to indicate that the bot has connected to the gateway.
     private boolean connected = false;
 
@@ -69,6 +69,8 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     private volatile Future<?> heartbeatThread;
 
     private final YDWReg ydwReg;
+
+    private boolean isSessionAvailable = false;
 
 
 
@@ -92,8 +94,8 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         this(ydw, token, intent.getValue(), status, largeThreshold, activity);
     }
 
-    public static void setSessionId(String sessionId) {
-        WebSocketManager.sessionId = sessionId;
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
 
@@ -158,7 +160,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             }
             case RECONNECT -> {
                 logger.debug("Received RECONNECT");
-                ws.sendClose(4900, "Received reconnect request");
+                ws.sendClose(4999, "OpCode 7 received hence requesting a reconnect");
             }
             default -> logger.debug("Unhandled opcode: {}", op);
         }
@@ -242,6 +244,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     public void onConnected(WebSocket websocket, Map<String, List<String>> headers)
             throws Exception {
         connected = true;
+        ydwReg.setApiStatus(YDW.ApiStatus.CONNECTING_TO_WEBSOCKET);
         if (sessionId == null) {
             identify();
         } else {
@@ -314,9 +317,10 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
     private void handleDisconnect(WebSocket websocket, WebSocketFrame serverCloseFrame,
             WebSocketFrame clientCloseFrame, boolean closedByServer) {
+        ydwReg.setApiStatus(YDW.ApiStatus.WEBSOCKET_DISCONNECTED);
         CloseCode closeCode = null;
         int rawCloseCode = 1005;
-
+        isSessionAvailable = false;
         // Done to make sure no more heartbeats are sent
         if (heartbeatThread != null) {
             heartbeatThread.cancel(false);
@@ -335,10 +339,36 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         } else if (clientCloseFrame != null) {
             rawCloseCode = clientCloseFrame.getCloseCode();
             closeCode = CloseCode.fromCode(rawCloseCode);
-            logger.error("'{}'", closeCode.getReason());
-        } else {
-            logger.error("Disconnected");
+            if (rawCloseCode == 1000) {
+                isSessionAvailable = true;
+            }
         }
+
+        boolean closeCodeIsReconnect = closeCode == null || closeCode.isReconnect();
+        if (!closeCodeIsReconnect) {
+            logger.error("The WebSocket was closed by a non-reconnectable close code.");
+        } else {
+
+            if (isSessionAvailable)
+                session();
+            try {
+                onReconnect(rawCloseCode);
+            } catch (Exception e) {
+                logger.error("Error reconnecting", e);
+            }
+        }
+    }
+
+    private void onReconnect(int closeCode) {
+        if (sessionId == null) {
+            logger.warn("Session ID is null, reconnecting...");
+        } else {
+            resume();
+        }
+    }
+
+    private void session() {
+        sessionId = null;
     }
 
     @Override

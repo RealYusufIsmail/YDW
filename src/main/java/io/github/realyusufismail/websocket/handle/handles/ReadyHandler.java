@@ -41,9 +41,6 @@ public class ReadyHandler extends Handle {
 
     @Override
     public void start() {
-        String sessionId = json.get("session_id").asText();
-        WebSocketManager.setSessionId(sessionId);
-
         List<UnavailableGuild> unavailableGuilds = new ArrayList<>();
         ArrayNode guilds = (ArrayNode) json.get("guilds");
         for (JsonNode guild : guilds) {
@@ -79,6 +76,9 @@ public class ReadyHandler extends Handle {
                 new SelfUserReg(json.get("user"), json.get("user").get("id").asLong(), ydw);
         ydw.setSelfUser(selfUser);
 
+
+        ydw.getWebSocket()
+            .setSessionId(json.hasNonNull("session_id") ? json.get("session_id").asText() : null);
         ydw.setApplicationId(json.get("application").get("id").asLong());
         ydw.setApiStatus(YDW.ApiStatus.READY_EVENT);
     }
