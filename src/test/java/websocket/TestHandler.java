@@ -14,7 +14,7 @@ public class TestHandler extends EventHandlerAdapter {
     @Override
     public void onSlashCommandInteractionEvent(SlashCommandInteractionEvent event) {
         if (event.getName().equals("ping")) {
-            System.out.println("Pong!");
+            event.reply("pong").queue();
         }
     }
 }

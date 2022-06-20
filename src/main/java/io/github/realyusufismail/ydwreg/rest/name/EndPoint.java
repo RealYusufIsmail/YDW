@@ -63,7 +63,8 @@ public enum EndPoint {
 
     // Slash command.
     GLOBAL_SLASH_COMMAND("https://discord.com/api/v10/applications/%s/commands"),
-    GUILD_SLASH_COMMAND("https://discord.com/api/v10/applications/%s/guilds/%s/commands"),;
+    GUILD_SLASH_COMMAND("https://discord.com/api/v10/applications/%s/guilds/%s/commands"),
+    REPLY_TO_SLASH_COMMAND("/webhooks/%s/%s");
 
     private final String endpoint;
 

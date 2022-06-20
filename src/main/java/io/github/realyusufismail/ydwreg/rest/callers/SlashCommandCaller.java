@@ -37,6 +37,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.function.Consumer;
 
+import static io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager.interaction;
+
 public class SlashCommandCaller {
     private final YDWReg ydw;
 
@@ -45,6 +47,7 @@ public class SlashCommandCaller {
     private final MediaType JSON;
     private final String token;
     private final String guildId;
+    private String interactionToken;
 
     private String name;
     private String description;
@@ -159,6 +162,29 @@ public class SlashCommandCaller {
         this.extender = optionExtenders;
     }
 
+    // Reply system
+
+    //TODO: Implement reply system
+    private ObjectNode replyJson() {
+        return JsonNodeFactory.instance.objectNode()
+                .put("content", "")
+                .put("ephemeral", ephemeral);
+    }
+
+    public void reply() {
+        if (token == null || interactionToken == null) {
+            throw new IllegalStateException("Token and interaction Token are required to reply");
+        }
+
+
+
+        Request request =
+                new YDWRequest()
+                        .request(token, EndPoint.REPLY_TO_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(), interactionToken))
+                        .post(RequestBody.create("", JSON))
+                        .build();
+    }
+
     public void setEphemeral(boolean ephemeral) {
         this.ephemeral = ephemeral;
     }
@@ -167,8 +193,8 @@ public class SlashCommandCaller {
         this.tts = tts;
     }
 
-    public void setMentionable(boolean mentionable) {
-        this.mentionable = mentionable;
+    public void setInteractionToken(String interactionToken) {
+        this.interactionToken = interactionToken;
     }
 
     public <T> void queue(@NotNull Request request, @Nullable Consumer<? super T> success,
