@@ -37,8 +37,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.function.Consumer;
 
-import static io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager.interaction;
-
 public class SlashCommandCaller {
     private final YDWReg ydw;
 
@@ -164,11 +162,9 @@ public class SlashCommandCaller {
 
     // Reply system
 
-    //TODO: Implement reply system
+    // TODO: Implement reply system
     private ObjectNode replyJson() {
-        return JsonNodeFactory.instance.objectNode()
-                .put("content", "")
-                .put("ephemeral", ephemeral);
+        return JsonNodeFactory.instance.objectNode().put("content", "").put("ephemeral", ephemeral);
     }
 
     public void reply() {
@@ -178,11 +174,12 @@ public class SlashCommandCaller {
 
 
 
-        Request request =
-                new YDWRequest()
-                        .request(token, EndPoint.REPLY_TO_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(), interactionToken))
-                        .post(RequestBody.create("", JSON))
-                        .build();
+        Request request = new YDWRequest()
+            .request(token,
+                    EndPoint.REPLY_TO_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
+                            interactionToken))
+            .post(RequestBody.create("", JSON))
+            .build();
     }
 
     public void setEphemeral(boolean ephemeral) {
