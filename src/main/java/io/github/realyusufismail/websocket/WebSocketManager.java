@@ -83,10 +83,18 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         this.largeThreshold = largeThreshold;
         this.activity = activity;
         // Create a WebSocketFactory instance.
-        ws = new WebSocketFactory().createSocket(YDWInfo.DISCORD_GATEWAY_LINK);
-        ws.addHeader("Accept-Encoding", "gzip");
-        ws.addListener(this);
-        ws.connect();
+        connect();
+    }
+
+    public synchronized void connect() {
+        try {
+            ws = new WebSocketFactory().createSocket(YDWInfo.DISCORD_GATEWAY_LINK);
+            ws.addHeader("Accept-Encoding", "gzip");
+            ws.addListener(this);
+            ws.connect();
+        } catch (IOException | WebSocketException e) {
+            logger.error("Error while connecting to the gateway", e);
+        }
     }
 
     public WebSocketManager(YDW ydw, String token, @NotNull GateWayIntent intent, String status,
@@ -363,9 +371,18 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         if (sessionId == null) {
             logger.warn("Session ID is null, reconnecting...");
         } else {
-            resume();
+            reconnect();
         }
     }
+
+    public void reconnect() {
+        try {
+            connect();
+        } catch (Exception e) {
+            logger.error("Error reconnecting", e);
+        }
+    }
+
 
     private void session() {
         sessionId = null;
