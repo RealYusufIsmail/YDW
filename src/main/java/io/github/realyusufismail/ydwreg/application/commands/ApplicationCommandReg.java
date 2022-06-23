@@ -18,8 +18,7 @@
 package io.github.realyusufismail.ydwreg.application.commands;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.github.realyusufismail.websocket.event.BasicEvent;
-import io.github.realyusufismail.websocket.event.EventExtender;
+import io.github.realyusufismail.ydw.event.EventExtender;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.application.commands.ApplicationCommand;
 import io.github.realyusufismail.ydw.application.commands.option.CommandOption;

@@ -15,10 +15,10 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.websocket.handle.handles.channel;
+package io.github.realyusufismail.ydwreg.handle.handles.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.github.realyusufismail.websocket.handle.Handle;
+import io.github.realyusufismail.ydwreg.handle.Handle;
 import io.github.realyusufismail.ydw.YDW;
 
 public class ChannelPinsUpdateHandler extends Handle {

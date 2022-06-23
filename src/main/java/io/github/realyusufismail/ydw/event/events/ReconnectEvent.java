@@ -1,7 +1,6 @@
-package io.github.realyusufismail.websocket.event.events;
+package io.github.realyusufismail.ydw.event.events;
 
-import io.github.realyusufismail.websocket.event.BasicEvent;
-import io.github.realyusufismail.websocket.event.EventExtender;
+import io.github.realyusufismail.ydw.event.EventExtender;
 import io.github.realyusufismail.ydw.YDW;
 
 public class ReconnectEvent extends EventExtender {

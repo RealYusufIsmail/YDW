@@ -1,6 +1,6 @@
 package io.github.realyusufismail.handler;
 
-import io.github.realyusufismail.websocket.event.BasicEvent;
+import io.github.realyusufismail.ydw.event.BasicEvent;
 
 /**
  * Used when updating an event.

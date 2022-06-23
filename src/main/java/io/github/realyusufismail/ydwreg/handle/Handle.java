@@ -15,20 +15,20 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.websocket.handle.handles;
+package io.github.realyusufismail.ydwreg.handle;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.github.realyusufismail.websocket.handle.Handle;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.entities.guild.GuildApplicationCommandPermission;
+import io.github.realyusufismail.ydwreg.YDWReg;
 
-public class ApplicationCommandPermissionsUpdateHandler extends Handle {
-    public ApplicationCommandPermissionsUpdateHandler(JsonNode json, YDW ydw) {
-        super(json, ydw);
+public abstract class Handle {
+    protected final JsonNode json;
+    protected final YDWReg ydw;
+
+    protected Handle(JsonNode json, YDW ydw) {
+        this.json = json.get("d");
+        this.ydw = (YDWReg) ydw;
     }
 
-    @Override
-    public void start() {
-        GuildApplicationCommandPermission guildApplicationCommandPermission;
-    }
+    public abstract void start();
 }

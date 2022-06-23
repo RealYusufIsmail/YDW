@@ -1,6 +1,5 @@
 package websocket;
 
-import io.github.realyusufismail.websocket.event.events.ReadyEvent;
 import io.github.realyusufismail.ydw.Status;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.YDWConfig;

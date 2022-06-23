@@ -15,20 +15,22 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.websocket.handle.handles;
+package io.github.realyusufismail.ydwreg.handle.handles.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.github.realyusufismail.websocket.handle.Handle;
+import io.github.realyusufismail.ydwreg.handle.Handle;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.entities.guild.Channel;
+import io.github.realyusufismail.ydwreg.entities.guild.ChannelReg;
 
-public class InvalidSessionHandler extends Handle {
-    public InvalidSessionHandler(JsonNode json, YDW ydw) {
+public class ChannelCreateHandler extends Handle {
+    public ChannelCreateHandler(JsonNode json, YDW ydw) {
         super(json, ydw);
     }
 
     @Override
     public void start() {
-        Boolean resumable = json.get("d").asBoolean();
-        ydw.setResumable(resumable);
+        Channel channel = new ChannelReg(json.get("d"), json.get("d").get("id").asLong(), ydw);
+        // TODO: Add channel to guild
     }
 }

@@ -1,4 +1,4 @@
-package io.github.realyusufismail.websocket.event;
+package io.github.realyusufismail.ydw.event;
 
 import io.github.realyusufismail.ydw.YDW;
 

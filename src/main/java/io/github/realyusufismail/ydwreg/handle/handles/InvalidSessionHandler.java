@@ -15,17 +15,20 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.websocket.handle.handles.channel;
+package io.github.realyusufismail.ydwreg.handle.handles;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.github.realyusufismail.websocket.handle.Handle;
+import io.github.realyusufismail.ydwreg.handle.Handle;
 import io.github.realyusufismail.ydw.YDW;
 
-public class ChannelUpdateHandler extends Handle {
-    public ChannelUpdateHandler(JsonNode json, YDW ydw) {
+public class InvalidSessionHandler extends Handle {
+    public InvalidSessionHandler(JsonNode json, YDW ydw) {
         super(json, ydw);
     }
 
     @Override
-    public void start() {}
+    public void start() {
+        Boolean resumable = json.get("d").asBoolean();
+        ydw.setResumable(resumable);
+    }
 }

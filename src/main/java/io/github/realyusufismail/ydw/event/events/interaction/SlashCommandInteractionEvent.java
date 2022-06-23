@@ -1,4 +1,4 @@
-package io.github.realyusufismail.websocket.event.events.interaction;
+package io.github.realyusufismail.ydw.event.events.interaction;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;

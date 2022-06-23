@@ -1,7 +1,7 @@
-package io.github.realyusufismail.websocket.event.events;
+package io.github.realyusufismail.ydw.event.events;
 
 import io.github.realyusufismail.handler.UpdateEvent;
-import io.github.realyusufismail.websocket.event.EventExtender;
+import io.github.realyusufismail.ydw.event.EventExtender;
 import io.github.realyusufismail.ydw.YDW;
 
 public class ApiStatusChangeEvent extends EventExtender implements UpdateEvent<YDW, YDW.ApiStatus> {

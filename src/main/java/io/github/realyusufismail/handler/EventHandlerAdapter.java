@@ -1,12 +1,12 @@
 package io.github.realyusufismail.handler;
 
 import io.github.realyusufismail.handler.util.ClassWalker;
-import io.github.realyusufismail.websocket.event.BasicEvent;
-import io.github.realyusufismail.websocket.event.EventExtender;
-import io.github.realyusufismail.websocket.event.events.ReadyEvent;
-import io.github.realyusufismail.websocket.event.events.ReconnectEvent;
-import io.github.realyusufismail.websocket.event.events.ResumedEvent;
-import io.github.realyusufismail.websocket.event.events.interaction.SlashCommandInteractionEvent;
+import io.github.realyusufismail.ydw.event.BasicEvent;
+import io.github.realyusufismail.ydw.event.EventExtender;
+import io.github.realyusufismail.ydw.event.events.ReadyEvent;
+import io.github.realyusufismail.ydw.event.events.ReconnectEvent;
+import io.github.realyusufismail.ydw.event.events.ResumedEvent;
+import io.github.realyusufismail.ydw.event.events.interaction.SlashCommandInteractionEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandle;

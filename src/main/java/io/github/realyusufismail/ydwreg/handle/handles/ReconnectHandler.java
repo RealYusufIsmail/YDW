@@ -1,7 +1,7 @@
-package io.github.realyusufismail.websocket.handle.handles;
+package io.github.realyusufismail.ydwreg.handle.handles;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.github.realyusufismail.websocket.handle.Handle;
+import io.github.realyusufismail.ydwreg.handle.Handle;
 import io.github.realyusufismail.ydw.YDW;
 
 public class ReconnectHandler extends Handle {

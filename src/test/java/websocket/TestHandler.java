@@ -1,8 +1,8 @@
 package websocket;
 
 import io.github.realyusufismail.handler.EventHandlerAdapter;
-import io.github.realyusufismail.websocket.event.events.ReadyEvent;
-import io.github.realyusufismail.websocket.event.events.interaction.SlashCommandInteractionEvent;
+import io.github.realyusufismail.ydw.event.events.ReadyEvent;
+import io.github.realyusufismail.ydw.event.events.interaction.SlashCommandInteractionEvent;
 
 public class TestHandler extends EventHandlerAdapter {
 
