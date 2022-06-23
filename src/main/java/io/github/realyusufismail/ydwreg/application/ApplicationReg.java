@@ -111,7 +111,7 @@ public class ApplicationReg implements Application {
         this.installUrl =
                 application.hasNonNull("install_url") ? application.get("install_url").asText()
                         : null;
-        if (application.has("rpc_regions")) {
+        if (application.hasNonNull("rpc_regions")) {
             application.get("rpc_regions").forEach(rpcRegion -> rpcRegions.add(rpcRegion.asText()));
         }
     }

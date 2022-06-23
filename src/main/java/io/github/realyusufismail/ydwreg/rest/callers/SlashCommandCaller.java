@@ -25,8 +25,10 @@ import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.Option;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.OptionExtender;
 import io.github.realyusufismail.ydwreg.rest.YDWCallback;
+import io.github.realyusufismail.ydwreg.rest.error.RestApiError;
 import io.github.realyusufismail.ydwreg.rest.name.EndPoint;
 import io.github.realyusufismail.ydwreg.rest.queue.Queue;
+import io.github.realyusufismail.ydwreg.rest.request.YDWRequest;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,7 +44,8 @@ public class SlashCommandCaller {
 
     private final MediaType JSON;
     private final String token;
-    private String guildId;
+    private final String guildId;
+    private String interactionToken;
 
     private String name;
     private String description;
@@ -54,8 +57,10 @@ public class SlashCommandCaller {
     private Boolean tts;
     private Boolean mentionable;
 
-    public SlashCommandCaller(String token, YDW ydw, MediaType json, OkHttpClient client) {
+    public SlashCommandCaller(String token, String guildId, YDW ydw, MediaType json,
+            OkHttpClient client) {
         this.token = token;
+        this.guildId = guildId;
         this.ydw = (YDWReg) ydw;
         this.client = client;
         JSON = json;
@@ -70,19 +75,26 @@ public class SlashCommandCaller {
             slashCommandJson().set("options", Option.toJsonArray(options, extender));
         }
 
-
         RequestBody body = RequestBody.create(slashCommandJson().toString(), JSON);
 
-        Request request = new Request.Builder()
-            .url(EndPoint.GLOBAL_SLASH_COMMAND.getFullEndpoint(ydw.getSelfUser().getIdLong()))
-            .header("Authorization", "Bot  " + token)
+        Request request = new YDWRequest()
+            .request(token, EndPoint.GLOBAL_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId()))
             .post(body)
             .build();
 
         client.newCall(request).enqueue(new YDWCallback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                ydw.getLogger().error("Failed to register slash command", e);
+                ydw.getLogger().error("Failed to register global slash command", e);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                if (!response.isSuccessful()) {
+                    RestApiError error = RestApiError.fromCode(response.code());
+                    ydw.getLogger()
+                        .error("Failed to register global slash command: " + error.getMessage());
+                }
             }
         });
     }
@@ -99,16 +111,28 @@ public class SlashCommandCaller {
 
         RequestBody body = RequestBody.create(slashCommandJson().toString(), JSON);
 
-        Request request = new Request.Builder()
-            .url(EndPoint.GUILD_SLASH_COMMAND.getFullEndpoint(ydw.getSelfUser().getIdLong()))
-            .header("Authorization", "Bot  " + token)
-            .post(body)
-            .build();
+        Request request =
+                new YDWRequest()
+                    .request(token,
+                            EndPoint.GUILD_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
+                                    guildId))
+                    .post(body)
+                    .build();
 
         client.newCall(request).enqueue(new YDWCallback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                ydw.getLogger().error("Failed to register slash command", e);
+                ydw.getLogger().error("Failed to register guild only slash command", e);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                if (!response.isSuccessful()) {
+                    RestApiError error = RestApiError.fromCode(response.code());
+                    ydw.getLogger()
+                        .error("Failed to register guild only slash command: "
+                                + error.getMessage());
+                }
             }
         });
     }
@@ -136,8 +160,26 @@ public class SlashCommandCaller {
         this.extender = optionExtenders;
     }
 
-    public void setGuildId(String guildId) {
-        this.guildId = guildId;
+    // Reply system
+
+    // TODO: Implement reply system
+    private ObjectNode replyJson() {
+        return JsonNodeFactory.instance.objectNode().put("content", "").put("ephemeral", ephemeral);
+    }
+
+    public void reply() {
+        if (token == null || interactionToken == null) {
+            throw new IllegalStateException("Token and interaction Token are required to reply");
+        }
+
+
+
+        Request request = new YDWRequest()
+            .request(token,
+                    EndPoint.REPLY_TO_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
+                            interactionToken))
+            .post(RequestBody.create("", JSON))
+            .build();
     }
 
     public void setEphemeral(boolean ephemeral) {
@@ -148,8 +190,8 @@ public class SlashCommandCaller {
         this.tts = tts;
     }
 
-    public void setMentionable(boolean mentionable) {
-        this.mentionable = mentionable;
+    public void setInteractionToken(String interactionToken) {
+        this.interactionToken = interactionToken;
     }
 
     public <T> void queue(@NotNull Request request, @Nullable Consumer<? super T> success,

@@ -23,8 +23,10 @@ import io.github.realyusufismail.ydw.entities.sticker.StickerPack;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.entities.sticker.StickerPackReg;
 import io.github.realyusufismail.ydwreg.entities.sticker.StickerReg;
+import io.github.realyusufismail.ydwreg.rest.error.RestApiError;
 import io.github.realyusufismail.ydwreg.rest.exception.RestApiException;
 import io.github.realyusufismail.ydwreg.rest.name.EndPoint;
+import io.github.realyusufismail.ydwreg.rest.request.YDWRequest;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
@@ -40,28 +42,32 @@ public class StickerCaller {
 
     private final OkHttpClient client;
 
-    public StickerCaller(YDWReg ydw, OkHttpClient client) {
+    private final String token;
+
+    public StickerCaller(String token, YDWReg ydw, OkHttpClient client) {
         this.ydw = ydw;
         this.client = client;
+        this.token = token;
     }
 
     @Nullable
     public List<StickerPack> getStickerPacks() {
-        Request request =
-                new Request.Builder().url(EndPoint.GET_STICKERS_AVAILABLE_FOR_NITRO.getEndpoint())
-                    .get()
-                    .build();
+        Request request = new YDWRequest()
+            .request(token, EndPoint.GET_STICKERS_AVAILABLE_FOR_NITRO.getEndpoint())
+            .get()
+            .build();
         try (var response = client.newCall(request).execute()) {
+            if (!response.isSuccessful())
+                throw new IOException("Unexpected code " + RestApiError.fromCode(response.code())
+                        + " " + RestApiError.fromCode(response.code()).getMessage());
             var body = response.body();
-            if (body == null) {
-                return null;
-            } else {
-                JsonNode json = ydw.getMapper().readTree(body.string());
-                List<StickerPack> packs = new ArrayList<>();
-                for (var pack : json) {
-                    packs.add(new StickerPackReg(pack, ydw, pack.get("id").asLong()));
-                }
+
+            JsonNode json = ydw.getMapper().readTree(body.string());
+            List<StickerPack> packs = new ArrayList<>();
+            for (var pack : json) {
+                packs.add(new StickerPackReg(pack, ydw, pack.get("id").asLong()));
             }
+
         } catch (IOException e) {
             throw new RestApiException(e);
         }
@@ -75,15 +81,16 @@ public class StickerCaller {
             .get()
             .build();
         try (var response = client.newCall(request).execute()) {
+            if (!response.isSuccessful())
+                throw new IOException("Unexpected code " + RestApiError.fromCode(response.code())
+                        + " " + RestApiError.fromCode(response.code()).getMessage());
             var body = response.body();
-            if (body == null) {
-                return new ArrayList<>();
-            } else {
-                JsonNode json = ydw.getMapper().readTree(body.string());
-                List<Sticker> stickers = new ArrayList<>();
-                for (var sticker : json) {
-                    stickers.add(new StickerReg(sticker, sticker.get("id").asLong(), ydw));
-                }
+
+            JsonNode json = ydw.getMapper().readTree(body.string());
+            List<Sticker> stickers = new ArrayList<>();
+            for (var sticker : json) {
+                stickers.add(new StickerReg(sticker, sticker.get("id").asLong(), ydw));
+
             }
         } catch (IOException e) {
             throw new RestApiException(e);
@@ -99,13 +106,14 @@ public class StickerCaller {
             .get()
             .build();
         try (var response = client.newCall(request).execute()) {
+            if (!response.isSuccessful())
+                throw new IOException("Unexpected code " + RestApiError.fromCode(response.code())
+                        + " " + RestApiError.fromCode(response.code()).getMessage());
             var body = response.body();
-            if (body == null) {
-                return null;
-            } else {
-                JsonNode json = ydw.getMapper().readTree(body.string());
-                return new StickerReg(json, stickerId, ydw);
-            }
+
+            JsonNode json = ydw.getMapper().readTree(body.string());
+            return new StickerReg(json, stickerId, ydw);
+
         } catch (IOException e) {
             throw new RestApiException(e);
         }

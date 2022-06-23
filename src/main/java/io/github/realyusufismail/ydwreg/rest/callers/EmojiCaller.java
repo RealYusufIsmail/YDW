@@ -22,8 +22,10 @@ import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.emoji.Emoji;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.entities.emoji.EmojiReg;
+import io.github.realyusufismail.ydwreg.rest.error.RestApiError;
 import io.github.realyusufismail.ydwreg.rest.exception.RestApiException;
 import io.github.realyusufismail.ydwreg.rest.name.EndPoint;
+import io.github.realyusufismail.ydwreg.rest.request.YDWRequest;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
@@ -38,27 +40,31 @@ public class EmojiCaller {
 
     private final OkHttpClient client;
 
-    public EmojiCaller(@Nullable YDW ydw, OkHttpClient client) {
+    private final String token;
+
+    public EmojiCaller(String token, @Nullable YDW ydw, OkHttpClient client) {
         this.ydw = (YDWReg) ydw;
         this.client = client;
+        this.token = token;
     }
 
     @NotNull
     public List<Emoji> getGuildEmojis(long guildId) {
-        Request request =
-                new Request.Builder().url(EndPoint.GET_LIST_GUILD_EMOJI.getFullEndpoint(guildId))
-                    .get()
-                    .build();
+        Request request = new YDWRequest()
+            .request(token, EndPoint.GET_LIST_GUILD_EMOJI.getFullEndpoint(guildId))
+            .get()
+            .build();
         try (var response = client.newCall(request).execute()) {
+            if (!response.isSuccessful())
+                throw new IOException("Unexpected code " + RestApiError.fromCode(response.code())
+                        + " " + RestApiError.fromCode(response.code()).getMessage());
+
             var body = response.body();
-            if (body == null) {
-                return new ArrayList<>();
-            } else {
-                JsonNode json = ydw.getMapper().readTree(body.string());
-                List<Emoji> emojis = new ArrayList<>();
-                for (JsonNode node : json) {
-                    emojis.add(new EmojiReg(node, node.get("id").asLong(), ydw));
-                }
+
+            JsonNode json = ydw.getMapper().readTree(body.string());
+            List<Emoji> emojis = new ArrayList<>();
+            for (JsonNode node : json) {
+                emojis.add(new EmojiReg(node, node.get("id").asLong(), ydw));
             }
         } catch (IOException e) {
             throw new RestApiException(e);
@@ -73,13 +79,15 @@ public class EmojiCaller {
             .get()
             .build();
         try (var response = client.newCall(request).execute()) {
+
+            if (!response.isSuccessful())
+                throw new IOException("Unexpected code " + RestApiError.fromCode(response.code())
+                        + " " + RestApiError.fromCode(response.code()).getMessage());
+
             var body = response.body();
-            if (body == null) {
-                return null;
-            } else {
-                JsonNode json = ydw.getMapper().readTree(body.string());
-                return new EmojiReg(json, json.get("id").asLong(), ydw);
-            }
+
+            JsonNode json = ydw.getMapper().readTree(body.string());
+            return new EmojiReg(json, json.get("id").asLong(), ydw);
         } catch (IOException e) {
             throw new RestApiException(e);
         }

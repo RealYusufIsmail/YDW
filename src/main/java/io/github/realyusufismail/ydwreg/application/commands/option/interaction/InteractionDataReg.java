@@ -15,15 +15,15 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.ydwreg.application.interaction;
+package io.github.realyusufismail.ydwreg.application.commands.option.interaction;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.application.commands.option.OptionType;
+import io.github.realyusufismail.ydw.application.commands.CommandTypes;
 import io.github.realyusufismail.ydw.application.interaction.InteractionData;
 import io.github.realyusufismail.ydw.application.interaction.resolved.ResolvedData;
 import io.github.realyusufismail.ydw.entities.Guild;
-import io.github.realyusufismail.ydwreg.application.interaction.resolved.ResolvedDataReg;
+import io.github.realyusufismail.ydwreg.application.commands.option.interaction.resolved.ResolvedDataReg;
 import io.github.realyusufismail.ydwreg.message_components.ComponentType;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.Nullable;
@@ -36,7 +36,7 @@ public class InteractionDataReg implements InteractionData {
     private final long id;
 
     private final String name;
-    private final OptionType type;
+    private final CommandTypes type;
     private final ResolvedData resolvedData;
     private final Guild guild;
     private final String customId;
@@ -46,9 +46,8 @@ public class InteractionDataReg implements InteractionData {
     public InteractionDataReg(JsonNode interaction, long id, YDW ydw) {
         this.ydw = ydw;
         this.id = id;
-
         this.name = interaction.get("name").asText();
-        this.type = OptionType.valueOf(interaction.get("type").asText());
+        this.type = CommandTypes.getCommandType(interaction.get("type").asInt());
         this.resolvedData = interaction.hasNonNull("resolved")
                 ? new ResolvedDataReg(interaction.get("resolved"), ydw)
                 : null;
@@ -70,7 +69,7 @@ public class InteractionDataReg implements InteractionData {
     }
 
     @Override
-    public OptionType getType() {
+    public CommandTypes getType() {
         return type;
     }
 

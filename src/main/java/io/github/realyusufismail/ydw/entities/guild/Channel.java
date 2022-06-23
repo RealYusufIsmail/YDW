@@ -55,7 +55,7 @@ public interface Channel extends SnowFlake, GenericEntity {
     Optional<Boolean> isNSFW();
 
     @NotNull
-    Optional<Message> getLastMessage();
+    Optional<Integer> getLastMessageId();
 
     Optional<Integer> getBitrate();
 

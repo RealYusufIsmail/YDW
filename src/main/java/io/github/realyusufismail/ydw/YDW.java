@@ -18,22 +18,18 @@
 package io.github.realyusufismail.ydw;
 
 
-import com.neovisionaries.ws.client.WebSocketException;
 import io.github.realyusufismail.websocket.WebSocketManager;
-import io.github.realyusufismail.websocket.event.Event;
-import io.github.realyusufismail.websocket.event.EventInterface;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
-import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
 import io.github.realyusufismail.ydw.entities.*;
 import io.github.realyusufismail.ydw.entities.guild.Channel;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandBuilderReg;
-import io.github.realyusufismail.ydwreg.application.interaction.InteractionManager;
+import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
 import io.github.realyusufismail.ydwreg.entities.guild.manager.GuildManager;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import org.jetbrains.annotations.NotNull;
-import reactor.core.publisher.Flux;
+import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
+import javax.annotation.CheckReturnValue;
 import java.util.List;
 
 public interface YDW {
@@ -75,6 +71,10 @@ public interface YDW {
          */
         READY(true),
         /**
+         * Indicates that you have received the ready event.
+         */
+        READY_EVENT(true),
+        /**
          * Indicates that the websocket has disconnected, will try to resume.
          */
         WEBSOCKET_DISCONNECTED,
@@ -114,6 +114,13 @@ public interface YDW {
         }
     }
 
+
+    YDW awaitStatus(ApiStatus status) throws InterruptedException;
+
+    default YDW awaitReady() throws InterruptedException {
+        return awaitStatus(ApiStatus.READY_EVENT);
+    }
+
     @NotNull
     List<Guild> getGuilds();
 
@@ -151,10 +158,7 @@ public interface YDW {
     void login(String token, int gatewayIntents, String status, int largeThreshold,
             ActivityConfig activity) throws Exception;
 
-
-    void setToken(String token);
-
-    void setGuildId(String guildId);
+    void loginForRest(String token, @Nullable String guildId);
 
     long getPing();
 
@@ -172,9 +176,11 @@ public interface YDW {
 
     boolean needsToAutoReconnect();
 
-    SelfUser getSelfUser();
+    SelfUser getSelfUser() throws InterruptedException;
 
-    <EventClass extends Event> Flux<EventClass> onEvent(Class<EventClass> event);
+    void setEventHandler(@NotNull Object... eventHandler);
+
+    void removeEventHandler(@NotNull Object... eventHandler);
 
     boolean isResumed();
 
@@ -184,9 +190,16 @@ public interface YDW {
 
     GuildManager getGuildManager();
 
-    default SlashCommandBuilder newSlashCommand(String name, String description) {
-        return new SlashCommandBuilderReg(this, name, description).call();
+    @CheckReturnValue
+
+    default SlashCommandBuilderReg newSlashCommand(String name, String description)
+            throws InterruptedException {
+        // wait until the api is ready
+        awaitReady();
+        return new SlashCommandBuilderReg(this, name, description);
     }
 
-    EventInterface getEventInterface();
+    String getToken();
+
+    long getApplicationId();
 }

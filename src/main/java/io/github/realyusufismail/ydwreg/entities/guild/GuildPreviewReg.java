@@ -60,19 +60,19 @@ public class GuildPreviewReg implements GuildPreview {
         this.description = preview.get("description").asText();
 
 
-        if (preview.has("features")) {
+        if (preview.hasNonNull("features")) {
             for (JsonNode feature : preview.get("features")) {
                 features.add(GuildFeatures.valueOf(feature.asText()));
             }
         }
 
-        if (preview.has("emojis")) {
+        if (preview.hasNonNull("emojis")) {
             for (JsonNode emoji : preview.get("emojis")) {
                 emojis.add(new EmojiReg(emoji, emoji.get("id").asLong(), ydw));
             }
         }
 
-        if (preview.has("stickers")) {
+        if (preview.hasNonNull("stickers")) {
             for (JsonNode sticker : preview.get("stickers")) {
                 stickers.add(new StickerReg(sticker, sticker.get("id").asLong(), ydw));
             }

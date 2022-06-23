@@ -1,20 +1,3 @@
-/*
- * GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- * Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/> Everyone is permitted to
- * copy and distribute verbatim copies of this license document, but changing it is not allowed.
- *
- * Yusuf Arfan Ismail Copyright (C) 2022 - future.
- *
- * The GNU General Public License is a free, copyleft license for software and other kinds of works.
- *
- * You may copy, distribute and modify the software as long as you track changes/dates in source
- * files. Any modifications to or software including (via compiler) GPL-licensed code must also be
- * made available under the GPL along with build & install instructions.
- *
- * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
- */
-
 package io.github.realyusufismail.ydwreg.rest;
 
 import io.github.realyusufismail.ydwreg.YDWReg;
@@ -22,88 +5,82 @@ import io.github.realyusufismail.ydwreg.rest.callers.*;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.net.http.HttpClient;
+import javax.annotation.Nullable;
 
-@SuppressWarnings("unused")
 public class RestApiHandler {
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
     private YDWReg ydw;
+    private OkHttpClient client; // This is the client that will be used to make the requests
+                                 // to the API
 
-    private final OkHttpClient client;
+    private final String guildId;
 
-    private String guildId;
-    private String token = "";
-    private final GuildCaller guildRestApi = new GuildCaller(getYDW(), JSON, getHttpClient());
-    private final UserCaller userCaller = new UserCaller(getYDW(), getHttpClient());
-    private final StickerCaller stickerCaller = new StickerCaller(getYDW(), getHttpClient());
-    private final EmojiCaller emojiCaller = new EmojiCaller(getYDW(), getHttpClient());
-    private final ChannelCaller channelCaller = new ChannelCaller(getYDW(), getHttpClient());
-    private final YDWCaller ydwCaller = new YDWCaller(getYDW(), getHttpClient());
-    private final SlashCommandCaller slashCommandCaller =
-            new SlashCommandCaller(getToken(), getYDW(), JSON, getHttpClient());
-    private final MessageCaller messageCaller = new MessageCaller(getYDW(), JSON, getHttpClient());
+    private static RestApiStatus status = RestApiStatus.INITIALISING;
 
-    public RestApiHandler(OkHttpClient client) {
-        this.client = client;
-    }
+    private final String token;
 
-    // I want a queue system were once the queue is called it executes the method
+    // logger
+    private static final Logger logger = LoggerFactory.getLogger(RestApiHandler.class);
 
-    public void setYDW(YDWReg ydw) {
+    public RestApiHandler(@NotNull YDWReg ydw, String token, OkHttpClient client,
+            @Nullable String guildId) {
         this.ydw = ydw;
-    }
-
-    public void setToken(String token) {
+        this.client = client;
         this.token = token;
-    }
-
-    public void setGuildId(String guildId) {
         this.guildId = guildId;
+
+        /*
+         * // while ydw and token are null, we wait for them to be set while (ydw == null || token
+         * == null) { try { System.out.println("Waiting for ydw and token to be set");
+         * Thread.sleep(100); } catch (InterruptedException e) { e.printStackTrace(); } }
+         * 
+         */
     }
 
-    public @NotNull GuildCaller getGuildRestApi() {
-        return guildRestApi;
-    }
 
-    public @NotNull UserCaller getUseCaller() {
-        return userCaller;
-    }
 
-    public @NotNull MessageCaller getMessageCaller() {
-        return messageCaller;
-    }
-
-    public @NotNull StickerCaller getStickerCaller() {
-        return stickerCaller;
-    }
-
-    public @NotNull YDWCaller getYDWCaller() {
-        return ydwCaller;
-    }
-
-    public @NotNull ChannelCaller getChannelCaller() {
-        return channelCaller;
-    }
-
-    public @NotNull EmojiCaller getEmojiCaller() {
-        return emojiCaller;
-    }
-
-    public @NotNull SlashCommandCaller getSlashCommandCaller() {
-        return slashCommandCaller;
+    public OkHttpClient getHttpClient() {
+        return client;
     }
 
     public YDWReg getYDW() {
         return ydw;
     }
 
-    public OkHttpClient getHttpClient() {
-        return client;
+    public @NotNull GuildCaller getGuildCaller() {
+        return new GuildCaller(token, ydw, JSON, client);
     }
 
-    public String getToken() {
-        return token;
+    public @NotNull UserCaller getUseCaller() {
+        return new UserCaller(token, ydw, client);
     }
 
+    public @NotNull MessageCaller getMessageCaller() {
+        return new MessageCaller(ydw, JSON, client);
+    }
+
+    public @NotNull StickerCaller getStickerCaller() {
+        return new StickerCaller(token, ydw, client);
+    }
+
+    public @NotNull YDWCaller getYDWCaller() {
+        return new YDWCaller(token, ydw, client);
+    }
+
+    public @NotNull ChannelCaller getChannelCaller() {
+        return new ChannelCaller(token, ydw, client);
+    }
+
+    public @NotNull EmojiCaller getEmojiCaller() {
+        return new EmojiCaller(token, ydw, client);
+    }
+
+    public @NotNull SlashCommandCaller getSlashCommandCaller() {
+        return new SlashCommandCaller(token, guildId, ydw, JSON, client);
+    }
 }
+

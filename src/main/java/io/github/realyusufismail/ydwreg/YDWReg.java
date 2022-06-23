@@ -18,36 +18,34 @@
 package io.github.realyusufismail.ydwreg;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.neovisionaries.ws.client.WebSocketException;
+import io.github.realyusufismail.handler.EventSenderSystem;
+import io.github.realyusufismail.handler.EventSystem;
 import io.github.realyusufismail.websocket.WebSocketManager;
-import io.github.realyusufismail.websocket.event.Event;
-import io.github.realyusufismail.websocket.event.EventInterface;
+import io.github.realyusufismail.websocket.event.BasicEvent;
 import io.github.realyusufismail.websocket.event.events.ApiStatusChangeEvent;
 import io.github.realyusufismail.ydw.GateWayIntent;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.entities.*;
 import io.github.realyusufismail.ydw.entities.guild.Channel;
-import io.github.realyusufismail.ydwreg.application.interaction.InteractionManager;
+import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
 import io.github.realyusufismail.ydwreg.entities.guild.manager.GuildManager;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import okhttp3.OkHttpClient;
-import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Flux;
 
-import java.io.IOException;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 
 public class YDWReg implements YDW {
 
     // logger
     public static final Logger logger = LoggerFactory.getLogger(YDWReg.class);
-    @NotNull
-    private final RestApiHandler rest;
+    private RestApiHandler rest;
     @NotNull
     private final ObjectMapper mapper;
     private WebSocketManager ws;
@@ -70,16 +68,50 @@ public class YDWReg implements YDW {
 
     private Boolean resumed;
 
-    private EventInterface eventInterface;
-
     private boolean ready;
 
     private ApiStatus status = ApiStatus.STARTING;
+    private String guildId;
+    private String token;
 
-    public YDWReg(@NotNull OkHttpClient client) {
-        this.rest = new RestApiHandler(client);
+    private Long applicationId;
+
+    private final ExecutorService executorService;
+
+    private final EventSenderSystem eventSenderSystem;
+
+    public YDWReg(@NotNull OkHttpClient client, ExecutorService executorService) {
+        this.executorService = executorService;
         mapper = new ObjectMapper();
         this.client = client;
+        eventSenderSystem = new EventSenderSystem(new EventSystem(), executorService);
+    }
+
+    public void handelEvent(BasicEvent event) {
+        eventSenderSystem.send(event);
+    }
+
+    @Override
+    public YDW awaitStatus(ApiStatus status) throws InterruptedException {
+        if (!status.isInitialized()) {
+            throw new IllegalArgumentException("Status is not part of the initialising state");
+        }
+
+        if (this.status == status)
+            return this;
+        List<ApiStatus> statuses = List.of(status);
+        while (!getStatus().isInitialized() || getStatus().ordinal() < status.ordinal()) {
+            if (getStatus() == ApiStatus.SHUT_DOWN)
+                throw new IllegalStateException("Bot is shut down");
+            else if (statuses.contains(getStatus()))
+                return this;
+            Thread.sleep(100);
+        }
+        return this;
+    }
+
+    public ApiStatus getStatus() {
+        return status;
     }
 
     @NotNull
@@ -140,18 +172,22 @@ public class YDWReg implements YDW {
     public void login(String token, int gatewayIntents, String status, int largeThreshold,
             ActivityConfig activity) throws Exception {
         logger.info("Received login request");
+        this.token = token;
         ws = new WebSocketManager(this, token, gatewayIntents, status, largeThreshold, activity);
     }
 
-
     @Override
-    public void setToken(String token) {
-        rest.setToken(token);
+    public void loginForRest(String token, @Nullable String guildId) {
+        rest = new RestApiHandler(this, token, client, guildId);
     }
 
     @Override
-    public void setGuildId(String guildId) {
-        rest.setGuildId(guildId);
+    public String getToken() {
+        return token;
+    }
+
+    public String getGuildId() {
+        return guildId;
     }
 
     @Override
@@ -211,21 +247,27 @@ public class YDWReg implements YDW {
     }
 
     @Override
-    public @NotNull SelfUser getSelfUser() {
+    public @NotNull SelfUser getSelfUser() throws InterruptedException {
         Optional<SelfUser> user = Optional.ofNullable(this.selfUser);
-        if (user.isPresent())
-            return user.get();
-        else
-            throw new IllegalStateException("Self user is not set");
+        return user.orElseThrow(() -> new IllegalStateException("Self user is not set"));
+    }
+
+    @Override
+    public void setEventHandler(@NotNull Object... eventHandler) {
+        for (Object handler : eventHandler) {
+            eventSenderSystem.register(handler);
+        }
+    }
+
+    @Override
+    public void removeEventHandler(@NotNull Object... eventHandler) {
+        for (Object handler : eventHandler) {
+            eventSenderSystem.unregister(handler);
+        }
     }
 
     public void setSelfUser(@NotNull SelfUser selfUser) {
         this.selfUser = selfUser;
-    }
-
-    @Override
-    public <EventClass extends Event> Flux<EventClass> onEvent(Class<EventClass> event) {
-        return eventInterface.onEvent(event);
     }
 
     public Boolean isResumable() {
@@ -256,15 +298,6 @@ public class YDWReg implements YDW {
         return new GuildManager(this);
     }
 
-    @Override
-    public EventInterface getEventInterface() {
-        return eventInterface;
-    }
-
-    public void setEventInterface(EventInterface eventInterface) {
-        this.eventInterface = eventInterface;
-    }
-
     public void setResumed(boolean b) {
         this.resumed = b;
     }
@@ -278,11 +311,12 @@ public class YDWReg implements YDW {
             ApiStatus oldStatus = this.status;
             this.status = apiStatus;
 
-            onEvent(ApiStatusChangeEvent.class).subscribe(event -> {
-                event.setOldStatus(oldStatus);
-                event.setNewStatus(apiStatus);
-            });
+            handelEvent(new ApiStatusChangeEvent(this, oldStatus, apiStatus));
         }
+    }
+
+    public void setRest(RestApiHandler rest) {
+        this.rest = rest;
     }
 
     public ObjectMapper getMapper() {
@@ -295,5 +329,23 @@ public class YDWReg implements YDW {
 
     public Logger getLogger() {
         return logger;
+    }
+
+    public void setApplicationId(long applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public long getApplicationId() {
+        if (applicationId == null)
+            throw new IllegalStateException("Application id is not set");
+        return applicationId;
+    }
+
+    public ExecutorService getExecutorService() {
+        return executorService;
+    }
+
+    public EventSenderSystem getEventSenderSystem() {
+        return eventSenderSystem;
     }
 }

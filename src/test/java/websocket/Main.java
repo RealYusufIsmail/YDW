@@ -1,16 +1,27 @@
 package websocket;
 
-import com.neovisionaries.ws.client.WebSocketException;
-import io.github.realyusufismail.ydw.GateWayIntent;
+import io.github.realyusufismail.websocket.event.events.ReadyEvent;
 import io.github.realyusufismail.ydw.Status;
-import io.github.realyusufismail.ydwreg.exception.InvalidStatusException;
+import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.YDWConfig;
 import io.github.yusufsdiscordbot.config.Config;
 
-import java.io.IOException;
-
 public class Main {
-    public static void main(String[] args)
-            throws WebSocketException, IOException, InvalidStatusException {
-        YDwConfig.setDefault(Config.getString("TOKEN")).setStatus(Status.ONLINE).build();
+    public static void main(String[] args) throws Exception {
+        YDW ydw = YDWConfig.setDefault(Config.getString("TOKEN"))
+            .setStatus(Status.ONLINE)
+            .setGuildId("938122131949097052")
+            .build();
+
+        ydw.awaitReady().newSlashCommand("ping", "responds with pong").call();
+
+        ydw.awaitReady()
+            .newSlashCommand("guild", "A guild only command")
+            .setToGuildOnly(true)
+            .call();
+
+        ydw.awaitReady().newSlashCommand("test1", "test1").setToGuildOnly(true).call();
+
+        ydw.awaitReady().setEventHandler(new TestHandler());
     }
 }

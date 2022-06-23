@@ -60,7 +60,7 @@ public class ChannelReg implements Channel {
     private final String name;
     private final String topic;
     private final Boolean nsfw;
-    private final Message lastMessage;
+    private final Integer lastMessageId;
     private final Integer bitrate;
     private final Integer userLimit;
     private final Integer rateLimitPerUser;
@@ -93,69 +93,73 @@ public class ChannelReg implements Channel {
 
         this.type = ChannelType.getChannelType(channelJ.get("type").asInt());
         this.guild =
-                channelJ.has("guild_id") ? ydw.getGuild(channelJ.get("guild_id").asLong()) : null;
-        this.position = channelJ.has("position") ? channelJ.get("position").asInt() : null;
-        this.name = channelJ.has("name") ? channelJ.get("name").asText() : null;
-        this.topic = channelJ.has("topic") ? channelJ.get("topic").asText() : null;
-        this.nsfw = channelJ.has("nsfw") ? channelJ.get("nsfw").asBoolean() : null;
-        this.lastMessage =
-                channelJ.has("last_message_id")
-                        ? ydw.getRest()
-                            .getChannelCaller()
-                            .getMessage(this.id, channelJ.get("last_message_id").asLong())
+                channelJ.hasNonNull("guild_id") ? ydw.getGuild(channelJ.get("guild_id").asLong())
                         : null;
-        this.bitrate = channelJ.has("bitrate") ? channelJ.get("bitrate").asInt() : null;
-        this.userLimit = channelJ.has("user_limit") ? channelJ.get("user_limit").asInt() : null;
-        this.rateLimitPerUser =
-                channelJ.has("rate_limit_per_user") ? channelJ.get("rate_limit_per_user").asInt()
+        this.position = channelJ.hasNonNull("position") ? channelJ.get("position").asInt() : null;
+        this.name = channelJ.hasNonNull("name") ? channelJ.get("name").asText() : null;
+        this.topic = channelJ.hasNonNull("topic") ? channelJ.get("topic").asText() : null;
+        this.nsfw = channelJ.hasNonNull("nsfw") ? channelJ.get("nsfw").asBoolean() : null;
+        this.lastMessageId =
+                channelJ.hasNonNull("last_message_id") ? channelJ.get("last_message_id").asInt()
                         : null;
-        this.icon = channelJ.has("icon") ? channelJ.get("icon").asText() : null;
+        this.bitrate = channelJ.hasNonNull("bitrate") ? channelJ.get("bitrate").asInt() : null;
+        this.userLimit =
+                channelJ.hasNonNull("user_limit") ? channelJ.get("user_limit").asInt() : null;
+        this.rateLimitPerUser = channelJ.hasNonNull("rate_limit_per_user")
+                ? channelJ.get("rate_limit_per_user").asInt()
+                : null;
+        this.icon = channelJ.hasNonNull("icon") ? channelJ.get("icon").asText() : null;
         this.owner =
-                channelJ.has("owner_id") ? ydw.getUser(channelJ.get("owner_id").asLong()) : null;
+                channelJ.hasNonNull("owner_id") ? ydw.getUser(channelJ.get("owner_id").asLong())
+                        : null;
         this.applicationId =
-                channelJ.has("application_id") ? channelJ.get("application_id").asLong() : null;
-        this.parentId = channelJ.has("parent_id") ? channelJ.get("parent_id").asLong() : null;
-        this.lastPinTimestamp = channelJ.has("last_pin_timestamp")
+                channelJ.hasNonNull("application_id") ? channelJ.get("application_id").asLong()
+                        : null;
+        this.parentId =
+                channelJ.hasNonNull("parent_id") ? channelJ.get("parent_id").asLong() : null;
+        this.lastPinTimestamp = channelJ.hasNonNull("last_pin_timestamp")
                 ? ZonedDateTime.parse(channelJ.get("last_pin_timestamp").asText())
                 : null;
-        this.rtcRegion = channelJ.has("rtc_region") ? channelJ.get("rtc_region").asText() : null;
-        this.videoQualityMode =
-                channelJ.has("video_quality_mode") ? channelJ.get("video_quality_mode").asInt()
-                        : null;
+        this.rtcRegion =
+                channelJ.hasNonNull("rtc_region") ? channelJ.get("rtc_region").asText() : null;
+        this.videoQualityMode = channelJ.hasNonNull("video_quality_mode")
+                ? channelJ.get("video_quality_mode").asInt()
+                : null;
         this.messageCount =
-                channelJ.has("message_count") ? channelJ.get("message_count").asInt() : null;
+                channelJ.hasNonNull("message_count") ? channelJ.get("message_count").asInt() : null;
         this.memberCount =
-                channelJ.has("member_count") ? channelJ.get("member_count").asInt() : null;
+                channelJ.hasNonNull("member_count") ? channelJ.get("member_count").asInt() : null;
         this.threadMetadata =
-                channelJ.has("thread_metadata")
+                channelJ.hasNonNull("thread_metadata")
                         ? new ThreadMetadataReg(channelJ.get("thread_metadata"),
                                 channelJ.get("thread_metadata").get("id").asLong(), ydw)
                         : null;
         this.member =
-                channelJ.has("member")
+                channelJ.hasNonNull("member")
                         ? new ThreadMemberReg(channelJ.get("member"),
                                 channelJ.get("member").get("id").asLong(), ydw)
                         : null;
-        this.defaultAutoArchiveDuration = channelJ.has("default_auto_archive_duration")
+        this.defaultAutoArchiveDuration = channelJ.hasNonNull("default_auto_archive_duration")
                 ? channelJ.get("default_auto_archive_duration").asInt()
                 : null;
-        this.permissions = channelJ.has("permissions")
+        this.permissions = channelJ.hasNonNull("permissions")
                 ? Permission.getPermissions(channelJ.get("permissions").asInt())
                 : null;
-        this.flags = channelJ.has("flags") ? MessageFlags.fromValues(channelJ.get("flags").asInt())
+        this.flags = channelJ.hasNonNull("flags")
+                ? MessageFlags.fromValues(channelJ.get("flags").asInt())
                 : null;
         this.category =
-                channelJ.has("category_id") ? new ChannelCategoryReg(channelJ, parentId, ydw)
+                channelJ.hasNonNull("category_id") ? new ChannelCategoryReg(channelJ, parentId, ydw)
                         : null;
 
-        if (channelJ.has("permission_overwrites")) {
+        if (channelJ.hasNonNull("permission_overwrites")) {
             for (JsonNode permission : channelJ.get("permission_overwrites")) {
                 permissionOverwrites
                     .add(new OverwriteReg(permission, permission.get("id").asLong(), ydw));
             }
         }
 
-        if (channelJ.has("recipients")) {
+        if (channelJ.hasNonNull("recipients")) {
             for (JsonNode recipient : channelJ.get("recipients")) {
                 recipients.add(new UserReg(recipient, recipient.get("id").asLong(), ydw));
             }
@@ -219,8 +223,8 @@ public class ChannelReg implements Channel {
     }
 
     @Override
-    public @NotNull Optional<Message> getLastMessage() {
-        return Optional.ofNullable(lastMessage);
+    public @NotNull Optional<Integer> getLastMessageId() {
+        return Optional.ofNullable(lastMessageId);
     }
 
     @NotNull

@@ -75,7 +75,7 @@ public class MemberReg implements Member {
 
         if (member.hasNonNull("roles")) {
             for (JsonNode role : member.get("roles")) {
-                roles.add(new RoleReg(role, ydw, role.get("id").asLong()));
+                roles.add(new RoleReg(role, ydw, role.asLong()));
             }
         }
     }

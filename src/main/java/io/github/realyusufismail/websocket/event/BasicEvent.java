@@ -15,14 +15,10 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.websocket;
+package io.github.realyusufismail.websocket.event;
 
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.YDWConnector;
-import io.github.yusufsdiscordbot.config.Config;
 
-class WebSocketTest {
-    public static void main(String[] args) throws Exception {
-        YDW ydw = YDWConnector.setUpBot(Config.getString("TOKEN")).build();
-    }
+public interface BasicEvent {
+    YDW getYDW();
 }

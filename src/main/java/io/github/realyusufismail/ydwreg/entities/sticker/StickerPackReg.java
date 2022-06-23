@@ -49,7 +49,7 @@ public class StickerPackReg implements StickerPack {
         this.coverStickerId = sticker.get("coverStickerId").asLong();
         this.bannerAssetId = sticker.get("bannerAssetId").asLong();
 
-        if (sticker.has("stickers")) {
+        if (sticker.hasNonNull("stickers")) {
             for (JsonNode s : sticker.get("stickers")) {
                 stickers.add(new StickerReg(s, s.get("id").asLong(), ydw));
             }

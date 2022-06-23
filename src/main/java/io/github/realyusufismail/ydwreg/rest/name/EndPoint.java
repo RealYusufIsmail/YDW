@@ -50,7 +50,7 @@ public enum EndPoint {
     GET_CURRENT_USER(YDWInfo.DISCORD_REST_LINK + "/users/@me"),
     GET_USER(YDWInfo.DISCORD_REST_LINK + "/users/%s"),
     GET_CURRENT_USER_GUILD_MEMBER(YDWInfo.DISCORD_REST_LINK + "/users/@me/guilds/%s/member"),
-    GET_CURRENT_USER_GUILDS(YDWInfo.DISCORD_REST_LINK + "/users/@me/guilds/%s"),
+    GET_CURRENT_USER_GUILDS(YDWInfo.DISCORD_REST_LINK + "/users/@me/guilds"),
     LEAVE_GUILD(YDWInfo.DISCORD_REST_LINK + "/users/@me/guilds/%s"),
     CREATE_DM(YDWInfo.DISCORD_REST_LINK + "/users/@me/channels"),
 
@@ -63,7 +63,8 @@ public enum EndPoint {
 
     // Slash command.
     GLOBAL_SLASH_COMMAND("https://discord.com/api/v10/applications/%s/commands"),
-    GUILD_SLASH_COMMAND("https://discord.com/api/v10/applications/%s/guilds/%s/commands"),;
+    GUILD_SLASH_COMMAND("https://discord.com/api/v10/applications/%s/guilds/%s/commands"),
+    REPLY_TO_SLASH_COMMAND("/webhooks/%s/%s");
 
     private final String endpoint;
 
@@ -75,19 +76,13 @@ public enum EndPoint {
         return endpoint;
     }
 
-    public @NotNull String getFullEndpoint(@NotNull String... parms) {
+    @NotNull
+    public String getFullEndpoint(@NotNull Object... parms) {
         StringBuilder sb = new StringBuilder(endpoint);
-        int parmsAmount = getEndpoint().split("%s").length - (getEndpoint().endsWith("%s") ? 1 : 0);
-        if (parms.length > parmsAmount) {
-            for (int i = parmsAmount; i < parms.length; i++) {
-                sb.append("/").append(parms[i]);
-            }
+        // replaces %s with parms
+        for (Object parm : parms) {
+            sb.replace(sb.indexOf("%s"), sb.indexOf("%s") + 2, parm.toString());
         }
         return sb.toString();
-    }
-
-    @NotNull
-    public String getFullEndpoint(Long... parms) {
-        return getFullEndpoint(Arrays.toString(parms));
     }
 }

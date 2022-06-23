@@ -62,7 +62,7 @@ public class GuildReg implements Guild {
     private final String vanityUrlCode;
     private final String description;
     private final String banner;
-    @NotNull
+
     private final Integer premiumTier;
     private final Integer premiumSubscriptionCount;
     private final String preferredLocale;
@@ -74,29 +74,19 @@ public class GuildReg implements Guild {
     @NotNull
     private final Integer nsfwLevel;
     private final Boolean isPremiumProgressBarEnabled;
-    @NotNull
     private final Long ownerId;
-    @NotNull
     private final Long afkChannelId;
-    @NotNull
     private final Integer afkTimeout;
     private final Boolean isWidgetEnabled;
     private final String permissions;
     private final Long widgetChannelId;
-    @NotNull
     private final Integer verificationLevel;
-    @NotNull
     private final Integer defaultMessageNotifications;
-    @NotNull
     private final Integer explicitContentFilter;
-    @NotNull
     private final Integer mfaLevel;
-    @NotNull
     private final Long applicationId;
-    @NotNull
     private final Long systemChannelId;
     private final SystemChannelFlags systemChannelFlags;
-    @NotNull
     private final Long rulesChannelId;
     private final ZonedDateTime joinedAt;
     private final Boolean isLarge;
@@ -113,8 +103,6 @@ public class GuildReg implements Guild {
     private final List<NewsChannel> newsChannels = new ArrayList<>();
     private final List<StageChannel> stageChannels = new ArrayList<>();
     private final List<VoiceChannel> voiceChannels = new ArrayList<>();
-    @NotNull
-    GuildCaller restApi = getYDW().getRest().getGuildRestApi();
 
     public GuildReg(@NotNull JsonNode guildJ, long guildId, @NotNull YDW ydw) {
         this.ydw = ydw;
@@ -123,29 +111,44 @@ public class GuildReg implements Guild {
         this.name = guildJ.get("name").asText();
         this.icon = guildJ.get("icon").asText();
         this.iconHash = guildJ.hasNonNull("icon_hash") ? guildJ.get("icon_hash").asText() : null;
-        this.splash = guildJ.get("splash").asText();
-        this.discoverySplash = guildJ.get("discovery_splash").asText();
+        this.splash = guildJ.hasNonNull("splash") ? guildJ.get("splash").asText() : null;
+        this.discoverySplash =
+                guildJ.hasNonNull("discovery_splash") ? guildJ.get("discovery_splash").asText()
+                        : null;
         this.owner = guildJ.hasNonNull("owner") ? guildJ.get("owner").asBoolean() : null;
         this.permissions =
                 guildJ.hasNonNull("permissions") ? guildJ.get("permissions").asText() : null;
-        this.afkChannelId = guildJ.get("afk_channel_id").asLong();
-        this.afkTimeout = guildJ.get("afk_timeout").asInt();
+        this.afkChannelId =
+                guildJ.hasNonNull("afk_channel_id") ? guildJ.get("afk_channel_id").asLong() : null;
+        this.afkTimeout =
+                guildJ.hasNonNull("afk_timeout") ? guildJ.get("afk_timeout").asInt() : null;
         this.isWidgetEnabled =
                 guildJ.hasNonNull("widget_enabled") ? guildJ.get("widget_enabled").asBoolean()
                         : null;
         this.widgetChannelId =
                 guildJ.hasNonNull("widget_channel_id") ? guildJ.get("widget_channel_id").asLong()
                         : null;
-        this.verificationLevel = guildJ.get("verification_level").asInt();
-        this.defaultMessageNotifications = guildJ.get("default_message_notifications").asInt();
-        this.explicitContentFilter = guildJ.get("explicit_content_filter").asInt();
-        this.mfaLevel = guildJ.get("mfa_level").asInt();
-        this.applicationId = guildJ.get("application_id").asLong();
-        this.systemChannelId = guildJ.get("system_channel_id").asLong();
+        this.verificationLevel =
+                guildJ.hasNonNull("verification_level") ? guildJ.get("verification_level").asInt()
+                        : null;
+        this.defaultMessageNotifications = guildJ.hasNonNull("default_message_notifications")
+                ? guildJ.get("default_message_notifications").asInt()
+                : null;
+        this.explicitContentFilter = guildJ.hasNonNull("explicit_content_filter")
+                ? guildJ.get("explicit_content_filter").asInt()
+                : null;
+        this.mfaLevel = guildJ.hasNonNull("mfa_level") ? guildJ.get("mfa_level").asInt() : null;
+        this.applicationId =
+                guildJ.hasNonNull("application_id") ? guildJ.get("application_id").asLong() : null;
+        this.systemChannelId =
+                guildJ.hasNonNull("system_channel_id") ? guildJ.get("system_channel_id").asLong()
+                        : null;
         this.systemChannelFlags = guildJ.hasNonNull("system_channel_flags")
                 ? SystemChannelFlags.fromValue(guildJ.get("system_channel_flags").asInt())
                 : null;
-        this.rulesChannelId = guildJ.get("rules_channel_id").asLong();
+        this.rulesChannelId =
+                guildJ.hasNonNull("rules_channel_id") ? guildJ.get("rules_channel_id").asLong()
+                        : null;
         this.maxPresences =
                 guildJ.hasNonNull("max_presences") ? guildJ.get("max_presences").asInt() : null;
         this.vanityUrlCode =
@@ -154,7 +157,8 @@ public class GuildReg implements Guild {
         this.description =
                 guildJ.hasNonNull("description") ? guildJ.get("description").asText() : null;
         this.banner = guildJ.hasNonNull("banner") ? guildJ.get("banner").asText() : null;
-        this.premiumTier = guildJ.get("premium_tier").asInt();
+        this.premiumTier =
+                guildJ.hasNonNull("premium_tier") ? guildJ.get("premium_tier").asInt() : null;
         this.premiumSubscriptionCount = guildJ.hasNonNull("premium_subscription_count")
                 ? guildJ.get("premium_subscription_count").asInt()
                 : null;
@@ -175,13 +179,13 @@ public class GuildReg implements Guild {
         this.welcomeScreen = guildJ.hasNonNull("welcome_screen")
                 ? new WelcomeScreenReg(guildJ.get("welcome_screen"), ydw, guildId)
                 : null;
-        this.nsfwLevel = guildJ.get("nsfw_level").asInt();
+        this.nsfwLevel = guildJ.hasNonNull("nsfw_level") ? guildJ.get("nsfw_level").asInt() : null;
         this.isPremiumProgressBarEnabled =
                 guildJ.hasNonNull("premium_tier_name") ? guildJ.get("premium_tier_name").asBoolean()
                         : null;
         this.maxMembers =
                 guildJ.hasNonNull("max_members") ? guildJ.get("max_members").asInt() : null;
-        this.ownerId = guildJ.get("owner_id").asLong();
+        this.ownerId = guildJ.hasNonNull("owner_id") ? guildJ.get("owner_id").asLong() : null;
         this.joinedAt = guildJ.hasNonNull("joined_at")
                 ? ZonedDateTime.parse(guildJ.get("joined_at").asText())
                 : null;
@@ -198,49 +202,49 @@ public class GuildReg implements Guild {
         final ArrayNode channels = (ArrayNode) guildJ.get("channels");
         final ArrayNode stickers = (ArrayNode) guildJ.get("stickers");
 
-        if (guildJ.has("roles")) {
+        if (guildJ.hasNonNull("roles")) {
             for (JsonNode roleJ : roles) {
                 Role role = new RoleReg(roleJ, ydw, roleJ.get("id").asLong());
                 this.roles.add(role);
             }
         }
 
-        if (guildJ.has("emojis")) {
+        if (guildJ.hasNonNull("emojis")) {
             for (JsonNode emojiJ : emojis) {
                 Emoji emoji = new EmojiReg(emojiJ, emojiJ.get("id").asLong(), ydw);
                 this.emoji.add(emoji);
             }
         }
 
-        if (guildJ.has("features")) {
+        if (guildJ.hasNonNull("features")) {
             for (JsonNode featureJ : features) {
                 GuildFeatures feature = GuildFeatures.getFeature(featureJ.asText());
                 this.features.add(feature);
             }
         }
 
-        if (guildJ.has("voice_states")) {
+        if (guildJ.hasNonNull("voice_states")) {
             for (JsonNode voiceStateJ : voiceStates) {
                 VoiceState voiceState = new VoiceStateReg(voiceStateJ, ydw);
                 this.voiceStates.add(voiceState);
             }
         }
 
-        if (guildJ.has("members")) {
+        if (guildJ.hasNonNull("members")) {
             for (JsonNode memberJ : members) {
                 Member member = new MemberReg(memberJ, ydw);
                 this.members.add(member);
             }
         }
 
-        if (guildJ.has("channels")) {
+        if (guildJ.hasNonNull("channels")) {
             for (JsonNode channelJ : channels) {
                 Channel channel = new ChannelReg(channelJ, channelJ.get("id").asLong(), ydw);
                 this.channels.add(channel);
             }
         }
 
-        if (guildJ.has("stickers")) {
+        if (guildJ.hasNonNull("stickers")) {
             for (JsonNode stickerJ : stickers) {
                 Sticker sticker = new StickerReg(stickerJ, stickerJ.get("id").asLong(), ydw);
                 this.stickers.add(sticker);
@@ -495,61 +499,61 @@ public class GuildReg implements Guild {
     @Override
     public @NotNull Action ban(@NotNull String userId, int deleteMessageDays, String reason) {
         Verify.checkAmount(deleteMessageDays, 7);
-        var request = restApi.ban(this.getIdLong(), userId, deleteMessageDays, reason);
+        var request = getGuildCaller().ban(this.getIdLong(), userId, deleteMessageDays, reason);
         return new ActionReg(request, ydw);
     }
 
     @Override
     public @NotNull Action ban(long userId, int deleteMessageDays, String reason) {
         Verify.checkAmount(deleteMessageDays, 7);
-        var request = restApi.ban(this.getIdLong(), userId, deleteMessageDays, reason);
+        var request = getGuildCaller().ban(this.getIdLong(), userId, deleteMessageDays, reason);
         return new ActionReg(request, ydw);
     }
 
     @NotNull
     @Override
     public Boolean isBanned(long userId) {
-        return restApi.isBanned(this.getIdLong(), userId);
+        return getGuildCaller().isBanned(this.getIdLong(), userId);
     }
 
     @NotNull
     @Override
     public Boolean isBanned(@NotNull String userId) {
-        return restApi.isBanned(this.getIdLong(), userId);
+        return getGuildCaller().isBanned(this.getIdLong(), userId);
     }
 
     @Override
     public @NotNull Action unBanUser(@NotNull String userId) {
-        var request = restApi.unBan(this.getIdLong(), userId);
+        var request = getGuildCaller().unBan(this.getIdLong(), userId);
         return new ActionReg(request, ydw);
     }
 
     @Override
     public @NotNull Action unBanUser(long userId) {
-        var request = restApi.unBan(this.getIdLong(), userId);
+        var request = getGuildCaller().unBan(this.getIdLong(), userId);
         return new ActionReg(request, ydw);
     }
 
     @Override
     public @NotNull Action kick(long userId) {
-        var request = restApi.kickMember(this.getIdLong(), userId);
+        var request = getGuildCaller().kickMember(this.getIdLong(), userId);
         return new ActionReg(request, ydw);
     }
 
     @Override
     public @NotNull Action kick(@NotNull String userId) {
-        var request = restApi.kickMember(this.getIdLong(), userId);
+        var request = getGuildCaller().kickMember(this.getIdLong(), userId);
         return new ActionReg(request, ydw);
     }
 
     @Override
     public @Nullable Member getMemberById(@NotNull String memberId) {
-        return restApi.getMember(this.getIdLong(), memberId);
+        return getGuildCaller().getMember(this.getIdLong(), memberId);
     }
 
     @Override
     public @NotNull Member getMemberById(long id) {
-        return restApi.getMember(this.getIdLong(), id);
+        return getGuildCaller().getMember(this.getIdLong(), id);
     }
 
     @Override
@@ -592,4 +596,8 @@ public class GuildReg implements Guild {
         return (YDWReg) ydw;
     }
 
+    @NotNull
+    private GuildCaller getGuildCaller() {
+        return ydw.getRest().getGuildCaller();
+    }
 }

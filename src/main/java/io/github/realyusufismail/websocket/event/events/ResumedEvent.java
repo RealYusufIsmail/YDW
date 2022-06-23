@@ -1,9 +1,10 @@
 package io.github.realyusufismail.websocket.event.events;
 
-import io.github.realyusufismail.websocket.event.Event;
+import io.github.realyusufismail.websocket.event.BasicEvent;
+import io.github.realyusufismail.websocket.event.EventExtender;
 import io.github.realyusufismail.ydw.YDW;
 
-public class ResumedEvent extends Event {
+public class ResumedEvent extends EventExtender {
     private final boolean resumed;
 
     public ResumedEvent(YDW ydw) {

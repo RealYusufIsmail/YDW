@@ -27,7 +27,7 @@ import io.github.realyusufismail.ydw.entities.User;
 import io.github.realyusufismail.ydw.entities.guild.Channel;
 import io.github.realyusufismail.ydw.entities.guild.Member;
 import io.github.realyusufismail.ydw.entities.guild.Message;
-import io.github.realyusufismail.ydwreg.application.interaction.InteractionDataReg;
+import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionDataReg;
 import io.github.realyusufismail.ydwreg.entities.UserReg;
 import io.github.realyusufismail.ydwreg.entities.guild.MemberReg;
 import io.github.realyusufismail.ydwreg.entities.guild.MessageReg;

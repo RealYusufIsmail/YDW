@@ -22,8 +22,10 @@ import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.guild.Message;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.entities.guild.MessageReg;
+import io.github.realyusufismail.ydwreg.rest.error.RestApiError;
 import io.github.realyusufismail.ydwreg.rest.exception.RestApiException;
 import io.github.realyusufismail.ydwreg.rest.name.EndPoint;
+import io.github.realyusufismail.ydwreg.rest.request.YDWRequest;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -38,26 +40,28 @@ public class ChannelCaller {
     private static final Logger logger = LoggerFactory.getLogger(ChannelCaller.class);
     private final YDWReg ydw;
     private final OkHttpClient client;
+    private final String token;
 
-    public ChannelCaller(@Nullable YDW ydw, OkHttpClient client) {
+    public ChannelCaller(String token, @NotNull YDW ydw, OkHttpClient client) {
         this.ydw = (YDWReg) ydw;
         this.client = client;
+        this.token = token;
     }
 
     @Nullable
     public Message getMessage(long channelId, long messageId) {
-        Request request = new Request.Builder()
-            .url(EndPoint.GET_CHANNEL_MESSAGE.getFullEndpoint(channelId, messageId))
+        Request request = new YDWRequest()
+            .request(token, EndPoint.GET_CHANNEL_MESSAGE.getFullEndpoint(channelId, messageId))
             .get()
             .build();
         try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful())
+                throw new IOException("Unexpected code " + RestApiError.fromCode(response.code())
+                        + " " + RestApiError.fromCode(response.code()).getMessage());
             var body = response.body();
-            if (body == null) {
-                return null;
-            } else {
-                JsonNode jsonNode = ydw.getMapper().readTree(body.string());
-                return new MessageReg(jsonNode, jsonNode.get("id").asLong(), ydw);
-            }
+            JsonNode jsonNode = ydw.getMapper().readTree(body.string());
+            return new MessageReg(jsonNode, jsonNode.get("id").asLong(), ydw);
+
         } catch (IOException e) {
             throw new RestApiException(e);
         }

@@ -25,10 +25,12 @@ public class ChannelCategoryReg extends ChannelReg implements ChannelCategory {
         super(chanelCategory, id, ydw);
 
         this.categoryId = id;
-        this.name = chanelCategory.has("name") ? chanelCategory.get("name").asText() : null;
-        this.nsfw = chanelCategory.has("nsfw") ? chanelCategory.get("nsfw").asBoolean() : null;
+        this.name = chanelCategory.hasNonNull("name") ? chanelCategory.get("name").asText() : null;
+        this.nsfw =
+                chanelCategory.hasNonNull("nsfw") ? chanelCategory.get("nsfw").asBoolean() : null;
         this.position =
-                chanelCategory.has("position") ? chanelCategory.get("position").asInt() : null;
+                chanelCategory.hasNonNull("position") ? chanelCategory.get("position").asInt()
+                        : null;
         this.type = ChannelType.getChannelType(chanelCategory.get("type").asInt());
     }
 

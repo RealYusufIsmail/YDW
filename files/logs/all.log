@@ -1,0 +1,28 @@
+2022/39/16 16:39:41 {ReadingThread} [ERROR] io.github.realyusufismail.websocket.WebSocketManager: Error while handling message
+io.github.realyusufismail.ydwreg.rest.exception.RestApiException: java.io.IOException: Unexpected code TOO_MANY_REQUESTS You have made too many requests in a given amount of time.
+	at io.github.realyusufismail.ydwreg.rest.callers.UserCaller.getGuilds(UserCaller.java:68)
+	at io.github.realyusufismail.ydwreg.entities.UserReg.<init>(UserReg.java:85)
+	at io.github.realyusufismail.ydwreg.entities.SelfUserReg.<init>(SelfUserReg.java:38)
+	at io.github.realyusufismail.ydwreg.entities.SelfUserReg.<init>(SelfUserReg.java:51)
+	at io.github.realyusufismail.websocket.handle.handles.ReadyHandler.start(ReadyHandler.java:79)
+	at io.github.realyusufismail.websocket.handle.OnHandler.fire(OnHandler.java:54)
+	at io.github.realyusufismail.websocket.handle.OnHandler.lambda$start$0(OnHandler.java:49)
+	at java.base/java.util.Optional.ifPresent(Optional.java:178)
+	at io.github.realyusufismail.websocket.handle.OnHandler.start(OnHandler.java:49)
+	at io.github.realyusufismail.websocket.WebSocketManager.lambda$onEvent$2(WebSocketManager.java:131)
+	at java.base/java.util.Optional.ifPresent(Optional.java:178)
+	at io.github.realyusufismail.websocket.WebSocketManager.onEvent(WebSocketManager.java:131)
+	at io.github.realyusufismail.websocket.WebSocketManager.onHandel(WebSocketManager.java:117)
+	at io.github.realyusufismail.websocket.WebSocketManager.onHandelMessage(WebSocketManager.java:110)
+	at io.github.realyusufismail.websocket.WebSocketManager.onTextMessage(WebSocketManager.java:102)
+	at com.neovisionaries.ws.client.ListenerManager.callOnTextMessage(ListenerManager.java:353)
+	at com.neovisionaries.ws.client.ReadingThread.callOnTextMessage(ReadingThread.java:266)
+	at com.neovisionaries.ws.client.ReadingThread.callOnTextMessage(ReadingThread.java:244)
+	at com.neovisionaries.ws.client.ReadingThread.handleTextFrame(ReadingThread.java:969)
+	at com.neovisionaries.ws.client.ReadingThread.handleFrame(ReadingThread.java:752)
+	at com.neovisionaries.ws.client.ReadingThread.main(ReadingThread.java:108)
+	at com.neovisionaries.ws.client.ReadingThread.runMain(ReadingThread.java:64)
+	at com.neovisionaries.ws.client.WebSocketThread.run(WebSocketThread.java:45)
+Caused by: java.io.IOException: Unexpected code TOO_MANY_REQUESTS You have made too many requests in a given amount of time.
+	at io.github.realyusufismail.ydwreg.rest.callers.UserCaller.getGuilds(UserCaller.java:60)
+	... 22 common frames omitted
