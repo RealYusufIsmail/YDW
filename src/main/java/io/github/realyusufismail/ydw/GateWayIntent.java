@@ -33,43 +33,35 @@ import java.util.EnumSet;
  * intents during the verification process. If your bot is already verified and you need to request
  * additional privileged intents, contact support.
  * </p>
- * <p>
- * Events under the GUILD_PRESENCES and GUILD_MEMBERS intents are turned off by default on all
- * gateway versions. If you are using Gateway v6, you will receive those events if you are
- * authorized to receive them and have enabled the intents in the Developer Portal. You do not need
- * to use Intents on Gateway v6 to receive these events; you just need to enable the flags."
- * </p>
  */
 public enum GateWayIntent {
-    GUILD_MEMBERS(1, true),
+    GUILD_MEMBERS(1),
     GUILD_BANS(2),
-    GUILD_EMOJIS(3),
-    GUILD_INTEGRATIONS(4),
     GUILD_WEBHOOKS(5),
+
     GUILD_INVITES(6),
     GUILD_VOICE_STATES(7),
-    GUILD_PRESENCES(8, true),
+    GUILD_PRESENCES(8),
     GUILD_MESSAGES(9),
+
     GUILD_MESSAGE_REACTIONS(10),
     GUILD_MESSAGE_TYPING(11),
     DIRECT_MESSAGES(12),
     DIRECT_MESSAGE_REACTIONS(13),
     DIRECT_MESSAGE_TYPING(14),
-    GUILD_SCHEDULED_EVENTS(15);
+
+    MESSAGE_CONTENT(15),
+    AUTO_MODERATION_CONFIGURATION(20),
+    AUTO_MODERATION_EXECUTION(21);
+
 
     public static final int ALL_INTENTS = 1 | getValue(EnumSet.allOf(GateWayIntent.class));
     public static final int DEFAULT_INTENTS = ALL_INTENTS & ~getValue(GUILD_MEMBERS,
-            GUILD_PRESENCES, GUILD_WEBHOOKS, GUILD_MESSAGE_TYPING, DIRECT_MESSAGE_TYPING);
+            GUILD_PRESENCES, GUILD_WEBHOOKS, GUILD_MESSAGE_TYPING, DIRECT_MESSAGE_TYPING, MESSAGE_CONTENT);
     private final int value;
-    private final boolean privileged;
 
     GateWayIntent(int value) {
-        this(value, false);
-    }
-
-    GateWayIntent(int value, boolean privileged) {
-        this.value = value;
-        this.privileged = privileged;
+        this.value = 1 << value;
     }
 
     public static @Nullable GateWayIntent fromInt(int i) {

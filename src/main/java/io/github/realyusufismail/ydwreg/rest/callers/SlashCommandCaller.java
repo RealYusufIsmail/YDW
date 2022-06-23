@@ -20,8 +20,10 @@ package io.github.realyusufismail.ydwreg.rest.callers;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.action.ReplyAction;
 import io.github.realyusufismail.ydw.application.commands.option.CommandType;
 import io.github.realyusufismail.ydwreg.YDWReg;
+import io.github.realyusufismail.ydwreg.action.ReplyActionReg;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.Option;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.OptionExtender;
 import io.github.realyusufismail.ydwreg.rest.YDWCallback;
@@ -163,23 +165,25 @@ public class SlashCommandCaller {
     // Reply system
 
     // TODO: Implement reply system
-    private ObjectNode replyJson() {
-        return JsonNodeFactory.instance.objectNode().put("content", "").put("ephemeral", ephemeral);
+    private ObjectNode replyJson(String content) {
+        return JsonNodeFactory.instance.objectNode().put("content", content)
+                .put("tts", tts)
+                .put("flags", ephemeral ? 64 : null);
     }
 
-    public void reply() {
+    public ReplyAction reply(String content) {
         if (token == null || interactionToken == null) {
             throw new IllegalStateException("Token and interaction Token are required to reply");
         }
-
-
 
         Request request = new YDWRequest()
             .request(token,
                     EndPoint.REPLY_TO_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
                             interactionToken))
-            .post(RequestBody.create("", JSON))
+            .post(RequestBody.create(replyJson(content).toString(), JSON))
             .build();
+
+        return new ReplyActionReg(request, ydw);
     }
 
     public void setEphemeral(boolean ephemeral) {
@@ -190,8 +194,9 @@ public class SlashCommandCaller {
         this.tts = tts;
     }
 
-    public void setInteractionToken(String interactionToken) {
+    public SlashCommandCaller setInteractionToken(String interactionToken) {
         this.interactionToken = interactionToken;
+        return this;
     }
 
     public <T> void queue(@NotNull Request request, @Nullable Consumer<? super T> success,

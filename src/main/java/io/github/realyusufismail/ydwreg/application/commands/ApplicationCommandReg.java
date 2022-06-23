@@ -36,18 +36,18 @@ import java.util.Optional;
 
 public class ApplicationCommandReg extends EventExtender implements ApplicationCommand {
 
-    private final long id;
-    private final YDW ydw;
+    protected final long id;
+    protected final YDW ydw;
 
-    private final CommandType type;
-    private final long applicationId;
-    private final Guild guild;
-    private final String name;
-    private final String description;
-    private final String[] defaultPermission;
-    private final List<CommandOption> options = new ArrayList<>();
-    private final Boolean dmVisible;
-    private final Long version;
+    protected final CommandType type;
+    protected final long applicationId;
+    protected final Guild guild;
+    protected final String name;
+    protected final String description;
+    protected final String[] defaultPermission;
+    protected final List<CommandOption> options = new ArrayList<>();
+    protected final Boolean dmVisible;
+    protected final Long version;
 
     public ApplicationCommandReg(@NotNull JsonNode application, long id, YDW ydw) {
         super(ydw);

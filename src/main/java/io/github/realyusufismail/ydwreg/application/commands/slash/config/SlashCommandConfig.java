@@ -19,7 +19,9 @@ public class SlashCommandConfig extends ApplicationCommandReg implements SlashCo
 
     @Override
     public ReplyAction reply(String message) {
-        return null;
+        return ydw.getRest().getSlashCommandCaller()
+                .setInteractionToken(this.getId())
+                .reply(message);
     }
 
     @Override
