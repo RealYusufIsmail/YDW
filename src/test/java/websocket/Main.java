@@ -22,6 +22,6 @@ public class Main {
 
         ydw.awaitReady().newSlashCommand("test1", "test1").setToGuildOnly(true).call();
 
-        ydw.awaitReady().setEventHandler(new TestHandler());
+        ydw.setEventHandler(new TestHandler());
     }
 }

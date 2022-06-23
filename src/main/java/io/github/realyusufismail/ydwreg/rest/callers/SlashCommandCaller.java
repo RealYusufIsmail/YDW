@@ -166,9 +166,10 @@ public class SlashCommandCaller {
 
     // TODO: Implement reply system
     private ObjectNode replyJson(String content) {
-        return JsonNodeFactory.instance.objectNode().put("content", content)
-                .put("tts", tts)
-                .put("flags", ephemeral ? 64 : null);
+        return JsonNodeFactory.instance.objectNode()
+            .put("content", content)
+            .put("tts", tts)
+            .put("flags", ephemeral ? 64 : null);
     }
 
     public ReplyAction reply(String content) {

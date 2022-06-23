@@ -56,8 +56,9 @@ public enum GateWayIntent {
 
 
     public static final int ALL_INTENTS = 1 | getValue(EnumSet.allOf(GateWayIntent.class));
-    public static final int DEFAULT_INTENTS = ALL_INTENTS & ~getValue(GUILD_MEMBERS,
-            GUILD_PRESENCES, GUILD_WEBHOOKS, GUILD_MESSAGE_TYPING, DIRECT_MESSAGE_TYPING, MESSAGE_CONTENT);
+    public static final int DEFAULT_INTENTS =
+            ALL_INTENTS & ~getValue(GUILD_MEMBERS, GUILD_PRESENCES, GUILD_WEBHOOKS,
+                    GUILD_MESSAGE_TYPING, DIRECT_MESSAGE_TYPING, MESSAGE_CONTENT);
     private final int value;
 
     GateWayIntent(int value) {
