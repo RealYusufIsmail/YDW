@@ -18,8 +18,8 @@
 package io.github.realyusufismail.ydwreg;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.realyusufismail.handler.EventSenderSystem;
-import io.github.realyusufismail.handler.EventSystem;
+import io.github.realyusufismail.handler.EventHandler;
+import io.github.realyusufismail.handler.MainHandlerEvent;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.ydw.event.BasicEvent;
 import io.github.realyusufismail.ydw.event.events.ApiStatusChangeEvent;
@@ -40,6 +40,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
+import java.util.function.Consumer;
 
 public class YDWReg implements YDW {
 
@@ -78,17 +79,17 @@ public class YDWReg implements YDW {
 
     private final ExecutorService executorService;
 
-    private final EventSenderSystem eventSenderSystem;
+    private final EventHandler eventHandler;
 
     public YDWReg(@NotNull OkHttpClient client, ExecutorService executorService) {
         this.executorService = executorService;
         mapper = new ObjectMapper();
         this.client = client;
-        eventSenderSystem = new EventSenderSystem(new EventSystem(), executorService);
+        eventHandler = new EventHandler(new MainHandlerEvent(), executorService);
     }
 
     public void handelEvent(BasicEvent event) {
-        eventSenderSystem.send(event);
+        eventHandler.send(event);
     }
 
     @Override
@@ -252,20 +253,6 @@ public class YDWReg implements YDW {
         return user.orElseThrow(() -> new IllegalStateException("Self user is not set"));
     }
 
-    @Override
-    public void setEventHandler(@NotNull Object... eventHandler) {
-        for (Object handler : eventHandler) {
-            eventSenderSystem.register(handler);
-        }
-    }
-
-    @Override
-    public void removeEventHandler(@NotNull Object... eventHandler) {
-        for (Object handler : eventHandler) {
-            eventSenderSystem.unregister(handler);
-        }
-    }
-
     public void setSelfUser(@NotNull SelfUser selfUser) {
         this.selfUser = selfUser;
     }
@@ -341,11 +328,13 @@ public class YDWReg implements YDW {
         return applicationId;
     }
 
-    public ExecutorService getExecutorService() {
-        return executorService;
+    @Override
+    public <Event extends BasicEvent> void onEvent(Class<Event> eventClass,
+            Consumer<Event> consumer) {
+        eventHandler.register(eventClass);
     }
 
-    public EventSenderSystem getEventSenderSystem() {
-        return eventSenderSystem;
+    public ExecutorService getExecutorService() {
+        return executorService;
     }
 }

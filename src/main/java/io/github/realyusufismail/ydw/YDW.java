@@ -22,6 +22,7 @@ import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.entities.*;
 import io.github.realyusufismail.ydw.entities.guild.Channel;
+import io.github.realyusufismail.ydw.event.BasicEvent;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandBuilderReg;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
 import io.github.realyusufismail.ydwreg.entities.guild.manager.GuildManager;
@@ -31,6 +32,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.CheckReturnValue;
 import java.util.List;
+import java.util.function.Consumer;
 
 public interface YDW {
 
@@ -178,10 +180,6 @@ public interface YDW {
 
     SelfUser getSelfUser() throws InterruptedException;
 
-    void setEventHandler(@NotNull Object... eventHandler);
-
-    void removeEventHandler(@NotNull Object... eventHandler);
-
     boolean isResumed();
 
     boolean hasReconnected();
@@ -202,4 +200,10 @@ public interface YDW {
     String getToken();
 
     long getApplicationId();
+
+    // event system
+    /**
+     * Used to run an event or to do something when an event is received.
+     */
+    <Event extends BasicEvent> void onEvent(Class<Event> eventClass, Consumer<Event> consumer);
 }

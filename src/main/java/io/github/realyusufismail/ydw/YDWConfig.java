@@ -27,8 +27,6 @@ public class YDWConfig {
 
     private ExecutorService executorService = null;
 
-    private final List<Object> handlers = new LinkedList<>();
-
     private YDWConfig(String token, int gatewayIntents) {
         this.token = token;
         this.gatewayIntents = 1 | gatewayIntents;
@@ -124,31 +122,6 @@ public class YDWConfig {
         return this;
     }
 
-    /**
-     * used to register the handlers
-     *
-     * @param handlers handlers
-     * @return ydwConnector
-     */
-    @NotNull
-    public YDWConfig registerHandlers(Object... handlers) {
-        Collections.addAll(this.handlers, handlers);
-        return this;
-    }
-
-    /**
-     * used to remove the handlers
-     *
-     * @param handlers the handlers to remove
-     * @return ydwConnector
-     */
-    @NotNull
-    public YDWConfig removeHandlers(Object... handlers) {
-        this.handlers.remove(Arrays.asList(handlers));
-        return this;
-    }
-
-
     public YDW build() throws Exception {
 
         if (token == null || token.isEmpty()) {
@@ -164,7 +137,6 @@ public class YDWConfig {
         }
 
         YDWReg ydw = new YDWReg(client, executorService);
-        handlers.forEach(ydw::setEventHandler);
         ydw.loginForRest(token, guildId);
         ydw.login(token, gatewayIntents, status, largeThreshold, activity);
         return ydw;

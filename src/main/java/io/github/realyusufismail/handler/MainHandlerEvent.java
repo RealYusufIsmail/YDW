@@ -1,4 +1,4 @@
-package io.github.realyusufismail.handler2;
+package io.github.realyusufismail.handler;
 
 import io.github.realyusufismail.ydw.event.BasicEvent;
 import org.jetbrains.annotations.NotNull;
@@ -10,13 +10,13 @@ public class MainHandlerEvent implements EvenRegister {
     private final CopyOnWriteArrayList<EvenRegister> listeners = new CopyOnWriteArrayList<>();
 
     @Override
-    public <Event extends BasicEvent> void register(Class<Event> eventClass, Consumer<Event> consumer) {
-        listeners.add((EvenRegister) eventClass.cast(consumer));
+    public <Event extends BasicEvent> void register(Class<Event> eventClass) {
+
     }
 
     @Override
-    public <Event extends BasicEvent> void unRegister(Class<Event> eventClass, Consumer<Event> consumer) {
-        listeners.remove((EvenRegister) eventClass.cast(consumer));
+    public <Event extends BasicEvent> void unRegister(Class<Event> eventClass) {
+        //listeners.remove()
     }
 
     @Override
