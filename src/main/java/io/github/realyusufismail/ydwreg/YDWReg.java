@@ -18,6 +18,7 @@
 package io.github.realyusufismail.ydwreg;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.realyusufismail.event.Client;
 import io.github.realyusufismail.handler.EventHandler;
 import io.github.realyusufismail.handler.MainHandlerEvent;
 import io.github.realyusufismail.websocket.WebSocketManager;
@@ -55,7 +56,7 @@ public class YDWReg implements YDW {
     private long gatewayPing;
     private SelfUser selfUser;
     @NotNull
-    private final OkHttpClient client;
+    private final OkHttpClient okHttpClient;
 
     private List<Guild> guilds;
 
@@ -81,10 +82,13 @@ public class YDWReg implements YDW {
 
     private final EventHandler eventHandler;
 
-    public YDWReg(@NotNull OkHttpClient client, ExecutorService executorService) {
+    private final Client client;
+
+    public YDWReg(@NotNull OkHttpClient okHttpClient, ExecutorService executorService) {
         this.executorService = executorService;
         mapper = new ObjectMapper();
-        this.client = client;
+        this.okHttpClient = okHttpClient;
+        this.client = new Client();
         eventHandler = new EventHandler(new MainHandlerEvent(), executorService);
     }
 
@@ -179,7 +183,7 @@ public class YDWReg implements YDW {
 
     @Override
     public void loginForRest(String token, @Nullable String guildId) {
-        rest = new RestApiHandler(this, token, client, guildId);
+        rest = new RestApiHandler(this, token, okHttpClient, guildId);
     }
 
     @Override
@@ -311,7 +315,7 @@ public class YDWReg implements YDW {
     }
 
     public OkHttpClient getHttpClient() {
-        return client;
+        return okHttpClient;
     }
 
     public Logger getLogger() {
