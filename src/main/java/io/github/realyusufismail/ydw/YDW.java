@@ -200,10 +200,4 @@ public interface YDW {
     String getToken();
 
     long getApplicationId();
-
-    // event system
-    /**
-     * Used to run an event or to do something when an event is received.
-     */
-    <Event extends BasicEvent> void onEvent(Class<Event> eventClass, Consumer<Event> consumer);
 }

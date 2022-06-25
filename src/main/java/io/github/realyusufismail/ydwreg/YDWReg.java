@@ -332,11 +332,6 @@ public class YDWReg implements YDW {
         return applicationId;
     }
 
-    @Override
-    public <Event extends BasicEvent> void onEvent(Class<Event> eventClass,
-            Consumer<Event> consumer) {
-        eventHandler.register(eventClass);
-    }
 
     public ExecutorService getExecutorService() {
         return executorService;

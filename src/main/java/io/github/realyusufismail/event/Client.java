@@ -14,7 +14,8 @@ public class Client implements IModule {
 
     }
 
-    public <EventClass extends EventExtender> Client on(Class<EventClass> event, Consumer<EventClass> consumer) {
+    public <EventClass extends EventExtender> Client on(Class<EventClass> event,
+            Consumer<EventClass> consumer) {
         return this;
     }
 }

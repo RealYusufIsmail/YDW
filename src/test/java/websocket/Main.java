@@ -21,10 +21,5 @@ public class Main {
             .call();
 
         ydw.awaitReady().newSlashCommand("test1", "test1").setToGuildOnly(true).call();
-
-        ydw.onEvent(ReadyEvent.class, event -> {
-            System.out.println("Ready");
-            System.out.println("Guilds: " + event.getNumberOfGuilds());
-        });
     }
 }
