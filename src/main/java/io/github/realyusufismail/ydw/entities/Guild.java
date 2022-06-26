@@ -20,10 +20,10 @@ package io.github.realyusufismail.ydw.entities;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 import io.github.realyusufismail.ydw.action.Action;
-import io.github.realyusufismail.ydw.entities.channel.NewsChannel;
-import io.github.realyusufismail.ydw.entities.channel.StageChannel;
-import io.github.realyusufismail.ydw.entities.channel.TextChannel;
-import io.github.realyusufismail.ydw.entities.channel.VoiceChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.NewsChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.StageChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.TextChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.VoiceChannel;
 import io.github.realyusufismail.ydw.entities.emoji.Emoji;
 import io.github.realyusufismail.ydw.entities.guild.*;
 import io.github.realyusufismail.ydw.entities.sticker.Sticker;

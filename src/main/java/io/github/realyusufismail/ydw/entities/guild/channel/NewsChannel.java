@@ -15,9 +15,9 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.ydw.entities.channel;
+package io.github.realyusufismail.ydw.entities.guild.channel;
 
 import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
 
-public interface VoiceChannel extends GuildChannel {
+public interface NewsChannel extends GuildChannel {
 }

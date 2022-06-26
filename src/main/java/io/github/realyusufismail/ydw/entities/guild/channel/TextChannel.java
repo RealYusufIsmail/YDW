@@ -15,9 +15,10 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.ydw.entities.channel;
+package io.github.realyusufismail.ydw.entities.guild.channel;
 
 import io.github.realyusufismail.ydw.entities.GenericEntity;
+import io.github.realyusufismail.ydw.entities.channel.Overwrite;
 import io.github.realyusufismail.ydw.entities.guild.ChannelCategory;
 import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;

@@ -15,11 +15,11 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.ydwreg.entities.channel;
+package io.github.realyusufismail.ydwreg.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.entities.channel.Reaction;
+import io.github.realyusufismail.ydw.entities.Reaction;
 import io.github.realyusufismail.ydw.entities.emoji.Emoji;
 import io.github.realyusufismail.ydwreg.entities.emoji.EmojiReg;
 import org.jetbrains.annotations.NotNull;

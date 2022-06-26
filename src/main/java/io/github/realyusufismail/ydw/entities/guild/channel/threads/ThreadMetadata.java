@@ -15,26 +15,20 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.ydwreg.entities.channel;
+package io.github.realyusufismail.ydw.entities.guild.channel.threads;
 
+import java.time.ZonedDateTime;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.entities.channel.StageChannel;
-import io.github.realyusufismail.ydwreg.YDWReg;
-import io.github.realyusufismail.ydwreg.entities.guild.ChannelReg;
-import org.jetbrains.annotations.NotNull;
+public interface ThreadMetadata {
+    boolean isArchived();
 
-public class StageChannelReg extends ChannelReg implements StageChannel {
-    private final YDW ydw;
+    int getAutoArchiveDuration();
 
-    public StageChannelReg(@NotNull JsonNode json, long id, @NotNull YDW ydw) {
-        super(json, id, ydw);
-        this.ydw = ydw;
-    }
+    ZonedDateTime getArchivedTimestamp();
 
-    @Override
-    public YDWReg getYDW() {
-        return (YDWReg) ydw;
-    }
+    boolean isLocked();
+
+    boolean isInvitable();
+
+    ZonedDateTime getCreationTimestamp();
 }

@@ -25,16 +25,15 @@ import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.User;
 import io.github.realyusufismail.ydw.entities.channel.ChannelType;
 import io.github.realyusufismail.ydw.entities.channel.Overwrite;
-import io.github.realyusufismail.ydw.entities.channel.threads.ThreadMember;
-import io.github.realyusufismail.ydw.entities.channel.threads.ThreadMetadata;
+import io.github.realyusufismail.ydw.entities.guild.Member;
+import io.github.realyusufismail.ydw.entities.guild.channel.threads.ThreadMetadata;
 import io.github.realyusufismail.ydw.entities.guild.Channel;
 import io.github.realyusufismail.ydw.entities.guild.ChannelCategory;
 import io.github.realyusufismail.ydw.entities.guild.Message;
 import io.github.realyusufismail.ydw.perm.Permission;
 import io.github.realyusufismail.ydwreg.entities.UserReg;
 import io.github.realyusufismail.ydwreg.entities.channel.OverwriteReg;
-import io.github.realyusufismail.ydwreg.entities.channel.thread.ThreadMemberReg;
-import io.github.realyusufismail.ydwreg.entities.channel.thread.ThreadMetadataReg;
+import io.github.realyusufismail.ydwreg.entities.guild.channel.thread.ThreadMetadataReg;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 import io.github.realyusufismail.ydwreg.entities.message.MessageFlags;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
@@ -78,7 +77,7 @@ public class ChannelReg implements Channel {
     @Nullable
     private final ThreadMetadata threadMetadata;
     @Nullable
-    private final ThreadMember member;
+    private final Member member;
     private final Integer defaultAutoArchiveDuration;
     @Nullable
     private final Permission[] permissions;
@@ -136,8 +135,7 @@ public class ChannelReg implements Channel {
                         : null;
         this.member =
                 channelJ.hasNonNull("member")
-                        ? new ThreadMemberReg(channelJ.get("member"),
-                                channelJ.get("member").get("id").asLong(), ydw)
+                        ? new MemberReg(channelJ.get("member"), ydw)
                         : null;
         this.defaultAutoArchiveDuration = channelJ.hasNonNull("default_auto_archive_duration")
                 ? channelJ.get("default_auto_archive_duration").asInt()
@@ -309,7 +307,7 @@ public class ChannelReg implements Channel {
     }
 
     @Override
-    public @NotNull Optional<ThreadMember> getMember() {
+    public @NotNull Optional<Member> getMember() {
         return Optional.ofNullable(member);
     }
 

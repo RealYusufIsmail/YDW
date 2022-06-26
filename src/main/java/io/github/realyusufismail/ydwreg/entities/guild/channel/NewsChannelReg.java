@@ -15,7 +15,26 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.ydw.entities.channel;
+package io.github.realyusufismail.ydwreg.entities.guild.channel;
 
-public interface Threads extends BaseChannel {
+import com.fasterxml.jackson.databind.JsonNode;
+import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.entities.guild.channel.NewsChannel;
+import io.github.realyusufismail.ydwreg.YDWReg;
+import io.github.realyusufismail.ydwreg.entities.guild.ChannelReg;
+import org.jetbrains.annotations.NotNull;
+
+public class NewsChannelReg extends ChannelReg implements NewsChannel {
+    private final YDW ydw;
+
+    public NewsChannelReg(@NotNull JsonNode json, long id, @NotNull YDW ydw) {
+        super(json, id, ydw);
+        this.ydw = ydw;
+    }
+
+    @Override
+    public YDWReg getYDW() {
+        return (YDWReg) ydw;
+    }
+
 }

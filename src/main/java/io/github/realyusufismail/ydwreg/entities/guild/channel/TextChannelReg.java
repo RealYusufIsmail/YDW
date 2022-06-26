@@ -15,15 +15,15 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.ydwreg.entities.channel;
+package io.github.realyusufismail.ydwreg.entities.guild.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.channel.Overwrite;
-import io.github.realyusufismail.ydw.entities.channel.TextChannel;
-import io.github.realyusufismail.ydw.entities.guild.Message;
+import io.github.realyusufismail.ydw.entities.guild.channel.TextChannel;
 import io.github.realyusufismail.ydwreg.YDWReg;
+import io.github.realyusufismail.ydwreg.entities.channel.OverwriteReg;
 import io.github.realyusufismail.ydwreg.entities.guild.ChannelReg;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;

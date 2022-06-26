@@ -17,5 +17,7 @@
 
 package io.github.realyusufismail.ydw.entities.channel;
 
-public interface DmChannel {
+import io.github.realyusufismail.ydw.entities.guild.Channel;
+
+public interface DmChannel extends Channel {
 }

@@ -17,7 +17,14 @@
 
 package io.github.realyusufismail.ydwreg.entities.channel;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.channel.DmChannel;
+import io.github.realyusufismail.ydwreg.entities.guild.ChannelReg;
+import org.jetbrains.annotations.NotNull;
 
-public class DmChannelReg implements DmChannel {
+public class DmChannelReg extends ChannelReg implements DmChannel {
+    public DmChannelReg(@NotNull JsonNode channelJ, long id, @NotNull YDW ydw) {
+        super(channelJ, id, ydw);
+    }
 }

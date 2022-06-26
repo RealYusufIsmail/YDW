@@ -25,8 +25,7 @@ import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.User;
 import io.github.realyusufismail.ydw.entities.channel.ChannelType;
 import io.github.realyusufismail.ydw.entities.channel.Overwrite;
-import io.github.realyusufismail.ydw.entities.channel.threads.ThreadMember;
-import io.github.realyusufismail.ydw.entities.channel.threads.ThreadMetadata;
+import io.github.realyusufismail.ydw.entities.guild.channel.threads.ThreadMetadata;
 import io.github.realyusufismail.ydw.perm.Permission;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 import io.github.realyusufismail.ydwreg.entities.message.MessageFlags;
@@ -87,7 +86,7 @@ public interface Channel extends SnowFlake, GenericEntity {
     Optional<ThreadMetadata> getThreadMetadata();
 
     @NotNull
-    Optional<ThreadMember> getMember();
+    Optional<Member> getMember();
 
     Optional<Integer> getDefaultAutoArchiveDuration();
 
