@@ -79,6 +79,5 @@ public class ReadyHandler extends Handle {
         ydw.getWebSocket()
             .setSessionId(json.hasNonNull("session_id") ? json.get("session_id").asText() : null);
         ydw.setApplicationId(json.get("application").get("id").asLong());
-        ydw.setApiStatus(YDW.ApiStatus.READY_EVENT);
     }
 }
