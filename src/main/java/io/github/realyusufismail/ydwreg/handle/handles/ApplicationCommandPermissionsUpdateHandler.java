@@ -18,9 +18,9 @@
 package io.github.realyusufismail.ydwreg.handle.handles;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.github.realyusufismail.ydwreg.handle.Handle;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.guild.GuildApplicationCommandPermission;
+import io.github.realyusufismail.ydwreg.handle.Handle;
 
 public class ApplicationCommandPermissionsUpdateHandler extends Handle {
     public ApplicationCommandPermissionsUpdateHandler(JsonNode json, YDW ydw) {

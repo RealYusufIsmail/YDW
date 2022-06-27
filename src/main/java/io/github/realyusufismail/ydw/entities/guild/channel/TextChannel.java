@@ -18,8 +18,9 @@
 package io.github.realyusufismail.ydw.entities.guild.channel;
 
 import io.github.realyusufismail.ydw.entities.GenericEntity;
+import io.github.realyusufismail.ydw.entities.Guild;
+import io.github.realyusufismail.ydw.entities.channel.ChannelType;
 import io.github.realyusufismail.ydw.entities.channel.Overwrite;
-import io.github.realyusufismail.ydw.entities.guild.ChannelCategory;
 import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
@@ -47,9 +48,8 @@ public interface TextChannel extends SnowFlake, GenericEntity, GuildChannel {
     @Override
     Optional<String> getTopic();
 
-    @NotNull
     @Override
-    Optional<Integer> getLastMessageId();
+    Optional<SnowFlake> getLastMessageId();
 
     @Override
     Optional<SnowFlake> getParentId();
@@ -58,5 +58,15 @@ public interface TextChannel extends SnowFlake, GenericEntity, GuildChannel {
     Optional<Integer> getDefaultAutoArchiveDuration();
 
     @Override
-    Optional<ChannelCategory> getCategory();
+    Optional<Category> getCategory();
+
+    @Override
+    Optional<Guild> getGuild();
+
+    @NotNull
+    @Override
+    default ChannelType getType() {
+        return ChannelType.GUILD_TEXT;
+    }
+
 }

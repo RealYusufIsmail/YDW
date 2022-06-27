@@ -18,7 +18,6 @@
 package io.github.realyusufismail.ydwreg.snowflake;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public interface SnowFlake {
     static @NotNull SnowFlake of(@NotNull String string) {
@@ -39,7 +38,7 @@ public interface SnowFlake {
     /**
      * @return The core long of this api.
      */
-    @Nullable
+    @NotNull
     Long getIdLong();}
 
 

@@ -9,6 +9,5 @@ public class GuildRoleCreateHandler extends Handle {
         super(json, ydw);
     }
 
-    public void start() {
-    }
+    public void start() {}
 }

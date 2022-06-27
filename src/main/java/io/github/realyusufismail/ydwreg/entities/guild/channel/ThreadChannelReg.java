@@ -19,12 +19,21 @@ package io.github.realyusufismail.ydwreg.entities.guild.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
 import io.github.realyusufismail.ydw.entities.guild.channel.ThreadChannel;
-import io.github.realyusufismail.ydwreg.entities.guild.ChannelReg;
+import io.github.realyusufismail.ydwreg.entities.ChannelReg;
 import org.jetbrains.annotations.NotNull;
 
 public class ThreadChannelReg extends ChannelReg implements ThreadChannel {
+    private final long id;
+
     public ThreadChannelReg(@NotNull JsonNode json, long id, @NotNull YDW ydw) {
         super(json, id, ydw);
+        this.id = id;
+    }
+
+    @Override
+    public int compareTo(@NotNull GuildChannel o) {
+        return Long.compare(id, o.getIdLong());
     }
 }

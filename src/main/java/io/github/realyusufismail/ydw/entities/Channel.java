@@ -15,16 +15,16 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.ydw.entities.guild;
+package io.github.realyusufismail.ydw.entities;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 import io.github.realyusufismail.ydw.action.Action;
 import io.github.realyusufismail.ydw.action.MessageAction;
-import io.github.realyusufismail.ydw.entities.GenericEntity;
-import io.github.realyusufismail.ydw.entities.Guild;
-import io.github.realyusufismail.ydw.entities.User;
 import io.github.realyusufismail.ydw.entities.channel.ChannelType;
 import io.github.realyusufismail.ydw.entities.channel.Overwrite;
+import io.github.realyusufismail.ydw.entities.guild.Member;
+import io.github.realyusufismail.ydw.entities.guild.Message;
+import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 import io.github.realyusufismail.ydw.entities.guild.channel.threads.ThreadMetadata;
 import io.github.realyusufismail.ydw.perm.Permission;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
@@ -53,8 +53,7 @@ public interface Channel extends SnowFlake, GenericEntity {
 
     Optional<Boolean> isNSFW();
 
-    @NotNull
-    Optional<Integer> getLastMessageId();
+    Optional<SnowFlake> getLastMessageId();
 
     Optional<Integer> getBitrate();
 
@@ -82,21 +81,20 @@ public interface Channel extends SnowFlake, GenericEntity {
 
     Optional<Integer> getMemberCount();
 
-    @NotNull
     Optional<ThreadMetadata> getThreadMetadata();
 
-    @NotNull
     Optional<Member> getMember();
 
     Optional<Integer> getDefaultAutoArchiveDuration();
 
-    @NotNull
     Optional<Permission[]> getPermissions();
 
     Optional<MessageFlags[]> getFlags();
 
-    Optional<ChannelCategory> getCategory();
+    Optional<Category> getCategory();
 
+
+    // Rest Actions
     @CheckReturnValue
     @NotNull
     MessageAction sendMessage(String message);

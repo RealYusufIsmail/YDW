@@ -19,6 +19,7 @@ package io.github.realyusufismail.ydwreg.handle;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.websocket.EventNames;
+import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.handle.handles.*;
 import io.github.realyusufismail.ydwreg.handle.handles.channel.ChannelCreateHandler;
 import io.github.realyusufismail.ydwreg.handle.handles.channel.ChannelDeleteHandler;
@@ -33,7 +34,6 @@ import io.github.realyusufismail.ydwreg.handle.handles.invite.InviteCreateHandle
 import io.github.realyusufismail.ydwreg.handle.handles.invite.InviteDeleteHandler;
 import io.github.realyusufismail.ydwreg.handle.handles.message.*;
 import io.github.realyusufismail.ydwreg.handle.handles.thread.*;
-import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.handle.handles.voice.VoiceServerUpdateHandler;
 import io.github.realyusufismail.ydwreg.handle.handles.voice.VoiceStateUpdateHandler;
 import org.jetbrains.annotations.NotNull;
@@ -86,11 +86,16 @@ public class OnHandler {
             case GUILD_ROLE_CREATE -> new GuildRoleCreateHandler(json, ydw).start();
             case GUILD_ROLE_UPDATE -> new GuildRoleUpdateHandler(json, ydw).start();
             case GUILD_ROLE_DELETE -> new GuildRoleDeleteHandler(json, ydw).start();
-            case GUILD_SCHEDULED_EVENT_CREATE -> new GuildScheduledEventCreateHandler(json, ydw).start();
-            case GUILD_SCHEDULED_EVENT_UPDATE -> new GuildScheduledEventUpdateHandler(json, ydw).start();
-            case GUILD_SCHEDULED_EVENT_DELETE -> new GuildScheduledEventDeleteHandler(json, ydw).start();
-            case GUILD_SCHEDULED_EVENT_USER_ADD -> new GuildScheduledEventUserAddHandler(json, ydw).start();
-            case GUILD_SCHEDULED_EVENT_USER_REMOVE -> new GuildScheduledEventUserRemoveHandler(json, ydw).start();
+            case GUILD_SCHEDULED_EVENT_CREATE -> new GuildScheduledEventCreateHandler(json, ydw)
+                .start();
+            case GUILD_SCHEDULED_EVENT_UPDATE -> new GuildScheduledEventUpdateHandler(json, ydw)
+                .start();
+            case GUILD_SCHEDULED_EVENT_DELETE -> new GuildScheduledEventDeleteHandler(json, ydw)
+                .start();
+            case GUILD_SCHEDULED_EVENT_USER_ADD -> new GuildScheduledEventUserAddHandler(json, ydw)
+                .start();
+            case GUILD_SCHEDULED_EVENT_USER_REMOVE -> new GuildScheduledEventUserRemoveHandler(json,
+                    ydw).start();
             case INTEGRATION_CREATE -> new IntegrationCreateHandler(json, ydw).start();
             case INTEGRATION_UPDATE -> new IntegrationUpdateHandler(json, ydw).start();
             case INTEGRATION_DELETE -> new IntegrationDeleteHandler(json, ydw).start();
@@ -103,7 +108,8 @@ public class OnHandler {
             case MESSAGE_DELETE_BULK -> new MessageDeleteBulkHandler(json, ydw).start();
             case MESSAGE_REACTION_ADD -> new MessageReactionAddHandler(json, ydw).start();
             case MESSAGE_REACTION_REMOVE -> new MessageReactionRemoveHandler(json, ydw).start();
-            case MESSAGE_REACTION_REMOVE_ALL -> new MessageReactionRemoveAllHandler(json, ydw).start();
+            case MESSAGE_REACTION_REMOVE_ALL -> new MessageReactionRemoveAllHandler(json, ydw)
+                .start();
             case PRESENCE_UPDATE -> new PresenceUpdateHandler(json, ydw).start();
             case TYPING_START -> new TypingStartHandler(json, ydw).start();
             case USER_UPDATE -> new UserUpdateHandler(json, ydw).start();

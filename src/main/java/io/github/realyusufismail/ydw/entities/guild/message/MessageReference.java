@@ -17,8 +17,8 @@
 
 package io.github.realyusufismail.ydw.entities.guild.message;
 
+import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
-import io.github.realyusufismail.ydw.entities.guild.Channel;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 
 import java.util.Optional;

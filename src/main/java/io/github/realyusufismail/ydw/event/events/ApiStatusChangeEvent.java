@@ -1,8 +1,8 @@
 package io.github.realyusufismail.ydw.event.events;
 
-import io.github.realyusufismail.handler.UpdateEvent;
-import io.github.realyusufismail.ydw.event.EventExtender;
+import io.github.realyusufismail.event.UpdateEvent;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.event.EventExtender;
 
 public class ApiStatusChangeEvent extends EventExtender implements UpdateEvent<YDW, YDW.ApiStatus> {
     private final YDW.ApiStatus oldStatus;
@@ -13,8 +13,6 @@ public class ApiStatusChangeEvent extends EventExtender implements UpdateEvent<Y
         this.oldStatus = oldStatus;
         this.newStatus = newStatus;
     }
-
-
 
     @Override
     public YDW getEntity() {

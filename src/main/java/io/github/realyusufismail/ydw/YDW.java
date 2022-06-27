@@ -21,10 +21,9 @@ package io.github.realyusufismail.ydw;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.entities.*;
-import io.github.realyusufismail.ydw.entities.guild.Channel;
-import io.github.realyusufismail.ydw.event.BasicEvent;
-import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandBuilderReg;
+import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
+import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandBuilderReg;
 import io.github.realyusufismail.ydwreg.entities.guild.manager.GuildManager;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +31,6 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.CheckReturnValue;
 import java.util.List;
-import java.util.function.Consumer;
 
 public interface YDW {
 
@@ -156,6 +154,11 @@ public interface YDW {
         return getChannel(Long.parseLong(channelId));
     }
 
+    Category getCategory(long categoryId);
+
+    default Category getCategory(@NotNull String categoryId) {
+        return getCategory(Long.parseLong(categoryId));
+    }
 
     void login(String token, int gatewayIntents, String status, int largeThreshold,
             ActivityConfig activity) throws Exception;

@@ -15,26 +15,26 @@
  * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
-package io.github.realyusufismail.ydwreg.entities.guild;
+package io.github.realyusufismail.ydwreg.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.action.Action;
 import io.github.realyusufismail.ydw.action.MessageAction;
+import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.User;
 import io.github.realyusufismail.ydw.entities.channel.ChannelType;
 import io.github.realyusufismail.ydw.entities.channel.Overwrite;
 import io.github.realyusufismail.ydw.entities.guild.Member;
-import io.github.realyusufismail.ydw.entities.guild.channel.threads.ThreadMetadata;
-import io.github.realyusufismail.ydw.entities.guild.Channel;
-import io.github.realyusufismail.ydw.entities.guild.ChannelCategory;
 import io.github.realyusufismail.ydw.entities.guild.Message;
+import io.github.realyusufismail.ydw.entities.guild.channel.Category;
+import io.github.realyusufismail.ydw.entities.guild.channel.threads.ThreadMetadata;
 import io.github.realyusufismail.ydw.perm.Permission;
-import io.github.realyusufismail.ydwreg.entities.UserReg;
 import io.github.realyusufismail.ydwreg.entities.channel.OverwriteReg;
-import io.github.realyusufismail.ydwreg.entities.guild.channel.thread.ThreadMetadataReg;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
+import io.github.realyusufismail.ydwreg.entities.guild.MemberReg;
+import io.github.realyusufismail.ydwreg.entities.guild.channel.thread.ThreadMetadataReg;
 import io.github.realyusufismail.ydwreg.entities.message.MessageFlags;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
@@ -59,13 +59,12 @@ public class ChannelReg implements Channel {
     private final String name;
     private final String topic;
     private final Boolean nsfw;
-    private final Integer lastMessageId;
+    private final Long lastMessageId;
     private final Integer bitrate;
     private final Integer userLimit;
     private final Integer rateLimitPerUser;
     private final List<User> recipients = new ArrayList<>();
     private final String icon;
-    @Nullable
     private final User owner;
     private final Long applicationId;
     private final Long parentId;
@@ -74,17 +73,12 @@ public class ChannelReg implements Channel {
     private final Integer videoQualityMode;
     private final Integer messageCount;
     private final Integer memberCount;
-    @Nullable
     private final ThreadMetadata threadMetadata;
-    @Nullable
     private final Member member;
     private final Integer defaultAutoArchiveDuration;
-    @Nullable
     private final Permission[] permissions;
-    @Nullable
     private final MessageFlags[] flags;
-    @Nullable
-    private final ChannelCategory category;
+    private final Category category;
 
     public ChannelReg(@NotNull JsonNode channelJ, long id, @NotNull YDW ydw) {
         this.id = id;
@@ -99,7 +93,7 @@ public class ChannelReg implements Channel {
         this.topic = channelJ.hasNonNull("topic") ? channelJ.get("topic").asText() : null;
         this.nsfw = channelJ.hasNonNull("nsfw") ? channelJ.get("nsfw").asBoolean() : null;
         this.lastMessageId =
-                channelJ.hasNonNull("last_message_id") ? channelJ.get("last_message_id").asInt()
+                channelJ.hasNonNull("last_message_id") ? channelJ.get("last_message_id").asLong()
                         : null;
         this.bitrate = channelJ.hasNonNull("bitrate") ? channelJ.get("bitrate").asInt() : null;
         this.userLimit =
@@ -134,9 +128,7 @@ public class ChannelReg implements Channel {
                                 channelJ.get("thread_metadata").get("id").asLong(), ydw)
                         : null;
         this.member =
-                channelJ.hasNonNull("member")
-                        ? new MemberReg(channelJ.get("member"), ydw)
-                        : null;
+                channelJ.hasNonNull("member") ? new MemberReg(channelJ.get("member"), ydw) : null;
         this.defaultAutoArchiveDuration = channelJ.hasNonNull("default_auto_archive_duration")
                 ? channelJ.get("default_auto_archive_duration").asInt()
                 : null;
@@ -146,9 +138,9 @@ public class ChannelReg implements Channel {
         this.flags = channelJ.hasNonNull("flags")
                 ? MessageFlags.fromValues(channelJ.get("flags").asInt())
                 : null;
-        this.category =
-                channelJ.hasNonNull("category_id") ? new ChannelCategoryReg(channelJ, parentId, ydw)
-                        : null;
+        this.category = channelJ.hasNonNull("parent_id")
+                ? ydw.getCategory(channelJ.get("parent_id").asLong())
+                : null;
 
         if (channelJ.hasNonNull("permission_overwrites")) {
             for (JsonNode permission : channelJ.get("permission_overwrites")) {
@@ -184,60 +176,51 @@ public class ChannelReg implements Channel {
         return type;
     }
 
-    @NotNull
     @Override
     public Optional<Guild> getGuild() {
         return Optional.ofNullable(guild);
     }
 
-    @NotNull
     @Override
     public Optional<Integer> getPosition() {
         return Optional.ofNullable(position);
     }
 
-    @NotNull
     @Override
     public List<Overwrite> getPermissionOverwrites() {
         return permissionOverwrites;
     }
 
-    @NotNull
     @Override
     public Optional<String> getName() {
         return Optional.ofNullable(name);
     }
 
-    @NotNull
     @Override
     public Optional<String> getTopic() {
         return Optional.ofNullable(topic);
     }
 
-    @NotNull
     @Override
     public Optional<Boolean> isNSFW() {
         return Optional.ofNullable(nsfw);
     }
 
     @Override
-    public @NotNull Optional<Integer> getLastMessageId() {
-        return Optional.ofNullable(lastMessageId);
+    public Optional<SnowFlake> getLastMessageId() {
+        return Optional.ofNullable(lastMessageId).map(SnowFlake::of);
     }
 
-    @NotNull
     @Override
     public Optional<Integer> getBitrate() {
         return Optional.ofNullable(bitrate);
     }
 
-    @NotNull
     @Override
     public Optional<Integer> getUserLimit() {
         return Optional.ofNullable(userLimit);
     }
 
-    @NotNull
     @Override
     public Optional<Integer> getRateLimitPerUser() {
         return Optional.ofNullable(rateLimitPerUser);
@@ -249,13 +232,11 @@ public class ChannelReg implements Channel {
         return recipients;
     }
 
-    @NotNull
     @Override
     public Optional<String> getIcon() {
         return Optional.ofNullable(icon);
     }
 
-    @NotNull
     @Override
     public Optional<User> getOwner() {
         return Optional.ofNullable(owner);
@@ -267,69 +248,62 @@ public class ChannelReg implements Channel {
     }
 
     @Override
-    public @NotNull Optional<SnowFlake> getParentId() {
+    public Optional<SnowFlake> getParentId() {
         return Optional.ofNullable(parentId).map(SnowFlake::of);
     }
 
-    @NotNull
     @Override
     public Optional<ZonedDateTime> getLastPinTimestamp() {
         return Optional.ofNullable(lastPinTimestamp);
     }
 
-    @NotNull
     @Override
     public Optional<String> getRTCRegion() {
         return Optional.ofNullable(rtcRegion);
     }
 
-    @NotNull
     @Override
     public Optional<Integer> getVideoQualityMode() {
         return Optional.ofNullable(videoQualityMode);
     }
 
-    @NotNull
     @Override
     public Optional<Integer> getMessageCount() {
         return Optional.ofNullable(messageCount);
     }
 
-    @NotNull
     @Override
     public Optional<Integer> getMemberCount() {
         return Optional.ofNullable(memberCount);
     }
 
     @Override
-    public @NotNull Optional<ThreadMetadata> getThreadMetadata() {
+    public Optional<ThreadMetadata> getThreadMetadata() {
         return Optional.ofNullable(threadMetadata);
     }
 
     @Override
-    public @NotNull Optional<Member> getMember() {
+    public Optional<Member> getMember() {
         return Optional.ofNullable(member);
     }
 
-    @NotNull
     @Override
     public Optional<Integer> getDefaultAutoArchiveDuration() {
         return Optional.ofNullable(defaultAutoArchiveDuration);
     }
 
     @Override
-    public @NotNull Optional<Permission[]> getPermissions() {
+    public Optional<Permission[]> getPermissions() {
         return Optional.ofNullable(permissions);
     }
 
-    @NotNull
     @Override
     public Optional<MessageFlags[]> getFlags() {
         return Optional.ofNullable(flags);
     }
 
     @Override
-    public Optional<ChannelCategory> getCategory() {
+    public Optional<Category> getCategory() {
         return Optional.ofNullable(category);
     }
 

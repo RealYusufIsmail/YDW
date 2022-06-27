@@ -21,10 +21,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.channel.Overwrite;
+import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 import io.github.realyusufismail.ydw.entities.guild.channel.TextChannel;
 import io.github.realyusufismail.ydwreg.YDWReg;
+import io.github.realyusufismail.ydwreg.entities.ChannelReg;
 import io.github.realyusufismail.ydwreg.entities.channel.OverwriteReg;
-import io.github.realyusufismail.ydwreg.entities.guild.ChannelReg;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,12 +41,11 @@ public class TextChannelReg extends ChannelReg implements TextChannel {
 
     private final long textChannelId;
 
-
     private final List<Overwrite> permissionOverwrites = new ArrayList<>();
     private final Boolean nsfw;
     private final String name;
     private final String topic;
-    private final Integer lastMessageId;
+    private final Long lastMessageId;
     private final Integer rateLimitPerUser;
     private final Guild guild;
     private final Integer position;
@@ -62,7 +63,7 @@ public class TextChannelReg extends ChannelReg implements TextChannel {
         this.topic = messageJson.hasNonNull("topic") ? messageJson.get("topic").asText() : null;
         this.nsfw = messageJson.hasNonNull("nsfw") ? messageJson.get("nsfw").asBoolean() : null;
         this.lastMessageId = messageJson.hasNonNull("last_message_id")
-                ? messageJson.get("last_message_id").asInt()
+                ? messageJson.get("last_message_id").asLong()
                 : null;
         this.position =
                 messageJson.hasNonNull("position") ? messageJson.get("position").asInt() : null;
@@ -124,8 +125,8 @@ public class TextChannelReg extends ChannelReg implements TextChannel {
 
     @NotNull
     @Override
-    public Optional<Integer> getLastMessageId() {
-        return Optional.ofNullable(lastMessageId);
+    public Optional<SnowFlake> getLastMessageId() {
+        return Optional.ofNullable(lastMessageId).map(SnowFlake::of);
     }
 
     @NotNull
@@ -146,9 +147,19 @@ public class TextChannelReg extends ChannelReg implements TextChannel {
         return Optional.ofNullable(guild);
     }
 
+    @Override
+    public Optional<Category> getCategory() {
+        return getParentId().map(id -> ydw.getCategory(id.getId()));
+    }
+
     @NotNull
     @Override
     public Long getIdLong() {
         return textChannelId;
+    }
+
+    @Override
+    public int compareTo(@NotNull GuildChannel o) {
+        return Long.compare(textChannelId, o.getIdLong());
     }
 }

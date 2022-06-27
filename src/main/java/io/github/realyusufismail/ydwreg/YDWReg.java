@@ -24,7 +24,7 @@ import io.github.realyusufismail.ydw.GateWayIntent;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.entities.*;
-import io.github.realyusufismail.ydw.entities.guild.Channel;
+import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
 import io.github.realyusufismail.ydwreg.entities.guild.manager.GuildManager;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
@@ -153,6 +153,11 @@ public class YDWReg implements YDW {
     @Override
     public Channel getChannel(long channelId) {
         return getRest().getYDWCaller().getChannel(channelId);
+    }
+
+    @Override
+    public Category getCategory(long categoryId) {
+        return getRest().getYDWCaller().getCategory(categoryId);
     }
 
     public boolean isGatewayIntents(@NotNull GateWayIntent intents) {
@@ -290,7 +295,7 @@ public class YDWReg implements YDW {
             ApiStatus oldStatus = this.status;
             this.status = apiStatus;
 
-            //handelEvent(new ApiStatusChangeEvent(this, oldStatus, apiStatus));
+            // handelEvent(new ApiStatusChangeEvent(this, oldStatus, apiStatus));
         }
     }
 

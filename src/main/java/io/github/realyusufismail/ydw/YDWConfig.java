@@ -7,10 +7,6 @@ import io.github.realyusufismail.ydwreg.exception.InvalidStatusException;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 public class YDWConfig {

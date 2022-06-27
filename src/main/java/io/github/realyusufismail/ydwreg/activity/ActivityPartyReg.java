@@ -20,7 +20,6 @@ package io.github.realyusufismail.ydwreg.activity;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.activity.ActivityParty;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +45,7 @@ public class ActivityPartyReg implements ActivityParty {
         return size;
     }
 
-    @Nullable
+    @NotNull
     @Override
     public Long getIdLong() {
         return id != null ? Long.parseLong(id) : null;

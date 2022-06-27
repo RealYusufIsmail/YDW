@@ -42,7 +42,7 @@ public enum CloseCode {
     INVALID_API_VERSION(4012, "You sent an invalid version for the gateway.", false),
     INVALID_INTENTS(4013, "You sent an invalid intents. Make sure you follow the protocol.", false),
     DISALLOWED_INTENTS(4014,
-            "You sent a disallowed intent for a Gateway Intent. You may have tried to specify an intent that you have not enabled or are not approved for.",
+            "You sent a disallowed intent for a Gateway Intent. You may have tried to specify an intent that you have not enabled or are not approved for. Examples include : GUILD_PRESENCES, MESSAGE_CONTENT, or GUILD_MEMBERS.",
             false);
 
     private final int code;

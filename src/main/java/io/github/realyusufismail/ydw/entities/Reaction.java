@@ -17,7 +17,6 @@
 
 package io.github.realyusufismail.ydw.entities;
 
-import io.github.realyusufismail.ydw.entities.GenericEntity;
 import io.github.realyusufismail.ydw.entities.emoji.Emoji;
 
 public interface Reaction extends GenericEntity {

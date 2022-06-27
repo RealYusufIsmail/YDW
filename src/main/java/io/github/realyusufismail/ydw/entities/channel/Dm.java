@@ -17,7 +17,24 @@
 
 package io.github.realyusufismail.ydw.entities.channel;
 
-import io.github.realyusufismail.ydw.entities.guild.Channel;
+import io.github.realyusufismail.ydw.entities.Channel;
+import io.github.realyusufismail.ydw.entities.User;
+import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
+import org.jetbrains.annotations.NotNull;
 
-public interface DmChannel extends Channel {
+import java.util.Optional;
+
+public interface Dm extends Channel {
+
+    @Override
+    Optional<SnowFlake> getLastMessageId();
+
+    @NotNull
+    @Override
+    default ChannelType getType() {
+        return ChannelType.DM;
+    }
+
+
+    User getUser();
 }

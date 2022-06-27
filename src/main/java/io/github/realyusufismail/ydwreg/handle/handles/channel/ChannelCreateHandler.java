@@ -18,10 +18,10 @@
 package io.github.realyusufismail.ydwreg.handle.handles.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.github.realyusufismail.ydwreg.handle.Handle;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.entities.guild.Channel;
-import io.github.realyusufismail.ydwreg.entities.guild.ChannelReg;
+import io.github.realyusufismail.ydw.entities.Channel;
+import io.github.realyusufismail.ydwreg.entities.ChannelReg;
+import io.github.realyusufismail.ydwreg.handle.Handle;
 
 public class ChannelCreateHandler extends Handle {
     public ChannelCreateHandler(JsonNode json, YDW ydw) {

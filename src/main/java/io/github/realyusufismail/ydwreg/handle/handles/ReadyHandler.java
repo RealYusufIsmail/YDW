@@ -19,7 +19,6 @@ package io.github.realyusufismail.ydwreg.handle.handles;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import io.github.realyusufismail.ydwreg.handle.Handle;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.AvailableGuild;
 import io.github.realyusufismail.ydw.entities.Guild;
@@ -28,6 +27,7 @@ import io.github.realyusufismail.ydw.entities.UnavailableGuild;
 import io.github.realyusufismail.ydwreg.entities.AvailableGuildReg;
 import io.github.realyusufismail.ydwreg.entities.SelfUserReg;
 import io.github.realyusufismail.ydwreg.entities.UnavailableGuildReg;
+import io.github.realyusufismail.ydwreg.handle.Handle;
 
 import java.util.ArrayList;
 import java.util.List;

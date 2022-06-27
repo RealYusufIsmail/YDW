@@ -18,6 +18,8 @@
 package io.github.realyusufismail.ydw.entities.guild.channel;
 
 import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
+import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 
-public interface StageChannel extends GuildChannel {
+public interface StageChannel extends VoiceChannel, GuildChannel, SnowFlake {
+
 }

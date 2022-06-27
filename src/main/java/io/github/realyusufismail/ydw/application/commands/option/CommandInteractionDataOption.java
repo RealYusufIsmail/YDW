@@ -17,13 +17,13 @@
 
 package io.github.realyusufismail.ydw.application.commands.option;
 
+import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.User;
+import io.github.realyusufismail.ydw.entities.guild.Member;
+import io.github.realyusufismail.ydw.entities.guild.Role;
 import io.github.realyusufismail.ydw.entities.guild.channel.NewsChannel;
 import io.github.realyusufismail.ydw.entities.guild.channel.TextChannel;
 import io.github.realyusufismail.ydw.entities.guild.channel.VoiceChannel;
-import io.github.realyusufismail.ydw.entities.guild.Channel;
-import io.github.realyusufismail.ydw.entities.guild.Member;
-import io.github.realyusufismail.ydw.entities.guild.Role;
 
 import java.util.Optional;
 

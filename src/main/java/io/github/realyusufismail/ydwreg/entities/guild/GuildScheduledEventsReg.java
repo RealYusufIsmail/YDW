@@ -19,9 +19,9 @@ package io.github.realyusufismail.ydwreg.entities.guild;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.User;
-import io.github.realyusufismail.ydw.entities.guild.Channel;
 import io.github.realyusufismail.ydw.entities.guild.GuildScheduledEvents;
 import io.github.realyusufismail.ydwreg.entities.event.EventPrivacyLevel;
 import io.github.realyusufismail.ydwreg.entities.event.EventStatus;
