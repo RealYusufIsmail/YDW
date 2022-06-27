@@ -19,9 +19,9 @@ package io.github.realyusufismail.ydwreg.entities.voice;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.User;
-import io.github.realyusufismail.ydw.entities.guild.Channel;
 import io.github.realyusufismail.ydw.entities.guild.Member;
 import io.github.realyusufismail.ydw.entities.voice.VoiceRegion;
 import io.github.realyusufismail.ydw.entities.voice.VoiceState;

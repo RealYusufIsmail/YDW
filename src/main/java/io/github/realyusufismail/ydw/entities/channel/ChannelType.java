@@ -59,4 +59,8 @@ public enum ChannelType {
                 || this == GUILD_PUBLIC_THREAD || this == GUILD_PRIVATE_THREAD
                 || this == GUILD_STAGE_VOICE;
     }
+
+    public boolean isDM() {
+        return this == DM || this == GROUP_DM;
+    }
 }

@@ -19,8 +19,8 @@ package io.github.realyusufismail.ydwreg.entities.guild;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.emoji.Emoji;
-import io.github.realyusufismail.ydw.entities.guild.Channel;
 import io.github.realyusufismail.ydw.entities.guild.WelcomeScreenChannel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

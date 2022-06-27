@@ -18,16 +18,13 @@
 package io.github.realyusufismail.ydwreg;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.realyusufismail.handler.EventSenderSystem;
-import io.github.realyusufismail.handler.EventSystem;
+import io.github.realyusufismail.event.Client;
 import io.github.realyusufismail.websocket.WebSocketManager;
-import io.github.realyusufismail.websocket.event.BasicEvent;
-import io.github.realyusufismail.websocket.event.events.ApiStatusChangeEvent;
 import io.github.realyusufismail.ydw.GateWayIntent;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.entities.*;
-import io.github.realyusufismail.ydw.entities.guild.Channel;
+import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
 import io.github.realyusufismail.ydwreg.entities.guild.manager.GuildManager;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
@@ -54,7 +51,7 @@ public class YDWReg implements YDW {
     private long gatewayPing;
     private SelfUser selfUser;
     @NotNull
-    private final OkHttpClient client;
+    private final OkHttpClient okHttpClient;
 
     private List<Guild> guilds;
 
@@ -78,17 +75,13 @@ public class YDWReg implements YDW {
 
     private final ExecutorService executorService;
 
-    private final EventSenderSystem eventSenderSystem;
+    private final Client client;
 
-    public YDWReg(@NotNull OkHttpClient client, ExecutorService executorService) {
+    public YDWReg(@NotNull OkHttpClient okHttpClient, ExecutorService executorService) {
         this.executorService = executorService;
         mapper = new ObjectMapper();
-        this.client = client;
-        eventSenderSystem = new EventSenderSystem(new EventSystem(), executorService);
-    }
-
-    public void handelEvent(BasicEvent event) {
-        eventSenderSystem.send(event);
+        this.okHttpClient = okHttpClient;
+        this.client = new Client();
     }
 
     @Override
@@ -162,6 +155,11 @@ public class YDWReg implements YDW {
         return getRest().getYDWCaller().getChannel(channelId);
     }
 
+    @Override
+    public Category getCategory(long categoryId) {
+        return getRest().getYDWCaller().getCategory(categoryId);
+    }
+
     public boolean isGatewayIntents(@NotNull GateWayIntent intents) {
         int raw = intents.getValue();
         return (ws.getGatewayIntents() & raw) == raw;
@@ -178,7 +176,7 @@ public class YDWReg implements YDW {
 
     @Override
     public void loginForRest(String token, @Nullable String guildId) {
-        rest = new RestApiHandler(this, token, client, guildId);
+        rest = new RestApiHandler(this, token, okHttpClient, guildId);
     }
 
     @Override
@@ -252,20 +250,6 @@ public class YDWReg implements YDW {
         return user.orElseThrow(() -> new IllegalStateException("Self user is not set"));
     }
 
-    @Override
-    public void setEventHandler(@NotNull Object... eventHandler) {
-        for (Object handler : eventHandler) {
-            eventSenderSystem.register(handler);
-        }
-    }
-
-    @Override
-    public void removeEventHandler(@NotNull Object... eventHandler) {
-        for (Object handler : eventHandler) {
-            eventSenderSystem.unregister(handler);
-        }
-    }
-
     public void setSelfUser(@NotNull SelfUser selfUser) {
         this.selfUser = selfUser;
     }
@@ -311,7 +295,7 @@ public class YDWReg implements YDW {
             ApiStatus oldStatus = this.status;
             this.status = apiStatus;
 
-            handelEvent(new ApiStatusChangeEvent(this, oldStatus, apiStatus));
+            // handelEvent(new ApiStatusChangeEvent(this, oldStatus, apiStatus));
         }
     }
 
@@ -324,7 +308,7 @@ public class YDWReg implements YDW {
     }
 
     public OkHttpClient getHttpClient() {
-        return client;
+        return okHttpClient;
     }
 
     public Logger getLogger() {
@@ -341,11 +325,8 @@ public class YDWReg implements YDW {
         return applicationId;
     }
 
+
     public ExecutorService getExecutorService() {
         return executorService;
-    }
-
-    public EventSenderSystem getEventSenderSystem() {
-        return eventSenderSystem;
     }
 }

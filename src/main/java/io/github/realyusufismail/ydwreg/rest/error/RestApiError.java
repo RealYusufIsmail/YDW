@@ -1,7 +1,5 @@
 package io.github.realyusufismail.ydwreg.rest.error;
 
-import java.io.IOException;
-
 public enum RestApiError {
     OK(200, "The request completed successfully."),
     CREATED(201, "The entity was created successfully."),

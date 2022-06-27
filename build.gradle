@@ -46,6 +46,9 @@ dependencies {
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.11'
     //google
     implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
+    //Event emitter
+    // https://mavenlibs.com/maven/dependency/io.elastic/java-api
+    implementation group: 'io.github.realyusufismail', name: 'java-api-fork', version: '2.2.2'
 }
 
 test {
@@ -85,6 +88,34 @@ java {
     withJavadocJar()
     withSourcesJar()
 }
+
+task downloadDependencies {
+    doLast {
+        logger.info("===== Downloading dependencies =====")
+        logger.info("  ---       Cleaning up...     ---")
+        // delete superseded library jars
+        Set<String> newFiles = sourceSets.main.runtimeClasspath.getFiles().stream().map(File::getName).toList()
+        fileTree("libraries").files.stream().filter(file -> !newFiles.contains(file.getName())).forEach(file -> {
+            logger.info("  -> Deleting leftover file: ${file.getName()}...")
+            file.delete()
+        })
+        logger.info("  ---     Cleanup complete.    ---")
+
+        logger.info("\n  ---  Copying dependencies... ---")
+        copy {
+            from(sourceSets.main.runtimeClasspath) {
+                include "*.jar"
+            }
+            into 'libraries/'
+            eachFile {
+                logger.info("  -> Copying ${it.name}...")
+            }
+        }
+        logger.info("  ---    Dependencies copied.  ---")
+        logger.info("===== Dependencies downloaded ======")
+    }
+}
+
 
 afterEvaluate { project ->
     ext.isReleaseVersion = !version.endsWith("RELEASE")

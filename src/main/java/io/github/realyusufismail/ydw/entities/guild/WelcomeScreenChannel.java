@@ -17,6 +17,7 @@
 
 package io.github.realyusufismail.ydw.entities.guild;
 
+import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.GenericEntity;
 import io.github.realyusufismail.ydw.entities.emoji.Emoji;
 
