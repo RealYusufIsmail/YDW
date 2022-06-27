@@ -18,9 +18,9 @@
 package io.github.realyusufismail.ydw.event.events;
 
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.event.EventExtender;
+import io.github.realyusufismail.ydw.event.Event;
 
-public class ReadyEvent extends EventExtender {
+public class ReadyEvent extends Event {
 
     private final long numberOfUnavailableGuilds;
 

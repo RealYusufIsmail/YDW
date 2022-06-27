@@ -2,9 +2,9 @@ package io.github.realyusufismail.ydw.event.events;
 
 import io.github.realyusufismail.event.UpdateEvent;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.event.EventExtender;
+import io.github.realyusufismail.ydw.event.Event;
 
-public class ApiStatusChangeEvent extends EventExtender implements UpdateEvent<YDW, YDW.ApiStatus> {
+public class ApiStatusChangeEvent extends Event implements UpdateEvent<YDW, YDW.ApiStatus> {
     private final YDW.ApiStatus oldStatus;
     private final YDW.ApiStatus newStatus;
 

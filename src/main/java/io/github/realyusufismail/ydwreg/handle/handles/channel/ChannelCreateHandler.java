@@ -22,6 +22,7 @@ import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.channel.ChannelType;
 import io.github.realyusufismail.ydw.entities.guild.channel.VoiceChannel;
+import io.github.realyusufismail.ydw.event.events.channel.ChannelCreateEvent;
 import io.github.realyusufismail.ydwreg.entities.ChannelReg;
 import io.github.realyusufismail.ydwreg.entities.guild.channel.*;
 import io.github.realyusufismail.ydwreg.handle.Handle;
@@ -37,8 +38,7 @@ public class ChannelCreateHandler extends Handle {
 
         Channel channel = createChannel(channelType, json);
 
-        //TODO: Add a way to handle events.
-
+        ydw.handelEvent(new ChannelCreateEvent(ydw, channel));
     }
 
     private Channel createChannel(ChannelType channelType, JsonNode json) {

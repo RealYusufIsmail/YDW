@@ -23,7 +23,7 @@ import io.github.realyusufismail.ydw.application.commands.ApplicationCommand;
 import io.github.realyusufismail.ydw.application.commands.option.CommandOption;
 import io.github.realyusufismail.ydw.application.commands.option.CommandType;
 import io.github.realyusufismail.ydw.entities.Guild;
-import io.github.realyusufismail.ydw.event.EventExtender;
+import io.github.realyusufismail.ydw.event.Event;
 import io.github.realyusufismail.ydwreg.application.commands.option.CommandOptionReg;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ApplicationCommandReg extends EventExtender implements ApplicationCommand {
+public class ApplicationCommandReg extends Event implements ApplicationCommand {
 
     private final long id;
     private final YDW ydw;

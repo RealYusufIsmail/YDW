@@ -19,12 +19,15 @@ package io.github.realyusufismail.ydwreg;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.realyusufismail.event.Client;
+import io.github.realyusufismail.event.EventHandler;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.ydw.GateWayIntent;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.entities.*;
 import io.github.realyusufismail.ydw.entities.guild.channel.Category;
+import io.github.realyusufismail.ydw.event.Event;
+import io.github.realyusufismail.ydw.event.events.ApiStatusChangeEvent;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
 import io.github.realyusufismail.ydwreg.entities.guild.manager.GuildManager;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
@@ -77,11 +80,18 @@ public class YDWReg implements YDW {
 
     private final Client client;
 
+    private final EventHandler eventHandler;
+
     public YDWReg(@NotNull OkHttpClient okHttpClient, ExecutorService executorService) {
         this.executorService = executorService;
         mapper = new ObjectMapper();
         this.okHttpClient = okHttpClient;
         this.client = new Client();
+        this.eventHandler = new EventHandler(this);
+    }
+
+    public void handelEvent(Event event) {
+        eventHandler.handle(event);
     }
 
     @Override
@@ -295,7 +305,7 @@ public class YDWReg implements YDW {
             ApiStatus oldStatus = this.status;
             this.status = apiStatus;
 
-            // handelEvent(new ApiStatusChangeEvent(this, oldStatus, apiStatus));
+            handelEvent(new ApiStatusChangeEvent(this, oldStatus, apiStatus));
         }
     }
 
