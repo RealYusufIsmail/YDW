@@ -1,4 +1,4 @@
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/https://github.com/RealYusufIsmail/YDW)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/RealYusufIsmail/YDW)
 
 # YDW
 YDW (Yusuf's Discord Wrapper) My own Discord Wrapper
