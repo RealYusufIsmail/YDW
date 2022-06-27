@@ -20,7 +20,10 @@ package io.github.realyusufismail.ydwreg.handle.handles.channel;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.Channel;
+import io.github.realyusufismail.ydw.entities.channel.ChannelType;
+import io.github.realyusufismail.ydw.entities.guild.channel.VoiceChannel;
 import io.github.realyusufismail.ydwreg.entities.ChannelReg;
+import io.github.realyusufismail.ydwreg.entities.guild.channel.*;
 import io.github.realyusufismail.ydwreg.handle.Handle;
 
 public class ChannelCreateHandler extends Handle {
@@ -30,7 +33,23 @@ public class ChannelCreateHandler extends Handle {
 
     @Override
     public void start() {
-        Channel channel = new ChannelReg(json.get("d"), json.get("d").get("id").asLong(), ydw);
-        // TODO: Add channel to guild
+        ChannelType channelType = ChannelType.getChannelType(json.get("type").asInt());
+
+        Channel channel = createChannel(channelType, json);
+
+        //TODO: Add a way to handle events.
+
+    }
+
+    private Channel createChannel(ChannelType channelType, JsonNode json) {
+        switch (channelType) {
+            case GUILD_TEXT : new TextChannelReg(json, json.get("id").asLong(), ydw);
+            case GUILD_VOICE : new VoiceChannelReg(json, json.get("id").asLong(), ydw);
+            case GUILD_CATEGORY : new CategoryReg(json, json.get("id").asLong(), ydw);
+            case GUILD_NEWS : new NewsChannelReg(json, json.get("id").asLong(), ydw);
+            case GUILD_STAGE_VOICE : new StageChannelReg(json, json.get("id").asLong(), ydw);
+            default :
+                return null;
+        }
     }
 }
