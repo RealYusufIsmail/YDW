@@ -22,9 +22,9 @@ import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.application.Interaction;
 import io.github.realyusufismail.ydw.application.interaction.InteractionData;
 import io.github.realyusufismail.ydw.application.interaction.InteractionType;
+import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.User;
-import io.github.realyusufismail.ydw.entities.guild.Channel;
 import io.github.realyusufismail.ydw.entities.guild.Member;
 import io.github.realyusufismail.ydw.entities.guild.Message;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionDataReg;
@@ -158,7 +158,7 @@ public class InteractionReg implements Interaction {
         return ydw;
     }
 
-    @Nullable
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;

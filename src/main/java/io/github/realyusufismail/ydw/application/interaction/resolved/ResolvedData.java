@@ -18,8 +18,8 @@
 package io.github.realyusufismail.ydw.application.interaction.resolved;
 
 import io.github.realyusufismail.ydw.entities.Attachment;
+import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.User;
-import io.github.realyusufismail.ydw.entities.guild.Channel;
 import io.github.realyusufismail.ydw.entities.guild.Member;
 import io.github.realyusufismail.ydw.entities.guild.Message;
 import io.github.realyusufismail.ydw.entities.guild.Role;

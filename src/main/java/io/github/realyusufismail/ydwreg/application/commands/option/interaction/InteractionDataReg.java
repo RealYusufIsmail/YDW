@@ -26,6 +26,7 @@ import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.resolved.ResolvedDataReg;
 import io.github.realyusufismail.ydwreg.message_components.ComponentType;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -104,7 +105,7 @@ public class InteractionDataReg implements InteractionData {
         return ydw;
     }
 
-    @Nullable
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;

@@ -80,6 +80,7 @@ public class MemberReg implements Member {
         }
     }
 
+    @NotNull
     @Override
     public Long getIdLong() {
         return user.getIdLong();

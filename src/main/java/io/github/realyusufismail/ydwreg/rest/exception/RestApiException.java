@@ -17,8 +17,6 @@
 
 package io.github.realyusufismail.ydwreg.rest.exception;
 
-import io.github.realyusufismail.ydwreg.rest.error.RestApiError;
-
 import java.io.IOException;
 
 public class RestApiException extends RuntimeException {

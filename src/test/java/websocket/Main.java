@@ -1,9 +1,9 @@
 package websocket;
 
-import io.github.realyusufismail.websocket.event.events.ReadyEvent;
 import io.github.realyusufismail.ydw.Status;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.YDWConfig;
+import io.github.realyusufismail.ydw.event.events.ReadyEvent;
 import io.github.yusufsdiscordbot.config.Config;
 
 public class Main {
@@ -21,7 +21,5 @@ public class Main {
             .call();
 
         ydw.awaitReady().newSlashCommand("test1", "test1").setToGuildOnly(true).call();
-
-        ydw.awaitReady().setEventHandler(new TestHandler());
     }
 }

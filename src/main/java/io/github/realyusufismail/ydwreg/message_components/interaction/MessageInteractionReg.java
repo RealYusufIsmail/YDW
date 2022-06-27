@@ -25,6 +25,7 @@ import io.github.realyusufismail.ydw.entities.guild.Member;
 import io.github.realyusufismail.ydw.interaction.MessageInteraction;
 import io.github.realyusufismail.ydwreg.entities.UserReg;
 import io.github.realyusufismail.ydwreg.entities.guild.MemberReg;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -75,7 +76,7 @@ public class MessageInteractionReg implements MessageInteraction {
         return Optional.ofNullable(member);
     }
 
-    @Nullable
+    @NotNull
     @Override
     public Long getIdLong() {
         return id;
