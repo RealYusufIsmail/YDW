@@ -86,8 +86,8 @@ public class YDWReg implements YDW {
         this.executorService = executorService;
         mapper = new ObjectMapper();
         this.okHttpClient = okHttpClient;
-        this.client = new Client();
-        this.eventHandler = new EventHandler(this);
+        this.client = new Client(this);
+        this.eventHandler = new EventHandler(this, client);
     }
 
     public void handelEvent(Event event) {

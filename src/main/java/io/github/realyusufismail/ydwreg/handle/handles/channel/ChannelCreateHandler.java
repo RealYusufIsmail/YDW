@@ -43,12 +43,17 @@ public class ChannelCreateHandler extends Handle {
 
     private Channel createChannel(ChannelType channelType, JsonNode json) {
         switch (channelType) {
-            case GUILD_TEXT : new TextChannelReg(json, json.get("id").asLong(), ydw);
-            case GUILD_VOICE : new VoiceChannelReg(json, json.get("id").asLong(), ydw);
-            case GUILD_CATEGORY : new CategoryReg(json, json.get("id").asLong(), ydw);
-            case GUILD_NEWS : new NewsChannelReg(json, json.get("id").asLong(), ydw);
-            case GUILD_STAGE_VOICE : new StageChannelReg(json, json.get("id").asLong(), ydw);
-            default :
+            case GUILD_TEXT:
+                new TextChannelReg(json, json.get("id").asLong(), ydw);
+            case GUILD_VOICE:
+                new VoiceChannelReg(json, json.get("id").asLong(), ydw);
+            case GUILD_CATEGORY:
+                new CategoryReg(json, json.get("id").asLong(), ydw);
+            case GUILD_NEWS:
+                new NewsChannelReg(json, json.get("id").asLong(), ydw);
+            case GUILD_STAGE_VOICE:
+                new StageChannelReg(json, json.get("id").asLong(), ydw);
+            default:
                 return null;
         }
     }
