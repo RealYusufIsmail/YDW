@@ -6,10 +6,11 @@ import io.github.realyusufismail.ydw.event.Event;
 public class ReconnectEvent extends Event {
     private final boolean reconnected;
 
-    public ReconnectEvent(YDW ydw) {
+    public ReconnectEvent(YDW ydw, boolean reconnected) {
         super(ydw);
 
-        this.reconnected = ydw.hasReconnected();
+
+        this.reconnected = reconnected;
     }
 
     public Boolean hasReconnected() {

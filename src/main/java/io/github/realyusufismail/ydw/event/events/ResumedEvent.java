@@ -6,10 +6,10 @@ import io.github.realyusufismail.ydw.event.Event;
 public class ResumedEvent extends Event {
     private final boolean resumed;
 
-    public ResumedEvent(YDW ydw) {
+    public ResumedEvent(YDW ydw, boolean resumed) {
         super(ydw);
 
-        this.resumed = ydw.isResumed();
+        this.resumed = resumed;
     }
 
     public Boolean hasResumed() {

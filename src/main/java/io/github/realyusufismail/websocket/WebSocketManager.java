@@ -33,46 +33,33 @@ import java.util.concurrent.TimeUnit;
 
 public class WebSocketManager extends WebSocketAdapter implements WebSocketListener {
 
-    private final Logger logger = LoggerFactory.getLogger(WebSocketManager.class);
-
     // Create a WebSocketFactory instance.
     static WebSocket ws;
-
-    ObjectMapper mapper = new ObjectMapper();
-
-    // The sequence number, used for resuming sessions and heartbeats.
-    private Integer seq = null;
-
+    private final Logger logger = LoggerFactory.getLogger(WebSocketManager.class);
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-
-    // Used to determine if any heart beats hve been missed.
-    private int missedHeartbeats = 0;
-
     // The bots token.
     private final String token;
-
     // The gateway intents
     private final int intent;
-
+    private final YDWReg ydwReg;
+    ObjectMapper mapper = new ObjectMapper();
+    // The sequence number, used for resuming sessions and heartbeats.
+    private Integer seq = null;
+    // Used to determine if any heart beats hve been missed.
+    private int missedHeartbeats = 0;
     // The sequence number, used for resuming sessions and heartbeats.
     // The status of the bot e.g. online, idle, dnd, invisible etc.
-    private String status;
-    private Integer largeThreshold;
+    private final String status;
+    private final Integer largeThreshold;
     // The activity of the bot e.g. playing, streaming, listening, watching etc.
-    private ActivityConfig activity;
-
+    private final ActivityConfig activity;
     // The session id. This is basically a key that stores the past activity of the bot.
     private volatile String sessionId = null;
     // Used to indicate that the bot has connected to the gateway.
     private boolean connected = false;
-
     // The thread used for the heartbeat. Needed in cases such as disconnect.
     private volatile Future<?> heartbeatThread;
-
-    private final YDWReg ydwReg;
-
     private boolean isSessionAvailable = false;
-
 
 
     public WebSocketManager(YDW ydw, String token, Integer intent, String status,
@@ -87,6 +74,11 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         connect();
     }
 
+    public WebSocketManager(YDW ydw, String token, @NotNull GateWayIntent intent, String status,
+            int largeThreshold, ActivityConfig activity) throws IOException, WebSocketException {
+        this(ydw, token, intent.getValue(), status, largeThreshold, activity);
+    }
+
     public synchronized void connect() {
         try {
             ws = new WebSocketFactory().createSocket(YDWInfo.DISCORD_GATEWAY_LINK);
@@ -96,11 +88,6 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         } catch (IOException | WebSocketException e) {
             logger.error("Error while connecting to the gateway", e);
         }
-    }
-
-    public WebSocketManager(YDW ydw, String token, @NotNull GateWayIntent intent, String status,
-            int largeThreshold, ActivityConfig activity) throws IOException, WebSocketException {
-        this(ydw, token, intent.getValue(), status, largeThreshold, activity);
     }
 
     public void setSessionId(String sessionId) {
@@ -116,8 +103,6 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     public void onHandelMessage(String message) throws Exception {
         try {
             JsonNode payload = mapper.readTree(message);
-            // TODO: remember to remove this when done testing
-            System.out.println(payload.toPrettyString());
             onHandel(payload);
         } catch (Exception e) {
             logger.error("Error while handling message", e);
@@ -231,7 +216,6 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     }
 
 
-
     /**
      * This was taken from JDA's WebSocket. <a href=
      * "https://github.com/DV8FromTheWorld/JDA/blob/023a6c9de489d2e487d44b294614bb4911597817/src/main/java/net/dv8tion/jda/internal/requests/WebSocketClient.java#L671">WebSocketClient.java</a>
@@ -242,7 +226,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
                 Socket rawSocket = ws.getSocket();
                 if (rawSocket != null) // attempt to set a 10 second timeout for the close frame
                     rawSocket.setSoTimeout(10000); // this has no affect if the socket is already
-                                                   // stuck in a read call
+                // stuck in a read call
             }
         } catch (SocketException ignored) {
         }
@@ -253,7 +237,6 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     public void onConnected(WebSocket websocket, Map<String, List<String>> headers)
             throws Exception {
         connected = true;
-        ydwReg.setApiStatus(YDW.ApiStatus.CONNECTING_TO_WEBSOCKET);
         if (sessionId == null) {
             identify();
         } else {
@@ -326,7 +309,6 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
     private void handleDisconnect(WebSocket websocket, WebSocketFrame serverCloseFrame,
             WebSocketFrame clientCloseFrame, boolean closedByServer) {
-        ydwReg.setApiStatus(YDW.ApiStatus.WEBSOCKET_DISCONNECTED);
         CloseCode closeCode = null;
         int rawCloseCode = 1005;
         isSessionAvailable = false;

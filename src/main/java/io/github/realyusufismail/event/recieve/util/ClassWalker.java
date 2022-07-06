@@ -4,8 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class ClassWalker implements Iterable<Class<?>>
-{
+public class ClassWalker implements Iterable<Class<?>> {
     private final Class<?> clazz;
     private final Class<?> end;
 

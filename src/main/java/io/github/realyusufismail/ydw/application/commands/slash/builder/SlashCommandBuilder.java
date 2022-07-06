@@ -19,7 +19,6 @@ public interface SlashCommandBuilder {
     SlashCommandBuilder setToGuildOnly(boolean toGuildOnly);
 
     @CheckReturnValue
-
     SlashCommandBuilder setOption(OptionType optionType, String name, String description,
             boolean required);
 
@@ -30,18 +29,14 @@ public interface SlashCommandBuilder {
     }
 
     @CheckReturnValue
-
     SlashCommandBuilder setOptions(Collection<Option> options);
 
     @CheckReturnValue
-
     SlashCommandBuilder setOptions(Option... options);
 
     @CheckReturnValue
-
     SlashCommandBuilder setExtendedOptions(OptionExtender... optionExtenders);
 
     @CheckReturnValue
-
     SlashCommandBuilder setExtendedOptions(Collection<OptionExtender> optionExtenders);
 }

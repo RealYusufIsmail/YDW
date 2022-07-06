@@ -23,13 +23,13 @@ import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.application.commands.option.OptionType;
 import io.github.realyusufismail.ydw.application.commands.slash.option.SlashOptionGetter;
 import io.github.realyusufismail.ydwreg.application.commands.option.CommandOptionMapping;
-import io.github.realyusufismail.ydwreg.application.commands.slash.config.SlashCommandConfig;
+import io.github.realyusufismail.ydwreg.application.commands.slash.SlashCommandReg;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SlashOptionGetterReg extends SlashCommandConfig implements SlashOptionGetter {
+public class SlashOptionGetterReg extends SlashCommandReg implements SlashOptionGetter {
 
     private final List<CommandOptionMapping> optionMappings = new ArrayList<>();
 

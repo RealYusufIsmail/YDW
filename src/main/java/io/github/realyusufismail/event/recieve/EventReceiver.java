@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Beta
-public class EventReceiver implements IEventReceiverConfig{
+public class EventReceiver implements IEventReceiverConfig {
     // Null as there is no default value for this parameter
     public Event event = null;
 

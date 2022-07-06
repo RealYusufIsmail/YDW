@@ -75,7 +75,7 @@ public class EmbedBuilder {
     private Provider provider;
     private Author author;
     @NotNull
-    private List<Fields> fields = new ArrayList<>();
+    private final List<Fields> fields = new ArrayList<>();
 
     public EmbedBuilder() {
         this(null);
@@ -226,9 +226,8 @@ public class EmbedBuilder {
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof EmbedBuilder))
+        if (!(o instanceof EmbedBuilder that))
             return false;
-        EmbedBuilder that = (EmbedBuilder) o;
         return Objects.equal(title, that.title) && Objects.equal(description, that.description)
                 && Objects.equal(url, that.url) && Objects.equal(timestamp, that.timestamp)
                 && Objects.equal(color, that.color) && Objects.equal(footer, that.footer)

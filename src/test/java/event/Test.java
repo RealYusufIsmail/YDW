@@ -8,8 +8,6 @@ public class Test implements IEventReceiver {
 
 
     public void onEvent(Event event) {
-        System.out.println("Event received");
-
         if (event instanceof ReadyEvent) {
             System.out
                 .println("The number of guilds is " + ((ReadyEvent) event).getNumberOfGuilds());

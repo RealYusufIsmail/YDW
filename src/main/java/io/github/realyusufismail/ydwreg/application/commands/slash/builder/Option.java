@@ -32,6 +32,22 @@ public class Option {
         return arrayNode;
     }
 
+    public static ArrayNode choiceToJsonArray(@NotNull Collection<Choice> choices) {
+        ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
+        for (Choice choice : choices) {
+            arrayNode.add(choicesToJson(choice));
+        }
+        return arrayNode;
+    }
+
+    static String choicesToJson(@NotNull Choice choices) {
+        return JsonNodeFactory.instance.arrayNode()
+            .add(JsonNodeFactory.instance.objectNode()
+                .put("name", choices.getName())
+                .set("value", choices.getValueAsJson()))
+            .toString();
+    }
+
     String optionToJson() {
         return JsonNodeFactory.instance.arrayNode()
             .add(JsonNodeFactory.instance.objectNode()
@@ -50,22 +66,6 @@ public class Option {
                 .put("type", SlashCommandBuilderReg.getOptionType().name())
                 .put("required", SlashCommandBuilderReg.isOptionRequired())
                 .set("choices", choiceToJsonArray(optionExtender.getChoices())))
-            .toString();
-    }
-
-    public static ArrayNode choiceToJsonArray(@NotNull Collection<Choice> choices) {
-        ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
-        for (Choice choice : choices) {
-            arrayNode.add(choicesToJson(choice));
-        }
-        return arrayNode;
-    }
-
-    static String choicesToJson(@NotNull Choice choices) {
-        return JsonNodeFactory.instance.arrayNode()
-            .add(JsonNodeFactory.instance.objectNode()
-                .put("name", choices.getName())
-                .set("value", choices.getValueAsJson()))
             .toString();
     }
 }

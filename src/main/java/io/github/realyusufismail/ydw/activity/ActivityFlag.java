@@ -33,12 +33,8 @@ public enum ActivityFlag {
 
     private final int value;
 
-    private ActivityFlag(int value) {
+    ActivityFlag(int value) {
         this.value = value;
-    }
-
-    public int getValue() {
-        return value;
     }
 
     @NotNull
@@ -49,5 +45,9 @@ public enum ActivityFlag {
             }
         }
         return UNKNOWN;
+    }
+
+    public int getValue() {
+        return value;
     }
 }

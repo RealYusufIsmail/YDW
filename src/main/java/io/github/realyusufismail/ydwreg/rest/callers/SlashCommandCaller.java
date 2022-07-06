@@ -45,11 +45,10 @@ public class SlashCommandCaller {
     private final MediaType JSON;
     private final String token;
     private final String guildId;
+    private final Integer commandType = CommandType.CHAT_INPUT.getValue();
     private String interactionToken;
-
     private String name;
     private String description;
-    private final Integer commandType = CommandType.CHAT_INPUT.getValue();
     private Collection<Option> options;
     private Collection<OptionExtender> extender;
 
@@ -163,23 +162,26 @@ public class SlashCommandCaller {
     // Reply system
 
     // TODO: Implement reply system
-    private ObjectNode replyJson() {
-        return JsonNodeFactory.instance.objectNode().put("content", "").put("ephemeral", ephemeral);
+    private ObjectNode replyJson(String content) {
+        return JsonNodeFactory.instance.objectNode()
+            .put("content", content)
+            .put("ephemeral", ephemeral);
     }
 
-    public void reply() {
+    public Request reply(String content) {
         if (token == null || interactionToken == null) {
             throw new IllegalStateException("Token and interaction Token are required to reply");
         }
-
 
 
         Request request = new YDWRequest()
             .request(token,
                     EndPoint.REPLY_TO_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
                             interactionToken))
-            .post(RequestBody.create("", JSON))
+            .post(RequestBody.create(replyJson(content).toString(), JSON))
             .build();
+
+        return request;
     }
 
     public void setEphemeral(boolean ephemeral) {

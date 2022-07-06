@@ -5,9 +5,8 @@ import io.github.realyusufismail.ydw.application.Interaction;
 
 public class InteractionManager {
 
-    private final YDW ydw;
-
     private static Interaction interaction;
+    private final YDW ydw;
 
 
     public InteractionManager(YDW ydw) {

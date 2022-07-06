@@ -63,6 +63,16 @@ public enum ActivityConfig {
         this.activity = activity;
     }
 
+    @NotNull
+    public static ActivityConfig getActivity(int activity) {
+        for (ActivityConfig config : values()) {
+            if (config.getActivity() == activity) {
+                return config;
+            }
+        }
+        return UNKNOWN;
+    }
+
     public int getActivity() {
         return activity;
     }
@@ -95,22 +105,11 @@ public enum ActivityConfig {
         return ActivityConfig.STREAMING.getActivity();
     }
 
-
     public String getName() {
         return name;
     }
 
     public String getUrl() {
         return url;
-    }
-
-    @NotNull
-    public static ActivityConfig getActivity(int activity) {
-        for (ActivityConfig config : values()) {
-            if (config.getActivity() == activity) {
-                return config;
-            }
-        }
-        return UNKNOWN;
     }
 }

@@ -20,12 +20,8 @@ public enum CommandTypes {
 
     private final int value;
 
-    private CommandTypes(int value) {
+    CommandTypes(int value) {
         this.value = value;
-    }
-
-    public int getValue() {
-        return value;
     }
 
     public static CommandTypes getCommandType(int value) {
@@ -35,5 +31,9 @@ public enum CommandTypes {
             }
         }
         return UNKNOWN;
+    }
+
+    public int getValue() {
+        return value;
     }
 }

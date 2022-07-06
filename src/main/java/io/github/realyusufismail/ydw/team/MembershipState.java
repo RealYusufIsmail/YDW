@@ -39,10 +39,6 @@ public enum MembershipState {
         this.value = value;
     }
 
-    public int getValue() {
-        return value;
-    }
-
     @NotNull
     public static MembershipState getMembershipState(int value) {
         return switch (value) {
@@ -50,5 +46,9 @@ public enum MembershipState {
             case 2 -> ACCEPTED;
             default -> UNKNOWN;
         };
+    }
+
+    public int getValue() {
+        return value;
     }
 }

@@ -28,14 +28,11 @@ import java.util.List;
 
 public class SlashCommandBuilderReg implements SlashCommandBuilder {
 
-    private final SlashCommandCaller caller;
-
     private static String optionName;
     private static String optionDescription;
-
     private static OptionType optionType;
     private static boolean optionRequired;
-
+    private final SlashCommandCaller caller;
     private Boolean guildOnly = false;
 
     public SlashCommandBuilderReg(@NotNull YDW ydw, String name, String description) {
@@ -44,6 +41,37 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
         caller.setDescription(description);
     }
 
+    public static String getOptionName() {
+        return optionName;
+    }
+
+    public static void setOptionName(String optionName) {
+        SlashCommandBuilderReg.optionName = optionName;
+    }
+
+    public static String getOptionDescription() {
+        return optionDescription;
+    }
+
+    public static void setOptionDescription(String optionDescription) {
+        SlashCommandBuilderReg.optionDescription = optionDescription;
+    }
+
+    public static OptionType getOptionType() {
+        return optionType;
+    }
+
+    public static void setOptionType(OptionType optionType) {
+        SlashCommandBuilderReg.optionType = optionType;
+    }
+
+    public static boolean isOptionRequired() {
+        return optionRequired;
+    }
+
+    public static void setOptionRequired(boolean optionRequired) {
+        SlashCommandBuilderReg.optionRequired = optionRequired;
+    }
 
     @Override
     public SlashCommandBuilderReg setToGuildOnly(boolean toGuildOnly) {
@@ -80,38 +108,6 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
     public SlashCommandBuilderReg setExtendedOptions(Collection<OptionExtender> optionExtenders) {
         caller.setOptionExtenders(optionExtenders);
         return this;
-    }
-
-    public static void setOptionName(String optionName) {
-        SlashCommandBuilderReg.optionName = optionName;
-    }
-
-    public static void setOptionDescription(String optionDescription) {
-        SlashCommandBuilderReg.optionDescription = optionDescription;
-    }
-
-    public static void setOptionType(OptionType optionType) {
-        SlashCommandBuilderReg.optionType = optionType;
-    }
-
-    public static void setOptionRequired(boolean optionRequired) {
-        SlashCommandBuilderReg.optionRequired = optionRequired;
-    }
-
-    public static String getOptionName() {
-        return optionName;
-    }
-
-    public static String getOptionDescription() {
-        return optionDescription;
-    }
-
-    public static OptionType getOptionType() {
-        return optionType;
-    }
-
-    public static boolean isOptionRequired() {
-        return optionRequired;
     }
 
     public void call() {

@@ -19,17 +19,17 @@ package io.github.realyusufismail.ydwreg;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.realyusufismail.event.recieve.EventReceiver;
-import io.github.realyusufismail.event.recieve.IEventReceiver;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.ydw.GateWayIntent;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
-import io.github.realyusufismail.ydw.entities.*;
+import io.github.realyusufismail.ydw.entities.Channel;
+import io.github.realyusufismail.ydw.entities.Guild;
+import io.github.realyusufismail.ydw.entities.SelfUser;
+import io.github.realyusufismail.ydw.entities.User;
 import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 import io.github.realyusufismail.ydw.event.Event;
-import io.github.realyusufismail.ydw.event.events.ApiStatusChangeEvent;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
-import io.github.realyusufismail.ydwreg.entities.guild.manager.GuildManager;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
@@ -45,40 +45,23 @@ public class YDWReg implements YDW {
 
     // logger
     public static final Logger logger = LoggerFactory.getLogger(YDWReg.class);
-    private RestApiHandler rest;
     @NotNull
     private final ObjectMapper mapper;
-    private WebSocketManager ws;
-    private long ping;
-    private long sequenceNumber;
-    private long gatewayPing;
-    private SelfUser selfUser;
     @NotNull
     private final OkHttpClient okHttpClient;
-
+    private final ExecutorService executorService;
+    private final EventReceiver eventReceiver;
+    private RestApiHandler rest;
+    private WebSocketManager ws;
+    private long ping;
+    private long gatewayPing;
+    private SelfUser selfUser;
     private List<Guild> guilds;
-
-    private List<UnavailableGuild> unavailableGuilds;
-
-    private List<AvailableGuild> availableGuilds;
-
     private Boolean resumable;
-
-    private Boolean reconnected;
-
-    private Boolean resumed;
-
     private boolean ready;
-
-    private ApiStatus status = ApiStatus.STARTING;
     private String guildId;
     private String token;
-
     private Long applicationId;
-
-    private final ExecutorService executorService;
-
-    private final EventReceiver eventReceiver;
 
     public YDWReg(@NotNull OkHttpClient okHttpClient, ExecutorService executorService) {
         this.executorService = executorService;
@@ -88,30 +71,8 @@ public class YDWReg implements YDW {
     }
 
     public void handelEvent(Event event) {
-        eventReceiver.receive(event);
-    }
+        eventReceiver.eventReceivers.forEach(eventReceiver -> eventReceiver.onEvent(event));
 
-    @Override
-    public YDW awaitStatus(ApiStatus status) throws InterruptedException {
-        if (!status.isInitialized()) {
-            throw new IllegalArgumentException("Status is not part of the initialising state");
-        }
-
-        if (this.status == status)
-            return this;
-        List<ApiStatus> statuses = List.of(status);
-        while (!getStatus().isInitialized() || getStatus().ordinal() < status.ordinal()) {
-            if (getStatus() == ApiStatus.SHUT_DOWN)
-                throw new IllegalStateException("Bot is shut down");
-            else if (statuses.contains(getStatus()))
-                return this;
-            Thread.sleep(100);
-        }
-        return this;
-    }
-
-    public ApiStatus getStatus() {
-        return status;
     }
 
     @NotNull
@@ -127,29 +88,6 @@ public class YDWReg implements YDW {
     @Override
     public Guild getGuild(long guildId) {
         return getRest().getYDWCaller().getGuild(guildId);
-    }
-
-    @Override
-    public List<UnavailableGuild> getUnavailableGuilds() {
-        return unavailableGuilds;
-    }
-
-    public void setUnavailableGuilds(List<UnavailableGuild> unavailableGuilds) {
-        this.unavailableGuilds = unavailableGuilds;
-    }
-
-    @Override
-    public List<AvailableGuild> getAvailableGuilds() {
-        return availableGuilds;
-    }
-
-    public void setAvailableGuilds(List<AvailableGuild> availableGuilds) {
-        this.availableGuilds = availableGuilds;
-    }
-
-    @Override
-    public boolean isSpecifiedGuildAvailable(long guildId) {
-        return false;
     }
 
     @Override
@@ -206,16 +144,6 @@ public class YDWReg implements YDW {
     }
 
     @Override
-    public long getSequenceNumber() {
-        return sequenceNumber;
-    }
-
-    public void setSequenceNumber(long sequenceNumber) {
-        this.sequenceNumber = sequenceNumber;
-    }
-
-
-    @Override
     public long getGatewayPing() {
         return gatewayPing;
     }
@@ -232,19 +160,13 @@ public class YDWReg implements YDW {
         return rest;
     }
 
+    public void setRest(RestApiHandler rest) {
+        this.rest = rest;
+    }
+
     @Override
     public WebSocketManager getWebSocket() {
         return ws;
-    }
-
-    @Override
-    public int getMaxReconnectDelay() {
-        return 0;
-    }
-
-    @Override
-    public boolean needsToAutoReconnect() {
-        return false;
     }
 
     public boolean isSelfUserThere() {
@@ -270,44 +192,8 @@ public class YDWReg implements YDW {
     }
 
     @Override
-    public boolean isResumed() {
-        return resumed;
-    }
-
-    @Override
-    public boolean hasReconnected() {
-        return reconnected;
-    }
-
-    @Override
     public InteractionManager getInteractionManager() {
         return new InteractionManager(this);
-    }
-
-    @Override
-    public GuildManager getGuildManager() {
-        return new GuildManager(this);
-    }
-
-    public void setResumed(boolean b) {
-        this.resumed = b;
-    }
-
-    public void setReconnected(boolean b) {
-        this.reconnected = b;
-    }
-
-    public void setApiStatus(YDW.ApiStatus apiStatus) {
-        synchronized (this.status) {
-            ApiStatus oldStatus = this.status;
-            this.status = apiStatus;
-
-            handelEvent(new ApiStatusChangeEvent(this, oldStatus, apiStatus));
-        }
-    }
-
-    public void setRest(RestApiHandler rest) {
-        this.rest = rest;
     }
 
     @Override
@@ -324,6 +210,11 @@ public class YDWReg implements YDW {
         }
     }
 
+    public YDW setReady(boolean ready) {
+        this.ready = ready;
+        return this;
+    }
+
     public ObjectMapper getMapper() {
         return mapper;
     }
@@ -336,14 +227,14 @@ public class YDWReg implements YDW {
         return logger;
     }
 
-    public void setApplicationId(long applicationId) {
-        this.applicationId = applicationId;
-    }
-
     public long getApplicationId() {
         if (applicationId == null)
             throw new IllegalStateException("Application id is not set");
         return applicationId;
+    }
+
+    public void setApplicationId(long applicationId) {
+        this.applicationId = applicationId;
     }
 
     public ExecutorService getExecutorService() {

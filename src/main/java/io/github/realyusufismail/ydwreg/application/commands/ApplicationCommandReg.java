@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ApplicationCommandReg extends Event implements ApplicationCommand {
+public class ApplicationCommandReg implements ApplicationCommand {
 
     private final long id;
     private final YDW ydw;
@@ -49,21 +49,20 @@ public class ApplicationCommandReg extends Event implements ApplicationCommand {
     private final Long version;
 
     public ApplicationCommandReg(@NotNull JsonNode application, long id, YDW ydw) {
-        super(ydw);
         this.id = id;
         this.ydw = ydw;
 
         this.type = application.hasNonNull("type")
                 ? CommandType.getCommandType(application.get("type").asInt())
                 : null;
-        this.applicationId = application.get("applicationId").asLong();
-        this.guild =
-                application.hasNonNull("guild") ? ydw.getGuild(application.get("guild").asLong())
-                        : null;
+        this.applicationId = application.get("application_id").asLong();
+        this.guild = application.hasNonNull("guild_id")
+                ? ydw.getGuild(application.get("guild_id").asLong())
+                : null;
         this.name = application.get("name").asText();
         this.description = application.get("description").asText();
-        this.defaultPermission = application.hasNonNull("defaultPermission")
-                ? application.get("defaultPermission").asText().split(",")
+        this.defaultPermission = application.hasNonNull("default_permission")
+                ? application.get("default_permission").asText().split(",")
                 : null;
         this.dmVisible = application.hasNonNull("dm_permission")
                 ? application.get("dm_permission").asBoolean()

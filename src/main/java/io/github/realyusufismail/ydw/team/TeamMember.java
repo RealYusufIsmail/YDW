@@ -27,7 +27,7 @@ import java.util.List;
 public interface TeamMember extends GenericEntity {
     /**
      * The state of the member's membership in the team.
-     * 
+     *
      * @return The state of the member's membership in the team.
      */
     @NotNull
@@ -35,14 +35,14 @@ public interface TeamMember extends GenericEntity {
 
     /**
      * The member's permissions in the team.
-     * 
+     *
      * @return The member's permissions in the team.
      */
     List<String> getPermissions();
 
     /**
      * The id of the parent team.
-     * 
+     *
      * @return The id of the parent team.
      */
     @NotNull
@@ -50,7 +50,7 @@ public interface TeamMember extends GenericEntity {
 
     /**
      * The user that is a member of the team.
-     * 
+     *
      * @return The user that is a member of the team.
      */
     @NotNull

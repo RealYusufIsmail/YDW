@@ -19,16 +19,40 @@ package io.github.realyusufismail.ydwreg.application.commands.slash;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydwreg.application.commands.slash.config.SlashCommandConfig;
+import io.github.realyusufismail.ydw.action.ReplyAction;
+import io.github.realyusufismail.ydw.application.Interaction;
+import io.github.realyusufismail.ydw.application.commands.reply.IReply;
+import io.github.realyusufismail.ydw.application.interaction.InteractionData;
+import io.github.realyusufismail.ydw.application.interaction.resolved.ResolvedData;
+import io.github.realyusufismail.ydw.entities.embed.Embed;
+import io.github.realyusufismail.ydwreg.action.ReplyActionReg;
+import io.github.realyusufismail.ydwreg.application.InteractionReg;
+import io.github.realyusufismail.ydwreg.message_components.ComponentType;
+import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
+import okhttp3.Request;
+import org.jetbrains.annotations.NotNull;
 
-public class SlashCommandReg extends SlashCommandConfig {
-    private final YDW ydw;
-    private final long id;
+import java.util.Optional;
 
-    public SlashCommandReg(JsonNode option, long id, YDW ydw) {
-        super(option, option.get("id").asLong(), ydw);
-        this.ydw = ydw;
-        this.id = id;
+public class SlashCommandReg extends InteractionReg implements Interaction, IReply {
+
+    public SlashCommandReg(@NotNull JsonNode application, long id, YDW ydw) {
+        super(application, id, ydw);
     }
 
+    @Override
+    public ReplyAction reply(String message) {
+        Request request = ydw.getRest().getSlashCommandCaller().reply(message);
+        return new ReplyActionReg(request, ydw);
+    }
+
+    @Override
+    public ReplyAction replyEmbed(Embed embed) {
+        return null;
+    }
+
+    public String getName() {
+        return super.getData().get().getName();
+    }
 }
+

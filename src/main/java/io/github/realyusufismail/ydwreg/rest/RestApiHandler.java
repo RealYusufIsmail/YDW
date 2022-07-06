@@ -12,19 +12,14 @@ import javax.annotation.Nullable;
 
 public class RestApiHandler {
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-
-    private YDWReg ydw;
-    private OkHttpClient client; // This is the client that will be used to make the requests
-                                 // to the API
-
-    private final String guildId;
-
-    private static RestApiStatus status = RestApiStatus.INITIALISING;
-
-    private final String token;
-
     // logger
     private static final Logger logger = LoggerFactory.getLogger(RestApiHandler.class);
+    private static final RestApiStatus status = RestApiStatus.INITIALISING;
+    // to the API
+    private final String guildId;
+    private final String token;
+    private final YDWReg ydw;
+    private final OkHttpClient client; // This is the client that will be used to make the requests
 
     public RestApiHandler(@NotNull YDWReg ydw, String token, OkHttpClient client,
             @Nullable String guildId) {
@@ -37,10 +32,9 @@ public class RestApiHandler {
          * // while ydw and token are null, we wait for them to be set while (ydw == null || token
          * == null) { try { System.out.println("Waiting for ydw and token to be set");
          * Thread.sleep(100); } catch (InterruptedException e) { e.printStackTrace(); } }
-         * 
+         *
          */
     }
-
 
 
     public OkHttpClient getHttpClient() {

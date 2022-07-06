@@ -85,9 +85,8 @@ public class YDWConfig {
 
     /**
      * the client used to connect to the websocket
-     * 
-     * @param client client
      *
+     * @param client client
      * @return ydwConnector
      */
     @NotNull

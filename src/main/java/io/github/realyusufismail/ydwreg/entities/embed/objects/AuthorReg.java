@@ -27,11 +27,11 @@ import java.util.Optional;
 public class AuthorReg implements Author {
 
     @Nullable
-    private String name;
+    private final String name;
     @Nullable
-    private String url;
-    private String iconUrl;
-    private String proxyIconUrl;
+    private final String url;
+    private final String iconUrl;
+    private final String proxyIconUrl;
 
     public AuthorReg(@NotNull JsonNode author) {
 

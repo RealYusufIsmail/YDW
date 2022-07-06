@@ -27,6 +27,7 @@ import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.User;
 import io.github.realyusufismail.ydw.entities.guild.Member;
 import io.github.realyusufismail.ydw.entities.guild.Message;
+import io.github.realyusufismail.ydw.event.Event;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionDataReg;
 import io.github.realyusufismail.ydwreg.entities.UserReg;
 import io.github.realyusufismail.ydwreg.entities.guild.MemberReg;
@@ -37,10 +38,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class InteractionReg implements Interaction {
+public class InteractionReg extends Event implements Interaction {
 
     private final long id;
-    private final YDW ydw;
+    protected final YDW ydw;
 
     private final Long applicationId;
     private final InteractionType type;
@@ -56,6 +57,7 @@ public class InteractionReg implements Interaction {
     private final String guildLocale;
 
     public InteractionReg(@NotNull JsonNode interaction, long id, YDW ydw) {
+        super(ydw);
         this.id = id;
         this.ydw = ydw;
 

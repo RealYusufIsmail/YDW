@@ -1,8 +1,8 @@
 package io.github.realyusufismail.event.updater;
 
 public class UpdateEvent {
-    private Object oldEvent;
-    private Object newEvent;
+    private final Object oldEvent;
+    private final Object newEvent;
 
     public UpdateEvent(Object oldEvent, Object newEvent) {
         this.oldEvent = oldEvent;

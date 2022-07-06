@@ -27,13 +27,13 @@ import java.util.Optional;
 public class SameEmbedStructureReg implements SameEmbedStructure {
 
     @Nullable
-    private String url;
+    private final String url;
     @Nullable
-    private String proxyUrl;
+    private final String proxyUrl;
     @Nullable
-    private Integer height;
+    private final Integer height;
     @Nullable
-    private Integer width;
+    private final Integer width;
 
     public SameEmbedStructureReg(@NotNull JsonNode embed) {
         this.url = embed.hasNonNull("url") ? embed.get("url").asText() : null;

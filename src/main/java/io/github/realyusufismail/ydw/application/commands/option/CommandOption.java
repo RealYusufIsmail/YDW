@@ -41,14 +41,14 @@ public interface CommandOption {
 
     /**
      * If the option is an INTEGER or NUMBER type, the minimum value permitted.
-     * 
+     *
      * @return the minimum value
      */
     Optional<Integer> getMinValue();
 
     /**
      * If the option is an INTEGER or NUMBER type, the maximum value permitted.
-     * 
+     *
      * @return the maximum value
      */
     Optional<Integer> getMaxValue();
