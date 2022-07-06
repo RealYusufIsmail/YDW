@@ -58,8 +58,9 @@ public abstract class EventAdapter implements IEventReceiver {
     // interaction
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {}
 
-    //channel
+    // channel
     public void onChannelCreate(ChannelCreateEvent event) {}
+
     public void onChannelDelete(ChannelCreateEvent event) {}
 
     /**
