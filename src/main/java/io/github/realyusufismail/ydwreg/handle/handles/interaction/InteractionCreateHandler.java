@@ -17,6 +17,7 @@ public class InteractionCreateHandler extends Handle {
     public void start() {
         Interaction interaction = new InteractionReg(json, json.get("id").asLong(), ydw);
         if (interaction.getType() == InteractionType.APPLICATION_COMMAND) {
+            ydw.getRest().getSlashCommandCaller().setInteractionToken(interaction.getToken());
             ydw.handelEvent(new SlashCommandInteractionEvent(json, ydw));
         }
     }

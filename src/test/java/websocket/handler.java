@@ -12,7 +12,7 @@ public class handler extends EventAdapter {
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         if (event.getData().get().getName().equals("ping")) {
             System.out.println("ping");
-            event.reply("pong").queue();
+            System.out.println(event.getMember().get().getJoinedAt());
         }
     }
 }
