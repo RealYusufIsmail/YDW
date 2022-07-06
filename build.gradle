@@ -48,7 +48,7 @@ dependencies {
     implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
     //Event emitter
     // https://mavenlibs.com/maven/dependency/io.elastic/java-api
-    implementation group: 'io.github.realyusufismail', name: 'java-api-fork', version: '2.2.2'
+    //implementation group: 'io.github.realyusufismail', name: 'java-api-fork', version: '2.2.4'
 }
 
 test {

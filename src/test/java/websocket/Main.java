@@ -20,6 +20,6 @@ public class Main {
             .setToGuildOnly(true)
             .call();
 
-        ydw.awaitReady().newSlashCommand("test1", "test1").setToGuildOnly(true).call();
+        ydw.addEventAdapter(new handler());
     }
 }

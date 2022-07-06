@@ -18,8 +18,8 @@
 package io.github.realyusufismail.ydwreg;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.realyusufismail.event.Client;
-import io.github.realyusufismail.event.EventHandler;
+import io.github.realyusufismail.event.recieve.EventReceiver;
+import io.github.realyusufismail.event.recieve.IEventReceiver;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.ydw.GateWayIntent;
 import io.github.realyusufismail.ydw.YDW;
@@ -78,20 +78,17 @@ public class YDWReg implements YDW {
 
     private final ExecutorService executorService;
 
-    private final Client client;
-
-    private final EventHandler eventHandler;
+    private final EventReceiver eventReceiver;
 
     public YDWReg(@NotNull OkHttpClient okHttpClient, ExecutorService executorService) {
         this.executorService = executorService;
         mapper = new ObjectMapper();
         this.okHttpClient = okHttpClient;
-        this.client = new Client(this);
-        this.eventHandler = new EventHandler(this, client);
+        eventReceiver = new EventReceiver();
     }
 
     public void handelEvent(Event event) {
-        eventHandler.handle(event);
+        eventReceiver.receive(event);
     }
 
     @Override
@@ -313,6 +310,20 @@ public class YDWReg implements YDW {
         this.rest = rest;
     }
 
+    @Override
+    public void addEventAdapter(Object... eventAdapters) {
+        for (Object eventAdapter : eventAdapters) {
+            this.eventReceiver.addEventReceiver(eventAdapter);
+        }
+    }
+
+    @Override
+    public void removeEventAdapter(Object... eventAdapters) {
+        for (Object eventAdapter : eventAdapters) {
+            this.eventReceiver.removeEventReceiver(eventAdapter);
+        }
+    }
+
     public ObjectMapper getMapper() {
         return mapper;
     }
@@ -334,7 +345,6 @@ public class YDWReg implements YDW {
             throw new IllegalStateException("Application id is not set");
         return applicationId;
     }
-
 
     public ExecutorService getExecutorService() {
         return executorService;

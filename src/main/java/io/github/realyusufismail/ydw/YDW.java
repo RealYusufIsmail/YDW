@@ -18,6 +18,8 @@
 package io.github.realyusufismail.ydw;
 
 
+import io.github.realyusufismail.event.adapter.EventAdapter;
+import io.github.realyusufismail.event.recieve.IEventReceiver;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.entities.*;
@@ -203,4 +205,8 @@ public interface YDW {
     String getToken();
 
     long getApplicationId();
+
+    void addEventAdapter(Object... eventAdapters);
+
+    void removeEventAdapter(Object... eventAdapters);
 }
