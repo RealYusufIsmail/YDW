@@ -136,6 +136,35 @@ public class SlashCommandCaller {
         });
     }
 
+    public void updateCommand(long commandId) {
+        if (token == null) {
+            throw new IllegalStateException("Token is required to update");
+        }
+
+        Request request = new YDWRequest()
+            .request(token,
+                    EndPoint.UPDATE_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
+                            commandId))
+            .patch(RequestBody.create(slashCommandJson().toString(), JSON))
+            .build();
+
+        client.newCall(request).enqueue(new YDWCallback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                ydw.getLogger().error("Failed to register update slash command", e);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                if (!response.isSuccessful()) {
+                    RestApiError error = RestApiError.fromCode(response.code());
+                    ydw.getLogger()
+                        .error("Failed to register update slash command: " + error.getMessage());
+                }
+            }
+        });
+    }
+
     private ObjectNode slashCommandJson() {
         return JsonNodeFactory.instance.objectNode()
             .put("name", name)
@@ -173,15 +202,11 @@ public class SlashCommandCaller {
             throw new IllegalStateException("Token and interaction Token are required to reply");
         }
 
+        RequestBody body = RequestBody.create(replyJson(content).toString(), JSON);
+        String url = EndPoint.REPLY_TO_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
+                interactionToken);
 
-        Request request = new YDWRequest()
-            .request(token,
-                    EndPoint.REPLY_TO_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
-                            interactionToken))
-            .post(RequestBody.create(replyJson(content).toString(), JSON))
-            .build();
-
-        return request;
+        return new YDWRequest().request(token, url).post(body).build();
     }
 
     public void setEphemeral(boolean ephemeral) {
