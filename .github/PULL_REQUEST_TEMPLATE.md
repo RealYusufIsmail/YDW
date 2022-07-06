@@ -1,6 +1,5 @@
-[contributing]: https://github.com/Together-Java/TJ-Bot/wiki/Contributing
-[code_guidelines]: https://github.com/Together-Java/TJ-Bot/wiki/Code-Guidelines
-[new_issue]: https://github.com/Together-Java/TJ-Bot/issues/new/choose
+[Code of conduct]: https://github.com/RealYusufIsmail/YDW/blob/master/.github/CODE_OF_CONDUCT.md
+[new_issue]: https://github.com/RealYusufIsmail/YDW/issues/new/choose
 
 ## Pull-request
 
