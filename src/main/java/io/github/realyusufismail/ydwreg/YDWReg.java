@@ -210,6 +210,28 @@ public class YDWReg implements YDW {
         }
     }
 
+    @Override
+    public YDW awaitReady() {
+        return ready ? this : awaitReady(this);
+    }
+
+    private YDW awaitReady(YDWReg ydwReg) {
+        if (ydwReg.isReady()) {
+            return ydwReg;
+        } else {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return awaitReady(ydwReg);
+        }
+    }
+
+    private boolean isReady() {
+        return ready;
+    }
+
     public YDW setReady(boolean ready) {
         this.ready = ready;
         return this;

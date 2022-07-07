@@ -197,9 +197,13 @@ public class SlashCommandCaller {
             .put("ephemeral", ephemeral);
     }
 
-    public Request reply(String content) {
-        if (token == null || interactionToken == null) {
-            throw new IllegalStateException("Token and interaction Token are required to reply");
+    public Request reply(String content, String interactionToken) {
+        if (token == null) {
+            throw new IllegalStateException("Token is required to reply");
+        }
+
+        if (interactionToken == null) {
+            throw new IllegalStateException("Interaction Token is required to reply");
         }
 
         RequestBody body = RequestBody.create(replyJson(content).toString(), JSON);
@@ -215,10 +219,6 @@ public class SlashCommandCaller {
 
     public void setTTS(boolean tts) {
         this.tts = tts;
-    }
-
-    public void setInteractionToken(String interactionToken) {
-        this.interactionToken = interactionToken;
     }
 
     public <T> void queue(@NotNull Request request, @Nullable Consumer<? super T> success,

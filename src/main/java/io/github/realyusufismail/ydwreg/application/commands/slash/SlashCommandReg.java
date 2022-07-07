@@ -42,7 +42,7 @@ public class SlashCommandReg extends InteractionReg implements Interaction, IRep
 
     @Override
     public ReplyAction reply(String message) {
-        Request request = ydw.getRest().getSlashCommandCaller().reply(message);
+        Request request = ydw.getRest().getSlashCommandCaller().reply(message, super.getToken());
         return new ReplyActionReg(request, ydw);
     }
 

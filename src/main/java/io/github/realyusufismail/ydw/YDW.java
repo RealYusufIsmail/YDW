@@ -96,4 +96,6 @@ public interface YDW {
     void addEventAdapter(Object... eventAdapters);
 
     void removeEventAdapter(Object... eventAdapters);
+
+    YDW awaitReady();
 }

@@ -29,10 +29,11 @@ public class Queue<T> {
                 failure.accept(e);
             }
 
+            //TODO: broken, fix it
             @Override
             public void onResponse(@NotNull okhttp3.Call call, @NotNull okhttp3.Response response)
                     throws IOException {
-                success.accept(null);
+                success.accept(response.body().string());
             }
         });
     }
