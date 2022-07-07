@@ -24,7 +24,7 @@ import io.github.realyusufismail.ydw.application.commands.option.CommandType;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.Option;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.OptionExtender;
-import io.github.realyusufismail.ydwreg.rest.YDWCallback;
+import io.github.realyusufismail.ydwreg.rest.queue.YDWCallback;
 import io.github.realyusufismail.ydwreg.rest.error.RestApiError;
 import io.github.realyusufismail.ydwreg.rest.name.EndPoint;
 import io.github.realyusufismail.ydwreg.rest.queue.Queue;
@@ -52,7 +52,7 @@ public class SlashCommandCaller {
     private Collection<Option> options;
     private Collection<OptionExtender> extender;
 
-    private Boolean ephemeral;
+    private boolean ephemeral;
     private Boolean tts;
     private Boolean mentionable;
 
@@ -136,14 +136,16 @@ public class SlashCommandCaller {
         });
     }
 
-    public void updateCommand(long commandId) {
-        if (token == null) {
-            throw new IllegalStateException("Token is required to update");
+    public void updateGlobalCommand(long commandId) {
+
+        if (name == null || description == null || guildId == null) {
+            throw new IllegalStateException(
+                    "Name, Description, Guild ID, and Options are required to call");
         }
 
         Request request = new YDWRequest()
             .request(token,
-                    EndPoint.UPDATE_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
+                    EndPoint.UPDATE_GLOBAL_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
                             commandId))
             .patch(RequestBody.create(slashCommandJson().toString(), JSON))
             .build();
@@ -151,7 +153,7 @@ public class SlashCommandCaller {
         client.newCall(request).enqueue(new YDWCallback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                ydw.getLogger().error("Failed to register update slash command", e);
+                ydw.getLogger().error("Failed to update global slash command", e);
             }
 
             @Override
@@ -159,7 +161,87 @@ public class SlashCommandCaller {
                 if (!response.isSuccessful()) {
                     RestApiError error = RestApiError.fromCode(response.code());
                     ydw.getLogger()
-                        .error("Failed to register update slash command: " + error.getMessage());
+                        .error("Failed to update global slash command: " + error.getMessage());
+                }
+            }
+        });
+    }
+
+    public void updateGuildCommand(long commandId) {
+        if (name == null || description == null || guildId == null) {
+            throw new IllegalStateException(
+                    "Name, Description, Guild ID, and Options are required to call");
+        }
+
+        Request request = new YDWRequest()
+            .request(token,
+                    EndPoint.UPDATE_GUILD_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
+                            guildId, commandId))
+            .patch(RequestBody.create(slashCommandJson().toString(), JSON))
+            .build();
+
+        client.newCall(request).enqueue(new YDWCallback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                ydw.getLogger().error("Failed to update guild slash command", e);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                if (!response.isSuccessful()) {
+                    RestApiError error = RestApiError.fromCode(response.code());
+                    ydw.getLogger()
+                        .error("Failed to update guild slash command: " + error.getMessage());
+                }
+            }
+        });
+    }
+
+    public void deleteGlobalCommand(long commandId) {
+        Request request = new YDWRequest()
+            .request(token,
+                    EndPoint.DELETE_GLOBAL_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
+                            commandId))
+            .delete()
+            .build();
+
+        client.newCall(request).enqueue(new YDWCallback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                ydw.getLogger().error("Failed to delete global slash command", e);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                if (!response.isSuccessful()) {
+                    RestApiError error = RestApiError.fromCode(response.code());
+                    ydw.getLogger()
+                        .error("Failed to delete global slash command: " + error.getMessage());
+                }
+            }
+        });
+    }
+
+    public void deleteGuildCommand(long commandId) {
+        Request request = new YDWRequest()
+            .request(token,
+                    EndPoint.DELETE_GUILD_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
+                            guildId, commandId))
+            .delete()
+            .build();
+
+        client.newCall(request).enqueue(new YDWCallback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                ydw.getLogger().error("Failed to delete guild slash command", e);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                if (!response.isSuccessful()) {
+                    RestApiError error = RestApiError.fromCode(response.code());
+                    ydw.getLogger()
+                        .error("Failed to delete guild slash command: " + error.getMessage());
                 }
             }
         });
@@ -190,13 +272,6 @@ public class SlashCommandCaller {
 
     // Reply system
 
-    // TODO: Implement reply system
-    private ObjectNode replyJson(String content) {
-        return JsonNodeFactory.instance.objectNode()
-            .put("content", content)
-            .put("ephemeral", ephemeral);
-    }
-
     public Request reply(String content, String interactionToken) {
         if (token == null) {
             throw new IllegalStateException("Token is required to reply");
@@ -213,6 +288,14 @@ public class SlashCommandCaller {
         return new YDWRequest().request(token, url).post(body).build();
     }
 
+    private ObjectNode replyJson(String content) {
+        if (ephemeral) {
+            return JsonNodeFactory.instance.objectNode().put("content", content).put("flags", 64);
+        } else {
+            return JsonNodeFactory.instance.objectNode().put("content", content);
+        }
+    }
+
     public void setEphemeral(boolean ephemeral) {
         this.ephemeral = ephemeral;
     }
@@ -221,8 +304,7 @@ public class SlashCommandCaller {
         this.tts = tts;
     }
 
-    public <T> void queue(@NotNull Request request, @Nullable Consumer<? super T> success,
-            @Nullable Consumer<? super Throwable> failure) {
-        new Queue<T>(client, request, success, failure).queue();
+    public void queue(@NotNull Request request, @Nullable Consumer<? super Throwable> failure) {
+        new Queue(client, request, failure).queue();
     }
 }

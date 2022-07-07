@@ -18,6 +18,6 @@ public class Main {
             .setGuildId("938122131949097052")
             .build();
 
-        ydw.addEventAdapter(new Test(), new handler());
+        ydw.addEventAdapter(new Handler(), new SlashCommandHandler());
     }
 }

@@ -64,8 +64,12 @@ public enum EndPoint {
     // Slash command.
     GLOBAL_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/applications/%s/commands"),
     GUILD_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/applications/%s/guilds/%s/commands"),
-    UPDATE_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/applications/%s/commands/%s"),
-    DELETE_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/applications/%s/commands/%s"),
+    UPDATE_GUILD_SLASH_COMMAND(
+            YDWInfo.DISCORD_REST_LINK + "/applications/%s/guilds/%s/commands/%s"),
+    UPDATE_GLOBAL_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/applications/%s/commands/%s"),
+    DELETE_GLOBAL_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/applications/%s/commands/%s"),
+    DELETE_GUILD_SLASH_COMMAND(
+            YDWInfo.DISCORD_REST_LINK + "/applications/%s/guilds/%s/commands/%s"),
     REPLY_TO_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/webhooks/%s/%s");
 
     private final String endpoint;

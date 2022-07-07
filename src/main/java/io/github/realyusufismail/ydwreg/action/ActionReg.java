@@ -43,18 +43,12 @@ public class ActionReg implements Action {
 
     @Override
     public void queue() {
-        queue(null, null);
+        queue(null);
     }
 
     @Override
-    public <T> void queue(@NotNull Consumer<? super T> success) {
-        queue(success, null);
-    }
-
-    @Override
-    public <T> void queue(@Nullable Consumer<? super T> success,
-            @Nullable Consumer<? super Throwable> failure) {
-        new Queue<T>(client, request, success, failure).queue();
+    public void queue(@Nullable Consumer<? super Throwable> failure) {
+        new Queue(client, request, failure).queue();
     }
 
     @Nullable

@@ -89,6 +89,20 @@ public interface YDW {
         return new SlashCommandBuilderReg(this, name, description);
     }
 
+    @CheckReturnValue
+    default SlashCommandBuilderReg updateSlashCommand(String name, String description)
+            throws InterruptedException {
+        return new SlashCommandBuilderReg(this, name, description);
+    }
+
+    default void deleteGlobalSlashCommand(long commandId) throws InterruptedException {
+        getRest().getSlashCommandCaller().deleteGlobalCommand(commandId);
+    }
+
+    default void deleteGuildSlashCommand(long commandId) throws InterruptedException {
+        getRest().getSlashCommandCaller().deleteGuildCommand(commandId);
+    }
+
     String getToken();
 
     long getApplicationId();

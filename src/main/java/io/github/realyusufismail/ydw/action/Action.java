@@ -17,12 +17,12 @@
 
 package io.github.realyusufismail.ydw.action;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.function.Consumer;
 
 public interface Action {
     void queue();
 
-    <T> void queue(Consumer<? super T> success);
-
-    <T> void queue(Consumer<? super T> success, Consumer<? super Throwable> failure);
+    void queue(@Nullable Consumer<? super Throwable> failure);
 }

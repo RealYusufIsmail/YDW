@@ -41,18 +41,13 @@ public class ReplyActionReg implements ReplyAction {
 
     @Override
     public void queue() {
-        queue(null, null);
+        queue(null);
     }
 
-    @Override
-    public <T> void queue(@NotNull Consumer<? super T> success) {
-        queue(success, null);
-    }
 
     @Override
-    public <T> void queue(@Nullable Consumer<? super T> success,
-            @Nullable Consumer<? super Throwable> failure) {
-        slashCommandCaller.queue(request, success, failure);
+    public void queue(@Nullable Consumer<? super Throwable> failure) {
+        slashCommandCaller.queue(request, failure);
     }
 
     @Override

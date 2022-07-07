@@ -65,8 +65,7 @@ public class MessageCaller {
         this.mentionable = mentionable;
     }
 
-    public <T> void queue(@NotNull Request request, @Nullable Consumer<? super T> success,
-            @Nullable Consumer<? super Throwable> failure) {
-        new Queue<T>(client, request, success, failure).queue();
+    public void queue(@NotNull Request request, @Nullable Consumer<? super Throwable> failure) {
+        new Queue(client, request, failure).queue();
     }
 }

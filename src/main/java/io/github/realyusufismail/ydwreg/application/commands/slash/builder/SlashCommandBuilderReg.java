@@ -116,6 +116,13 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
         } else {
             caller.callGlobalCommand();
         }
+    }
 
+    public void update(long commandId) {
+        if (guildOnly) {
+            caller.updateGuildCommand(commandId);
+        } else {
+            caller.updateGlobalCommand(commandId);
+        }
     }
 }
