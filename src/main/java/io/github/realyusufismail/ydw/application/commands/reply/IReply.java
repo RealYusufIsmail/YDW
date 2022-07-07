@@ -23,7 +23,7 @@ import io.github.realyusufismail.ydw.entities.embed.Embed;
 
 public interface IReply {
     @CheckReturnValue
-    ReplyAction reply(String message);
+    void reply(String message);
 
     @CheckReturnValue
     ReplyAction replyEmbed(Embed embed);

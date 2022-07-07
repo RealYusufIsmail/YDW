@@ -22,17 +22,9 @@ import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.action.ReplyAction;
 import io.github.realyusufismail.ydw.application.Interaction;
 import io.github.realyusufismail.ydw.application.commands.reply.IReply;
-import io.github.realyusufismail.ydw.application.interaction.InteractionData;
-import io.github.realyusufismail.ydw.application.interaction.resolved.ResolvedData;
 import io.github.realyusufismail.ydw.entities.embed.Embed;
-import io.github.realyusufismail.ydwreg.action.ReplyActionReg;
 import io.github.realyusufismail.ydwreg.application.InteractionReg;
-import io.github.realyusufismail.ydwreg.message_components.ComponentType;
-import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
-import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Optional;
 
 public class SlashCommandReg extends InteractionReg implements Interaction, IReply {
 
@@ -41,9 +33,10 @@ public class SlashCommandReg extends InteractionReg implements Interaction, IRep
     }
 
     @Override
-    public ReplyAction reply(String message) {
-        Request request = ydw.getRest().getSlashCommandCaller().reply(message, super.getToken());
-        return new ReplyActionReg(request, ydw);
+    public void reply(String message) {
+        ydw.getRest()
+            .getSlashCommandCaller()
+            .reply(message, super.getData().get().getId(), super.getToken());
     }
 
     @Override

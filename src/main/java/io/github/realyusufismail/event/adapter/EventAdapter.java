@@ -70,7 +70,6 @@ public abstract class EventAdapter implements IEventReceiver {
      */
     @Override
     public final void onEvent(Event event) {
-        System.out.println("Event received");
         onBasicEvent(event);
 
         if (event instanceof IEventUpdate)

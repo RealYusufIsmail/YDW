@@ -31,6 +31,7 @@ import io.github.realyusufismail.ydw.entities.guild.Message;
 import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 import io.github.realyusufismail.ydw.entities.guild.channel.threads.ThreadMetadata;
 import io.github.realyusufismail.ydw.perm.Permission;
+import io.github.realyusufismail.ydwreg.action.MessageActionReg;
 import io.github.realyusufismail.ydwreg.entities.channel.OverwriteReg;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 import io.github.realyusufismail.ydwreg.entities.guild.MemberReg;
@@ -307,16 +308,14 @@ public class ChannelReg implements Channel {
         return Optional.ofNullable(category);
     }
 
-    @NotNull
     @Override
-    public MessageAction sendMessage(String message) {
-        return null;
+    public void sendMessage(String message) {
+        ydw.getRest().getChannelCaller().sendMessage(this.id, message);
     }
 
-    @NotNull
     @Override
-    public MessageAction sendEmbedMessage(EmbedBuilder embedBuilder) {
-        return null;
+    public void sendEmbedMessage(EmbedBuilder embedBuilder) {
+        ydw.getRest().getChannelCaller().sendEmbedMessage(this.id, embedBuilder);
     }
 
     @NotNull

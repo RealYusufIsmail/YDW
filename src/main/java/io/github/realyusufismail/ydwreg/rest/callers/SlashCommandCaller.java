@@ -17,6 +17,7 @@
 
 package io.github.realyusufismail.ydwreg.rest.callers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.YDW;
@@ -272,7 +273,7 @@ public class SlashCommandCaller {
 
     // Reply system
 
-    public Request reply(String content, String interactionToken) {
+    public void reply(String content, String interactionId, String interactionToken) {
         if (token == null) {
             throw new IllegalStateException("Token is required to reply");
         }
@@ -281,19 +282,39 @@ public class SlashCommandCaller {
             throw new IllegalStateException("Interaction Token is required to reply");
         }
 
-        RequestBody body = RequestBody.create(replyJson(content).toString(), JSON);
-        String url = EndPoint.REPLY_TO_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
-                interactionToken);
+        JsonNode json = JsonNodeFactory.instance.objectNode().put("content", content);
 
-        return new YDWRequest().request(token, url).post(body).build();
+        RequestBody body = RequestBody.create(json.toString(), JSON);
+
+        System.out.println(EndPoint.REPLY_TO_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
+                interactionToken));
+        Request request = new YDWRequest()
+            .request(token,
+                    EndPoint.REPLY_TO_SLASH_COMMAND.getFullEndpoint(interactionId,
+                            interactionToken))
+            .post(body)
+            .build();
+
+        client.newCall(request).enqueue(new YDWCallback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                ydw.getLogger().error("Failed to reply to slash command", e);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                if (!response.isSuccessful()) {
+                    RestApiError error = RestApiError.fromCode(response.code());
+                    ydw.getLogger()
+                        .error("Failed to reply to slash command: " + error.getCode() + " "
+                                + error.getMessage());
+                }
+            }
+        });
     }
 
     private ObjectNode replyJson(String content) {
-        if (ephemeral) {
-            return JsonNodeFactory.instance.objectNode().put("content", content).put("flags", 64);
-        } else {
-            return JsonNodeFactory.instance.objectNode().put("content", content);
-        }
+        return JsonNodeFactory.instance.objectNode().put("content", content);
     }
 
     public void setEphemeral(boolean ephemeral) {

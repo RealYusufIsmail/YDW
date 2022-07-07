@@ -66,7 +66,7 @@ public class RestApiHandler {
     }
 
     public @NotNull ChannelCaller getChannelCaller() {
-        return new ChannelCaller(token, ydw, client);
+        return new ChannelCaller(token, ydw, client, JSON);
     }
 
     public @NotNull EmojiCaller getEmojiCaller() {

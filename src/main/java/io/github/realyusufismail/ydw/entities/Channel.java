@@ -95,13 +95,9 @@ public interface Channel extends SnowFlake, GenericEntity {
 
 
     // Rest Actions
-    @CheckReturnValue
-    @NotNull
-    MessageAction sendMessage(String message);
+    void sendMessage(String message);
 
-    @CheckReturnValue
-    @NotNull
-    MessageAction sendEmbedMessage(EmbedBuilder embedBuilder);
+    void sendEmbedMessage(EmbedBuilder embedBuilder);
 
     @NotNull
     Message getMessage(@NotNull String messageId);

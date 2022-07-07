@@ -70,7 +70,7 @@ public enum EndPoint {
     DELETE_GLOBAL_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/applications/%s/commands/%s"),
     DELETE_GUILD_SLASH_COMMAND(
             YDWInfo.DISCORD_REST_LINK + "/applications/%s/guilds/%s/commands/%s"),
-    REPLY_TO_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/webhooks/%s/%s");
+    REPLY_TO_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/interactions/%s/%s/callback");
 
     private final String endpoint;
 
