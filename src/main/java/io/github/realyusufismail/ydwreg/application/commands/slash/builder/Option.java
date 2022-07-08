@@ -26,8 +26,11 @@ public class Option {
         for (Option option : options) {
             arrayNode.add(option.optionToJson());
         }
-        for (OptionExtender optionExtender : optionExtenders) {
-            arrayNode.add(optionExtender.optionExtenderToJson(optionExtender));
+
+        if (optionExtenders != null) {
+            for (OptionExtender optionExtender : optionExtenders) {
+                arrayNode.add(optionExtender.optionToJson());
+            }
         }
         return arrayNode;
     }

@@ -20,6 +20,7 @@ package io.github.realyusufismail.ydw;
 
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
+import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
 import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.SelfUser;
@@ -102,6 +103,8 @@ public interface YDW {
     default void deleteGuildSlashCommand(long commandId) throws InterruptedException {
         getRest().getSlashCommandCaller().deleteGuildCommand(commandId);
     }
+
+    void upsertCommands(List<SlashCommandBuilder> commands);
 
     String getToken();
 

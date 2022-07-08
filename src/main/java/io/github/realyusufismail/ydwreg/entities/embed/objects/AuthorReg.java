@@ -18,6 +18,8 @@
 package io.github.realyusufismail.ydwreg.entities.embed.objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.entities.embed.objects.Author;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -72,5 +74,15 @@ public class AuthorReg implements Author {
     @Override
     public Optional<String> getProxyIconUrl() {
         return Optional.ofNullable(proxyIconUrl);
+    }
+
+    @Override
+    public ObjectNode toJson() {
+        ObjectNode author = JsonNodeFactory.instance.objectNode();
+        getName().ifPresent(name -> author.put("name", name));
+        getUrl().ifPresent(url -> author.put("url", url));
+        getIconUrl().ifPresent(iconUrl -> author.put("icon_url", iconUrl));
+        getProxyIconUrl().ifPresent(proxyIconUrl -> author.put("proxy_icon_url", proxyIconUrl));
+        return author;
     }
 }

@@ -70,6 +70,13 @@ public enum EndPoint {
     DELETE_GLOBAL_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/applications/%s/commands/%s"),
     DELETE_GUILD_SLASH_COMMAND(
             YDWInfo.DISCORD_REST_LINK + "/applications/%s/guilds/%s/commands/%s"),
+    BULK_OVERWRITE_GLOBAL_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/applications/%s/commands"),
+    BULK_OVERWRITE_GUILD_SLASH_COMMAND(
+            YDWInfo.DISCORD_REST_LINK + "/applications/%s/guilds/%s/commands"),
+    GET_GLOBAL_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/applications/%s/commands/%s"),
+    GET_GLOBAL_SLASH_COMMANDS(YDWInfo.DISCORD_REST_LINK + "/applications/%s/commands"),
+    GET_GUILD_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/applications/%s/guilds/%s/commands/%s"),
+    GET_GUILD_SLASH_COMMANDS(YDWInfo.DISCORD_REST_LINK + "/applications/%s/guilds/%s/commands"),
     REPLY_TO_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/interactions/%s/%s/callback");
 
     private final String endpoint;

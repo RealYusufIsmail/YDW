@@ -20,7 +20,6 @@ package io.github.realyusufismail.ydwreg.entities;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.action.Action;
-import io.github.realyusufismail.ydw.action.MessageAction;
 import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.User;
@@ -309,8 +308,9 @@ public class ChannelReg implements Channel {
     }
 
     @Override
-    public void sendMessage(String message) {
-        ydw.getRest().getChannelCaller().sendMessage(this.id, message);
+    public MessageActionReg sendMessage(String message) {
+        var req = ydw.getRest().getChannelCaller().sendMessage(this.id, message);
+        return new MessageActionReg(req, ydw);
     }
 
     @Override

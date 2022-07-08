@@ -18,6 +18,8 @@
 package io.github.realyusufismail.ydwreg.entities.embed.objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.entities.embed.objects.Provider;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,13 +43,21 @@ public class ProviderReg implements Provider {
 
     @NotNull
     @Override
-    public Optional<String> name() {
+    public Optional<String> getName() {
         return Optional.ofNullable(name);
     }
 
     @NotNull
     @Override
-    public Optional<String> url() {
+    public Optional<String> getUrl() {
         return Optional.ofNullable(url);
+    }
+
+    @Override
+    public ObjectNode toJson() {
+        ObjectNode json = JsonNodeFactory.instance.objectNode();
+        getName().ifPresent(name -> json.put("name", name));
+        getUrl().ifPresent(url -> json.put("url", url));
+        return json;
     }
 }

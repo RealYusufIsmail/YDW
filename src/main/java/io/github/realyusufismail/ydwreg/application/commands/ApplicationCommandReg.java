@@ -23,7 +23,6 @@ import io.github.realyusufismail.ydw.application.commands.ApplicationCommand;
 import io.github.realyusufismail.ydw.application.commands.option.CommandOption;
 import io.github.realyusufismail.ydw.application.commands.option.CommandType;
 import io.github.realyusufismail.ydw.entities.Guild;
-import io.github.realyusufismail.ydw.event.Event;
 import io.github.realyusufismail.ydwreg.application.commands.option.CommandOptionReg;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
@@ -69,8 +68,11 @@ public class ApplicationCommandReg implements ApplicationCommand {
                 : null;
         this.version = application.get("version").asLong();
 
-        for (JsonNode option : application.get("options")) {
-            options.add(new CommandOptionReg(option));
+        if (application.hasNonNull("options") && application.get("options").isArray()) {
+            application.get("options").forEach(option -> {
+                CommandOptionReg commandOption = new CommandOptionReg(option);
+                options.add(commandOption);
+            });
         }
     }
 

@@ -21,21 +21,33 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.application.commands.ApplicationCommand;
 import io.github.realyusufismail.ydw.application.commands.option.CommandType;
+import io.github.realyusufismail.ydw.application.commands.reply.ReplyConfig;
+import io.github.realyusufismail.ydw.application.interaction.InteractionCallbackType;
+import io.github.realyusufismail.ydw.builder.MessageBuilder;
 import io.github.realyusufismail.ydwreg.YDWReg;
+import io.github.realyusufismail.ydwreg.application.commands.ApplicationCommandReg;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.Option;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.OptionExtender;
-import io.github.realyusufismail.ydwreg.rest.queue.YDWCallback;
+import io.github.realyusufismail.ydwreg.application.interaction.InteractionResponseBuilderReg;
+import io.github.realyusufismail.ydwreg.builder.MessageBuilderReg;
+import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
+import io.github.realyusufismail.ydwreg.entities.message.MessageFlags;
 import io.github.realyusufismail.ydwreg.rest.error.RestApiError;
+import io.github.realyusufismail.ydwreg.rest.exception.RestApiException;
 import io.github.realyusufismail.ydwreg.rest.name.EndPoint;
 import io.github.realyusufismail.ydwreg.rest.queue.Queue;
+import io.github.realyusufismail.ydwreg.rest.queue.YDWCallback;
 import io.github.realyusufismail.ydwreg.rest.request.YDWRequest;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class SlashCommandCaller {
@@ -52,10 +64,6 @@ public class SlashCommandCaller {
     private String description;
     private Collection<Option> options;
     private Collection<OptionExtender> extender;
-
-    private boolean ephemeral;
-    private Boolean tts;
-    private Boolean mentionable;
 
     public SlashCommandCaller(String token, String guildId, YDW ydw, MediaType json,
             OkHttpClient client) {
@@ -248,12 +256,178 @@ public class SlashCommandCaller {
         });
     }
 
+    public void upsertGlobalCommand() {
+        // need to check if command exits and if so update it otherwise create it and if it is not
+        // there delete it
+        if (name == null || description == null || guildId == null) {
+            throw new IllegalStateException(
+                    "Name, Description, Guild ID, and Options are required to call");
+        }
+
+        var commands = getGlobalSlashCommands();
+
+        var commandToUpdate = commands.stream().filter(c -> c.getName().equals(name)).findFirst();
+
+        var commandsToDelete = commands.stream().filter(c -> !c.getName().equals(name)).findFirst();
+
+        if (commandToUpdate.isPresent()) {
+            updateGlobalCommand(commandToUpdate.get().getIdLong());
+        } else if (commandsToDelete.isPresent()) {
+            deleteGlobalCommand(commandsToDelete.get().getIdLong());
+        } else {
+            callGlobalCommand();
+        }
+
+        var commandToDelete = commands.stream().filter(c -> !c.getName().equals(name)).findFirst();
+
+        commandToDelete.ifPresent(interaction -> deleteGlobalCommand(interaction.getIdLong()));
+    }
+
+    public void upsertGuildCommand() {
+        // need to check if command exits and if so update it otherwise create it and if it is not
+        // there delete it
+        if (name == null || description == null || guildId == null) {
+            throw new IllegalStateException(
+                    "Name, Description, Guild ID, and Options are required to call");
+        }
+
+        var commands = getGuildSlashCommands();
+
+        var commandToUpdate = commands.stream().filter(c -> c.getName().equals(name)).findFirst();
+
+        var commandsToDelete = commands.stream().filter(c -> !c.getName().equals(name)).findFirst();
+
+        if (commandToUpdate.isPresent()) {
+            updateGuildCommand(commandToUpdate.get().getIdLong());
+        } else if (commandsToDelete.isPresent()) {
+            deleteGuildCommand(commandsToDelete.get().getIdLong());
+        } else {
+            callGuildOnlyCommand();
+        }
+
+        var commandToDelete = commands.stream().filter(c -> !c.getName().equals(name)).findFirst();
+
+        commandToDelete.ifPresent(interaction -> deleteGuildCommand(interaction.getIdLong()));
+    }
+
+    public List<ApplicationCommand> getGlobalSlashCommands() {
+        Request request = new YDWRequest()
+            .request(token, EndPoint.GLOBAL_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId()))
+            .get()
+            .build();
+
+        try (var response = client.newCall(request).execute()) {
+            return getSlashResponse(response);
+        } catch (IOException e) {
+            throw new RestApiException(e);
+        }
+    }
+
+    public List<ApplicationCommand> getGuildSlashCommands() {
+        Request request =
+                new YDWRequest()
+                    .request(token,
+                            EndPoint.GUILD_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
+                                    guildId))
+                    .get()
+                    .build();
+
+        try (var response = client.newCall(request).execute()) {
+            return getSlashResponse(response);
+        } catch (IOException e) {
+            throw new RestApiException(e);
+        }
+    }
+
+    public List<ApplicationCommand> getSlashResponse(Response response) throws IOException {
+        if (!response.isSuccessful())
+            throw new IOException("Unexpected code " + RestApiError.fromCode(response.code()) + " "
+                    + RestApiError.fromCode(response.code()).getMessage());
+
+        var body = response.body();
+        JsonNode json = ydw.getMapper().readTree(body.string());
+        List<ApplicationCommand> commands = new ArrayList<>();
+        for (var command : json) {
+            commands.add(new ApplicationCommandReg(command, command.get("id").asLong(), ydw));
+        }
+        return commands;
+    }
+
+    // Reply system
+    public Request reply(String content, ReplyConfig config, String interactionId,
+            String interactionToken) {
+        if (token == null) {
+            throw new IllegalStateException("Token is required to reply");
+        }
+
+        if (interactionToken == null) {
+            throw new IllegalStateException("Interaction Token is required to reply");
+        }
+
+        RequestBody body = RequestBody.create(replyJson(content, null, config).toString(), JSON);
+
+        return new YDWRequest()
+            .request(token,
+                    EndPoint.REPLY_TO_SLASH_COMMAND.getFullEndpoint(interactionId,
+                            interactionToken))
+            .post(body)
+            .build();
+    }
+
+    public Request replyEmbed(EmbedBuilder build, ReplyConfig config, String id, String token) {
+        if (token == null) {
+            throw new IllegalStateException("Token is required to reply");
+        }
+
+        if (id == null) {
+            throw new IllegalStateException("Interaction Token is required to reply");
+        }
+
+        RequestBody body = RequestBody.create(replyJson(null, build, config).toString(), JSON);
+
+        return new YDWRequest()
+            .request(token, EndPoint.REPLY_TO_SLASH_COMMAND.getFullEndpoint(id, token))
+            .post(body)
+            .build();
+    }
+
     private ObjectNode slashCommandJson() {
         return JsonNodeFactory.instance.objectNode()
             .put("name", name)
             .put("description", description)
             .put("type", commandType);
     }
+
+
+    private ObjectNode replyJson(@Nullable String content, @Nullable EmbedBuilder embed,
+            ReplyConfig config) {
+        var interaction = new InteractionResponseBuilderReg();
+
+        interaction.setType(InteractionCallbackType.CHANNEL_MESSAGE_WITH_SOURCE);
+
+        MessageBuilder messageBuilder = new MessageBuilderReg();
+
+        if (content != null) {
+            messageBuilder.setContent(content);
+        }
+
+        if (embed != null) {
+            messageBuilder.setEmbeds(embed);
+        }
+
+        if (config.isEphemeral()) {
+            messageBuilder.setFlags(MessageFlags.EPHEMERAL);
+        }
+
+        if (config.isTTS()) {
+            messageBuilder.setTTS(true);
+        }
+
+        interaction.setMessageBuilder(messageBuilder);
+
+        return interaction.toJson();
+    }
+
 
     public void setName(String name) {
         this.name = name;
@@ -271,61 +445,8 @@ public class SlashCommandCaller {
         this.extender = optionExtenders;
     }
 
-    // Reply system
-
-    public void reply(String content, String interactionId, String interactionToken) {
-        if (token == null) {
-            throw new IllegalStateException("Token is required to reply");
-        }
-
-        if (interactionToken == null) {
-            throw new IllegalStateException("Interaction Token is required to reply");
-        }
-
-        JsonNode json = JsonNodeFactory.instance.objectNode().put("content", content);
-
-        RequestBody body = RequestBody.create(json.toString(), JSON);
-
-        System.out.println(EndPoint.REPLY_TO_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
-                interactionToken));
-        Request request = new YDWRequest()
-            .request(token,
-                    EndPoint.REPLY_TO_SLASH_COMMAND.getFullEndpoint(interactionId,
-                            interactionToken))
-            .post(body)
-            .build();
-
-        client.newCall(request).enqueue(new YDWCallback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                ydw.getLogger().error("Failed to reply to slash command", e);
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) {
-                if (!response.isSuccessful()) {
-                    RestApiError error = RestApiError.fromCode(response.code());
-                    ydw.getLogger()
-                        .error("Failed to reply to slash command: " + error.getCode() + " "
-                                + error.getMessage());
-                }
-            }
-        });
-    }
-
-    private ObjectNode replyJson(String content) {
-        return JsonNodeFactory.instance.objectNode().put("content", content);
-    }
-
-    public void setEphemeral(boolean ephemeral) {
-        this.ephemeral = ephemeral;
-    }
-
-    public void setTTS(boolean tts) {
-        this.tts = tts;
-    }
-
-    public void queue(@NotNull Request request, @Nullable Consumer<? super Throwable> failure) {
-        new Queue(client, request, failure).queue();
+    public void queue(@NotNull Request request, @Nullable Consumer<? super Throwable> failure,
+            Consumer<? super Response> success) {
+        new Queue(client, request, failure, success).queue();
     }
 }

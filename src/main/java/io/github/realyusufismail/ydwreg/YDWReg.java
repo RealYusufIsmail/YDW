@@ -23,6 +23,7 @@ import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.ydw.GateWayIntent;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
+import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
 import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.SelfUser;
@@ -30,6 +31,7 @@ import io.github.realyusufismail.ydw.entities.User;
 import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 import io.github.realyusufismail.ydw.event.Event;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
+import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandBuilderReg;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +41,6 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
 
 public class YDWReg implements YDW {
 
@@ -49,7 +50,6 @@ public class YDWReg implements YDW {
     private final ObjectMapper mapper;
     @NotNull
     private final OkHttpClient okHttpClient;
-    private final ExecutorService executorService;
     private final EventReceiver eventReceiver;
     private RestApiHandler rest;
     private WebSocketManager ws;
@@ -57,14 +57,11 @@ public class YDWReg implements YDW {
     private long gatewayPing;
     private SelfUser selfUser;
     private List<Guild> guilds;
-    private Boolean resumable;
     private boolean ready;
-    private String guildId;
     private String token;
     private Long applicationId;
 
-    public YDWReg(@NotNull OkHttpClient okHttpClient, ExecutorService executorService) {
-        this.executorService = executorService;
+    public YDWReg(@NotNull OkHttpClient okHttpClient) {
         mapper = new ObjectMapper();
         this.okHttpClient = okHttpClient;
         eventReceiver = new EventReceiver();
@@ -129,10 +126,6 @@ public class YDWReg implements YDW {
         return token;
     }
 
-    public String getGuildId() {
-        return guildId;
-    }
-
     @Override
     public long getPing() {
         return ping;
@@ -183,17 +176,16 @@ public class YDWReg implements YDW {
         this.selfUser = selfUser;
     }
 
-    public Boolean isResumable() {
-        return resumable;
-    }
-
-    public void setResumable(Boolean resumable) {
-        this.resumable = resumable;
-    }
-
     @Override
     public InteractionManager getInteractionManager() {
         return new InteractionManager(this);
+    }
+
+    @Override
+    public void upsertCommands(List<SlashCommandBuilder> commands) {
+        for (SlashCommandBuilder command : commands) {
+            ((SlashCommandBuilderReg) command).upsert();
+        }
     }
 
     @Override
@@ -212,29 +204,23 @@ public class YDWReg implements YDW {
 
     @Override
     public YDW awaitReady() {
-        return ready ? this : awaitReady(this);
-    }
-
-    private YDW awaitReady(YDWReg ydwReg) {
-        if (ydwReg.isReady()) {
-            return ydwReg;
-        } else {
+        while (!isReady()) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            return awaitReady(ydwReg);
         }
+
+        return this;
     }
 
-    private boolean isReady() {
+    private synchronized boolean isReady() {
         return ready;
     }
 
-    public YDW setReady(boolean ready) {
+    public void setReady(boolean ready) {
         this.ready = ready;
-        return this;
     }
 
     public ObjectMapper getMapper() {
@@ -257,9 +243,5 @@ public class YDWReg implements YDW {
 
     public void setApplicationId(long applicationId) {
         this.applicationId = applicationId;
-    }
-
-    public ExecutorService getExecutorService() {
-        return executorService;
     }
 }

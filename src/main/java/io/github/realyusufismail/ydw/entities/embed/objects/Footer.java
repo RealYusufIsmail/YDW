@@ -17,6 +17,8 @@
 
 package io.github.realyusufismail.ydw.entities.embed.objects;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import java.util.Optional;
 
 public interface Footer {
@@ -25,4 +27,6 @@ public interface Footer {
     Optional<String> getIconUrl();
 
     Optional<String> getProxyIconUrl();
+
+    ObjectNode toJson();
 }

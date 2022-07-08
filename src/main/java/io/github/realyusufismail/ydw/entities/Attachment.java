@@ -17,6 +17,7 @@
 
 package io.github.realyusufismail.ydw.entities;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 
 import java.util.Optional;
@@ -39,4 +40,6 @@ public interface Attachment extends SnowFlake, GenericEntity {
     Optional<Integer> getWidth();
 
     Optional<Boolean> isEphemeral();
+
+    ObjectNode toJson();
 }

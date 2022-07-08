@@ -18,6 +18,8 @@
 package io.github.realyusufismail.ydwreg.entities.guild;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.Attachment;
 import org.jetbrains.annotations.NotNull;
@@ -57,8 +59,7 @@ public class AttachmentReg implements Attachment {
         this.height = attachment.hasNonNull("height") ? attachment.get("height").asInt() : null;
         this.width = attachment.hasNonNull("width") ? attachment.get("width").asInt() : null;
         this.emphemeral =
-                attachment.hasNonNull("emphemeral") ? attachment.get("emphemeral").asBoolean()
-                        : null;
+                attachment.hasNonNull("ephemeral") ? attachment.get("ephemeral").asBoolean() : null;
     }
 
 
@@ -124,5 +125,34 @@ public class AttachmentReg implements Attachment {
     @Override
     public Optional<Boolean> isEphemeral() {
         return Optional.ofNullable(emphemeral);
+    }
+
+    @Override
+    public ObjectNode toJson() {
+        ObjectNode json = JsonNodeFactory.instance.objectNode();
+
+        json.put("id", id);
+        json.put("filename", fileName);
+
+        if (description != null)
+            json.put("description", description);
+
+        if (cotentType != null)
+            json.put("content_type", cotentType);
+
+        json.put("size", size);
+        json.put("url", url);
+        json.put("proxy_url", proxyUrl);
+
+        if (height != null)
+            json.put("height", height);
+
+        if (width != null)
+            json.put("width", width);
+
+        if (emphemeral != null)
+            json.put("ephemeral", emphemeral);
+
+        return json;
     }
 }

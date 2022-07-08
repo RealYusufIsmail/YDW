@@ -18,13 +18,25 @@
 package io.github.realyusufismail.ydw.application.commands.reply;
 
 import com.google.errorprone.annotations.CheckReturnValue;
-import io.github.realyusufismail.ydw.action.ReplyAction;
-import io.github.realyusufismail.ydw.entities.embed.Embed;
+import io.github.realyusufismail.ydw.action.Action;
+import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
+import org.jetbrains.annotations.Nullable;
 
 public interface IReply {
-    @CheckReturnValue
-    void reply(String message);
 
     @CheckReturnValue
-    ReplyAction replyEmbed(Embed embed);
+    default Action reply(String message) {
+        return reply(message, null);
+    }
+
+    @CheckReturnValue
+    Action reply(String message, @Nullable ReplyConfig config);
+
+    @CheckReturnValue
+    default Action replyEmbed(EmbedBuilder embed) {
+        return replyEmbed(embed, null);
+    }
+
+    @CheckReturnValue
+    Action replyEmbed(EmbedBuilder embed, @Nullable ReplyConfig config);
 }

@@ -18,6 +18,8 @@
 package io.github.realyusufismail.ydwreg.entities.embed.objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.entities.embed.objects.SameEmbedStructure;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -72,5 +74,15 @@ public class SameEmbedStructureReg implements SameEmbedStructure {
     @Override
     public Optional<Integer> getWidth() {
         return Optional.empty();
+    }
+
+    @Override
+    public ObjectNode toJson() {
+        ObjectNode json = JsonNodeFactory.instance.objectNode();
+        getUrl().ifPresent(url -> json.put("url", url));
+        getProxyUrl().ifPresent(proxyUrl -> json.put("proxy_url", proxyUrl));
+        getHeight().ifPresent(height -> json.put("height", height));
+        getWidth().ifPresent(width -> json.put("width", width));
+        return json;
     }
 }

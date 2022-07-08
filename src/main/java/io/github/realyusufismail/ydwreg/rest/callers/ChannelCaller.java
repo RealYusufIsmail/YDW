@@ -27,7 +27,6 @@ import io.github.realyusufismail.ydwreg.entities.guild.MessageReg;
 import io.github.realyusufismail.ydwreg.rest.error.RestApiError;
 import io.github.realyusufismail.ydwreg.rest.exception.RestApiException;
 import io.github.realyusufismail.ydwreg.rest.name.EndPoint;
-import io.github.realyusufismail.ydwreg.rest.queue.YDWCallback;
 import io.github.realyusufismail.ydwreg.rest.request.YDWRequest;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
@@ -71,7 +70,7 @@ public class ChannelCaller {
     }
 
 
-    public void sendMessage(long channelId, @NotNull String message) {
+    public Request sendMessage(long channelId, @NotNull String message) {
         if (message.length() > 2000)
             throw new RestApiException("Message is too long");
 
@@ -79,25 +78,21 @@ public class ChannelCaller {
 
         RequestBody body = RequestBody.create(json.toString(), JSON);
 
-        Request request =
-                new YDWRequest().request(token, EndPoint.CREATE_MESSAGE.getFullEndpoint(channelId))
-                    .post(body)
-                    .build();
+        return new YDWRequest().request(token, EndPoint.CREATE_MESSAGE.getFullEndpoint(channelId))
+            .post(body)
+            .build();
 
-        client.newCall(request).enqueue(new YDWCallback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                ydw.getLogger().error("Failed to send message", e);
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) {
-                if (!response.isSuccessful()) {
-                    RestApiError error = RestApiError.fromCode(response.code());
-                    ydw.getLogger().error("Failed to send message: " + error.getMessage());
-                }
-            }
-        });
+        /*
+         * client.newCall(request).enqueue(new YDWCallback() {
+         * 
+         * @Override public void onFailure(@NotNull Call call, @NotNull IOException e) {
+         * ydw.getLogger().error("Failed to send message", e); }
+         * 
+         * @Override public void onResponse(@NotNull Call call, @NotNull Response response) { if
+         * (!response.isSuccessful()) { RestApiError error = RestApiError.fromCode(response.code());
+         * ydw.getLogger().error("Failed to send message: " + error.getMessage()); } } });
+         * 
+         */
     }
 
     public void sendEmbedMessage(long id, EmbedBuilder embedBuilder) {

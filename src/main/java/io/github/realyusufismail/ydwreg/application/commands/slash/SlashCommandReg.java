@@ -19,12 +19,15 @@ package io.github.realyusufismail.ydwreg.application.commands.slash;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.action.ReplyAction;
+import io.github.realyusufismail.ydw.action.Action;
 import io.github.realyusufismail.ydw.application.Interaction;
 import io.github.realyusufismail.ydw.application.commands.reply.IReply;
-import io.github.realyusufismail.ydw.entities.embed.Embed;
+import io.github.realyusufismail.ydw.application.commands.reply.ReplyConfig;
+import io.github.realyusufismail.ydwreg.action.ActionReg;
 import io.github.realyusufismail.ydwreg.application.InteractionReg;
+import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class SlashCommandReg extends InteractionReg implements Interaction, IReply {
 
@@ -33,19 +36,21 @@ public class SlashCommandReg extends InteractionReg implements Interaction, IRep
     }
 
     @Override
-    public void reply(String message) {
-        ydw.getRest()
+    public Action reply(String message, @Nullable ReplyConfig config) {
+        var req = ydw.getRest()
             .getSlashCommandCaller()
-            .reply(message, super.getData().get().getId(), super.getToken());
+            .reply(message, config, super.getId(), super.getToken());
+
+        return new ActionReg(req, ydw);
     }
 
     @Override
-    public ReplyAction replyEmbed(Embed embed) {
-        return null;
-    }
+    public Action replyEmbed(EmbedBuilder embed, @Nullable ReplyConfig config) {
+        var req = ydw.getRest()
+            .getSlashCommandCaller()
+            .replyEmbed(embed.build(), config, super.getId(), super.getToken());
 
-    public String getName() {
-        return super.getData().get().getName();
+        return new ActionReg(req, ydw);
     }
 }
 

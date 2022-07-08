@@ -17,12 +17,20 @@
 
 package io.github.realyusufismail.ydw.action;
 
+import okhttp3.Response;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
 public interface Action {
-    void queue();
+    default void queue() {
+        queue(null, null);
+    }
 
-    void queue(@Nullable Consumer<? super Throwable> failure);
+    default void queue(@Nullable Consumer<? super Throwable> failure) {
+        queue(failure, null);
+    }
+
+    void queue(@Nullable Consumer<? super Throwable> failure,
+            @Nullable Consumer<? super Response> success);
 }

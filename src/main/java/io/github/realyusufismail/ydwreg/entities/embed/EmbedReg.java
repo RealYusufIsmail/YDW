@@ -23,7 +23,6 @@ import io.github.realyusufismail.ydw.entities.embed.objects.Image;
 import io.github.realyusufismail.ydw.entities.embed.objects.*;
 import io.github.realyusufismail.ydwreg.entities.embed.objects.*;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.time.ZonedDateTime;
@@ -34,24 +33,16 @@ import java.util.Optional;
 public class EmbedReg implements Embed {
 
     private final String title;
-    @Nullable
     private final EmbedType type;
     private final String description;
     private final String url;
     private final String timestamp;
-    @Nullable
     private final Color color;
-    @Nullable
     private final Footer footer;
-    @Nullable
     private final Image image;
-    @Nullable
     private final Thumbnail thumbnail;
-    @Nullable
     private final Video video;
-    @Nullable
     private final Provider provider;
-    @Nullable
     private final Author author;
     private final List<Fields> fields = new ArrayList<>();
 
@@ -79,98 +70,66 @@ public class EmbedReg implements Embed {
         }
     }
 
-    public EmbedReg(String title, String description, EmbedType type, String url, String timestamp,
-            Color color, Footer footer, Image image, Thumbnail thumbnail, Video video,
-            Provider provider, Author author, @NotNull List<Fields> fields) {
-        this.title = title;
-        this.type = type;
-        this.description = description;
-        this.url = url;
-        this.timestamp = timestamp;
-        this.color = color;
-        this.footer = footer;
-        this.image = image;
-        this.thumbnail = thumbnail;
-        this.video = video;
-        this.provider = provider;
-        this.author = author;
-        this.fields.addAll(fields);
-    }
-
-
-    @NotNull
     @Override
     public Optional<String> getTitle() {
         return Optional.ofNullable(title);
     }
 
-    @NotNull
     @Override
     public Optional<EmbedType> getEmbedType() {
         return Optional.ofNullable(type);
     }
 
-    @NotNull
     @Override
     public Optional<String> getDescription() {
         return Optional.ofNullable(description);
     }
 
-    @NotNull
     @Override
     public Optional<String> getUrl() {
         return Optional.ofNullable(url);
     }
 
-    @NotNull
     @Override
     public Optional<ZonedDateTime> getTimeStamp() {
         return Optional.ofNullable(ZonedDateTime.parse(timestamp));
     }
 
-    @NotNull
     @Override
     public Optional<Color> getColour() {
         return Optional.ofNullable(color);
     }
 
-    @NotNull
     @Override
     public Optional<Footer> getFooter() {
         return Optional.ofNullable(footer);
     }
 
-    @NotNull
     @Override
     public Optional<Image> getImage() {
         return Optional.ofNullable(image);
     }
 
-    @NotNull
     @Override
     public Optional<Thumbnail> getThumbnail() {
         return Optional.ofNullable(thumbnail);
     }
 
-    @NotNull
     @Override
     public Optional<Video> getVideo() {
         return Optional.ofNullable(video);
     }
 
-    @NotNull
     @Override
     public Optional<Provider> getProvider() {
         return Optional.ofNullable(provider);
     }
 
-    @NotNull
     @Override
     public Optional<Author> getAuthor() {
         return Optional.ofNullable(author);
     }
 
-    @NotNull
     @Override
     public List<Fields> getFields() {
         return fields;

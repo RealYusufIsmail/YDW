@@ -17,6 +17,8 @@
 
 package io.github.realyusufismail.ydw.entities.embed.objects;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import java.util.Optional;
 
 public interface Fields {
@@ -25,4 +27,6 @@ public interface Fields {
     Optional<String> getValue();
 
     Optional<Boolean> isInline();
+
+    ObjectNode toJson();
 }

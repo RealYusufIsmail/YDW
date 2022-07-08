@@ -17,6 +17,8 @@
 
 package io.github.realyusufismail.ydw.entities.embed.objects;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import java.util.Optional;
 
 public interface SameEmbedStructure {
@@ -27,4 +29,6 @@ public interface SameEmbedStructure {
     Optional<Integer> getHeight();
 
     Optional<Integer> getWidth();
+
+    ObjectNode toJson();
 }

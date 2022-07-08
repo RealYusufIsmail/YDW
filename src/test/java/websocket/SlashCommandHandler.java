@@ -6,6 +6,7 @@ import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.embed.Embed;
 import io.github.realyusufismail.ydw.entities.guild.channel.TextChannel;
 import io.github.realyusufismail.ydw.event.events.interaction.SlashCommandInteractionEvent;
+import io.github.realyusufismail.ydwreg.application.commands.slash.reply.ReplyConfigReg;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 
 import java.awt.*;
@@ -20,10 +21,11 @@ public class SlashCommandHandler extends EventAdapter {
 
             if (event.getChannel().isPresent()) {
                 Channel channel = event.getChannel().get();
-                event.reply("The channel is " + channel.getName().get());
+                event
+                    .reply("The channel is " + channel.getName().get(),
+                            new ReplyConfigReg().setEphemeral(true))
+                    .queue();
             }
-        } else if (name.equals("ping")) {
-            System.out.println("Ping");
         }
     }
 }

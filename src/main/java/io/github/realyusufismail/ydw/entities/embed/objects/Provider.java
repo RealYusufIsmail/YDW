@@ -17,10 +17,14 @@
 
 package io.github.realyusufismail.ydw.entities.embed.objects;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import java.util.Optional;
 
 public interface Provider {
-    Optional<String> name();
+    Optional<String> getName();
 
-    Optional<String> url();
+    Optional<String> getUrl();
+
+    ObjectNode toJson();
 }

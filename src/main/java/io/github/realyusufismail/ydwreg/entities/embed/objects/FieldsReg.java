@@ -18,6 +18,8 @@
 package io.github.realyusufismail.ydwreg.entities.embed.objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.entities.embed.objects.Fields;
 import org.jetbrains.annotations.NotNull;
 
@@ -57,5 +59,16 @@ public class FieldsReg implements Fields {
     @Override
     public Optional<Boolean> isInline() {
         return Optional.ofNullable(inline);
+    }
+
+    @Override
+    public ObjectNode toJson() {
+        ObjectNode fields = JsonNodeFactory.instance.objectNode();
+        getName().ifPresent(n -> fields.put("name", n));
+        getValue().ifPresent(v -> fields.put("value", v));
+        isInline().ifPresent(i -> fields.put("inline", i));
+        return fields;
+
+
     }
 }

@@ -125,4 +125,12 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
             caller.updateGlobalCommand(commandId);
         }
     }
+
+    public void upsert() {
+        if (guildOnly) {
+            caller.upsertGuildCommand();
+        } else {
+            caller.upsertGlobalCommand();
+        }
+    }
 }
