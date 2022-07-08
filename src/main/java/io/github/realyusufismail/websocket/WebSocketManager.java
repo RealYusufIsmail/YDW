@@ -60,6 +60,8 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     // The thread used for the heartbeat. Needed in cases such as disconnect.
     private volatile Future<?> heartbeatThread;
     private boolean isSessionAvailable = false;
+    // the time that the hearbeat started
+    private long heartbeatStartTime;
 
 
     public WebSocketManager(YDW ydw, String token, Integer intent, String status,
@@ -142,6 +144,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
                 logger.debug("Received HEARTBEAT_ACK");
                 logger.debug("Heartbeat acknowledged");
                 missedHeartbeats = 0;
+                ydwReg.setGatewayPing(System.currentTimeMillis() - heartbeatStartTime);
             }
             case INVALID_SESSION -> {
                 logger.debug("Received INVALID_SESSION");
@@ -182,13 +185,12 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             d = null;
         }
 
-
         JsonNode heartbeat = JsonNodeFactory.instance.objectNode()
             .put("op", OpCode.HEARTBEAT.getCode())
             .put("d", d);
 
-
         ws.sendText(heartbeat.toString());
+        heartbeatStartTime = System.currentTimeMillis();
     }
 
     /**

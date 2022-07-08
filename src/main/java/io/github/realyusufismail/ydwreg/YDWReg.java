@@ -30,6 +30,7 @@ import io.github.realyusufismail.ydw.entities.SelfUser;
 import io.github.realyusufismail.ydw.entities.User;
 import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 import io.github.realyusufismail.ydw.event.Event;
+import io.github.realyusufismail.ydw.event.events.GatewayPingEvent;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandBuilderReg;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
@@ -54,7 +55,7 @@ public class YDWReg implements YDW {
     private RestApiHandler rest;
     private WebSocketManager ws;
     private long ping;
-    private long gatewayPing;
+    private long gatewayPing = -1;
     private SelfUser selfUser;
     private List<Guild> guilds;
     private boolean ready;
@@ -144,7 +145,7 @@ public class YDWReg implements YDW {
     public void setGatewayPing(long gatewayPing) {
         var oldGatewayPing = this.gatewayPing;
         this.gatewayPing = gatewayPing;
-        // apiHandler(new GatewayPingEvent(this, oldGatewayPing));
+        handelEvent(new GatewayPingEvent(this, oldGatewayPing));
     }
 
     @NotNull

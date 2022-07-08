@@ -58,6 +58,7 @@ public class OnHandler {
 
     public void fire(@NotNull EventNames event, JsonNode json) {
         switch (event) {
+            case HELLO -> new HelloHandler(json, ydw).start();
             case READY -> new ReadyHandler(json, ydw).start();
             case RESUMED -> new ResumedHandler(json, ydw).start();
             case RECONNECT -> new ReconnectHandler(json, ydw).start();

@@ -18,6 +18,7 @@
 package io.github.realyusufismail.ydwreg.rest.callers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.YDW;
@@ -46,6 +47,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
@@ -214,21 +216,7 @@ public class SlashCommandCaller {
             .delete()
             .build();
 
-        client.newCall(request).enqueue(new YDWCallback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                ydw.getLogger().error("Failed to delete global slash command", e);
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) {
-                if (!response.isSuccessful()) {
-                    RestApiError error = RestApiError.fromCode(response.code());
-                    ydw.getLogger()
-                        .error("Failed to delete global slash command: " + error.getMessage());
-                }
-            }
-        });
+        client.newCall(request);
     }
 
     public void deleteGuildCommand(long commandId) {
@@ -239,21 +227,7 @@ public class SlashCommandCaller {
             .delete()
             .build();
 
-        client.newCall(request).enqueue(new YDWCallback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                ydw.getLogger().error("Failed to delete guild slash command", e);
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) {
-                if (!response.isSuccessful()) {
-                    RestApiError error = RestApiError.fromCode(response.code());
-                    ydw.getLogger()
-                        .error("Failed to delete guild slash command: " + error.getMessage());
-                }
-            }
-        });
+        client.newCall(request);
     }
 
     public void upsertGlobalCommand() {
@@ -266,21 +240,23 @@ public class SlashCommandCaller {
 
         var commands = getGlobalSlashCommands();
 
-        var commandToUpdate = commands.stream().filter(c -> c.getName().equals(name)).findFirst();
+        commands.stream()
+            .filter(c -> c.getName().equals(name))
+            .filter(c -> c.getDescription().equals(description))
+            .forEach(c -> {
+                updateGlobalCommand(c.getIdLong());
+            });
 
-        var commandsToDelete = commands.stream().filter(c -> !c.getName().equals(name)).findFirst();
+        commands.stream()
+            .filter(c -> !c.getName().equals(name))
+            .filter(c -> !c.getDescription().equals(description))
+            .forEach(c -> {
+                deleteGlobalCommand(c.getIdLong());
+            });
 
-        if (commandToUpdate.isPresent()) {
-            updateGlobalCommand(commandToUpdate.get().getIdLong());
-        } else if (commandsToDelete.isPresent()) {
-            deleteGlobalCommand(commandsToDelete.get().getIdLong());
-        } else {
+        if (commands.stream().noneMatch(c -> c.getName().equals(name))) {
             callGlobalCommand();
         }
-
-        var commandToDelete = commands.stream().filter(c -> !c.getName().equals(name)).findFirst();
-
-        commandToDelete.ifPresent(interaction -> deleteGlobalCommand(interaction.getIdLong()));
     }
 
     public void upsertGuildCommand() {
@@ -293,21 +269,23 @@ public class SlashCommandCaller {
 
         var commands = getGuildSlashCommands();
 
-        var commandToUpdate = commands.stream().filter(c -> c.getName().equals(name)).findFirst();
+        commands.stream()
+            .filter(c -> c.getName().equals(name))
+            .filter(c -> c.getDescription().equals(description))
+            .forEach(c -> {
+                updateGuildCommand(c.getIdLong());
+            });
 
-        var commandsToDelete = commands.stream().filter(c -> !c.getName().equals(name)).findFirst();
+        commands.stream()
+            .filter(c -> !c.getName().equals(name))
+            .filter(c -> !c.getDescription().equals(description))
+            .forEach(c -> {
+                deleteGuildCommand(c.getIdLong());
+            });
 
-        if (commandToUpdate.isPresent()) {
-            updateGuildCommand(commandToUpdate.get().getIdLong());
-        } else if (commandsToDelete.isPresent()) {
-            deleteGuildCommand(commandsToDelete.get().getIdLong());
-        } else {
+        if (commands.stream().noneMatch(c -> c.getName().equals(name))) {
             callGuildOnlyCommand();
         }
-
-        var commandToDelete = commands.stream().filter(c -> !c.getName().equals(name)).findFirst();
-
-        commandToDelete.ifPresent(interaction -> deleteGuildCommand(interaction.getIdLong()));
     }
 
     public List<ApplicationCommand> getGlobalSlashCommands() {

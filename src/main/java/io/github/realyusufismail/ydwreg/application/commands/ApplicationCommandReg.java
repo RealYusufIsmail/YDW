@@ -18,6 +18,8 @@
 package io.github.realyusufismail.ydwreg.application.commands;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.application.commands.ApplicationCommand;
 import io.github.realyusufismail.ydw.application.commands.option.CommandOption;
@@ -128,6 +130,22 @@ public class ApplicationCommandReg implements ApplicationCommand {
     @Override
     public SnowFlake getVersion() {
         return SnowFlake.of(version);
+    }
+
+    @Override
+    public ObjectNode toJson() {
+        ObjectNode objectNode = JsonNodeFactory.instance.objectNode();
+        objectNode.put("id", id);
+        getCommandType().ifPresent(commandType -> objectNode.put("type", commandType.getValue()));
+        objectNode.put("application_id", applicationId);
+        getGuild().ifPresent(guild -> objectNode.put("guild_id", guild.getIdLong()));
+        objectNode.put("name", name);
+        objectNode.put("description", description);
+        getDefaultMemberPermissions().ifPresent(
+                permissions -> objectNode.put("default_permission", String.join(",", permissions)));
+        objectNode.put("dm_permission", dmVisible);
+        objectNode.put("version", version);
+        return objectNode;
     }
 
     @Nullable
