@@ -18,6 +18,7 @@
 package io.github.realyusufismail.ydw;
 
 
+import com.google.errorprone.annotations.CheckReturnValue;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
@@ -32,7 +33,6 @@ import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.CheckReturnValue;
 import java.util.List;
 
 public interface YDW {

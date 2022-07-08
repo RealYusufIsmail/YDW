@@ -5,10 +5,9 @@ import io.github.realyusufismail.ydwreg.rest.callers.*;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.annotation.Nullable;
 
 public class RestApiHandler {
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
