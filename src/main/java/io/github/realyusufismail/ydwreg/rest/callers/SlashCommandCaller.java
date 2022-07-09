@@ -216,7 +216,12 @@ public class SlashCommandCaller {
             .delete()
             .build();
 
-        client.newCall(request);
+        client.newCall(request).enqueue(new YDWCallback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                System.out.println("Failed to delete global slash command");
+            }
+        });
     }
 
     public void deleteGuildCommand(long commandId) {
@@ -227,7 +232,12 @@ public class SlashCommandCaller {
             .delete()
             .build();
 
-        client.newCall(request);
+        client.newCall(request).enqueue(new YDWCallback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                System.out.println("Failed to delete guild slash command");
+            }
+        });
     }
 
     public void upsertGlobalCommand() {
@@ -241,18 +251,13 @@ public class SlashCommandCaller {
         var commands = getGlobalSlashCommands();
 
         commands.stream()
-            .filter(c -> c.getName().equals(name))
-            .filter(c -> c.getDescription().equals(description))
-            .forEach(c -> {
-                updateGlobalCommand(c.getIdLong());
-            });
+            // check fif any commands need to be deleted
+            .filter(command -> !command.getName().equals(name))
+            .forEach(command -> deleteGlobalCommand(command.getIdLong()));
 
-        commands.stream()
-            .filter(c -> !c.getName().equals(name))
-            .filter(c -> !c.getDescription().equals(description))
-            .forEach(c -> {
-                deleteGlobalCommand(c.getIdLong());
-            });
+        commands.stream().filter(c -> c.getName().equals(name)).forEach(c -> {
+            updateGlobalCommand(c.getIdLong());
+        });
 
         if (commands.stream().noneMatch(c -> c.getName().equals(name))) {
             callGlobalCommand();
@@ -269,18 +274,19 @@ public class SlashCommandCaller {
 
         var commands = getGuildSlashCommands();
 
-        commands.stream()
-            .filter(c -> c.getName().equals(name))
-            .filter(c -> c.getDescription().equals(description))
-            .forEach(c -> {
-                updateGuildCommand(c.getIdLong());
-            });
 
         commands.stream()
             .filter(c -> !c.getName().equals(name))
             .filter(c -> !c.getDescription().equals(description))
             .forEach(c -> {
                 deleteGuildCommand(c.getIdLong());
+            });
+
+        commands.stream()
+            .filter(c -> c.getName().equals(name))
+            .filter(c -> c.getDescription().equals(description))
+            .forEach(c -> {
+                updateGuildCommand(c.getIdLong());
             });
 
         if (commands.stream().noneMatch(c -> c.getName().equals(name))) {
