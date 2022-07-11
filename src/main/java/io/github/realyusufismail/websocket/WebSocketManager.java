@@ -30,13 +30,15 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.*;
 
-// TODO: fix reconnection system
 public class WebSocketManager extends WebSocketAdapter implements WebSocketListener {
 
     // Create a WebSocketFactory instance.
     static WebSocket ws;
     private final Logger logger = LoggerFactory.getLogger(WebSocketManager.class);
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    //the core pool
+    private final int corePoolSize = Runtime.getRuntime().availableProcessors();
+    //the scheduled thread pool
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(corePoolSize);
     // The bots token.
     private final String token;
     // The gateway intents
@@ -68,7 +70,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
 
     public WebSocketManager(YDW ydw, String token, Integer intent, String status,
-            int largeThreshold, ActivityConfig activity) throws IOException, WebSocketException {
+            int largeThreshold, ActivityConfig activity) {
         this.ydwReg = (YDWReg) ydw;
         this.token = token;
         this.intent = intent;
@@ -80,7 +82,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     }
 
     public WebSocketManager(YDW ydw, String token, @NotNull GateWayIntent intent, String status,
-            int largeThreshold, ActivityConfig activity) throws IOException, WebSocketException {
+            int largeThreshold, ActivityConfig activity)  {
         this(ydw, token, intent.getValue(), status, largeThreshold, activity);
     }
 
@@ -105,7 +107,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         onHandelMessage(message);
     }
 
-    public void onHandelMessage(String message) throws Exception {
+    public void onHandelMessage(String message) {
         try {
             JsonNode payload = mapper.readTree(message);
             onHandel(payload);
@@ -114,7 +116,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         }
     }
 
-    public void onHandel(JsonNode payload) throws Exception {
+    public void onHandel(JsonNode payload) {
         onEvent(payload);
     }
 
@@ -412,7 +414,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     }
 
     @Override
-    public void onError(WebSocket websocket, @NotNull WebSocketException cause) throws Exception {
+    public void onError(WebSocket websocket, @NotNull WebSocketException cause) {
         if (cause.getCause() instanceof SocketTimeoutException) {
             logger.error("Socket timeout");
         } else if (cause.getCause() instanceof IOException) {
