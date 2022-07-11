@@ -11,8 +11,13 @@ Inspiration for the websocket and CloseCode.
 <br>
 Inspiration for event adapter. Handle event system was built alone.
 <br>
+Inspiration for the gateway intent.
+<br>
 some other minor methods such as gateway ping.
-
+<br>
+The use of optionals was inspired by JavaCord.
+<br>
+If i have missed on any code that I have used from JDA, please let me know.
 
 This project use java 17.
 

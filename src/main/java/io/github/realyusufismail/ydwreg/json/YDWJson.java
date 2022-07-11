@@ -1,18 +1,19 @@
 /*
- * GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
  *
- * Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/> Everyone is permitted to
- * copy and distribute verbatim copies of this license document, but changing it is not allowed.
+ *  * Copyright 2022 Yusuf Arfan Ismail and other YDW contributors.
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *    http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
  *
- * Yusuf Arfan Ismail Copyright (C) 2022 - future.
- *
- * The GNU General Public License is a free, copyleft license for software and other kinds of works.
- *
- * You may copy, distribute and modify the software as long as you track changes/dates in source
- * files. Any modifications to or software including (via compiler) GPL-licensed code must also be
- * made available under the GPL along with build & install instructions.
- *
- * You can find more details here https://github.com/RealYusufIsmail/YDW/LICENSE
  */
 
 package io.github.realyusufismail.ydwreg.json;
