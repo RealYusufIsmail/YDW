@@ -64,7 +64,8 @@ public class EmbedBuilder {
      * Max length for author name is 256 characters.
      */
     private static final int MAX_AUTHOR_NAME_LENGTH = 256;
-
+    @NotNull
+    private final List<Fields> fields = new ArrayList<>();
     private String title;
     private String description;
     private String url;
@@ -76,8 +77,6 @@ public class EmbedBuilder {
     private Video video;
     private Provider provider;
     private Author author;
-    @NotNull
-    private final List<Fields> fields = new ArrayList<>();
 
     public EmbedBuilder() {
         this(null);

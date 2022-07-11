@@ -12,7 +12,7 @@ public class Handler extends EventAdapter {
     }
 
     @Override
-    public void onGatewayPingEvent(GatewayPingEvent event) {
+    public void onGatewayPing(GatewayPingEvent event) {
         System.out.println("Gateway ping is: " + event.getNewPing());
     }
 

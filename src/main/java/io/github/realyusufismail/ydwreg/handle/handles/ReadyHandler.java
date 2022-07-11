@@ -68,7 +68,7 @@ public class ReadyHandler extends Handle {
         ydw.setSelfUser(selfUser);
 
         ydw.setReady(true);
-
+        ydw.getWebSocket().setReconnectTimeoutS(2);
         ydw.handelEvent(new ReadyEvent(ydw, unavailableGuilds.size(), availableGuilds.size()));
     }
 }

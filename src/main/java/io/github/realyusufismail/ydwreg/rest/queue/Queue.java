@@ -57,9 +57,7 @@ public class Queue {
 
                 }
             });
-        }
-
-        else {
+        } else {
             client.newCall(request);
         }
     }

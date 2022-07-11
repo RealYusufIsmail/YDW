@@ -27,9 +27,6 @@ public class Main {
 
         List<SlashCommandBuilder> slashCommandBuilders = new ArrayList<>();
 
-        slashCommandBuilders
-            .add(new SlashCommandBuilderReg(ydw, "test", "Gets the ping of the bot"));
-
         ydw.awaitReady().upsertCommands(slashCommandBuilders);
     }
 }

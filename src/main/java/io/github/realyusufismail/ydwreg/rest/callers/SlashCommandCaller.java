@@ -18,7 +18,6 @@
 package io.github.realyusufismail.ydwreg.rest.callers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.YDW;
@@ -47,7 +46,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
@@ -294,6 +292,14 @@ public class SlashCommandCaller {
         }
     }
 
+    public void deleteAllCommands() {
+        var guildCommands = getGuildSlashCommands();
+        var globalCommands = getGlobalSlashCommands();
+
+        guildCommands.forEach(c -> deleteGuildCommand(c.getIdLong()));
+        globalCommands.forEach(c -> deleteGlobalCommand(c.getIdLong()));
+    }
+
     public List<ApplicationCommand> getGlobalSlashCommands() {
         Request request = new YDWRequest()
             .request(token, EndPoint.GLOBAL_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId()))
@@ -433,4 +439,6 @@ public class SlashCommandCaller {
             Consumer<? super Response> success) {
         new Queue(client, request, failure, success).queue();
     }
+
+
 }

@@ -46,6 +46,8 @@ dependencies {
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.11'
     //google
     implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
+    //better time
+    implementation group: 'joda-time', name: 'joda-time', version: '2.10.14'
 }
 
 

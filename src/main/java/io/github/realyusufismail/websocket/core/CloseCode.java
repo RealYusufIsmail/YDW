@@ -39,6 +39,8 @@ public enum CloseCode {
     SHARDING_REQUIRED(4011,
             "The session would have handled too many guilds - you are required to shard your connection in order to connect.",
             false),
+    Reconnect(4900, "Something has happened, attempting to reconnect"),
+    GRACEFUL_CLOSE(1000, "The connection was closed gracefully or your heartbeats timed out."),
     INVALID_API_VERSION(4012, "You sent an invalid version for the gateway.", false),
     INVALID_INTENTS(4013, "You sent an invalid intents. Make sure you follow the protocol.", false),
     DISALLOWED_INTENTS(4014,

@@ -40,9 +40,8 @@ import java.util.Optional;
 
 public class InteractionReg extends Event implements Interaction {
 
-    private final long id;
     protected final YDW ydw;
-
+    private final long id;
     private final Long applicationId;
     private final InteractionType type;
     private final InteractionData data;

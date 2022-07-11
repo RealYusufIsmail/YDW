@@ -84,14 +84,14 @@ public class ChannelCaller {
 
         /*
          * client.newCall(request).enqueue(new YDWCallback() {
-         * 
+         *
          * @Override public void onFailure(@NotNull Call call, @NotNull IOException e) {
          * ydw.getLogger().error("Failed to send message", e); }
-         * 
+         *
          * @Override public void onResponse(@NotNull Call call, @NotNull Response response) { if
          * (!response.isSuccessful()) { RestApiError error = RestApiError.fromCode(response.code());
          * ydw.getLogger().error("Failed to send message: " + error.getMessage()); } } });
-         * 
+         *
          */
     }
 

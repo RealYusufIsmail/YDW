@@ -9,28 +9,6 @@ public class SlashCommandHandler extends EventAdapter {
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         String name = event.getData().get().getName();
-        if (name.equals("ping")) {
-            event
-                .reply(event.getYDW().getGatewayPing() + "ms",
-                        new ReplyConfigReg().setEphemeral(true))
-                .queue(error -> {
-                    System.out.println(error.getMessage());
-                },
 
-                        success -> {
-                            System.out.println("Success");
-                        });
-        } else if (name.equals("test")) {
-            event
-                .reply(event.getYDW().getGatewayPing() + "ms",
-                        new ReplyConfigReg().setEphemeral(true))
-                .queue(error -> {
-                    System.out.println(error.getMessage());
-                },
-
-                        success -> {
-                            System.out.println("Success");
-                        });
-        }
     }
 }

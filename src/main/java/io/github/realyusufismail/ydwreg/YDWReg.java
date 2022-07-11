@@ -184,8 +184,14 @@ public class YDWReg implements YDW {
 
     @Override
     public void upsertCommands(List<SlashCommandBuilder> commands) {
-        for (SlashCommandBuilder command : commands) {
-            ((SlashCommandBuilderReg) command).upsert();
+
+        if (commands.isEmpty()) {
+            // need to delete all commands
+            getRest().getSlashCommandCaller().deleteAllCommands();
+        } else {
+            commands.forEach(command -> {
+                ((SlashCommandBuilderReg) command).upsert();
+            });
         }
     }
 

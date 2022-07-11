@@ -12,9 +12,11 @@ import io.github.realyusufismail.ydw.GateWayIntent;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.YDWInfo;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
+import io.github.realyusufismail.ydw.event.events.ShutdownEvent;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.handle.OnHandler;
 import org.jetbrains.annotations.NotNull;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,11 +28,9 @@ import java.nio.channels.ClosedChannelException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
+// TODO: fix reconnection system
 public class WebSocketManager extends WebSocketAdapter implements WebSocketListener {
 
     // Create a WebSocketFactory instance.
@@ -42,26 +42,29 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     // The gateway intents
     private final int intent;
     private final YDWReg ydwReg;
-    ObjectMapper mapper = new ObjectMapper();
-    // The sequence number, used for resuming sessions and heartbeats.
-    private Integer seq = null;
-    // Used to determine if any heart beats hve been missed.
-    private int missedHeartbeats = 0;
     // The sequence number, used for resuming sessions and heartbeats.
     // The status of the bot e.g. online, idle, dnd, invisible etc.
     private final String status;
     private final Integer largeThreshold;
     // The activity of the bot e.g. playing, streaming, listening, watching etc.
     private final ActivityConfig activity;
+    ObjectMapper mapper = new ObjectMapper();
+    // The sequence number, used for resuming sessions and heartbeats.
+    private Integer seq = null;
     // The session id. This is basically a key that stores the past activity of the bot.
     private volatile String sessionId = null;
     // Used to indicate that the bot has connected to the gateway.
     private boolean connected = false;
     // The thread used for the heartbeat. Needed in cases such as disconnect.
     private volatile Future<?> heartbeatThread;
-    private boolean isSessionAvailable = false;
+    private boolean canNotResume = false;
     // the time that the hearbeat started
     private long heartbeatStartTime;
+    // The amounts of time that the heartbeat has been missed.
+    private int heartbeatsMissed = 0;
+    private int reconnectTimeoutS = 2;
+    // weather we need to reconnect or not.
+    private boolean needsToReconnect;
 
 
     public WebSocketManager(YDW ydw, String token, Integer intent, String status,
@@ -142,8 +145,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             }
             case HEARTBEAT_ACK -> {
                 logger.debug("Received HEARTBEAT_ACK");
-                logger.debug("Heartbeat acknowledged");
-                missedHeartbeats = 0;
+                heartbeatsMissed = 0;
                 ydwReg.setGatewayPing(System.currentTimeMillis() - heartbeatStartTime);
             }
             case INVALID_SESSION -> {
@@ -153,13 +155,20 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
                     logger.debug("Session invalidated, resuming session");
 
                 int closeCode = shouldResume ? 4900 : 1000;
-                ws.sendClose(closeCode, "Session invalidated");
+                wsClose(closeCode, "Session invalidated");
             }
             case RECONNECT -> {
                 logger.debug("Received RECONNECT");
-                ws.sendClose(4999, "OpCode 7 received hence requesting a reconnect");
+                wsClose(4900, "OpCode 7 received hence requesting a reconnect");
             }
             default -> logger.debug("Unhandled opcode: {}", op);
+        }
+    }
+
+    private void wsClose(int code, String reason) {
+        prepareClose();
+        if (ws != null) {
+            ws.sendClose(code, reason);
         }
     }
 
@@ -189,8 +198,32 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             .put("op", OpCode.HEARTBEAT.getCode())
             .put("d", d);
 
-        ws.sendText(heartbeat.toString());
-        heartbeatStartTime = System.currentTimeMillis();
+        if (heartbeatsMissed >= 2) {
+            heartbeatsMissed = 0;
+            logger.warn("Heartbeat missed, will attempt to reconnect");
+            prepareClose();
+            ws.disconnect(4900, "Heartbeat missed");
+        } else {
+            heartbeatsMissed += 1;
+            ws.sendText(heartbeat.toString());
+            heartbeatStartTime = System.currentTimeMillis();
+        }
+    }
+
+    /**
+     * This was taken from JDA's WebSocket. <a href=
+     * "https://github.com/DV8FromTheWorld/JDA/blob/023a6c9de489d2e487d44b294614bb4911597817/src/main/java/net/dv8tion/jda/internal/requests/WebSocketClient.java#L671">WebSocketClient.java</a>
+     */
+    private void prepareClose() {
+        try {
+            if (ws != null) {
+                Socket rawSocket = ws.getSocket();
+                if (rawSocket != null) // attempt to set a 10 second timeout for the close frame
+                    rawSocket.setSoTimeout(10000); // this has no affect if the socket is already
+                // stuck in a read call
+            }
+        } catch (SocketException ignored) {
+        }
     }
 
     /**
@@ -218,26 +251,8 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     }
 
 
-    /**
-     * This was taken from JDA's WebSocket. <a href=
-     * "https://github.com/DV8FromTheWorld/JDA/blob/023a6c9de489d2e487d44b294614bb4911597817/src/main/java/net/dv8tion/jda/internal/requests/WebSocketClient.java#L671">WebSocketClient.java</a>
-     */
-    private void prepareClose() {
-        try {
-            if (ws != null) {
-                Socket rawSocket = ws.getSocket();
-                if (rawSocket != null) // attempt to set a 10 second timeout for the close frame
-                    rawSocket.setSoTimeout(10000); // this has no affect if the socket is already
-                // stuck in a read call
-            }
-        } catch (SocketException ignored) {
-        }
-    }
-
-
     @Override
-    public void onConnected(WebSocket websocket, Map<String, List<String>> headers)
-            throws Exception {
+    public void onConnected(WebSocket websocket, Map<String, List<String>> headers) {
         connected = true;
         if (sessionId == null) {
             identify();
@@ -313,7 +328,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             WebSocketFrame clientCloseFrame, boolean closedByServer) {
         CloseCode closeCode = null;
         int rawCloseCode = 1005;
-        isSessionAvailable = false;
+        canNotResume = false;
         // Done to make sure no more heartbeats are sent
         if (heartbeatThread != null) {
             heartbeatThread.cancel(false);
@@ -333,34 +348,58 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             rawCloseCode = clientCloseFrame.getCloseCode();
             closeCode = CloseCode.fromCode(rawCloseCode);
             if (rawCloseCode == 1000) {
-                isSessionAvailable = true;
+                canNotResume = true;
             }
         }
 
         boolean closeCodeIsReconnect = closeCode == null || closeCode.isReconnect();
-        if (!closeCodeIsReconnect) {
-            logger.error("The WebSocket was closed by a non-reconnectable close code.");
+        if (!needsToReconnect || !closeCodeIsReconnect || heartbeatThread.isCancelled()) {
+            logger.error("Unable to reconnect, closing connection");
+            ydwReg.handelEvent(
+                    new ShutdownEvent(ydwReg, DateTime.now(), CloseCode.fromCode(rawCloseCode)));
         } else {
+            if (canNotResume)
+                unableToResume();
 
-            if (isSessionAvailable)
-                session();
+            // received reconnect close code, try to reconnect
             try {
                 onReconnect(rawCloseCode);
-            } catch (Exception e) {
+            } catch (InterruptedException e) {
                 logger.error("Error reconnecting", e);
+                queueReconnect();
+                unableToResume();
             }
         }
     }
 
-    private void onReconnect(int closeCode) {
+    private void onReconnect(int closeCode) throws InterruptedException {
         if (sessionId == null) {
-            logger.warn("Session ID is null, reconnecting...");
+            logger.warn("Session ID is null, starting a new session...");
+            queueReconnect();
         } else {
             reconnect();
         }
     }
 
-    public void reconnect() {
+    public void reconnect() throws InterruptedException {
+        if (sessionId != null)
+            reconnectTimeoutS = 0;
+
+        while (needsToReconnect) {
+            int delay = reconnectTimeoutS;
+            Thread.sleep(delay * 1000L);
+            try {
+                connect();
+            } catch (RejectedExecutionException e) {
+                ydwReg.handelEvent(
+                        new ShutdownEvent(ydwReg, DateTime.now(), CloseCode.fromCode(1000)));
+            } catch (RuntimeException e) {
+                logger.error("Error reconnecting", e);
+            }
+        }
+    }
+
+    public void queueReconnect() {
         try {
             connect();
         } catch (Exception e) {
@@ -368,8 +407,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         }
     }
 
-
-    private void session() {
+    private void unableToResume() {
         sessionId = null;
     }
 
@@ -388,5 +426,13 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
     public int getGatewayIntents() {
         return intent;
+    }
+
+    public void setReconnectTimeoutS(int reconnectTimeoutS) {
+        this.reconnectTimeoutS = reconnectTimeoutS;
+    }
+
+    public void needsToReconnect(boolean needsToReconnect) {
+        this.needsToReconnect = needsToReconnect;
     }
 }
