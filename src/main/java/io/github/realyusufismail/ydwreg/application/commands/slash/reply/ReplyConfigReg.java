@@ -15,8 +15,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
-            
+ */ 
 package io.github.realyusufismail.ydwreg.application.commands.slash.reply;
 
 import io.github.realyusufismail.ydw.application.commands.reply.ReplyConfig;
