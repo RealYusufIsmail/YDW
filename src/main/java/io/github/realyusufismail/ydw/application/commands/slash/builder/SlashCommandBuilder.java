@@ -1,10 +1,10 @@
 package io.github.realyusufismail.ydw.application.commands.slash.builder;
 
+import com.google.errorprone.annotations.CheckReturnValue;
 import io.github.realyusufismail.ydw.application.commands.option.OptionType;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.Option;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.OptionExtender;
 
-import javax.annotation.CheckReturnValue;
 import java.util.Collection;
 
 public interface SlashCommandBuilder {
@@ -19,7 +19,6 @@ public interface SlashCommandBuilder {
     SlashCommandBuilder setToGuildOnly(boolean toGuildOnly);
 
     @CheckReturnValue
-
     SlashCommandBuilder setOption(OptionType optionType, String name, String description,
             boolean required);
 
@@ -30,18 +29,14 @@ public interface SlashCommandBuilder {
     }
 
     @CheckReturnValue
-
     SlashCommandBuilder setOptions(Collection<Option> options);
 
     @CheckReturnValue
-
     SlashCommandBuilder setOptions(Option... options);
 
     @CheckReturnValue
-
     SlashCommandBuilder setExtendedOptions(OptionExtender... optionExtenders);
 
     @CheckReturnValue
-
     SlashCommandBuilder setExtendedOptions(Collection<OptionExtender> optionExtenders);
 }

@@ -13,7 +13,7 @@ public interface SlashOptionGetter {
 
     /**
      * Used to get the slash command options
-     * 
+     *
      * @return the list of options
      */
     // TODO: revert to List<CommandOption> getOptions(); when the issue is fixed.
@@ -21,7 +21,7 @@ public interface SlashOptionGetter {
 
     /**
      * Used to get the slash command options with that specific name.
-     * 
+     *
      * @param name the name of the option
      * @return the option
      */

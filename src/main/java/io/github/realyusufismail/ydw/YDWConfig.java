@@ -7,7 +7,7 @@ import io.github.realyusufismail.ydwreg.exception.InvalidStatusException;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.ExecutorService;
+import java.util.Objects;
 
 public class YDWConfig {
     private final String token;
@@ -20,8 +20,6 @@ public class YDWConfig {
     private OkHttpClient client;
 
     private String guildId;
-
-    private ExecutorService executorService = null;
 
     private YDWConfig(String token, int gatewayIntents) {
         this.token = token;
@@ -85,9 +83,8 @@ public class YDWConfig {
 
     /**
      * the client used to connect to the websocket
-     * 
-     * @param client client
      *
+     * @param client client
      * @return ydwConnector
      */
     @NotNull
@@ -106,18 +103,6 @@ public class YDWConfig {
         return this;
     }
 
-    /**
-     * the executor service used to run the tasks
-     *
-     * @param executorService executorService
-     * @return ydwConnector
-     */
-    @NotNull
-    public YDWConfig setExecutorService(ExecutorService executorService) {
-        this.executorService = executorService;
-        return this;
-    }
-
     public YDW build() throws Exception {
 
         if (token == null || token.isEmpty()) {
@@ -125,14 +110,8 @@ public class YDWConfig {
         }
 
         OkHttpClient client;
-
-        if (this.client == null) {
-            client = new OkHttpClient();
-        } else {
-            client = this.client;
-        }
-
-        YDWReg ydw = new YDWReg(client, executorService);
+        client = Objects.requireNonNullElseGet(this.client, OkHttpClient::new);
+        YDWReg ydw = new YDWReg(client);
         ydw.loginForRest(token, guildId);
         ydw.login(token, gatewayIntents, status, largeThreshold, activity);
         return ydw;

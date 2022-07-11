@@ -27,7 +27,7 @@ public interface RoleTags extends GenericEntity {
 
     /**
      * Gets the id of the bot that owns the role.
-     * 
+     *
      * @return The id of the bot that owns the role.
      */
     @NotNull
@@ -35,7 +35,7 @@ public interface RoleTags extends GenericEntity {
 
     /**
      * Gets the id of the integration this role belongs to/
-     * 
+     *
      * @return The id of the integration this role belongs to.
      */
     @NotNull
@@ -43,7 +43,7 @@ public interface RoleTags extends GenericEntity {
 
     /**
      * Weather the role is a nitro boost role.
-     * 
+     *
      * @return true if the role is a nitro boost role, false otherwise.
      */
     Optional<Boolean> isPremiumSubscriber();

@@ -18,9 +18,9 @@
 package io.github.realyusufismail.ydw.event.events;
 
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.event.EventExtender;
+import io.github.realyusufismail.ydw.event.Event;
 
-public class ReadyEvent extends EventExtender {
+public class ReadyEvent extends Event {
 
     private final long numberOfUnavailableGuilds;
 
@@ -28,12 +28,12 @@ public class ReadyEvent extends EventExtender {
 
     private final long numberOfGuilds;
 
-    public ReadyEvent(YDW ydw) {
+    public ReadyEvent(YDW ydw, long numberOfUnavailableGuilds, long numberOfAvailableGuilds) {
         super(ydw);
+        this.numberOfUnavailableGuilds = numberOfUnavailableGuilds;
+        this.numberOfAvailableGuilds = numberOfAvailableGuilds;
 
-        this.numberOfUnavailableGuilds = ydw.getUnavailableGuilds().size();
-        this.numberOfAvailableGuilds = ydw.getAvailableGuilds().size();
-        this.numberOfGuilds = numberOfAvailableGuilds + numberOfUnavailableGuilds;
+        this.numberOfGuilds = this.numberOfAvailableGuilds + this.numberOfUnavailableGuilds;
     }
 
     public long getNumberOfUnavailableGuilds() {

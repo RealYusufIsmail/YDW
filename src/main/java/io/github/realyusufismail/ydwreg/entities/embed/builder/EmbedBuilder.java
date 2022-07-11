@@ -17,12 +17,14 @@
 
 package io.github.realyusufismail.ydwreg.entities.embed.builder;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Objects;
 import com.google.errorprone.annotations.CheckReturnValue;
 import io.github.realyusufismail.ydw.entities.embed.Embed;
 import io.github.realyusufismail.ydw.entities.embed.objects.Image;
 import io.github.realyusufismail.ydw.entities.embed.objects.*;
-import io.github.realyusufismail.ydwreg.entities.embed.EmbedReg;
 import io.github.realyusufismail.ydwreg.entities.embed.objects.*;
 import io.github.realyusufismail.ydwreg.util.Verify;
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +64,8 @@ public class EmbedBuilder {
      * Max length for author name is 256 characters.
      */
     private static final int MAX_AUTHOR_NAME_LENGTH = 256;
-
+    @NotNull
+    private final List<Fields> fields = new ArrayList<>();
     private String title;
     private String description;
     private String url;
@@ -74,26 +77,37 @@ public class EmbedBuilder {
     private Video video;
     private Provider provider;
     private Author author;
-    @NotNull
-    private List<Fields> fields = new ArrayList<>();
 
     public EmbedBuilder() {
         this(null);
     }
 
     public EmbedBuilder(@Nullable Embed embed) {
-        this.title = embed.getTitle().get();
-        this.description = embed.getDescription().get();
-        this.url = embed.getUrl().get();
-        this.timestamp = embed.getTimeStamp().get().toString();
-        this.color = embed.getColour().get();
-        this.footer = embed.getFooter().get();
-        this.image = embed.getImage().get();
-        this.thumbnail = embed.getThumbnail().get();
-        this.video = embed.getVideo().get();
-        this.provider = embed.getProvider().get();
-        this.author = embed.getAuthor().get();
-        this.fields.addAll(embed.getFields());
+        if (embed.getTitle().isPresent())
+            this.title = embed.getTitle().get();
+        if (embed.getDescription().isPresent())
+            this.description = embed.getDescription().get();
+        if (embed.getUrl().isPresent())
+            this.url = embed.getUrl().get();
+        if (embed.getTimeStamp().isPresent())
+            this.timestamp = embed.getTimeStamp().get().toString();
+        if (embed.getColour().isPresent())
+            this.color = embed.getColour().get();
+        if (embed.getFooter().isPresent())
+            this.footer = embed.getFooter().get();
+        if (embed.getImage().isPresent())
+            this.image = embed.getImage().get();
+        if (embed.getThumbnail().isPresent())
+            this.thumbnail = embed.getThumbnail().get();
+        if (embed.getVideo().isPresent())
+            this.video = embed.getVideo().get();
+        if (embed.getProvider().isPresent())
+            this.provider = embed.getProvider().get();
+        if (embed.getAuthor().isPresent())
+            this.author = embed.getAuthor().get();
+        if (!embed.getFields().isEmpty()) {
+            this.fields.addAll(embed.getFields());
+        }
     }
 
     @NotNull
@@ -214,21 +228,52 @@ public class EmbedBuilder {
                 && fields.isEmpty();
     }
 
-    public @NotNull Embed build() {
-        if (isEmpty())
-            throw new IllegalArgumentException("Embed cannot be empty.");
-        return new EmbedReg(title, description, Embed.EmbedType.RICH, url, timestamp, color, footer,
-                image, thumbnail, video, provider, author, fields);
+    public @NotNull EmbedBuilder build() {
+        return this;
     }
 
+    public ObjectNode toJson() {
+        ObjectNode json = JsonNodeFactory.instance.objectNode()
+            .put("title", title)
+            .put("description", description)
+            .put("url", url)
+            .put("timestamp", timestamp)
+            .put("color", color.getRGB());
+
+        if (footer != null)
+            json.set("footer", footer.toJson());
+
+        if (image != null)
+            json.set("image", image.toJson());
+
+        if (thumbnail != null)
+            json.set("thumbnail", thumbnail.toJson());
+
+        if (video != null)
+            json.set("video", video.toJson());
+
+        if (provider != null)
+            json.set("provider", provider.toJson());
+
+        if (author != null)
+            json.set("author", author.toJson());
+
+        if (!fields.isEmpty()) {
+            ArrayNode fieldsJson = json.putArray("fields");
+            for (Fields field : fields) {
+                fieldsJson.add(field.toJson());
+            }
+        }
+
+        return json;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof EmbedBuilder))
+        if (!(o instanceof EmbedBuilder that))
             return false;
-        EmbedBuilder that = (EmbedBuilder) o;
         return Objects.equal(title, that.title) && Objects.equal(description, that.description)
                 && Objects.equal(url, that.url) && Objects.equal(timestamp, that.timestamp)
                 && Objects.equal(color, that.color) && Objects.equal(footer, that.footer)

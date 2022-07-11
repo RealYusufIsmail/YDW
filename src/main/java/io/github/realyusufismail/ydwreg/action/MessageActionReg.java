@@ -21,6 +21,7 @@ import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.action.MessageAction;
 import io.github.realyusufismail.ydwreg.rest.callers.MessageCaller;
 import okhttp3.Request;
+import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,19 +41,9 @@ public class MessageActionReg implements MessageAction {
     }
 
     @Override
-    public void queue() {
-        queue(null, null);
-    }
-
-    @Override
-    public <T> void queue(@NotNull Consumer<? super T> success) {
-        queue(success, null);
-    }
-
-    @Override
-    public <T> void queue(@Nullable Consumer<? super T> success,
-            @Nullable Consumer<? super Throwable> failure) {
-        messageCaller.queue(request, success, failure);
+    public void queue(@Nullable Consumer<? super Throwable> failure,
+            Consumer<? super Response> success) {
+        messageCaller.queue(request, failure, success);
     }
 
     @Override

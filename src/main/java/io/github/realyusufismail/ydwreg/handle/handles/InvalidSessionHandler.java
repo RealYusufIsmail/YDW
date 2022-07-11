@@ -19,6 +19,7 @@ package io.github.realyusufismail.ydwreg.handle.handles;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.event.events.InvalidSessionEvent;
 import io.github.realyusufismail.ydwreg.handle.Handle;
 
 public class InvalidSessionHandler extends Handle {
@@ -28,7 +29,6 @@ public class InvalidSessionHandler extends Handle {
 
     @Override
     public void start() {
-        Boolean resumable = json.get("d").asBoolean();
-        ydw.setResumable(resumable);
+        ydw.handelEvent(new InvalidSessionEvent(ydw, json.get("d").asBoolean()));
     }
 }

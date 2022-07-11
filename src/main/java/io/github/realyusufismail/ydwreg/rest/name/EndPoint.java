@@ -62,9 +62,22 @@ public enum EndPoint {
     GET_GUILD_EMOJI(YDWInfo.DISCORD_REST_LINK + "/guilds/%s/emojis/%s"),
 
     // Slash command.
-    GLOBAL_SLASH_COMMAND("https://discord.com/api/v10/applications/%s/commands"),
-    GUILD_SLASH_COMMAND("https://discord.com/api/v10/applications/%s/guilds/%s/commands"),
-    REPLY_TO_SLASH_COMMAND("/webhooks/%s/%s");
+    GLOBAL_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/applications/%s/commands"),
+    GUILD_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/applications/%s/guilds/%s/commands"),
+    UPDATE_GUILD_SLASH_COMMAND(
+            YDWInfo.DISCORD_REST_LINK + "/applications/%s/guilds/%s/commands/%s"),
+    UPDATE_GLOBAL_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/applications/%s/commands/%s"),
+    DELETE_GLOBAL_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/applications/%s/commands/%s"),
+    DELETE_GUILD_SLASH_COMMAND(
+            YDWInfo.DISCORD_REST_LINK + "/applications/%s/guilds/%s/commands/%s"),
+    BULK_OVERWRITE_GLOBAL_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/applications/%s/commands"),
+    BULK_OVERWRITE_GUILD_SLASH_COMMAND(
+            YDWInfo.DISCORD_REST_LINK + "/applications/%s/guilds/%s/commands"),
+    GET_GLOBAL_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/applications/%s/commands/%s"),
+    GET_GLOBAL_SLASH_COMMANDS(YDWInfo.DISCORD_REST_LINK + "/applications/%s/commands"),
+    GET_GUILD_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/applications/%s/guilds/%s/commands/%s"),
+    GET_GUILD_SLASH_COMMANDS(YDWInfo.DISCORD_REST_LINK + "/applications/%s/guilds/%s/commands"),
+    REPLY_TO_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/interactions/%s/%s/callback");
 
     private final String endpoint;
 

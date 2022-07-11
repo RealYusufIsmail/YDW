@@ -17,9 +17,7 @@
 
 package io.github.realyusufismail.ydw.entities;
 
-import com.google.errorprone.annotations.CheckReturnValue;
 import io.github.realyusufismail.ydw.action.Action;
-import io.github.realyusufismail.ydw.action.MessageAction;
 import io.github.realyusufismail.ydw.entities.channel.ChannelType;
 import io.github.realyusufismail.ydw.entities.channel.Overwrite;
 import io.github.realyusufismail.ydw.entities.guild.Member;
@@ -27,6 +25,7 @@ import io.github.realyusufismail.ydw.entities.guild.Message;
 import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 import io.github.realyusufismail.ydw.entities.guild.channel.threads.ThreadMetadata;
 import io.github.realyusufismail.ydw.perm.Permission;
+import io.github.realyusufismail.ydwreg.action.MessageActionReg;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 import io.github.realyusufismail.ydwreg.entities.message.MessageFlags;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
@@ -95,13 +94,9 @@ public interface Channel extends SnowFlake, GenericEntity {
 
 
     // Rest Actions
-    @CheckReturnValue
-    @NotNull
-    MessageAction sendMessage(String message);
+    MessageActionReg sendMessage(String message);
 
-    @CheckReturnValue
-    @NotNull
-    MessageAction sendEmbedMessage(EmbedBuilder embedBuilder);
+    void sendEmbedMessage(EmbedBuilder embedBuilder);
 
     @NotNull
     Message getMessage(@NotNull String messageId);

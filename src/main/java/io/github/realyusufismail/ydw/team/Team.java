@@ -28,14 +28,14 @@ public interface Team extends SnowFlake, GenericEntity {
 
     /**
      * Gets the hash icon of the team.
-     * 
+     *
      * @return The hash icon of the team.
      */
     Optional<String> getIcon();
 
     /**
      * Gets the list of members who are in the team.
-     * 
+     *
      * @return The list of members who are in the team. If the list is empty, the team is empty.
      */
     @NotNull
@@ -43,14 +43,14 @@ public interface Team extends SnowFlake, GenericEntity {
 
     /**
      * Gets the name of the team.
-     * 
+     *
      * @return The name of the team.
      */
     String getName();
 
     /**
      * Gets the id of the owner of the team.
-     * 
+     *
      * @return The id of the owner of the team.
      */
     @NotNull

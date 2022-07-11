@@ -18,6 +18,8 @@
 package io.github.realyusufismail.ydwreg.entities.embed.objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.entities.embed.objects.Footer;
 import org.jetbrains.annotations.NotNull;
 
@@ -60,5 +62,14 @@ public class FooterReg implements Footer {
     @Override
     public Optional<String> getProxyIconUrl() {
         return Optional.ofNullable(proxyIconUrl);
+    }
+
+    @Override
+    public ObjectNode toJson() {
+        ObjectNode objectNode = JsonNodeFactory.instance.objectNode();
+        objectNode.put("text", text);
+        objectNode.put("icon_url", iconUrl);
+        objectNode.put("proxy_icon_url", proxyIconUrl);
+        return objectNode;
     }
 }

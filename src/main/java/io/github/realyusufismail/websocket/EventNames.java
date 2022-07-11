@@ -20,6 +20,7 @@ package io.github.realyusufismail.websocket;
 import org.jetbrains.annotations.NotNull;
 
 public enum EventNames {
+    HELLO("HELLO"),
     READY("READY"),
     RESUMED("RESUMED"),
     RECONNECT("RECONNECT"),

@@ -58,6 +58,7 @@ public class OnHandler {
 
     public void fire(@NotNull EventNames event, JsonNode json) {
         switch (event) {
+            case HELLO -> new HelloHandler(json, ydw).start();
             case READY -> new ReadyHandler(json, ydw).start();
             case RESUMED -> new ResumedHandler(json, ydw).start();
             case RECONNECT -> new ReconnectHandler(json, ydw).start();
@@ -116,7 +117,6 @@ public class OnHandler {
             case VOICE_STATE_UPDATE -> new VoiceStateUpdateHandler(json, ydw).start();
             case VOICE_SERVER_UPDATE -> new VoiceServerUpdateHandler(json, ydw).start();
             case WEBHOOKS_UPDATE -> new WebhooksUpdateHandler(json, ydw).start();
-            default -> new UnknownHandler(json, ydw).start();
         }
     }
 }

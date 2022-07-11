@@ -18,12 +18,13 @@
 package io.github.realyusufismail.ydwreg.application.commands;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.application.commands.ApplicationCommand;
 import io.github.realyusufismail.ydw.application.commands.option.CommandOption;
 import io.github.realyusufismail.ydw.application.commands.option.CommandType;
 import io.github.realyusufismail.ydw.entities.Guild;
-import io.github.realyusufismail.ydw.event.EventExtender;
 import io.github.realyusufismail.ydwreg.application.commands.option.CommandOptionReg;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ApplicationCommandReg extends EventExtender implements ApplicationCommand {
+public class ApplicationCommandReg implements ApplicationCommand {
 
     private final long id;
     private final YDW ydw;
@@ -49,29 +50,31 @@ public class ApplicationCommandReg extends EventExtender implements ApplicationC
     private final Long version;
 
     public ApplicationCommandReg(@NotNull JsonNode application, long id, YDW ydw) {
-        super(ydw);
         this.id = id;
         this.ydw = ydw;
 
         this.type = application.hasNonNull("type")
                 ? CommandType.getCommandType(application.get("type").asInt())
                 : null;
-        this.applicationId = application.get("applicationId").asLong();
-        this.guild =
-                application.hasNonNull("guild") ? ydw.getGuild(application.get("guild").asLong())
-                        : null;
+        this.applicationId = application.get("application_id").asLong();
+        this.guild = application.hasNonNull("guild_id")
+                ? ydw.getGuild(application.get("guild_id").asLong())
+                : null;
         this.name = application.get("name").asText();
         this.description = application.get("description").asText();
-        this.defaultPermission = application.hasNonNull("defaultPermission")
-                ? application.get("defaultPermission").asText().split(",")
+        this.defaultPermission = application.hasNonNull("default_permission")
+                ? application.get("default_permission").asText().split(",")
                 : null;
         this.dmVisible = application.hasNonNull("dm_permission")
                 ? application.get("dm_permission").asBoolean()
                 : null;
         this.version = application.get("version").asLong();
 
-        for (JsonNode option : application.get("options")) {
-            options.add(new CommandOptionReg(option));
+        if (application.hasNonNull("options") && application.get("options").isArray()) {
+            application.get("options").forEach(option -> {
+                CommandOptionReg commandOption = new CommandOptionReg(option);
+                options.add(commandOption);
+            });
         }
     }
 
@@ -127,6 +130,22 @@ public class ApplicationCommandReg extends EventExtender implements ApplicationC
     @Override
     public SnowFlake getVersion() {
         return SnowFlake.of(version);
+    }
+
+    @Override
+    public ObjectNode toJson() {
+        ObjectNode objectNode = JsonNodeFactory.instance.objectNode();
+        objectNode.put("id", id);
+        getCommandType().ifPresent(commandType -> objectNode.put("type", commandType.getValue()));
+        objectNode.put("application_id", applicationId);
+        getGuild().ifPresent(guild -> objectNode.put("guild_id", guild.getIdLong()));
+        objectNode.put("name", name);
+        objectNode.put("description", description);
+        getDefaultMemberPermissions().ifPresent(
+                permissions -> objectNode.put("default_permission", String.join(",", permissions)));
+        objectNode.put("dm_permission", dmVisible);
+        objectNode.put("version", version);
+        return objectNode;
     }
 
     @Nullable

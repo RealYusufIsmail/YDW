@@ -25,6 +25,7 @@ import io.github.realyusufismail.ydwreg.rest.queue.Queue;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,8 +66,8 @@ public class MessageCaller {
         this.mentionable = mentionable;
     }
 
-    public <T> void queue(@NotNull Request request, @Nullable Consumer<? super T> success,
-            @Nullable Consumer<? super Throwable> failure) {
-        new Queue<T>(client, request, success, failure).queue();
+    public void queue(@NotNull Request request, @Nullable Consumer<? super Throwable> failure,
+            Consumer<? super Response> success) {
+        new Queue(client, request, failure, success).queue();
     }
 }

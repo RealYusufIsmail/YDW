@@ -21,9 +21,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.AvailableGuild;
-import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.SelfUser;
 import io.github.realyusufismail.ydw.entities.UnavailableGuild;
+import io.github.realyusufismail.ydw.event.events.ReadyEvent;
 import io.github.realyusufismail.ydwreg.entities.AvailableGuildReg;
 import io.github.realyusufismail.ydwreg.entities.SelfUserReg;
 import io.github.realyusufismail.ydwreg.entities.UnavailableGuildReg;
@@ -50,8 +50,6 @@ public class ReadyHandler extends Handle {
             }
         }
 
-        ydw.setUnavailableGuilds(unavailableGuilds);
-
         List<AvailableGuild> availableGuilds = new ArrayList<>();
         for (JsonNode guild : guilds) {
             if (!guild.get("unavailable").asBoolean()) {
@@ -61,23 +59,16 @@ public class ReadyHandler extends Handle {
             }
         }
 
-        ydw.setAvailableGuilds(availableGuilds);
-
-        List<Guild> guildsList = new ArrayList<>();
-        for (JsonNode guild : guilds) {
-            Guild guild1 = ydw.getGuild(guild.get("id").asLong());
-            guildsList.add(guild1);
-        }
-
-        ydw.setGuilds(guildsList);
+        ydw.getWebSocket()
+            .setSessionId(json.hasNonNull("session_id") ? json.get("session_id").asText() : null);
+        ydw.setApplicationId(json.get("application").get("id").asLong());
 
         SelfUser selfUser =
                 new SelfUserReg(json.get("user"), json.get("user").get("id").asLong(), ydw);
         ydw.setSelfUser(selfUser);
 
-
-        ydw.getWebSocket()
-            .setSessionId(json.hasNonNull("session_id") ? json.get("session_id").asText() : null);
-        ydw.setApplicationId(json.get("application").get("id").asLong());
+        ydw.setReady(true);
+        ydw.getWebSocket().setReconnectTimeoutS(2);
+        ydw.handelEvent(new ReadyEvent(ydw, unavailableGuilds.size(), availableGuilds.size()));
     }
 }

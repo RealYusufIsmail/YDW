@@ -1,39 +1,65 @@
 package io.github.realyusufismail.ydwreg.rest.queue;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
+import io.github.realyusufismail.ydwreg.rest.error.RestApiError;
+import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.function.Consumer;
 
-public class Queue<T> {
+public class Queue {
     private final OkHttpClient client;
     private final Request request;
-    private final Consumer<? super T> success;
     private final Consumer<? super Throwable> failure;
+    private final Consumer<? super Response> success;
 
     public Queue(OkHttpClient client, @NotNull Request request,
-            @Nullable Consumer<? super T> success, @Nullable Consumer<? super Throwable> failure) {
+            @Nullable Consumer<? super Throwable> failure,
+            @Nullable Consumer<? super Response> success) {
         this.client = client;
         this.request = request;
-        this.success = success;
         this.failure = failure;
+        this.success = success;
     }
 
     public void queue() {
-        client.newCall(request).enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(@NotNull okhttp3.Call call, @NotNull IOException e) {
-                failure.accept(e);
-            }
+        if (failure != null && success != null) {
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    failure.accept(e);
+                }
 
-            @Override
-            public void onResponse(@NotNull okhttp3.Call call, @NotNull okhttp3.Response response)
-                    throws IOException {
-                success.accept(null);
-            }
-        });
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) {
+                    if (response.isSuccessful())
+                        success.accept(response);
+                    else
+                        failure.accept(new IOException(
+                                "Unexpected code " + RestApiError.fromCode(response.code()) + " "
+                                        + RestApiError.fromCode(response.code()).getMessage()));
+                }
+            });
+        } else if (failure != null) {
+            client.newCall(request).enqueue(new YDWCallback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    failure.accept(e);
+                }
+            });
+        } else if (success != null) {
+            client.newCall(request).enqueue(new YDWCallback() {
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) {
+                    if (response.isSuccessful())
+                        success.accept(response);
+
+                }
+            });
+        } else {
+            client.newCall(request);
+        }
     }
 }
+

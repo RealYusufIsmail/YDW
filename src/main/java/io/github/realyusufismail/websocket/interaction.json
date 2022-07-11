@@ -1,44 +1,47 @@
 {
-  "t" : "INTERACTION_CREATE",
-  "s" : 3,
-  "op" : 0,
-  "d" : {
-    "version" : 1,
-    "type" : 2,
-    "token" : "",
-    "member" : {
-      "user" : {
-        "username" : "Yusuf.I",
-        "public_flags" : 256,
-        "id" : "",
-        "discriminator" : "0001",
-        "avatar_decoration" : null,
-        "avatar" : "a_f41bc30da291dbb710d67cf216fa8de2"
+  "t": "INTERACTION_CREATE",
+  "s": 3,
+  "op": 0,
+  "d": {
+    "version": 1,
+    "type": 2,
+    "token": "",
+    "member": {
+      "user": {
+        "username": "Yusuf.I",
+        "public_flags": 256,
+        "id": "",
+        "discriminator": "0001",
+        "avatar_decoration": null,
+        "avatar": "a_f41bc30da291dbb710d67cf216fa8de2"
       },
-      "roles" : [ "947211155812790314", "946909516052701244" ],
-      "premium_since" : null,
-      "permissions" : "4398046511103",
-      "pending" : false,
-      "nick" : null,
-      "mute" : false,
-      "joined_at" : "2022-02-01T17:22:25.752000+00:00",
-      "is_pending" : false,
-      "flags" : 0,
-      "deaf" : false,
-      "communication_disabled_until" : null,
-      "avatar" : null
+      "roles": [
+        "947211155812790314",
+        "946909516052701244"
+      ],
+      "premium_since": null,
+      "permissions": "4398046511103",
+      "pending": false,
+      "nick": null,
+      "mute": false,
+      "joined_at": "2022-02-01T17:22:25.752000+00:00",
+      "is_pending": false,
+      "flags": 0,
+      "deaf": false,
+      "communication_disabled_until": null,
+      "avatar": null
     },
-    "locale" : "en-GB",
-    "id" : "987015650503454761",
-    "guild_locale" : "en-US",
-    "guild_id" : "938122131949097052",
-    "data" : {
-      "type" : 1,
-      "name" : "ping",
-      "id" : "985518192006942790",
-      "guild_id" : "938122131949097052"
+    "locale": "en-GB",
+    "id": "987015650503454761",
+    "guild_locale": "en-US",
+    "guild_id": "938122131949097052",
+    "data": {
+      "type": 1,
+      "name": "ping",
+      "id": "985518192006942790",
+      "guild_id": "938122131949097052"
     },
-    "channel_id" : "938122131949097055",
-    "application_id" : "931915661532360704"
+    "channel_id": "938122131949097055",
+    "application_id": "931915661532360704"
   }
 }

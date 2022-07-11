@@ -23,7 +23,7 @@ import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.rest.queue.Queue;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import org.jetbrains.annotations.NotNull;
+import okhttp3.Response;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -42,19 +42,9 @@ public class ActionReg implements Action {
     }
 
     @Override
-    public void queue() {
-        queue(null, null);
-    }
-
-    @Override
-    public <T> void queue(@NotNull Consumer<? super T> success) {
-        queue(success, null);
-    }
-
-    @Override
-    public <T> void queue(@Nullable Consumer<? super T> success,
-            @Nullable Consumer<? super Throwable> failure) {
-        new Queue<T>(client, request, success, failure).queue();
+    public void queue(@Nullable Consumer<? super Throwable> failure,
+            Consumer<? super Response> success) {
+        new Queue(client, request, failure, success).queue();
     }
 
     @Nullable

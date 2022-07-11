@@ -1,4 +1,4 @@
-package io.github.realyusufismail.ydwreg.rest;
+package io.github.realyusufismail.ydwreg.rest.queue;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public abstract class YDWCallback implements Callback {
     @Override
-    public abstract void onFailure(@NotNull Call call, @NotNull IOException e);
+    public void onFailure(@NotNull Call call, @NotNull IOException e) {}
 
     @Override
     public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {

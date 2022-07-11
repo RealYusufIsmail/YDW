@@ -1,0 +1,12 @@
+[
+  {
+    "id": 995054781120925817,
+    "type": 1,
+    "application_id": 931915661532360704,
+    "name": "ping",
+    "description": "Gets the ping of the bot",
+    "default_permission": "true",
+    "dm_permission": true,
+    "version": 995056794697211964
+  }
+]

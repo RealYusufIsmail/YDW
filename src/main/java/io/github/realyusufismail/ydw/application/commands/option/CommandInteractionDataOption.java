@@ -39,7 +39,7 @@ public interface CommandInteractionDataOption {
 
     /**
      * Gets the name of the parameter.
-     * 
+     *
      * @return the name of the parameter.
      */
     String getName();
