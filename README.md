@@ -18,3 +18,16 @@ This project use java 17.
 
 This is for learning purposes.
 
+To use this project you need to add this to your build.gradle file:
+
+```
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'io.github.realyusufismail', name: 'ydw', version: '0.0.1'
+]
+}
+```
+

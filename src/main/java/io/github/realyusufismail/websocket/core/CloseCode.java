@@ -23,7 +23,7 @@ public enum CloseCode {
 
     RECONNECT(4900, "Something has happened, attempting to reconnect"),
     GRACEFUL_CLOSE(1000, "The connection was closed gracefully or your heartbeats timed out."),
-    CLOUD_FLARE_LOAD(     1001, "The connection was closed due to CloudFlare load balancing."),
+    CLOUD_FLARE_LOAD(1001, "The connection was closed due to CloudFlare load balancing."),
     UNKNOWN_OPCODE(4001,
             "You sent an invalid Gateway opcode or an invalid payload for an opcode. Don't do that!"),
     DECODE_ERROR(4002, "You sent an invalid payload to us. Make sure you follow the protocol."),

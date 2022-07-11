@@ -35,10 +35,11 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     // Create a WebSocketFactory instance.
     static WebSocket ws;
     private final Logger logger = LoggerFactory.getLogger(WebSocketManager.class);
-    //the core pool
+    // the core pool
     private final int corePoolSize = Runtime.getRuntime().availableProcessors();
-    //the scheduled thread pool
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(corePoolSize);
+    // the scheduled thread pool
+    private final ScheduledExecutorService scheduler =
+            Executors.newScheduledThreadPool(corePoolSize);
     // The bots token.
     private final String token;
     // The gateway intents
@@ -82,7 +83,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     }
 
     public WebSocketManager(YDW ydw, String token, @NotNull GateWayIntent intent, String status,
-            int largeThreshold, ActivityConfig activity)  {
+            int largeThreshold, ActivityConfig activity) {
         this(ydw, token, intent.getValue(), status, largeThreshold, activity);
     }
 

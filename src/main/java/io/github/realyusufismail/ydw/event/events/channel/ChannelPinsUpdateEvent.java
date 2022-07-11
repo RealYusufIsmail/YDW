@@ -12,7 +12,8 @@ public class ChannelPinsUpdateEvent extends Event {
     private final Channel channel;
     private final ZonedDateTime lastPinTime;
 
-    public ChannelPinsUpdateEvent(YDW ydw, Guild guild, Channel channel, ZonedDateTime lastPinTime) {
+    public ChannelPinsUpdateEvent(YDW ydw, Guild guild, Channel channel,
+            ZonedDateTime lastPinTime) {
         super(ydw);
         this.guild = guild;
         this.channel = channel;

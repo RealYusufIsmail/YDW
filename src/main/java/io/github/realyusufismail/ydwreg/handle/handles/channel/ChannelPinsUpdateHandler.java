@@ -34,11 +34,16 @@ public class ChannelPinsUpdateHandler extends Handle {
     @Override
     public void start() {
 
-        Guild guild = json.hasNonNull("guild_id") ? ydw.getGuild(json.get("guild_id").asLong()) : null;
+        Guild guild =
+                json.hasNonNull("guild_id") ? ydw.getGuild(json.get("guild_id").asLong()) : null;
 
-        Channel channel = json.hasNonNull("channel_id") ? ydw.getChannel(json.get("channel_id").asLong()) : null;
+        Channel channel =
+                json.hasNonNull("channel_id") ? ydw.getChannel(json.get("channel_id").asLong())
+                        : null;
 
-        ZonedDateTime lastPinTime = json.hasNonNull("last_pin_timestamp") ? ZonedDateTime.parse(json.get("last_pin_timestamp").asText()) : null;
+        ZonedDateTime lastPinTime = json.hasNonNull("last_pin_timestamp")
+                ? ZonedDateTime.parse(json.get("last_pin_timestamp").asText())
+                : null;
 
         ydw.handelEvent(new ChannelPinsUpdateEvent(ydw, guild, channel, lastPinTime));
     }
