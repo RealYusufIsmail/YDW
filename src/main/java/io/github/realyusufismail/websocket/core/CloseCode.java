@@ -20,7 +20,10 @@ package io.github.realyusufismail.websocket.core;
 import org.jetbrains.annotations.NotNull;
 
 public enum CloseCode {
-    UNKNOWN(4000, "We're not sure what went wrong. Try reconnecting?"),
+
+    RECONNECT(4900, "Something has happened, attempting to reconnect"),
+    GRACEFUL_CLOSE(1000, "The connection was closed gracefully or your heartbeats timed out."),
+    CLOUD_FLARE_LOAD(     1001, "The connection was closed due to CloudFlare load balancing."),
     UNKNOWN_OPCODE(4001,
             "You sent an invalid Gateway opcode or an invalid payload for an opcode. Don't do that!"),
     DECODE_ERROR(4002, "You sent an invalid payload to us. Make sure you follow the protocol."),
@@ -39,13 +42,12 @@ public enum CloseCode {
     SHARDING_REQUIRED(4011,
             "The session would have handled too many guilds - you are required to shard your connection in order to connect.",
             false),
-    Reconnect(4900, "Something has happened, attempting to reconnect"),
-    GRACEFUL_CLOSE(1000, "The connection was closed gracefully or your heartbeats timed out."),
     INVALID_API_VERSION(4012, "You sent an invalid version for the gateway.", false),
     INVALID_INTENTS(4013, "You sent an invalid intents. Make sure you follow the protocol.", false),
     DISALLOWED_INTENTS(4014,
             "You sent a disallowed intent for a Gateway Intent. You may have tried to specify an intent that you have not enabled or are not approved for. Examples include : GUILD_PRESENCES, MESSAGE_CONTENT, or GUILD_MEMBERS.",
-            false);
+            false),
+    UNKNOWN(4000, "We're not sure what went wrong. Will try to reconnect.");
 
     private final int code;
     private final String reason;
@@ -68,35 +70,6 @@ public enum CloseCode {
             }
         }
         return UNKNOWN;
-    }
-
-    public static @NotNull CloseCode fromReason(String reason) {
-        for (CloseCode closeCode : CloseCode.values()) {
-            if (closeCode.getReason().equals(reason)) {
-                return closeCode;
-            }
-        }
-        return UNKNOWN;
-    }
-
-    // gets the reason for a specific code
-    public static String getReason(int code) {
-        for (CloseCode closeCode : CloseCode.values()) {
-            if (closeCode.getCode() == code) {
-                return closeCode.getReason();
-            }
-        }
-        return "Unknown";
-    }
-
-    // gets the code for a specific reason
-    public static int getCode(String reason) {
-        for (CloseCode closeCode : CloseCode.values()) {
-            if (closeCode.getReason().equals(reason)) {
-                return closeCode.getCode();
-            }
-        }
-        return 4000;
     }
 
     public int getCode() {

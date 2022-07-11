@@ -19,7 +19,12 @@ package io.github.realyusufismail.ydwreg.handle.handles.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.entities.Channel;
+import io.github.realyusufismail.ydw.entities.Guild;
+import io.github.realyusufismail.ydw.event.events.channel.ChannelPinsUpdateEvent;
 import io.github.realyusufismail.ydwreg.handle.Handle;
+
+import java.time.ZonedDateTime;
 
 public class ChannelPinsUpdateHandler extends Handle {
     public ChannelPinsUpdateHandler(JsonNode json, YDW ydw) {
@@ -29,5 +34,12 @@ public class ChannelPinsUpdateHandler extends Handle {
     @Override
     public void start() {
 
+        Guild guild = json.hasNonNull("guild_id") ? ydw.getGuild(json.get("guild_id").asLong()) : null;
+
+        Channel channel = json.hasNonNull("channel_id") ? ydw.getChannel(json.get("channel_id").asLong()) : null;
+
+        ZonedDateTime lastPinTime = json.hasNonNull("last_pin_timestamp") ? ZonedDateTime.parse(json.get("last_pin_timestamp").asText()) : null;
+
+        ydw.handelEvent(new ChannelPinsUpdateEvent(ydw, guild, channel, lastPinTime));
     }
 }
