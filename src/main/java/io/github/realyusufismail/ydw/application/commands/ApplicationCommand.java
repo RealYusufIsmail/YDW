@@ -19,6 +19,7 @@
 package io.github.realyusufismail.ydw.application.commands;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.github.realyusufismail.ydw.application.commands.option.CommandInteractionDataOption;
 import io.github.realyusufismail.ydw.application.commands.option.CommandOption;
 import io.github.realyusufismail.ydw.application.commands.option.CommandType;
 import io.github.realyusufismail.ydw.entities.GenericEntity;
@@ -78,7 +79,7 @@ public interface ApplicationCommand extends SnowFlake, GenericEntity {
      */
     boolean isDmVisible();
 
-    List<CommandOption> getOptions();
+    List<CommandInteractionDataOption> getOptions();
 
     /**
      * @return autoincrement version identifier updated during substantial record changes

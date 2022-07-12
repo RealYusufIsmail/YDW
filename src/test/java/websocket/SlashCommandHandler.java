@@ -27,6 +27,5 @@ public class SlashCommandHandler extends EventAdapter {
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         String name = event.getData().get().getName();
-
     }
 }

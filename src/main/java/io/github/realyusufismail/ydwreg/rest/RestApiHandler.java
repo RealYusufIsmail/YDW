@@ -93,5 +93,9 @@ public class RestApiHandler {
     public @NotNull SlashCommandCaller getSlashCommandCaller() {
         return new SlashCommandCaller(token, guildId, ydw, JSON, client);
     }
+
+    public @NotNull InteractionCaller getInteractionCaller() {
+        return new InteractionCaller(ydw, client, JSON, token);
+    }
 }
 

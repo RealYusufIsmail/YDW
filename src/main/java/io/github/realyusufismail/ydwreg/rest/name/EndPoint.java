@@ -78,7 +78,8 @@ public enum EndPoint {
     GET_GLOBAL_SLASH_COMMANDS(YDWInfo.DISCORD_REST_LINK + "/applications/%s/commands"),
     GET_GUILD_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/applications/%s/guilds/%s/commands/%s"),
     GET_GUILD_SLASH_COMMANDS(YDWInfo.DISCORD_REST_LINK + "/applications/%s/guilds/%s/commands"),
-    REPLY_TO_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/interactions/%s/%s/callback");
+    REPLY_TO_SLASH_COMMAND(YDWInfo.DISCORD_REST_LINK + "/interactions/%s/%s/callback"),
+    GET_APPLICATION_COMMAND(YDWInfo.DISCORD_REST_LINK + "/applications/%s/commands/%s");
 
     private final String endpoint;
 

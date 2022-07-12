@@ -23,9 +23,11 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.application.commands.ApplicationCommand;
+import io.github.realyusufismail.ydw.application.commands.option.CommandInteractionDataOption;
 import io.github.realyusufismail.ydw.application.commands.option.CommandOption;
 import io.github.realyusufismail.ydw.application.commands.option.CommandType;
 import io.github.realyusufismail.ydw.entities.Guild;
+import io.github.realyusufismail.ydwreg.application.commands.option.CommandOptionMapping;
 import io.github.realyusufismail.ydwreg.application.commands.option.CommandOptionReg;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +48,7 @@ public class ApplicationCommandReg implements ApplicationCommand {
     private final String name;
     private final String description;
     private final String[] defaultPermission;
-    private final List<CommandOption> options = new ArrayList<>();
+    private final List<CommandInteractionDataOption> options = new ArrayList<>();
     private final Boolean dmVisible;
     private final Long version;
 
@@ -73,7 +75,7 @@ public class ApplicationCommandReg implements ApplicationCommand {
 
         if (application.hasNonNull("options") && application.get("options").isArray()) {
             application.get("options").forEach(option -> {
-                CommandOptionReg commandOption = new CommandOptionReg(option);
+                CommandInteractionDataOption commandOption = new CommandOptionMapping(option);
                 options.add(commandOption);
             });
         }
@@ -123,7 +125,7 @@ public class ApplicationCommandReg implements ApplicationCommand {
     }
 
     @Override
-    public List<CommandOption> getOptions() {
+    public List<CommandInteractionDataOption> getOptions() {
         return options;
     }
 

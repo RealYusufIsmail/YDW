@@ -20,6 +20,7 @@ package io.github.realyusufismail.ydwreg.application.commands.option;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.application.commands.option.CommandInteractionDataOption;
+import io.github.realyusufismail.ydw.application.commands.option.CommandOption;
 import io.github.realyusufismail.ydw.application.commands.option.OptionType;
 import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.User;
@@ -33,90 +34,70 @@ import java.util.Optional;
 
 public class CommandOptionMapping implements CommandInteractionDataOption {
 
-    private final JsonNode config;
-    private final OptionType type;
-
     private final String name;
     private final Boolean focused;
 
-    public CommandOptionMapping(JsonNode config, OptionType type) {
-        this.config = config;
-        this.type = type;
-        name = config.get("name").asText();
-        focused = config.hasNonNull("focused") ? config.get("focused").asBoolean() : null;
+    public CommandOptionMapping(JsonNode json) {
+        this.name = json.get("name").asText();
+        this.focused = json.get("focused").asBoolean();
     }
 
-    @Override
     public OptionType getType() {
-        return type;
+        return null;
     }
 
-    @Override
     public String getName() {
         return name;
     }
 
-    @Override
     public Optional<Boolean> isFocused() {
         return Optional.ofNullable(focused);
     }
 
-    @Override
     public Optional<String> getAsString() {
         return Optional.empty();
     }
 
-    @Override
     public Optional<Integer> getAsInt() {
         return Optional.empty();
     }
 
-    @Override
     public Optional<Double> getAsDouble() {
         return Optional.empty();
     }
 
-    @Override
     public Optional<Long> getAsLong() {
         return Optional.empty();
     }
 
-    @Override
     public Optional<Boolean> getAsBoolean() {
         return Optional.empty();
     }
 
-    @Override
     public Member getAsMember() {
         return null;
     }
 
-    @Override
     public User getAsUser() {
         return null;
     }
 
-    @Override
     public Channel getAsChannel() {
         return null;
     }
 
-    @Override
     public TextChannel getAsTextChannel() {
         return null;
     }
 
-    @Override
     public VoiceChannel getAsVoiceChannel() {
         return null;
     }
 
-    @Override
     public NewsChannel getAsNewsChannel() {
         return null;
     }
 
-    @Override
     public Role getAsRole() {
         return null;
     }

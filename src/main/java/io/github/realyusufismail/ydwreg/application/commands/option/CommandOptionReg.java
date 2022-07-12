@@ -61,7 +61,7 @@ public class CommandOptionReg implements CommandOption {
 
         if (option.hasNonNull("options")) {
             for (JsonNode optionNode : option.get("options")) {
-                options.add(new CommandOptionMapping(optionNode, optionType));
+                options.add(new CommandOptionMapping(optionNode));
             }
         }
 
