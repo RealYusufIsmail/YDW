@@ -18,14 +18,7 @@
  */ 
 package io.github.realyusufismail.ydw.application.commands.slash.option;
 
-import io.github.realyusufismail.ydw.application.commands.option.OptionType;
 import io.github.realyusufismail.ydwreg.application.commands.option.CommandOptionMapping;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 public interface SlashOptionGetter {
     CommandOptionMapping getOption(String name);

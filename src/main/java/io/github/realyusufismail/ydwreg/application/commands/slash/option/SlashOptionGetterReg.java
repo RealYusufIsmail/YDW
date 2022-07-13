@@ -21,27 +21,25 @@ package io.github.realyusufismail.ydwreg.application.commands.slash.option;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.application.Interaction;
 import io.github.realyusufismail.ydw.application.commands.option.CommandInteractionDataOption;
-import io.github.realyusufismail.ydw.application.commands.option.CommandOption;
-import io.github.realyusufismail.ydw.application.commands.option.OptionType;
 import io.github.realyusufismail.ydw.application.commands.slash.option.SlashOptionGetter;
 import io.github.realyusufismail.ydwreg.application.commands.option.CommandOptionMapping;
-import io.github.realyusufismail.ydwreg.application.commands.option.CommandOptionReg;
 import io.github.realyusufismail.ydwreg.application.commands.slash.SlashCommandReg;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SlashOptionGetterReg extends SlashCommandReg implements SlashOptionGetter {
 
-    public SlashOptionGetterReg(@NotNull JsonNode application, long id, YDW ydw) {
-        super(application, id, ydw);
+    public SlashOptionGetterReg(@NotNull JsonNode application, long id, Interaction interaction,
+            YDW ydw) {
+        super(application, id, interaction, ydw);
     }
 
     @Override
     public CommandOptionMapping getOption(String name) {
-        List<CommandInteractionDataOption> options = getApplicationCommand().getOptions();
+        List<CommandInteractionDataOption> options = getOptions();
         for (CommandInteractionDataOption option : options) {
             if (option.getName().equals(name)) {
                 return (CommandOptionMapping) option;

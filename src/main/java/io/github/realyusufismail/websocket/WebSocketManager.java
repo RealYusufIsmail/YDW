@@ -441,9 +441,9 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         if (cause.getCause() instanceof SocketTimeoutException) {
             logger.error("Socket timeout");
         } else if (cause.getCause() instanceof IOException) {
-            logger.error("IO error");
+            logger.error("IO error {}", cause.getCause().getMessage());
         } else if (cause.getCause() instanceof ClosedChannelException) {
-            logger.error("Closed channel");
+            logger.error("Closed channel error {}", cause.getCause().getMessage());
         } else {
             logger.error("Unknown error", cause);
         }

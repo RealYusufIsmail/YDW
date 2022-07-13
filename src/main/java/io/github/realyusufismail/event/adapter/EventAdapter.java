@@ -23,7 +23,10 @@ import io.github.realyusufismail.event.recieve.util.ClassWalker;
 import io.github.realyusufismail.event.updater.IEventUpdate;
 import io.github.realyusufismail.ydw.event.BasicEvent;
 import io.github.realyusufismail.ydw.event.Event;
-import io.github.realyusufismail.ydw.event.events.*;
+import io.github.realyusufismail.ydw.event.events.ReadyEvent;
+import io.github.realyusufismail.ydw.event.events.ReconnectEvent;
+import io.github.realyusufismail.ydw.event.events.ResumedEvent;
+import io.github.realyusufismail.ydw.event.events.ShutdownEvent;
 import io.github.realyusufismail.ydw.event.events.channel.ChannelCreateEvent;
 import io.github.realyusufismail.ydw.event.events.interaction.SlashCommandInteractionEvent;
 
@@ -77,8 +80,6 @@ public abstract class EventAdapter implements IEventReceiver {
     public void onReconnect(ReconnectEvent event) {}
 
     public void onShutdown(ShutdownEvent event) {}
-
-    public void onGatewayPing(GatewayPingEvent event) {}
 
     // interaction
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {}

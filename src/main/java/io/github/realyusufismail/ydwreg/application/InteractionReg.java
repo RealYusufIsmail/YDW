@@ -20,9 +20,7 @@ package io.github.realyusufismail.ydwreg.application;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.application.Application;
 import io.github.realyusufismail.ydw.application.Interaction;
-import io.github.realyusufismail.ydw.application.commands.ApplicationCommand;
 import io.github.realyusufismail.ydw.application.interaction.InteractionData;
 import io.github.realyusufismail.ydw.application.interaction.InteractionType;
 import io.github.realyusufismail.ydw.entities.Channel;
@@ -57,7 +55,6 @@ public class InteractionReg extends Event implements Interaction {
     private final Message message;
     private final String locale;
     private final String guildLocale;
-    private final ApplicationCommand application;
 
     public InteractionReg(@NotNull JsonNode interaction, long id, YDW ydw) {
         super(ydw);
@@ -93,8 +90,6 @@ public class InteractionReg extends Event implements Interaction {
         guildLocale =
                 interaction.hasNonNull("guild_locale") ? interaction.get("guild_locale").asText()
                         : null;
-
-        application = ydw.getRest().getInteractionCaller().getApplication(applicationId, id);
     }
 
     @Nullable
@@ -157,11 +152,6 @@ public class InteractionReg extends Event implements Interaction {
     @Override
     public Optional<String> getGuildLocale() {
         return Optional.ofNullable(guildLocale);
-    }
-
-    @Override
-    public ApplicationCommand getApplicationCommand() {
-        return application;
     }
 
     @Nullable

@@ -20,7 +20,6 @@ package io.github.realyusufismail.ydwreg.application.commands.option;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.application.commands.option.CommandInteractionDataOption;
-import io.github.realyusufismail.ydw.application.commands.option.CommandOption;
 import io.github.realyusufismail.ydw.application.commands.option.OptionType;
 import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.User;

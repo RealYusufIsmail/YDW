@@ -18,43 +18,18 @@
  */ 
 package io.github.realyusufismail.ydw.application.commands.slash.builder;
 
-import com.google.errorprone.annotations.CheckReturnValue;
-import io.github.realyusufismail.ydw.application.commands.option.OptionType;
-import io.github.realyusufismail.ydwreg.application.commands.slash.builder.Option;
-import io.github.realyusufismail.ydwreg.application.commands.slash.builder.OptionExtender;
-
-import java.util.Collection;
+import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandCreatorReg;
 
 public interface SlashCommandBuilder {
 
-    /**
-     * Weather the command should be available in specified guild or available for all guilds.
-     *
-     * @return true if the command should be available in specified guild or false were it is
-     *         available for all guilds.
-     */
-    @CheckReturnValue
-    SlashCommandBuilder setToGuildOnly(boolean toGuildOnly);
-
-    @CheckReturnValue
-    SlashCommandBuilder setOption(OptionType optionType, String name, String description,
-            boolean required);
-
-    @CheckReturnValue
-
-    default SlashCommandBuilder setOption(OptionType optionType, String name, String description) {
-        return setOption(optionType, name, description, false);
+    static SlashCommandCreator create(YDW ydw, String name, String description) {
+        return new SlashCommandCreatorReg(ydw, name, description);
     }
 
-    @CheckReturnValue
-    SlashCommandBuilder setOptions(Collection<Option> options);
+    void upsert();
 
-    @CheckReturnValue
-    SlashCommandBuilder setOptions(Option... options);
+    void create();
 
-    @CheckReturnValue
-    SlashCommandBuilder setExtendedOptions(OptionExtender... optionExtenders);
-
-    @CheckReturnValue
-    SlashCommandBuilder setExtendedOptions(Collection<OptionExtender> optionExtenders);
+    void delete();
 }

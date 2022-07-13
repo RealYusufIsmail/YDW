@@ -22,34 +22,51 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.action.Action;
 import io.github.realyusufismail.ydw.application.Interaction;
+import io.github.realyusufismail.ydw.application.commands.ApplicationCommand;
 import io.github.realyusufismail.ydw.application.commands.reply.IReply;
 import io.github.realyusufismail.ydw.application.commands.reply.ReplyConfig;
 import io.github.realyusufismail.ydwreg.action.ActionReg;
-import io.github.realyusufismail.ydwreg.application.InteractionReg;
+import io.github.realyusufismail.ydwreg.application.commands.ApplicationCommandReg;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SlashCommandReg extends InteractionReg implements Interaction, IReply {
+// TODO: need to use Application command instead of Interaction
+public class SlashCommandReg extends ApplicationCommandReg implements ApplicationCommand, IReply {
 
-    public SlashCommandReg(@NotNull JsonNode application, long id, YDW ydw) {
-        super(application, id, ydw);
+    public SlashCommandReg(@NotNull JsonNode application, long id, Interaction interaction,
+            YDW ydw) {
+        super(application, id, interaction, ydw);
+    }
+
+    public SlashCommandReg(@NotNull ApplicationCommand applicationCommand, YDW ydw) {
+        super(applicationCommand, ydw);
     }
 
     @Override
     public Action reply(String message, @Nullable ReplyConfig config) {
-        var req = ydw.getRest()
-            .getSlashCommandCaller()
-            .reply(message, config, super.getId(), super.getToken());
+        String token =
+                super.getInteraction().isPresent() ? super.getInteraction().get().getToken() : null;
+        if (token == null) {
+            throw new IllegalStateException("Interaction token is null");
+        }
+
+        var req =
+                ydw.getRest().getSlashCommandCaller().reply(message, config, super.getId(), token);
 
         return new ActionReg(req, ydw);
     }
 
     @Override
     public Action replyEmbed(EmbedBuilder embed, @Nullable ReplyConfig config) {
+        String token =
+                super.getInteraction().isPresent() ? super.getInteraction().get().getToken() : null;
+        if (token == null) {
+            throw new IllegalStateException("Interaction token is null");
+        }
         var req = ydw.getRest()
             .getSlashCommandCaller()
-            .replyEmbed(embed.build(), config, super.getId(), super.getToken());
+            .replyEmbed(embed.build(), config, super.getId(), token);
 
         return new ActionReg(req, ydw);
     }

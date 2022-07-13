@@ -18,7 +18,6 @@
  */ 
 package io.github.realyusufismail.ydw.application;
 
-import io.github.realyusufismail.ydw.application.commands.ApplicationCommand;
 import io.github.realyusufismail.ydw.application.interaction.InteractionData;
 import io.github.realyusufismail.ydw.application.interaction.InteractionType;
 import io.github.realyusufismail.ydw.entities.Channel;
@@ -59,12 +58,4 @@ public interface Interaction extends SnowFlake, GenericEntity {
     Optional<String> getLocale();
 
     Optional<String> getGuildLocale();
-
-    /**
-     * Used to retrieve the application command.
-     *
-     * @return {@link ApplicationCommand}
-     */
-    ApplicationCommand getApplicationCommand();
-
 }

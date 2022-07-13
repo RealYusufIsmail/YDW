@@ -19,6 +19,7 @@
 package io.github.realyusufismail.ydwreg.rest.callers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.github.realyusufismail.ydw.application.Interaction;
 import io.github.realyusufismail.ydw.application.commands.ApplicationCommand;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.application.commands.ApplicationCommandReg;
@@ -47,7 +48,8 @@ public class InteractionCaller {
         this.token = token;
     }
 
-    public ApplicationCommand getApplication(long applicationId, long commandId) {
+    public ApplicationCommand getApplication(long applicationId, long commandId,
+            Interaction interaction) {
 
         Request request =
                 new YDWRequest()
@@ -67,7 +69,7 @@ public class InteractionCaller {
             if (response.code() == 404) {
                 return getGuildApplication(applicationId, commandId);
             } else if (response.code() == 200) {
-                return getGlobalApplication(response);
+                return getGlobalApplication(interaction, response);
             } else {
                 throw new IOException("Unexpected code " + RestApiError.fromCode(response.code())
                         + " " + RestApiError.fromCode(response.code()).getMessage());
@@ -79,14 +81,19 @@ public class InteractionCaller {
         return null;
     }
 
-    private ApplicationCommand getGlobalApplication(Response response) throws IOException {
+    private ApplicationCommand getGlobalApplication(Interaction interaction, Response response)
+            throws IOException {
         var body = response.body();
         JsonNode json = ydw.getMapper().readTree(body.string());
-        return new ApplicationCommandReg(json, json.get("id").asLong(), ydw);
+        return new ApplicationCommandReg(json, json.get("id").asLong(), interaction, ydw);
     }
 
     private ApplicationCommand getGuildApplication(long applicationId, long commandId) {
 
+        return null;
+    }
+
+    public Interaction getInteraction(JsonNode json) {
         return null;
     }
 }
