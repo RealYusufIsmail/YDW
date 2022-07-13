@@ -19,7 +19,9 @@
 package websocket;
 
 import io.github.realyusufismail.event.adapter.EventAdapter;
+import io.github.realyusufismail.ydw.application.commands.reply.ReplyConfig;
 import io.github.realyusufismail.ydw.event.events.interaction.SlashCommandInteractionEvent;
+import io.github.realyusufismail.ydwreg.application.commands.slash.reply.ReplyConfigReg;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 
 import java.awt.*;
@@ -28,8 +30,9 @@ public class SlashCommandHandler extends EventAdapter {
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         if (event.getName().equals("ping")) {
-            event.replyEmbed(new EmbedBuilder().setTitle("Test").setColor(Color.CYAN).build())
-                .queue();
+            // event.replyEmbed(new EmbedBuilder().setTitle("Test").setColor(Color.CYAN).build())
+            // .queue();
+            event.reply("Pong!", new ReplyConfigReg().setEphemeral(true)).queue();
         }
     }
 }

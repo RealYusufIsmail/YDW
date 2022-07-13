@@ -402,12 +402,14 @@ public class SlashCommandCaller {
             messageBuilder.setEmbeds(embed);
         }
 
-        if (config.isEphemeral()) {
-            messageBuilder.setFlags(MessageFlags.EPHEMERAL);
-        }
+        if (config != null) {
+            if (config.isEphemeral()) {
+                messageBuilder.setFlags(MessageFlags.EPHEMERAL);
+            }
 
-        if (config.isTTS()) {
-            messageBuilder.setTTS(true);
+            if (config.isTTS()) {
+                messageBuilder.setTTS(true);
+            }
         }
 
         interaction.setMessageBuilder(messageBuilder);
