@@ -105,7 +105,6 @@ public interface YDW {
         getRest().getSlashCommandCaller().deleteGuildCommand(commandId);
     }
 
-    // TODO: completely and utterly broken
     void upsertCommands(List<SlashCommandBuilder> commands);
 
     String getToken();

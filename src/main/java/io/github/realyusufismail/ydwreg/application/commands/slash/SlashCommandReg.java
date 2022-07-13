@@ -43,10 +43,12 @@ public class SlashCommandReg extends ApplicationCommandReg implements Applicatio
         super(applicationCommand, ydw);
     }
 
+    //TODO: Reply system is broken.
     @Override
     public Action reply(String message, @Nullable ReplyConfig config) {
         String token =
                 super.getInteraction().isPresent() ? super.getInteraction().get().getToken() : null;
+
         if (token == null) {
             throw new IllegalStateException("Interaction token is null");
         }
