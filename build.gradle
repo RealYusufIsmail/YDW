@@ -20,6 +20,7 @@ ext {
 
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
+apply plugin: 'jacoco' // code coverage reports
 
 archivesBaseName = "YDW"
 description = "YDW (Yusuf's Discord Wrapper) My own Discord Wrapper"
@@ -54,6 +55,24 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+
+jacocoTestReport {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
+    jacocoTestReport.dependsOn test
+    jacocoTestCoverageVerification.dependsOn jacocoTestReport
+}
+
+configurations.all {
+    //noinspection GrUnresolvedAccess
+    // ez vulnerability fix
+    exclude group: "org.slf4j", module: "slf4j-log4j12"
 }
 
 compileJava {

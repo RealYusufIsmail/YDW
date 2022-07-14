@@ -1,10 +1,9 @@
-[Code of conduct]: https://github.com/RealYusufIsmail/YDW/blob/master/.github/CODE_OF_CONDUCT.md
+[code_of_conduct]: https://github.com/RealYusufIsmail/YDW/blob/master/.github/CODE_OF_CONDUCT.md
 [new_issue]: https://github.com/RealYusufIsmail/YDW/issues/new/choose
 
 ## Pull-request
 
-- [ ] I have read the [contributing guidelines][contributing].
-- [ ] I have read the [code guidelines][code_guidelines].
+- [ ] I have read the [code of conduct][code_of_conduct].
 - [ ] I have created a relating [issue][new_issue].
 
 ### Changes
