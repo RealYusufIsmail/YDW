@@ -21,7 +21,7 @@ ext {
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-archivesBaseName = "ydw"
+archivesBaseName = "YDW"
 description = "YDW (Yusuf's Discord Wrapper) My own Discord Wrapper"
 group 'io.github.realyusufismail'
 version '0.0.2'
