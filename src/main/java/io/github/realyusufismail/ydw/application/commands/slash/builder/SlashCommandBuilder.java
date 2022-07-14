@@ -30,6 +30,4 @@ public interface SlashCommandBuilder {
     void upsert();
 
     void create();
-
-    void delete();
 }

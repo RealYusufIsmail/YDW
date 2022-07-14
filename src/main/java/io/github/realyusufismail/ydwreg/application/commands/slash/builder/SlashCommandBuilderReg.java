@@ -42,11 +42,10 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
 
     @Override
     public void create() {
-
-    }
-
-    @Override
-    public void delete() {
-
+        if (guildOnly) {
+            caller.createGuildOnlyCommand();
+        } else {
+            caller.createGlobalCommand();
+        }
     }
 }
