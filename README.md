@@ -25,13 +25,13 @@ This is for learning purposes.
 
 To use this project you need to add this to your build.gradle file:
 
-```
+```java
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation group: 'io.github.realyusufismail', name: 'ydw', version: '0.0.1'
+    implementation group: 'io.github.realyusufismail', name: 'YDW', version: '0.0.1'
 }
 ```
 
