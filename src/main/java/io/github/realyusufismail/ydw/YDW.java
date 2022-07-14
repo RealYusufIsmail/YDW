@@ -23,13 +23,13 @@ import com.google.errorprone.annotations.CheckReturnValue;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
+import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandCreator;
 import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.SelfUser;
 import io.github.realyusufismail.ydw.entities.User;
 import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
-import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandBuilderReg;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -86,15 +86,15 @@ public interface YDW {
     InteractionManager getInteractionManager();
 
     @CheckReturnValue
-    default SlashCommandBuilderReg newSlashCommand(String name, String description)
+    default SlashCommandCreator newSlashCommand(String name, String description)
             throws InterruptedException {
-        return new SlashCommandBuilderReg(this, name, description);
+        return SlashCommandBuilder.create(this, name, description);
     }
 
     @CheckReturnValue
-    default SlashCommandBuilderReg updateSlashCommand(String name, String description)
+    default SlashCommandCreator updateSlashCommand(String name, String description)
             throws InterruptedException {
-        return new SlashCommandBuilderReg(this, name, description);
+        return SlashCommandBuilder.create(this, name, description);
     }
 
     default void deleteGlobalSlashCommand(long commandId) throws InterruptedException {
@@ -105,7 +105,6 @@ public interface YDW {
         getRest().getSlashCommandCaller().deleteGuildCommand(commandId);
     }
 
-    // TODO: completely and utterly broken
     void upsertCommands(List<SlashCommandBuilder> commands);
 
     String getToken();

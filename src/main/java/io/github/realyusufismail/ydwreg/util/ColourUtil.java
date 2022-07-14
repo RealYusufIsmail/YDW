@@ -16,14 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.ydw.application.commands.reply;
+package io.github.realyusufismail.ydwreg.util;
 
-public interface ReplyConfig {
-    ReplyConfig setEphemeral(boolean ephemeral);
+import org.jetbrains.annotations.NotNull;
 
-    ReplyConfig setTTS(boolean tts);
+import java.awt.*;
 
-    boolean isEphemeral();
+public final class ColourUtil {
+    private ColourUtil() {}
 
-    boolean isTTS();
+    public static int convertRGB(@NotNull Color color) {
+        return color.getRGB() & 0xFFFFFF;
+    }
 }

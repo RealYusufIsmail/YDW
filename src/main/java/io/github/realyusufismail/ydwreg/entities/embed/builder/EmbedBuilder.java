@@ -27,6 +27,7 @@ import io.github.realyusufismail.ydw.entities.embed.Embed;
 import io.github.realyusufismail.ydw.entities.embed.objects.Image;
 import io.github.realyusufismail.ydw.entities.embed.objects.*;
 import io.github.realyusufismail.ydwreg.entities.embed.objects.*;
+import io.github.realyusufismail.ydwreg.util.ColourUtil;
 import io.github.realyusufismail.ydwreg.util.Verify;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -84,30 +85,32 @@ public class EmbedBuilder {
     }
 
     public EmbedBuilder(@Nullable Embed embed) {
-        if (embed.getTitle().isPresent())
-            this.title = embed.getTitle().get();
-        if (embed.getDescription().isPresent())
-            this.description = embed.getDescription().get();
-        if (embed.getUrl().isPresent())
-            this.url = embed.getUrl().get();
-        if (embed.getTimeStamp().isPresent())
-            this.timestamp = embed.getTimeStamp().get().toString();
-        if (embed.getColour().isPresent())
-            this.color = embed.getColour().get();
-        if (embed.getFooter().isPresent())
-            this.footer = embed.getFooter().get();
-        if (embed.getImage().isPresent())
-            this.image = embed.getImage().get();
-        if (embed.getThumbnail().isPresent())
-            this.thumbnail = embed.getThumbnail().get();
-        if (embed.getVideo().isPresent())
-            this.video = embed.getVideo().get();
-        if (embed.getProvider().isPresent())
-            this.provider = embed.getProvider().get();
-        if (embed.getAuthor().isPresent())
-            this.author = embed.getAuthor().get();
-        if (!embed.getFields().isEmpty()) {
-            this.fields.addAll(embed.getFields());
+        if (embed != null) {
+            if (embed.getTitle().isPresent())
+                this.title = embed.getTitle().get();
+            if (embed.getDescription().isPresent())
+                this.description = embed.getDescription().get();
+            if (embed.getUrl().isPresent())
+                this.url = embed.getUrl().get();
+            if (embed.getTimeStamp().isPresent())
+                this.timestamp = embed.getTimeStamp().get().toString();
+            if (embed.getColour().isPresent())
+                this.color = embed.getColour().get();
+            if (embed.getFooter().isPresent())
+                this.footer = embed.getFooter().get();
+            if (embed.getImage().isPresent())
+                this.image = embed.getImage().get();
+            if (embed.getThumbnail().isPresent())
+                this.thumbnail = embed.getThumbnail().get();
+            if (embed.getVideo().isPresent())
+                this.video = embed.getVideo().get();
+            if (embed.getProvider().isPresent())
+                this.provider = embed.getProvider().get();
+            if (embed.getAuthor().isPresent())
+                this.author = embed.getAuthor().get();
+            if (!embed.getFields().isEmpty()) {
+                this.fields.addAll(embed.getFields());
+            }
         }
     }
 
@@ -234,12 +237,27 @@ public class EmbedBuilder {
     }
 
     public ObjectNode toJson() {
-        ObjectNode json = JsonNodeFactory.instance.objectNode()
-            .put("title", title)
-            .put("description", description)
-            .put("url", url)
-            .put("timestamp", timestamp)
-            .put("color", color.getRGB());
+        ObjectNode json = JsonNodeFactory.instance.objectNode();
+
+        if (title != null)
+            json.put("title", title);
+
+
+        if (description != null)
+            json.put("description", description);
+
+
+        if (url != null)
+            json.put("url", url);
+
+
+        if (timestamp != null)
+            json.put("timestamp", timestamp);
+
+
+        if (color != null) {
+            json.put("color", ColourUtil.convertRGB(color));
+        }
 
         if (footer != null)
             json.set("footer", footer.toJson());
@@ -265,7 +283,6 @@ public class EmbedBuilder {
                 fieldsJson.add(field.toJson());
             }
         }
-
         return json;
     }
 

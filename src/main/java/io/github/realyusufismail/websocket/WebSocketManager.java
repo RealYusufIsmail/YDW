@@ -227,7 +227,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             heartbeatsMissed = 0;
             logger.warn("Heartbeat missed, will attempt to reconnect");
             prepareClose();
-            ws.disconnect(4900, "Heartbeat missed");
+            ws.disconnect(4900, "ZOMBIE CONNECTION");
         } else {
             heartbeatsMissed += 1;
             ws.sendText(heartbeat.toString());
@@ -378,8 +378,12 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         }
 
         boolean closeCodeIsReconnect = closeCode == null || closeCode.isReconnect();
-        if (!needsToReconnect || !closeCodeIsReconnect || heartbeatThread.isCancelled()) {
-            logger.error("Unable to reconnect, closing connection");
+        if (!needsToReconnect || !closeCodeIsReconnect || scheduler.isShutdown()) {
+            if (!closeCodeIsReconnect) {
+                logger.error(
+                        "WebSocket connection was closed and cannot be recovered due to identification issues\n{}",
+                        closeCode);
+            }
             ydwReg.handelEvent(
                     new ShutdownEvent(ydwReg, DateTime.now(), CloseCode.fromCode(rawCloseCode)));
         } else {
@@ -441,9 +445,9 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         if (cause.getCause() instanceof SocketTimeoutException) {
             logger.error("Socket timeout");
         } else if (cause.getCause() instanceof IOException) {
-            logger.error("IO error");
+            logger.error("IO error {}", cause.getCause().getMessage());
         } else if (cause.getCause() instanceof ClosedChannelException) {
-            logger.error("Closed channel");
+            logger.error("Closed channel error {}", cause.getCause().getMessage());
         } else {
             logger.error("Unknown error", cause);
         }

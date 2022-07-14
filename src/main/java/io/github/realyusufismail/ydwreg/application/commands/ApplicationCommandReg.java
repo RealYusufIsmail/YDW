@@ -22,12 +22,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.application.Interaction;
 import io.github.realyusufismail.ydw.application.commands.ApplicationCommand;
-import io.github.realyusufismail.ydw.application.commands.option.CommandOption;
+import io.github.realyusufismail.ydw.application.commands.option.CommandInteractionDataOption;
 import io.github.realyusufismail.ydw.application.commands.option.CommandType;
 import io.github.realyusufismail.ydw.entities.Guild;
-import io.github.realyusufismail.ydwreg.application.commands.option.CommandOptionReg;
+import io.github.realyusufismail.ydw.event.Event;
+import io.github.realyusufismail.ydwreg.application.commands.option.CommandOptionMapping;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
+import io.github.realyusufismail.ydwreg.util.Verify;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,10 +38,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ApplicationCommandReg implements ApplicationCommand {
+public class ApplicationCommandReg extends Event implements ApplicationCommand {
 
     private final long id;
-    private final YDW ydw;
+    protected final YDW ydw;
+    private final Interaction interaction;
 
     private final CommandType type;
     private final long applicationId;
@@ -46,13 +50,16 @@ public class ApplicationCommandReg implements ApplicationCommand {
     private final String name;
     private final String description;
     private final String[] defaultPermission;
-    private final List<CommandOption> options = new ArrayList<>();
+    private final List<CommandInteractionDataOption> options = new ArrayList<>();
     private final Boolean dmVisible;
     private final Long version;
 
-    public ApplicationCommandReg(@NotNull JsonNode application, long id, YDW ydw) {
+    public ApplicationCommandReg(@NotNull JsonNode application, long id,
+            @Nullable Interaction interaction, YDW ydw) {
+        super(ydw);
         this.id = id;
         this.ydw = ydw;
+        this.interaction = Verify.hasNonNull(interaction) ? interaction : null;
 
         this.type = application.hasNonNull("type")
                 ? CommandType.getCommandType(application.get("type").asInt())
@@ -73,16 +80,40 @@ public class ApplicationCommandReg implements ApplicationCommand {
 
         if (application.hasNonNull("options") && application.get("options").isArray()) {
             application.get("options").forEach(option -> {
-                CommandOptionReg commandOption = new CommandOptionReg(option);
+                CommandInteractionDataOption commandOption = new CommandOptionMapping(option);
                 options.add(commandOption);
             });
         }
+    }
+
+    public ApplicationCommandReg(ApplicationCommand command, YDW ydw) {
+        super(ydw);
+        this.id = command.getIdLong();
+        this.ydw = ydw;
+        this.interaction =
+                command.getInteraction().isPresent() ? command.getInteraction().get() : null;
+        this.type = command.getCommandType().isPresent() ? command.getCommandType().get() : null;
+        this.applicationId = command.getApplicationIdLong().getIdLong();
+        this.guild = command.getGuild().isPresent() ? command.getGuild().get() : null;
+        this.name = command.getName();
+        this.description = command.getDescription();
+        this.defaultPermission = command.getDefaultMemberPermissions().isPresent()
+                ? command.getDefaultMemberPermissions().get()
+                : null;
+        this.dmVisible = command.isDmVisible();
+        this.version = command.getVersion().getIdLong();
+        options.addAll(command.getOptions());
     }
 
     @NotNull
     @Override
     public Long getIdLong() {
         return id;
+    }
+
+    @Override
+    public Optional<Interaction> getInteraction() {
+        return Optional.ofNullable(interaction);
     }
 
     @Override
@@ -123,7 +154,7 @@ public class ApplicationCommandReg implements ApplicationCommand {
     }
 
     @Override
-    public List<CommandOption> getOptions() {
+    public List<CommandInteractionDataOption> getOptions() {
         return options;
     }
 

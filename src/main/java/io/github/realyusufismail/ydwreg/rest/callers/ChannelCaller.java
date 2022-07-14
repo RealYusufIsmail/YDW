@@ -38,11 +38,12 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 public class ChannelCaller {
-    private static final Logger logger = LoggerFactory.getLogger(ChannelCaller.class);
+
     private final YDWReg ydw;
     private final OkHttpClient client;
     private final String token;
     private final MediaType JSON;
+    private ResponseBody body = null;
 
     public ChannelCaller(String token, @NotNull YDW ydw, OkHttpClient client, MediaType json) {
         this.ydw = (YDWReg) ydw;
@@ -57,16 +58,20 @@ public class ChannelCaller {
             .request(token, EndPoint.GET_CHANNEL_MESSAGE.getFullEndpoint(channelId, messageId))
             .get()
             .build();
+
+
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful())
                 throw new IOException("Unexpected code " + RestApiError.fromCode(response.code())
                         + " " + RestApiError.fromCode(response.code()).getMessage());
-            var body = response.body();
+            body = response.body();
             JsonNode jsonNode = ydw.getMapper().readTree(body.string());
             return new MessageReg(jsonNode, jsonNode.get("id").asLong(), ydw);
-
         } catch (IOException e) {
             throw new RestApiException(e);
+        } finally {
+            if (body != null)
+                body.close();
         }
     }
 
@@ -82,20 +87,9 @@ public class ChannelCaller {
         return new YDWRequest().request(token, EndPoint.CREATE_MESSAGE.getFullEndpoint(channelId))
             .post(body)
             .build();
-
-        /*
-         * client.newCall(request).enqueue(new YDWCallback() {
-         *
-         * @Override public void onFailure(@NotNull Call call, @NotNull IOException e) {
-         * ydw.getLogger().error("Failed to send message", e); }
-         *
-         * @Override public void onResponse(@NotNull Call call, @NotNull Response response) { if
-         * (!response.isSuccessful()) { RestApiError error = RestApiError.fromCode(response.code());
-         * ydw.getLogger().error("Failed to send message: " + error.getMessage()); } } });
-         *
-         */
     }
 
+    // TODO: Implement this method
     public void sendEmbedMessage(long id, EmbedBuilder embedBuilder) {
 
     }

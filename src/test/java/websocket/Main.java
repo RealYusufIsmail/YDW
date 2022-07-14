@@ -45,6 +45,7 @@ public class Main {
 
         List<SlashCommandBuilder> slashCommandBuilders = new ArrayList<>();
 
+        slashCommandBuilders.add(SlashCommandBuilder.create(ydw, "ping", "Pong!").build());
         ydw.awaitReady().upsertCommands(slashCommandBuilders);
     }
 }

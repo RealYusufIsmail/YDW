@@ -23,10 +23,7 @@ import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.application.commands.slash.SlashCommandReg;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 import io.github.realyusufismail.ydwreg.rest.queue.Queue;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,13 +32,12 @@ import java.util.function.Consumer;
 public class MessageCaller {
 
     private final YDWReg ydw;
-
     @NotNull
     private final OkHttpClient client;
     private final MediaType JSON;
-
     private Boolean tts;
     private Boolean mentionable;
+    private ResponseBody body = null;
 
     public MessageCaller(YDW ydw, MediaType json, OkHttpClient client) {
         this.ydw = (YDWReg) ydw;

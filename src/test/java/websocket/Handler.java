@@ -30,11 +30,6 @@ public class Handler extends EventAdapter {
     }
 
     @Override
-    public void onGatewayPing(GatewayPingEvent event) {
-        System.out.println("Gateway ping is: " + event.getNewPing());
-    }
-
-    @Override
     public void onReconnect(ReconnectEvent event) {
         System.out.println("Reconnecting...");
     }

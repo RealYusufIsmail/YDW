@@ -28,10 +28,10 @@ import java.util.Collection;
 public class Option {
 
     public Option(OptionType type, String name, String description, boolean isRequired) {
-        SlashCommandBuilderReg.setOptionType(type);
-        SlashCommandBuilderReg.setOptionName(name);
-        SlashCommandBuilderReg.setOptionDescription(description);
-        SlashCommandBuilderReg.setOptionRequired(isRequired);
+        SlashCommandCreatorReg.setOptionType(type);
+        SlashCommandCreatorReg.setOptionName(name);
+        SlashCommandCreatorReg.setOptionDescription(description);
+        SlashCommandCreatorReg.setOptionRequired(isRequired);
     }
 
     public Option(OptionType type, String name, String description) {
@@ -72,20 +72,20 @@ public class Option {
     String optionToJson() {
         return JsonNodeFactory.instance.arrayNode()
             .add(JsonNodeFactory.instance.objectNode()
-                .put("name", SlashCommandBuilderReg.getOptionName())
-                .put("description", SlashCommandBuilderReg.getOptionDescription())
-                .put("type", SlashCommandBuilderReg.getOptionType().name())
-                .put("required", SlashCommandBuilderReg.isOptionRequired()))
+                .put("name", SlashCommandCreatorReg.getOptionName())
+                .put("description", SlashCommandCreatorReg.getOptionDescription())
+                .put("type", SlashCommandCreatorReg.getOptionType().name())
+                .put("required", SlashCommandCreatorReg.isOptionRequired()))
             .toString();
     }
 
     String optionExtenderToJson(@NotNull OptionExtender optionExtender) {
         return JsonNodeFactory.instance.arrayNode()
             .add(JsonNodeFactory.instance.objectNode()
-                .put("name", SlashCommandBuilderReg.getOptionName())
-                .put("description", SlashCommandBuilderReg.getOptionDescription())
-                .put("type", SlashCommandBuilderReg.getOptionType().name())
-                .put("required", SlashCommandBuilderReg.isOptionRequired())
+                .put("name", SlashCommandCreatorReg.getOptionName())
+                .put("description", SlashCommandCreatorReg.getOptionDescription())
+                .put("type", SlashCommandCreatorReg.getOptionType().name())
+                .put("required", SlashCommandCreatorReg.isOptionRequired())
                 .set("choices", choiceToJsonArray(optionExtender.getChoices())))
             .toString();
     }

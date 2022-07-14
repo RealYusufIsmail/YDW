@@ -74,4 +74,8 @@ public class Verify {
             throw new VerifyException("The provided url is not a valid url!");
         }
     }
+
+    public static boolean hasNonNull(Object o) {
+        return o != null;
+    }
 }

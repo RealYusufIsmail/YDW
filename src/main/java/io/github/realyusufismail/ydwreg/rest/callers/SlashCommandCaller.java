@@ -52,10 +52,9 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class SlashCommandCaller {
+
     private final YDWReg ydw;
-
     private final OkHttpClient client;
-
     private final MediaType JSON;
     private final String token;
     private final String guildId;
@@ -65,6 +64,7 @@ public class SlashCommandCaller {
     private String description;
     private Collection<Option> options;
     private Collection<OptionExtender> extender;
+    private ResponseBody body = null;
 
     public SlashCommandCaller(String token, String guildId, YDW ydw, MediaType json,
             OkHttpClient client) {
@@ -75,7 +75,7 @@ public class SlashCommandCaller {
         JSON = json;
     }
 
-    public void callGlobalCommand() {
+    public void createGlobalCommand() {
         if (name == null || description == null) {
             throw new IllegalStateException("Name, Description, and Options are required to call");
         }
@@ -108,7 +108,7 @@ public class SlashCommandCaller {
         });
     }
 
-    public void callGuildOnlyCommand() {
+    public void createGuildOnlyCommand() {
         if (name == null || description == null || guildId == null) {
             throw new IllegalStateException(
                     "Name, Description, Guild ID, and Options are required to call");
@@ -254,12 +254,12 @@ public class SlashCommandCaller {
             .filter(command -> !command.getName().equals(name))
             .forEach(command -> deleteGlobalCommand(command.getIdLong()));
 
-        commands.stream().filter(c -> c.getName().equals(name)).forEach(c -> {
-            updateGlobalCommand(c.getIdLong());
-        });
+        commands.stream()
+            .filter(c -> c.getName().equals(name))
+            .forEach(c -> updateGlobalCommand(c.getIdLong()));
 
         if (commands.stream().noneMatch(c -> c.getName().equals(name))) {
-            callGlobalCommand();
+            createGlobalCommand();
         }
     }
 
@@ -277,19 +277,15 @@ public class SlashCommandCaller {
         commands.stream()
             .filter(c -> !c.getName().equals(name))
             .filter(c -> !c.getDescription().equals(description))
-            .forEach(c -> {
-                deleteGuildCommand(c.getIdLong());
-            });
+            .forEach(c -> deleteGuildCommand(c.getIdLong()));
 
         commands.stream()
             .filter(c -> c.getName().equals(name))
             .filter(c -> c.getDescription().equals(description))
-            .forEach(c -> {
-                updateGuildCommand(c.getIdLong());
-            });
+            .forEach(c -> updateGuildCommand(c.getIdLong()));
 
         if (commands.stream().noneMatch(c -> c.getName().equals(name))) {
-            callGuildOnlyCommand();
+            createGuildOnlyCommand();
         }
     }
 
@@ -339,7 +335,7 @@ public class SlashCommandCaller {
         JsonNode json = ydw.getMapper().readTree(body.string());
         List<ApplicationCommand> commands = new ArrayList<>();
         for (var command : json) {
-            commands.add(new ApplicationCommandReg(command, command.get("id").asLong(), ydw));
+            commands.add(new ApplicationCommandReg(command, command.get("id").asLong(), null, ydw));
         }
         return commands;
     }
@@ -406,16 +402,17 @@ public class SlashCommandCaller {
             messageBuilder.setEmbeds(embed);
         }
 
-        if (config.isEphemeral()) {
-            messageBuilder.setFlags(MessageFlags.EPHEMERAL);
-        }
+        if (config != null) {
+            if (config.isEphemeral()) {
+                messageBuilder.setFlags(MessageFlags.EPHEMERAL);
+            }
 
-        if (config.isTTS()) {
-            messageBuilder.setTTS(true);
+            if (config.isTTS()) {
+                messageBuilder.setTTS(true);
+            }
         }
 
         interaction.setMessageBuilder(messageBuilder);
-
         return interaction.toJson();
     }
 
@@ -440,6 +437,4 @@ public class SlashCommandCaller {
             Consumer<? super Response> success) {
         new Queue(client, request, failure, success).queue();
     }
-
-
 }

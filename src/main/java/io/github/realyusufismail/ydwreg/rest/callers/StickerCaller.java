@@ -30,6 +30,7 @@ import io.github.realyusufismail.ydwreg.rest.name.EndPoint;
 import io.github.realyusufismail.ydwreg.rest.request.YDWRequest;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,12 +39,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StickerCaller {
+
     @NotNull
     private final YDWReg ydw;
-
     private final OkHttpClient client;
-
     private final String token;
+    private ResponseBody body = null;
 
     public StickerCaller(String token, YDWReg ydw, OkHttpClient client) {
         this.ydw = ydw;
@@ -68,11 +69,13 @@ public class StickerCaller {
             for (var pack : json) {
                 packs.add(new StickerPackReg(pack, ydw, pack.get("id").asLong()));
             }
-
+            return packs;
         } catch (IOException e) {
             throw new RestApiException(e);
+        } finally {
+            if (body != null)
+                body.close();
         }
-        return null;
     }
 
     @NotNull
@@ -91,12 +94,14 @@ public class StickerCaller {
             List<Sticker> stickers = new ArrayList<>();
             for (var sticker : json) {
                 stickers.add(new StickerReg(sticker, sticker.get("id").asLong(), ydw));
-
             }
+            return stickers;
         } catch (IOException e) {
             throw new RestApiException(e);
+        } finally {
+            if (body != null)
+                body.close();
         }
-        return new ArrayList<>();
     }
 
     @Nullable
@@ -114,9 +119,11 @@ public class StickerCaller {
 
             JsonNode json = ydw.getMapper().readTree(body.string());
             return new StickerReg(json, stickerId, ydw);
-
         } catch (IOException e) {
             throw new RestApiException(e);
+        } finally {
+            if (body != null)
+                body.close();
         }
     }
 }

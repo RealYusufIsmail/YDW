@@ -33,7 +33,6 @@ import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 import io.github.realyusufismail.ydw.event.Event;
 import io.github.realyusufismail.ydw.event.events.GatewayPingEvent;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
-import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandBuilderReg;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
@@ -185,14 +184,11 @@ public class YDWReg implements YDW {
 
     @Override
     public void upsertCommands(List<SlashCommandBuilder> commands) {
-
         if (commands.isEmpty()) {
             // need to delete all commands
             getRest().getSlashCommandCaller().deleteAllCommands();
         } else {
-            commands.forEach(command -> {
-                ((SlashCommandBuilderReg) command).upsert();
-            });
+            commands.forEach(SlashCommandBuilder::upsert);
         }
     }
 

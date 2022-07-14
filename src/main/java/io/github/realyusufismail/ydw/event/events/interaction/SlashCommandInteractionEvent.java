@@ -20,11 +20,17 @@ package io.github.realyusufismail.ydw.event.events.interaction;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.application.Interaction;
+import io.github.realyusufismail.ydw.application.commands.ApplicationCommand;
 import io.github.realyusufismail.ydwreg.application.commands.slash.SlashCommandReg;
 
 public class SlashCommandInteractionEvent extends SlashCommandReg {
 
-    public SlashCommandInteractionEvent(JsonNode slashCommand, YDW ydw) {
-        super(slashCommand, slashCommand.get("id").asLong(), ydw);
+    public SlashCommandInteractionEvent(JsonNode slashCommand, Interaction interaction, YDW ydw) {
+        super(slashCommand, slashCommand.get("id").asLong(), interaction, ydw);
+    }
+
+    public SlashCommandInteractionEvent(ApplicationCommand applicationCommand, YDW ydw) {
+        super(applicationCommand, ydw);
     }
 }
