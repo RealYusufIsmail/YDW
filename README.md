@@ -1,4 +1,5 @@
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/RealYusufIsmail/YDW)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.realyusufismail/ydw/badge.svg)](https://maven-badges.herokuapp.com/maven-central/realyusufismail/ydw)
 
 # YDW
 YDW (Yusuf's Discord Wrapper) My own Discord Wrapper inspired by others such as JDA and Javacord
@@ -31,7 +32,7 @@ repositories {
 }
 
 dependencies {
-    implementation group: 'io.github.realyusufismail', name: 'YDW', version: '0.0.1'
+    implementation group: 'io.github.realyusufismail', name: 'ydw', version: '0.0.1'
 }
 ```
 
