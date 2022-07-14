@@ -26,20 +26,17 @@ import io.github.realyusufismail.ydwreg.application.commands.ApplicationCommandR
 import io.github.realyusufismail.ydwreg.rest.error.RestApiError;
 import io.github.realyusufismail.ydwreg.rest.name.EndPoint;
 import io.github.realyusufismail.ydwreg.rest.request.YDWRequest;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.*;
 
 import java.io.IOException;
 
 public class InteractionCaller {
+
     private final YDWReg ydw;
-
     private final OkHttpClient client;
-
     private final MediaType JSON;
     private final String token;
+    private ResponseBody body = null;
 
     public InteractionCaller(YDWReg ydw, OkHttpClient client, MediaType json, String token) {
         this.ydw = ydw;
@@ -76,6 +73,9 @@ public class InteractionCaller {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (body != null)
+                body.close();
         }
 
         return null;

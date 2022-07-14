@@ -28,6 +28,7 @@ import io.github.realyusufismail.ydwreg.rest.name.EndPoint;
 import io.github.realyusufismail.ydwreg.rest.request.YDWRequest;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,11 +37,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserCaller {
+
     private final YDWReg ydw;
-
     private final OkHttpClient client;
-
     private final String token;
+    private ResponseBody body = null;
 
     public UserCaller(String token, @Nullable YDWReg ydw, OkHttpClient client) {
         this.ydw = ydw;
@@ -64,9 +65,12 @@ public class UserCaller {
             for (JsonNode node : json) {
                 guilds.add(new GuildReg(node, node.get("id").asLong(), ydw));
             }
+            return guilds;
         } catch (IOException e) {
             throw new RestApiException(e);
+        } finally {
+            if (body != null)
+                body.close();
         }
-        return new ArrayList<>();
     }
 }

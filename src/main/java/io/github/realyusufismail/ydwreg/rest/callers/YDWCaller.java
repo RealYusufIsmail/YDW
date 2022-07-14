@@ -36,6 +36,7 @@ import io.github.realyusufismail.ydwreg.rest.request.YDWRequest;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,13 +44,11 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 public class YDWCaller {
+
     private final YDWReg ydw;
-
     private final OkHttpClient client;
-
-    private final Logger logger = LoggerFactory.getLogger(YDWCaller.class);
-
     private final String token;
+    private ResponseBody body = null;
 
 
     public YDWCaller(String token, YDW ydw, OkHttpClient client) {
@@ -71,6 +70,9 @@ public class YDWCaller {
             return new UserReg(jsonNode, jsonNode.get("id").asLong(), ydw);
         } catch (IOException e) {
             throw new RestApiException(e);
+        } finally {
+            if (body != null)
+                body.close();
         }
     }
 
@@ -90,6 +92,9 @@ public class YDWCaller {
             return new GuildReg(jsonNode, jsonNode.get("id").asLong(), ydw);
         } catch (IOException e) {
             throw new RestApiException(e);
+        } finally {
+            if (body != null)
+                body.close();
         }
     }
 
@@ -106,6 +111,9 @@ public class YDWCaller {
             return new ChannelReg(jsonNode, jsonNode.get("id").asLong(), ydw);
         } catch (IOException e) {
             throw new RestApiException(e);
+        } finally {
+            if (body != null)
+                body.close();
         }
     }
 
@@ -127,6 +135,9 @@ public class YDWCaller {
             return new CategoryReg(jsonNode, jsonNode.get("id").asLong(), ydw);
         } catch (IOException e) {
             throw new RestApiException(e);
+        } finally {
+            if (body != null)
+                body.close();
         }
     }
 }

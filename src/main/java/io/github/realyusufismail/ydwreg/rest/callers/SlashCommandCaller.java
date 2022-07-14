@@ -52,10 +52,9 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class SlashCommandCaller {
+
     private final YDWReg ydw;
-
     private final OkHttpClient client;
-
     private final MediaType JSON;
     private final String token;
     private final String guildId;
@@ -65,6 +64,7 @@ public class SlashCommandCaller {
     private String description;
     private Collection<Option> options;
     private Collection<OptionExtender> extender;
+    private ResponseBody body = null;
 
     public SlashCommandCaller(String token, String guildId, YDW ydw, MediaType json,
             OkHttpClient client) {

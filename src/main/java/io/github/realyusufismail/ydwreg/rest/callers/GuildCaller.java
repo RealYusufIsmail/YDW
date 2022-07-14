@@ -30,24 +30,20 @@ import io.github.realyusufismail.ydwreg.json.YDWJson;
 import io.github.realyusufismail.ydwreg.rest.exception.InvalidJsonException;
 import io.github.realyusufismail.ydwreg.rest.name.EndPoint;
 import io.github.realyusufismail.ydwreg.rest.request.YDWRequest;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
+import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
 public class GuildCaller {
-    private final YDWReg ydw;
 
+    private final YDWReg ydw;
     @NotNull
     private final OkHttpClient client;
-
     private final MediaType JSON;
-
     private final String token;
+    private ResponseBody body = null;
 
     public GuildCaller(String token, @Nullable YDW ydw, MediaType json, OkHttpClient client) {
         this.ydw = (YDWReg) ydw;
@@ -69,6 +65,9 @@ public class GuildCaller {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (body != null)
+                body.close();
         }
         return null;
     }
@@ -99,6 +98,9 @@ public class GuildCaller {
             return true;
         } catch (IOException e) {
             return false;
+        } finally {
+            if (body != null)
+                body.close();
         }
     }
 
@@ -136,6 +138,9 @@ public class GuildCaller {
             }
         } catch (IOException e) {
             throw new InvalidJsonException(e);
+        } finally {
+            if (body != null)
+                body.close();
         }
         return null;
     }
