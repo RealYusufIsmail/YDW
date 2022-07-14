@@ -32,7 +32,12 @@ public class SlashCommandHandler extends EventAdapter {
         if (event.getName().equals("ping")) {
             // event.replyEmbed(new EmbedBuilder().setTitle("Test").setColor(Color.CYAN).build())
             // .queue();
-            event.reply("Pong!", new ReplyConfigReg().setEphemeral(true)).queue();
+            event.replyEmbed(new EmbedBuilder().setTitle("Test").setColor(Color.CYAN).build())
+                .queue(error -> {
+                    throw new RuntimeException(error);
+                }, success -> {
+                    System.out.println("Success");
+                });
         }
     }
 }

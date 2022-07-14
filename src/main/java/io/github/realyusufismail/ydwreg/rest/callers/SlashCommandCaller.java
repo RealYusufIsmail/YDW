@@ -413,7 +413,6 @@ public class SlashCommandCaller {
         }
 
         interaction.setMessageBuilder(messageBuilder);
-
         return interaction.toJson();
     }
 

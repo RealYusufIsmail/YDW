@@ -43,18 +43,23 @@ public class SlashCommandReg extends ApplicationCommandReg implements Applicatio
         super(applicationCommand, ydw);
     }
 
-    //TODO: Reply system is broken.
     @Override
     public Action reply(String message, @Nullable ReplyConfig config) {
         String token =
                 super.getInteraction().isPresent() ? super.getInteraction().get().getToken() : null;
 
+        String id =
+                super.getInteraction().isPresent() ? super.getInteraction().get().getId() : null;
+
         if (token == null) {
             throw new IllegalStateException("Interaction token is null");
         }
 
-        var req =
-                ydw.getRest().getSlashCommandCaller().reply(message, config, super.getId(), token);
+        if (id == null) {
+            throw new IllegalStateException("Interaction id is null");
+        }
+
+        var req = ydw.getRest().getSlashCommandCaller().reply(message, config, id, token);
 
         return new ActionReg(req, ydw);
     }
@@ -63,12 +68,20 @@ public class SlashCommandReg extends ApplicationCommandReg implements Applicatio
     public Action replyEmbed(EmbedBuilder embed, @Nullable ReplyConfig config) {
         String token =
                 super.getInteraction().isPresent() ? super.getInteraction().get().getToken() : null;
+
+        String id =
+                super.getInteraction().isPresent() ? super.getInteraction().get().getId() : null;
+
         if (token == null) {
             throw new IllegalStateException("Interaction token is null");
         }
-        var req = ydw.getRest()
-            .getSlashCommandCaller()
-            .replyEmbed(embed.build(), config, super.getId(), token);
+
+        if (id == null) {
+            throw new IllegalStateException("Interaction id is null");
+        }
+
+        var req =
+                ydw.getRest().getSlashCommandCaller().replyEmbed(embed.build(), config, id, token);
 
         return new ActionReg(req, ydw);
     }

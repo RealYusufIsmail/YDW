@@ -27,6 +27,7 @@ import io.github.realyusufismail.ydw.entities.embed.Embed;
 import io.github.realyusufismail.ydw.entities.embed.objects.Image;
 import io.github.realyusufismail.ydw.entities.embed.objects.*;
 import io.github.realyusufismail.ydwreg.entities.embed.objects.*;
+import io.github.realyusufismail.ydwreg.util.ColourUtil;
 import io.github.realyusufismail.ydwreg.util.Verify;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -236,12 +237,27 @@ public class EmbedBuilder {
     }
 
     public ObjectNode toJson() {
-        ObjectNode json = JsonNodeFactory.instance.objectNode()
-            .put("title", title)
-            .put("description", description)
-            .put("url", url)
-            .put("timestamp", timestamp)
-            .put("color", color.getRGB());
+        ObjectNode json = JsonNodeFactory.instance.objectNode();
+
+        if (title != null)
+            json.put("title", title);
+
+
+        if (description != null)
+            json.put("description", description);
+
+
+        if (url != null)
+            json.put("url", url);
+
+
+        if (timestamp != null)
+            json.put("timestamp", timestamp);
+
+
+        if (color != null) {
+            json.put("color", ColourUtil.convertRGB(color));
+        }
 
         if (footer != null)
             json.set("footer", footer.toJson());
@@ -267,7 +283,6 @@ public class EmbedBuilder {
                 fieldsJson.add(field.toJson());
             }
         }
-
         return json;
     }
 

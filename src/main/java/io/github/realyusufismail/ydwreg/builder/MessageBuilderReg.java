@@ -18,6 +18,7 @@
  */ 
 package io.github.realyusufismail.ydwreg.builder;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.builder.MessageBuilder;
@@ -93,7 +94,7 @@ public class MessageBuilderReg implements MessageBuilder {
             json.put("content", content);
 
         if (embedBuilder != null)
-            json.set("embed", embedBuilder.toJson());
+            json.set("embeds", JsonNodeFactory.instance.arrayNode().add(embedBuilder.toJson()));
 
         if (allowedMention != null)
             json.set("allowed_mentions", allowedMention.toJson());
