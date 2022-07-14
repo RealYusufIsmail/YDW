@@ -25,14 +25,19 @@ public class ReplyConfigReg implements ReplyConfig {
     private boolean ephemeral;
     private boolean tts;
 
+    public ReplyConfigReg() {
+        // only allow new ReplyConfigReg in Action, if not throw exception
 
-    @Override
+        if (this.getClass() != ReplyConfigReg.class) {
+            throw new IllegalStateException("ReplyConfigReg is a singleton class");
+        }
+    }
+
     public ReplyConfig setEphemeral(boolean ephemeral) {
         this.ephemeral = ephemeral;
         return this;
     }
 
-    @Override
     public ReplyConfig setTTS(boolean tts) {
         this.tts = tts;
         return this;

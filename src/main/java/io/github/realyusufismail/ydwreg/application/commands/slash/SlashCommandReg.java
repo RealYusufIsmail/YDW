@@ -43,6 +43,13 @@ public class SlashCommandReg extends ApplicationCommandReg implements Applicatio
         super(applicationCommand, ydw);
     }
 
+    /**
+     * Used to reply to an interaction.
+     *
+     * @param message The message to reply with.
+     * @param config Action.config is used to set the reply config.
+     * @return The action that was created.
+     */
     @Override
     public Action reply(String message, @Nullable ReplyConfig config) {
         String token =
@@ -64,6 +71,13 @@ public class SlashCommandReg extends ApplicationCommandReg implements Applicatio
         return new ActionReg(req, ydw);
     }
 
+    /**
+     * Used to reply to an interaction.
+     *
+     * @param message The message to reply with.
+     * @param config Action.config is used to set the reply config.
+     * @return The action that was created.
+     */
     @Override
     public Action replyEmbed(EmbedBuilder embed, @Nullable ReplyConfig config) {
         String token =
