@@ -21,7 +21,6 @@ package io.github.realyusufismail.ydwreg;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.realyusufismail.event.recieve.EventReceiver;
 import io.github.realyusufismail.websocket.WebSocketManager;
-import io.github.realyusufismail.ydw.GateWayIntent;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
@@ -44,7 +43,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class YDWReg implements YDW {
-
     // logger
     public static final Logger logger = LoggerFactory.getLogger(YDWReg.class);
     @NotNull
@@ -70,7 +68,6 @@ public class YDWReg implements YDW {
 
     public void handelEvent(Event event) {
         eventReceiver.eventReceivers.forEach(eventReceiver -> eventReceiver.onEvent(event));
-
     }
 
     @NotNull
@@ -102,12 +99,6 @@ public class YDWReg implements YDW {
     public Category getCategory(long categoryId) {
         return getRest().getYDWCaller().getCategory(categoryId);
     }
-
-    public boolean isGatewayIntents(@NotNull GateWayIntent intents) {
-        int raw = intents.getValue();
-        return (ws.getGatewayIntents() & raw) == raw;
-    }
-
 
     @Override
     public void login(String token, int gatewayIntents, String status, int largeThreshold,
@@ -161,10 +152,6 @@ public class YDWReg implements YDW {
     @Override
     public WebSocketManager getWebSocket() {
         return ws;
-    }
-
-    public boolean isSelfUserThere() {
-        return selfUser != null;
     }
 
     @Override

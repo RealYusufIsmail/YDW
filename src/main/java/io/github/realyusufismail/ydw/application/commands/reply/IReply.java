@@ -19,8 +19,8 @@
 package io.github.realyusufismail.ydw.application.commands.reply;
 
 import com.google.errorprone.annotations.CheckReturnValue;
-import io.github.realyusufismail.ydw.action.Action;
 import io.github.realyusufismail.ydw.action.ReplyAction;
+import io.github.realyusufismail.ydw.action.config.ReplyConfig;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 import org.jetbrains.annotations.Nullable;
 

@@ -18,8 +18,8 @@
  */ 
 package io.github.realyusufismail.ydw.action;
 
-import io.github.realyusufismail.ydw.application.commands.reply.ReplyConfig;
-import io.github.realyusufismail.ydwreg.application.commands.slash.reply.ReplyConfigReg;
+import io.github.realyusufismail.ydw.action.config.ReplyConfig;
+import io.github.realyusufismail.ydwreg.action.config.ReplyConfigReg;
 
 public interface ReplyAction extends Action {
     ReplyConfig config = new ReplyConfigReg();

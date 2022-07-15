@@ -20,13 +20,11 @@ package io.github.realyusufismail.ydwreg.application.commands.slash;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.action.Action;
 import io.github.realyusufismail.ydw.action.ReplyAction;
+import io.github.realyusufismail.ydw.action.config.ReplyConfig;
 import io.github.realyusufismail.ydw.application.Interaction;
 import io.github.realyusufismail.ydw.application.commands.ApplicationCommand;
 import io.github.realyusufismail.ydw.application.commands.reply.IReply;
-import io.github.realyusufismail.ydw.application.commands.reply.ReplyConfig;
-import io.github.realyusufismail.ydwreg.action.ActionReg;
 import io.github.realyusufismail.ydwreg.action.ReplyActionReg;
 import io.github.realyusufismail.ydwreg.application.commands.ApplicationCommandReg;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;

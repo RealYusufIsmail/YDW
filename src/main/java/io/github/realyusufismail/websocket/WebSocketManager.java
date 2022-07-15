@@ -56,9 +56,11 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
     // Create a WebSocketFactory instance.
     static WebSocket ws;
+    // YDW
+    private final YDWReg ydwReg;
     private final Logger logger = LoggerFactory.getLogger(WebSocketManager.class);
     // the core pool
-    private final int corePoolSize = Runtime.getRuntime().availableProcessors();
+    private int corePoolSize;
     // the scheduled thread pool
     private final ScheduledExecutorService scheduler =
             Executors.newScheduledThreadPool(corePoolSize);
@@ -66,7 +68,6 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     private final String token;
     // The gateway intents
     private final int intent;
-    private final YDWReg ydwReg;
     // The sequence number, used for resuming sessions and heartbeats.
     // The status of the bot e.g. online, idle, dnd, invisible etc.
     private final String status;
@@ -463,5 +464,9 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
     public void needsToReconnect(boolean needsToReconnect) {
         this.needsToReconnect = needsToReconnect;
+    }
+
+    public void setCorePoolSize(int corePoolSize) {
+        this.corePoolSize = corePoolSize;
     }
 }

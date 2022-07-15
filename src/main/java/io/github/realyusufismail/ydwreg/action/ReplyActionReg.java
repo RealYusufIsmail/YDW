@@ -21,10 +21,6 @@ package io.github.realyusufismail.ydwreg.action;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.action.ReplyAction;
 import okhttp3.Request;
-import okhttp3.Response;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Consumer;
 
 public class ReplyActionReg extends ActionReg implements ReplyAction {
 

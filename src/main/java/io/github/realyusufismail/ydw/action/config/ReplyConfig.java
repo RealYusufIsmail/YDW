@@ -16,18 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.ydw;
+package io.github.realyusufismail.ydw.action.config;
 
-public final class YDWInfo {
-    public static final int DISCORD_REST_VERSION = 10;
-    public static final int DISCORD_GATEWAY_VERSION = 10;
-    public static final String ydw_VERSION = "0.0.2";
+public interface ReplyConfig {
+    ReplyConfig setEphemeral(boolean ephemeral);
 
-    public static final String DISCORD_GATEWAY_LINK =
-            "wss://gateway.discord.gg/?v=" + DISCORD_GATEWAY_VERSION + "&encoding=json";
-    public static final String DISCORD_REST_LINK =
-            "https://discord.com/api/v" + DISCORD_REST_VERSION;
-    public static final String ydw_GITHUB = "https://github.com/ydw";
+    ReplyConfig setTTS(boolean tts);
 
-    private YDWInfo() {}
+    boolean isEphemeral();
+
+    boolean isTTS();
 }

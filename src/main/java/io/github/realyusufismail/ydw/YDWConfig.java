@@ -39,6 +39,8 @@ public class YDWConfig {
 
     private String guildId;
 
+    private int corePoolSize = 1;
+
     private YDWConfig(String token, int gatewayIntents) {
         this.token = token;
         this.gatewayIntents = 1 | gatewayIntents;
@@ -121,6 +123,16 @@ public class YDWConfig {
         return this;
     }
 
+    /**
+     * Used to set the core pool size of the thread pool.
+     *
+     * @param corePoolSize corePoolSize
+     */
+    public YDWConfig setCorePoolSize(int corePoolSize) {
+        this.corePoolSize = corePoolSize;
+        return this;
+    }
+
     public YDW build() throws Exception {
 
         if (token == null || token.isEmpty()) {
@@ -131,6 +143,7 @@ public class YDWConfig {
         client = Objects.requireNonNullElseGet(this.client, OkHttpClient::new);
         YDWReg ydw = new YDWReg(client);
         ydw.loginForRest(token, guildId);
+        ydw.getWebSocket().setCorePoolSize(corePoolSize);
         ydw.login(token, gatewayIntents, status, largeThreshold, activity);
         return ydw;
     }

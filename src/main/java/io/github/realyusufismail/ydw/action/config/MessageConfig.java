@@ -16,14 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.ydw.application.commands.reply;
+package io.github.realyusufismail.ydw.action.config;
 
-public interface ReplyConfig {
-    ReplyConfig setEphemeral(boolean ephemeral);
+import org.jetbrains.annotations.NotNull;
 
-    ReplyConfig setTTS(boolean tts);
+public interface MessageConfig {
+    @NotNull
+    MessageConfig setTTS(boolean tts);
 
-    boolean isEphemeral();
+    @NotNull
+    MessageConfig setMentionable(boolean mentionable);
 
     boolean isTTS();
+
+    boolean isMentionable();
 }

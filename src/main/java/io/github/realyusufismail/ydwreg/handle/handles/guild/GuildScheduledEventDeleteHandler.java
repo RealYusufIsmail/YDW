@@ -29,6 +29,6 @@ public class GuildScheduledEventDeleteHandler extends Handle {
 
     @Override
     public void start() {
-        // TODO
+
     }
 }

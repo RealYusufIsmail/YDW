@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.ydwreg.application.commands.slash.reply;
+package io.github.realyusufismail.ydwreg.action.config;
 
-import io.github.realyusufismail.ydw.application.commands.reply.ReplyConfig;
+import io.github.realyusufismail.ydw.action.config.ReplyConfig;
 
 public class ReplyConfigReg implements ReplyConfig {
 

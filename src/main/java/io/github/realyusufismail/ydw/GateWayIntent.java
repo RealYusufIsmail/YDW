@@ -28,7 +28,7 @@ import java.util.EnumSet;
  * Inspired from JDA's <a href=
  * "https://github.com/DV8FromTheWorld/JDA/blob/master/src/main/java/net/dv8tion/jda/api/requests/GatewayIntent.java">Gateway
  * Intent</a>
- *
+ * <p>
  * GUILD_MEMBERS and GUILD_MEMBERS : are a Privileged intent. <br>
  * As discord states : <br>
  * <p>
@@ -36,7 +36,7 @@ import java.util.EnumSet;
  * Developer Portal and enable the toggle for each Privileged Intent that you wish to use. If your
  * bot qualifies for verification, you must first verify your bot and request access to these
  * intents during the verification process. If your bot is already verified and you need to request
- * additional privileged intents, contact support.
+ * additional privileged intents, contact support."
  * </p>
  */
 public enum GateWayIntent {
