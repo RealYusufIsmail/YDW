@@ -40,7 +40,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO: finish this class
 public class ResolvedDataReg implements ResolvedData {
 
     private final Map<SnowFlake, User> users = new HashMap<>();

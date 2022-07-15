@@ -32,8 +32,6 @@ import io.github.realyusufismail.ydwreg.rest.request.YDWRequest;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 

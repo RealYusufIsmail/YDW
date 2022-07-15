@@ -25,8 +25,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.function.Consumer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Queue {
     private final OkHttpClient client;
