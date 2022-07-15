@@ -97,20 +97,26 @@ public interface Channel extends SnowFlake, GenericEntity {
     // Rest Actions
     MessageActionReg sendMessage(String message);
 
-    void sendEmbedMessage(EmbedBuilder embedBuilder);
-
-    @NotNull
-    Message getMessage(@NotNull String messageId);
+    MessageActionReg sendEmbedMessage(EmbedBuilder embedBuilder);
 
     @NotNull
     Message getMessage(long messageId);
 
-    @Nullable
-    Action deleteMessage(@NotNull String messageId);
+    @NotNull
+    default Message getMessage(@NotNull String messageId) {
+        return getMessage(Long.parseUnsignedLong(messageId));
+    }
 
-    @Nullable
-    Action deleteMessage(long messageId);
+    List<Message> getMessages(int limit);
 
-    @Nullable
-    Action deleteMessages(int min, int max);
+    @NotNull
+    default MessageActionReg deleteMessage(@NotNull String messageId) {
+        return deleteMessage(Long.parseUnsignedLong(messageId));
+    }
+
+    @NotNull
+    MessageActionReg deleteMessage(long messageId);
+
+    @NotNull
+    MessageActionReg deleteMessages(int amount);
 }

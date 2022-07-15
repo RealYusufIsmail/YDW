@@ -35,6 +35,7 @@ import io.github.realyusufismail.ydwreg.action.MessageActionReg;
 import io.github.realyusufismail.ydwreg.entities.channel.OverwriteReg;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 import io.github.realyusufismail.ydwreg.entities.guild.MemberReg;
+import io.github.realyusufismail.ydwreg.entities.guild.MessageReg;
 import io.github.realyusufismail.ydwreg.entities.guild.channel.thread.ThreadMetadataReg;
 import io.github.realyusufismail.ydwreg.entities.message.MessageFlags;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
@@ -315,37 +316,33 @@ public class ChannelReg implements Channel {
     }
 
     @Override
-    public void sendEmbedMessage(EmbedBuilder embedBuilder) {
-        ydw.getRest().getChannelCaller().sendEmbedMessage(this.id, embedBuilder);
-    }
-
-    @NotNull
-    @Override
-    public Message getMessage(@NotNull String messageId) {
-        return null;
+    public MessageActionReg sendEmbedMessage(EmbedBuilder embedBuilder) {
+        var req = ydw.getRest().getChannelCaller().sendEmbedMessage(this.id, embedBuilder);
+        return new MessageActionReg(req, ydw);
     }
 
     @NotNull
     @Override
     public Message getMessage(long messageId) {
-        return null;
+        return ydw.getRest().getChannelCaller().getMessage(this.id, messageId);
     }
 
-    @Nullable
     @Override
-    public Action deleteMessage(@NotNull String messageId) {
-        return null;
+    public List<Message> getMessages(int limit) {
+        return ydw.getRest().getChannelCaller().getMessages(this.id, limit);
     }
 
-    @Nullable
+    @NotNull
     @Override
-    public Action deleteMessage(long messageId) {
-        return null;
+    public MessageActionReg deleteMessage(long messageId) {
+        var req = ydw.getRest().getChannelCaller().deleteMessage(this.id, messageId);
+        return new MessageActionReg(req, ydw);
     }
 
-    @Nullable
+    @NotNull
     @Override
-    public Action deleteMessages(int min, int max) {
-        return null;
+    public MessageActionReg deleteMessages(int amount) {
+        var req = ydw.getRest().getChannelCaller().deleteMessages(this.id, amount);
+        return new MessageActionReg(req, ydw);
     }
 }

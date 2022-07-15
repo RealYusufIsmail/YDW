@@ -20,20 +20,7 @@ package io.github.realyusufismail.ydw.action;
 
 import io.github.realyusufismail.ydw.application.commands.reply.ReplyConfig;
 import io.github.realyusufismail.ydwreg.application.commands.slash.reply.ReplyConfigReg;
-import okhttp3.Response;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Consumer;
-
-public interface Action {
-    default void queue() {
-        queue(null, null);
-    }
-
-    default void queue(@Nullable Consumer<? super Throwable> failure) {
-        queue(failure, null);
-    }
-
-    void queue(@Nullable Consumer<? super Throwable> failure,
-            @Nullable Consumer<? super Response> success);
+public interface ReplyAction extends Action {
+    ReplyConfig config = new ReplyConfigReg();
 }

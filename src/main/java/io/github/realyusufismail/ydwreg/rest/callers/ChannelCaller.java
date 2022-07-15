@@ -19,8 +19,10 @@
 package io.github.realyusufismail.ydwreg.rest.callers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.action.Action;
 import io.github.realyusufismail.ydw.entities.guild.Message;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
@@ -34,6 +36,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChannelCaller {
 
@@ -50,7 +54,7 @@ public class ChannelCaller {
         JSON = json;
     }
 
-    @Nullable
+    @NotNull
     public Message getMessage(long channelId, long messageId) {
         Request request = new YDWRequest()
             .request(token, EndPoint.GET_CHANNEL_MESSAGE.getFullEndpoint(channelId, messageId))
@@ -73,6 +77,33 @@ public class ChannelCaller {
         }
     }
 
+    public List<Message> getMessages(long id, int limit) {
+        HttpUrl url =
+                new HttpUrl.Builder().scheme(EndPoint.GET_CHANNEL_MESSAGES.getFullEndpoint(id))
+                    .addQueryParameter("limit", String.valueOf(limit))
+                    .build();
+
+        Request request = new YDWRequest().request(token, url).get().build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful())
+                throw new IOException("Unexpected code " + RestApiError.fromCode(response.code())
+                        + " " + RestApiError.fromCode(response.code()).getMessage());
+
+            body = response.body();
+            List<Message> messages = new ArrayList<>();
+            JsonNode jsonNode = ydw.getMapper().readTree(body.string());
+            for (JsonNode node : jsonNode) {
+                messages.add(new MessageReg(node, node.get("id").asLong(), ydw));
+            }
+            return messages;
+        } catch (IOException e) {
+            throw new RestApiException(e);
+        } finally {
+            if (body != null)
+                body.close();
+        }
+    }
 
     public Request sendMessage(long channelId, @NotNull String message) {
         if (message.length() > 2000)
@@ -87,8 +118,45 @@ public class ChannelCaller {
             .build();
     }
 
-    // TODO: Implement this method
-    public void sendEmbedMessage(long id, EmbedBuilder embedBuilder) {
+    public Request sendEmbedMessage(long id, @NotNull EmbedBuilder embedBuilder) {
+        JsonNode json = JsonNodeFactory.instance.objectNode()
+            .put("embeds", JsonNodeFactory.instance.arrayNode().add(embedBuilder.toJson()));
+        RequestBody body = RequestBody.create(json.toString(), JSON);
+        return new YDWRequest().request(token, EndPoint.CREATE_MESSAGE.getFullEndpoint(id))
+            .post(body)
+            .build();
+    }
 
+    public Request deleteMessage(long id, long messageId) {
+        return new YDWRequest()
+            .request(token, EndPoint.DELETE_MESSAGE.getFullEndpoint(id, messageId))
+            .delete()
+            .build();
+    }
+
+    public Request deleteMessages(long id, int amount) {
+        if (amount < 2 || amount > 200)
+            throw new RestApiException("Amount must be between 2 and 100");
+
+
+        getMessages(id, amount);
+
+        List<Long> messageIds = new ArrayList<>();
+        for (Message message : getMessages(id, amount)) {
+            messageIds.add(message.getIdLong());
+        }
+
+        ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
+        for (Long messageId : messageIds) {
+            arrayNode.add(messageId);
+        }
+
+        JsonNode json = JsonNodeFactory.instance.objectNode()
+            .set("messages", JsonNodeFactory.instance.arrayNode().addAll(arrayNode));
+
+        RequestBody body = RequestBody.create(json.toString(), JSON);
+        return new YDWRequest().request(token, EndPoint.BULK_DELETE_MESSAGES.getFullEndpoint(id))
+            .post(body)
+            .build();
     }
 }

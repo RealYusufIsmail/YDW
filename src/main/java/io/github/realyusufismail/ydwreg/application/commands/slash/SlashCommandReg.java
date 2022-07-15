@@ -21,11 +21,13 @@ package io.github.realyusufismail.ydwreg.application.commands.slash;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.action.Action;
+import io.github.realyusufismail.ydw.action.ReplyAction;
 import io.github.realyusufismail.ydw.application.Interaction;
 import io.github.realyusufismail.ydw.application.commands.ApplicationCommand;
 import io.github.realyusufismail.ydw.application.commands.reply.IReply;
 import io.github.realyusufismail.ydw.application.commands.reply.ReplyConfig;
 import io.github.realyusufismail.ydwreg.action.ActionReg;
+import io.github.realyusufismail.ydwreg.action.ReplyActionReg;
 import io.github.realyusufismail.ydwreg.application.commands.ApplicationCommandReg;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +35,13 @@ import org.jetbrains.annotations.Nullable;
 
 // TODO: need to use Application command instead of Interaction
 public class SlashCommandReg extends ApplicationCommandReg implements ApplicationCommand, IReply {
+
+    private final String token =
+            super.getInteraction().isPresent() ? super.getInteraction().get().getToken() : null;
+
+    private final String id =
+            super.getInteraction().isPresent() ? super.getInteraction().get().getId() : null;
+
 
     public SlashCommandReg(@NotNull JsonNode application, long id, Interaction interaction,
             YDW ydw) {
@@ -51,13 +60,7 @@ public class SlashCommandReg extends ApplicationCommandReg implements Applicatio
      * @return The action that was created.
      */
     @Override
-    public Action reply(String message, @Nullable ReplyConfig config) {
-        String token =
-                super.getInteraction().isPresent() ? super.getInteraction().get().getToken() : null;
-
-        String id =
-                super.getInteraction().isPresent() ? super.getInteraction().get().getId() : null;
-
+    public ReplyAction reply(String message, @Nullable ReplyConfig config) {
         if (token == null) {
             throw new IllegalStateException("Interaction token is null");
         }
@@ -68,24 +71,18 @@ public class SlashCommandReg extends ApplicationCommandReg implements Applicatio
 
         var req = ydw.getRest().getSlashCommandCaller().reply(message, config, id, token);
 
-        return new ActionReg(req, ydw);
+        return new ReplyActionReg(req, ydw);
     }
 
     /**
      * Used to reply to an interaction.
      *
-     * @param message The message to reply with.
+     * @param embed the embed to reply with.
      * @param config Action.config is used to set the reply config.
      * @return The action that was created.
      */
     @Override
-    public Action replyEmbed(EmbedBuilder embed, @Nullable ReplyConfig config) {
-        String token =
-                super.getInteraction().isPresent() ? super.getInteraction().get().getToken() : null;
-
-        String id =
-                super.getInteraction().isPresent() ? super.getInteraction().get().getId() : null;
-
+    public ReplyAction replyEmbed(EmbedBuilder embed, @Nullable ReplyConfig config) {
         if (token == null) {
             throw new IllegalStateException("Interaction token is null");
         }
@@ -97,7 +94,7 @@ public class SlashCommandReg extends ApplicationCommandReg implements Applicatio
         var req =
                 ydw.getRest().getSlashCommandCaller().replyEmbed(embed.build(), config, id, token);
 
-        return new ActionReg(req, ydw);
+        return new ReplyActionReg(req, ydw);
     }
 }
 

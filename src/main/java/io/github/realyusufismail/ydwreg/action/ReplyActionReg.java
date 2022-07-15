@@ -16,24 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.ydw.action;
+package io.github.realyusufismail.ydwreg.action;
 
-import io.github.realyusufismail.ydw.application.commands.reply.ReplyConfig;
-import io.github.realyusufismail.ydwreg.application.commands.slash.reply.ReplyConfigReg;
+import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.action.ReplyAction;
+import okhttp3.Request;
 import okhttp3.Response;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public interface Action {
-    default void queue() {
-        queue(null, null);
-    }
+public class ReplyActionReg extends ActionReg implements ReplyAction {
 
-    default void queue(@Nullable Consumer<? super Throwable> failure) {
-        queue(failure, null);
+    public ReplyActionReg(Request request, YDW ydw) {
+        super(request, ydw);
     }
-
-    void queue(@Nullable Consumer<? super Throwable> failure,
-            @Nullable Consumer<? super Response> success);
 }
