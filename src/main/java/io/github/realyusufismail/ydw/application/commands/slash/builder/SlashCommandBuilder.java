@@ -15,7 +15,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 package io.github.realyusufismail.ydw.application.commands.slash.builder;
 
 import io.github.realyusufismail.ydw.YDW;
@@ -23,11 +23,11 @@ import io.github.realyusufismail.ydwreg.application.commands.slash.builder.Slash
 
 public interface SlashCommandBuilder {
 
-    static SlashCommandCreator create(YDW ydw, String name, String description) {
-        return new SlashCommandCreatorReg(ydw, name, description);
-    }
+  static SlashCommandCreator create(YDW ydw, String name, String description) {
+    return new SlashCommandCreatorReg(ydw, name, description);
+  }
 
-    void upsert();
+  void upsert();
 
-    void create();
+  void create();
 }
