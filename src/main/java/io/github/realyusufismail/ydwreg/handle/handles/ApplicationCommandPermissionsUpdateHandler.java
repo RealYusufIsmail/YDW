@@ -21,15 +21,18 @@ package io.github.realyusufismail.ydwreg.handle.handles;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.guild.GuildApplicationCommandPermission;
+import io.github.realyusufismail.ydwreg.entities.guild.GuildApplicationCommandPermissionReg;
 import io.github.realyusufismail.ydwreg.handle.Handle;
 
-public class ApplicationCommandPermissionsUpdateHandler extends Handle {
+public class ApplicationCommandPermissionsUpdateHandler extends Handle  {
     public ApplicationCommandPermissionsUpdateHandler(JsonNode json, YDW ydw) {
         super(json, ydw);
     }
 
     @Override
     public void start() {
-        GuildApplicationCommandPermission guildApplicationCommandPermission;
+        GuildApplicationCommandPermission guildApplicationCommandPermission = new GuildApplicationCommandPermissionReg(json, json.get("id").asLong(), ydw);
+
+        //TODO: Requires a cahce system to check for existing permissions.
     }
 }

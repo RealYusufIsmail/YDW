@@ -18,11 +18,20 @@
  */ 
 package io.github.realyusufismail.ydw.entities.guild;
 
+import io.github.realyusufismail.ydw.application.commands.perm.ApplicationCommandPermission;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
+
+import java.util.List;
 
 public interface GuildApplicationCommandPermission extends SnowFlake {
     SnowFlake getApplicationId();
 
     Guild getGuild();
+
+    /**
+     * Gets the list of permissions for that command. Max of 100
+     * @return The list of permissions for that command.
+     */
+    List<ApplicationCommandPermission> getPermissions();
 }

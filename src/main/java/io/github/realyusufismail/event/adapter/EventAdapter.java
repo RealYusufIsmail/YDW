@@ -29,6 +29,7 @@ import io.github.realyusufismail.ydw.event.events.ResumedEvent;
 import io.github.realyusufismail.ydw.event.events.ShutdownEvent;
 import io.github.realyusufismail.ydw.event.events.channel.ChannelCreateEvent;
 import io.github.realyusufismail.ydw.event.events.interaction.SlashCommandInteractionEvent;
+import io.github.realyusufismail.ydw.event.events.message.MessageCreateEvent;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -88,6 +89,9 @@ public abstract class EventAdapter implements IEventReceiver {
     public void onChannelCreate(ChannelCreateEvent event) {}
 
     public void onChannelDelete(ChannelCreateEvent event) {}
+
+    //message
+    public void onMessageCreate(MessageCreateEvent event) {}
 
     /**
      * This method is called when an event is received.
