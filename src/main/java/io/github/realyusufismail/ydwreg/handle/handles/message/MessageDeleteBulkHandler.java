@@ -41,7 +41,7 @@ public class MessageDeleteBulkHandler extends Handle {
     public void start() {
         List<Long> messageIds = new ArrayList<>();
         long channelId = json.get("channel_id").asLong();
-        Optional<Guild> guild = Optional.of(ydw.getGuild(json.get("guild_id").asLong()));
+        Optional<Guild> guild = Optional.ofNullable(ydw.getGuild(json.get("guild_id").asLong()));
 
         JsonNode messageIdsNode = json.get("ids");
         for (JsonNode messageIdNode : messageIdsNode) {

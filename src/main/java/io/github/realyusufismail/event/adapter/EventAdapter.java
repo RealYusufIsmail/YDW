@@ -28,8 +28,11 @@ import io.github.realyusufismail.ydw.event.events.ReconnectEvent;
 import io.github.realyusufismail.ydw.event.events.ResumedEvent;
 import io.github.realyusufismail.ydw.event.events.ShutdownEvent;
 import io.github.realyusufismail.ydw.event.events.channel.ChannelCreateEvent;
+import io.github.realyusufismail.ydw.event.events.channel.ChannelDeleteEvent;
 import io.github.realyusufismail.ydw.event.events.interaction.SlashCommandInteractionEvent;
-import io.github.realyusufismail.ydw.event.events.message.MessageCreateEvent;
+import io.github.realyusufismail.ydw.event.events.invite.InviteCreateEvent;
+import io.github.realyusufismail.ydw.event.events.invite.InviteDeleteEvent;
+import io.github.realyusufismail.ydw.event.events.message.*;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -88,10 +91,25 @@ public abstract class EventAdapter implements IEventReceiver {
     // channel
     public void onChannelCreate(ChannelCreateEvent event) {}
 
-    public void onChannelDelete(ChannelCreateEvent event) {}
+    public void onChannelDelete(ChannelDeleteEvent event) {}
 
     // message
     public void onMessageCreate(MessageCreateEvent event) {}
+
+    public void onMessageDelete(MessageDeleteEvent event) {}
+
+    public void onMessageBulkDelete(MessageDeleteBulkEvent event) {}
+
+    public void onMessageReactionAdd(MessageReactionAddEvent event) {}
+
+    public void onMessageReactionRemove(MessageReactionRemoveEvent event) {}
+
+    public void onMessageReactionRemoveAll(MessageReactionRemoveAllEvent event) {}
+
+    // invite
+    public void onInviteCreate(InviteCreateEvent event) {}
+
+    public void onInviteDelete(InviteDeleteEvent event) {}
 
     /**
      * This method is called when an event is received.

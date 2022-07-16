@@ -39,7 +39,7 @@ public class MessageDeleteHandler extends Handle {
     public void start() {
         long messageId = json.get("id").asLong();
         long channelId = json.get("channel_id").asLong();
-        Optional<Guild> guild = Optional.of(ydw.getGuild(json.get("guild_id").asLong()));
+        Optional<Guild> guild = Optional.ofNullable(ydw.getGuild(json.get("guild_id").asLong()));
 
         AtomicReference<Channel> channel = new AtomicReference<>();
         guild.ifPresent(g -> {

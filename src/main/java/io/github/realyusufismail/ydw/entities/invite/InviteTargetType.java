@@ -16,21 +16,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.ydwreg.handle;
+package io.github.realyusufismail.ydw.entities.invite;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydwreg.YDWReg;
-import org.jetbrains.annotations.NotNull;
+public enum InviteTargetType {
+    STREAM(1),
+    EMBEDDED_APPLICATION(2),
+    UNKNOWN(-1);
 
-public abstract class Handle {
-    protected final JsonNode json;
-    protected final YDWReg ydw;
+    private final int value;
 
-    protected Handle(@NotNull JsonNode json, YDW ydw) {
-        this.json = json.get("d");
-        this.ydw = (YDWReg) ydw;
+    private InviteTargetType(int value) {
+        this.value = value;
     }
 
-    public abstract void start();
+    public int getValue() {
+        return value;
+    }
+
+    public static InviteTargetType fromValue(int value) {
+        for (InviteTargetType type : values()) {
+            if (type.getValue() == value) {
+                return type;
+            }
+        }
+        return UNKNOWN;
+    }
 }

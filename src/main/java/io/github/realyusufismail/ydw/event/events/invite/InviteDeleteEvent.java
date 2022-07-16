@@ -16,29 +16,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.ydwreg.handle.handles.invite;
+package io.github.realyusufismail.ydw.event.events.invite;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
-import io.github.realyusufismail.ydw.event.events.invite.InviteDeleteEvent;
-import io.github.realyusufismail.ydwreg.handle.Handle;
+import io.github.realyusufismail.ydw.event.Event;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class InviteDeleteHandler extends Handle {
+public class InviteDeleteEvent extends Event {
+    private Channel channel;
+    private Guild guild;
+    private String code;
 
-    public InviteDeleteHandler(JsonNode json, YDW ydw) {
-        super(json, ydw);
+    public InviteDeleteEvent(YDW ydw, Channel channel, @Nullable Guild guild, String code) {
+        super(ydw);
+        this.channel = channel;
+        this.guild = guild;
+        this.code = code;
     }
 
-    @Override
-    public void start() {
-        Channel channel = ydw.getChannel(json.get("channel_id").asLong());
-        Optional<Guild> guild = Optional.ofNullable(ydw.getGuild(json.get("guild_id").asLong()));
-        String code = json.get("code").asText();
+    public Channel getChannel() {
+        return channel;
+    }
 
-        ydw.handelEvent(new InviteDeleteEvent(ydw, channel, guild.get(), code));
+    public Optional<Guild> getGuild() {
+        return Optional.ofNullable(guild);
+    }
+
+    public String getCode() {
+        return code;
     }
 }

@@ -42,8 +42,8 @@ public class MessageReactionAddHandler extends Handle {
         User user = ydw.getUser(json.get("user_id").asLong());
         Channel channel = ydw.getChannel(json.get("channel_id").asLong());
         Message message = channel.getMessage(json.get("message_id").asLong());
-        Optional<Guild> guild = Optional.of(ydw.getGuild(json.get("guild_id").asLong()));
-        Optional<Member> member = Optional.of(new MemberReg(json.get("member"), ydw));
+        Optional<Guild> guild = Optional.ofNullable(ydw.getGuild(json.get("guild_id").asLong()));
+        Optional<Member> member = Optional.ofNullable(new MemberReg(json.get("member"), ydw));
 
         ydw.handelEvent(new MessageReactionAddEvent(ydw, user, channel, message, guild.get(),
                 member.get()));
