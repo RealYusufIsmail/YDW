@@ -73,11 +73,7 @@ public class YDWReg implements YDW {
     @NotNull
     @Override
     public List<Guild> getGuilds() {
-        return guilds;
-    }
-
-    public void setGuilds(List<Guild> guilds) {
-        this.guilds = guilds;
+        return rest.getYDW().getGuilds();
     }
 
     @Override
@@ -156,7 +152,7 @@ public class YDWReg implements YDW {
     }
 
     @Override
-    public @NotNull SelfUser getSelfUser() throws InterruptedException {
+    public @NotNull SelfUser getSelfUser() {
         Optional<SelfUser> user = Optional.ofNullable(this.selfUser);
         return user.orElseThrow(() -> new IllegalStateException("Self user is not set"));
     }
@@ -176,7 +172,9 @@ public class YDWReg implements YDW {
             // need to delete all commands
             getRest().getSlashCommandCaller().deleteAllCommands();
         } else {
-            commands.forEach(SlashCommandBuilder::upsert);
+            for (SlashCommandBuilder command : commands) {
+                command.upsert();
+            }
         }
     }
 

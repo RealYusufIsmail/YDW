@@ -60,8 +60,4 @@ public interface User extends SnowFlake, GenericEntity {
     Optional<UserFlags> getPublicFlags();
 
     List<Guild> getGuilds();
-
-    default void ifPresent(@NotNull Consumer<User> consumer) {
-        consumer.accept(this);
-    }
 }

@@ -118,7 +118,8 @@ public class ChannelCaller {
 
     public Request sendEmbedMessage(long id, @NotNull EmbedBuilder embedBuilder) {
         JsonNode json = JsonNodeFactory.instance.objectNode()
-            .put("embeds", JsonNodeFactory.instance.arrayNode().add(embedBuilder.toJson()));
+            .set("embeds", JsonNodeFactory.instance.arrayNode().add(embedBuilder.toJson()));
+
         RequestBody body = RequestBody.create(json.toString(), JSON);
         return new YDWRequest().request(token, EndPoint.CREATE_MESSAGE.getFullEndpoint(id))
             .post(body)

@@ -21,6 +21,7 @@ package websocket;
 import io.github.realyusufismail.event.adapter.EventAdapter;
 import io.github.realyusufismail.ydw.action.Action;
 import io.github.realyusufismail.ydw.action.ReplyAction;
+import io.github.realyusufismail.ydw.entities.SelfUser;
 import io.github.realyusufismail.ydw.event.events.interaction.SlashCommandInteractionEvent;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 
@@ -33,15 +34,24 @@ public class SlashCommandHandler extends EventAdapter {
             // event.replyEmbed(new EmbedBuilder().setTitle("Test").setColor(Color.CYAN).build())
             // .queue();
             event
-                .replyEmbed(new EmbedBuilder().setTitle("Test")
-                    .addField("yo", "1", false)
-                    .setColor(Color.CYAN)
+                .replyEmbed(new EmbedBuilder().setTitle("Ping")
+                    .addField("Ping", String.valueOf(event.getYDW().getPing()), false)
+                    .setColor(Color.RED)
                     .build(), ReplyAction.config.setEphemeral(true))
-                .queue(error -> {
-                    throw new RuntimeException(error);
-                }, success -> {
-                    System.out.println("Success");
-                });
+                .queue();
+        } else if (event.getName().equals("info")) {
+            SelfUser selfUser = event.getYDW().getSelfUser();
+            EmbedBuilder builder = new EmbedBuilder();
+
+            builder.setTitle("Info");
+            builder.addField("Name", selfUser.getUserName(), false);
+            builder.addField("Discriminator", selfUser.getDiscriminator(), false);
+            builder.addField("ID", selfUser.getId(), false);
+            builder.addField("Avatar", selfUser.getAvatar(), false);
+            builder.addField("Servers", String.valueOf(event.getYDW().getGuilds().size()), false);
+
+            event.replyEmbed(builder.build())
+                .queue(error -> System.out.println("Error: " + error.getCause()));
         }
     }
 }

@@ -93,35 +93,56 @@ public class MessageReg implements Message {
         this.id = id;
 
         this.channel = ydw.getChannel(message.get("channel_id").asLong());
+
         this.author =
                 new UserReg(message.get("author"), message.get("author").get("id").asLong(), ydw);
+
         this.content = message.get("content").asText();
+
         this.timestamp = ZonedDateTime.parse(message.get("timestamp").asText());
-        this.editedTimestamp = ZonedDateTime.parse(message.get("edited_timestamp").asText());
+
+        this.editedTimestamp = message.hasNonNull("edited_timestamp")
+                ? ZonedDateTime.parse(message.get("edited_timestamp").asText())
+                : null;
+
         this.tts = message.get("tts").asBoolean();
-        this.type = MessageType.valueOf(message.get("type").asText());
+
+        this.type = MessageType.fromInt(message.get("type").asInt());
+
         this.isPinned = message.get("pinned").asBoolean();
+
         this.nonce = message.get("nonce") != null ? message.get("nonce").asInt() : null;
+
         this.reference = message.get("message_reference") != null
                 ? new MessageReferenceReg(message.get("message_reference"),
                         message.get("message_reference").get("id").asLong(), ydw)
                 : null;
+
         this.mentionsEveryone = message.get("mention_everyone").asBoolean();
+
         this.application =
-                message.get("application") != null ? new ApplicationReg(message.get("application"),
-                        message.get("application").get("id").asLong(), ydw) : null;
-        this.referencedMessage = message.get("referenced_message") != null
-                ? new MessageReg(message.get("referenced_message"),
-                        message.get("referenced_message").get("id").asLong(), ydw)
+                message.hasNonNull("application")
+                        ? new ApplicationReg(message.get("application"),
+                                message.get("application").get("id").asLong(), ydw)
+                        : null;
+
+        this.referencedMessage =
+                message.hasNonNull("referenced_message")
+                        ? new MessageReg(message.get("referenced_message"),
+                                message.get("referenced_message").get("id").asLong(), ydw)
+                        : null;
+
+        this.interaction = message.hasNonNull("interaction")
+                ? new MessageInteractionReg(message.get("interaction"),
+                        message.get("interaction").get("id").asLong(), ydw)
                 : null;
-        this.interaction = message.get("interaction") != null ? new MessageInteractionReg(
-                message.get("interaction"), message.get("interaction").get("id").asLong(), ydw)
-                : null;
-        this.thread = message.get("thread_channel_id") != null
+
+        this.thread = message.hasNonNull("thread_channel_id")
                 ? ydw.getChannel(message.get("thread_channel_id").asLong())
                 : null;
+
         this.messageActivity =
-                message.get("activity") != null ? new MessageActivityReg(message.get("activity"))
+                message.hasNonNull("activity") ? new MessageActivityReg(message.get("activity"))
                         : null;
 
         if (message.hasNonNull("mentions")) {
@@ -216,8 +237,8 @@ public class MessageReg implements Message {
     }
 
     @Override
-    public ZonedDateTime getEditedTimestamp() {
-        return editedTimestamp;
+    public Optional<ZonedDateTime> getEditedTimestamp() {
+        return Optional.ofNullable(editedTimestamp);
     }
 
     @Override

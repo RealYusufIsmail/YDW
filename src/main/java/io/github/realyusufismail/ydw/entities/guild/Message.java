@@ -46,7 +46,7 @@ public interface Message extends SnowFlake, GenericEntity {
 
     ZonedDateTime getTimestamp();
 
-    ZonedDateTime getEditedTimestamp();
+    Optional<ZonedDateTime> getEditedTimestamp();
 
     /**
      * @return true if the message is text to speech(TTS), false otherwise

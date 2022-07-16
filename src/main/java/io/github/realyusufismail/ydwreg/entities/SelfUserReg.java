@@ -71,9 +71,4 @@ public class SelfUserReg extends UserReg implements SelfUser {
     public YDWReg getYDWReg() {
         return getYDW();
     }
-
-    @Override
-    public void ifPresent(@NotNull Consumer<User> consumer) {
-        super.ifPresent(consumer);
-    }
 }

@@ -81,7 +81,7 @@ public interface YDW {
 
     WebSocketManager getWebSocket();
 
-    SelfUser getSelfUser() throws InterruptedException;
+    SelfUser getSelfUser();
 
     InteractionManager getInteractionManager();
 

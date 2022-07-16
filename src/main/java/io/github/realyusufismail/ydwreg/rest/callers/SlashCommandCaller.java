@@ -242,9 +242,8 @@ public class SlashCommandCaller {
     public void upsertGlobalCommand() {
         // need to check if command exits and if so update it otherwise create it and if it is not
         // there delete it
-        if (name == null || description == null || guildId == null) {
-            throw new IllegalStateException(
-                    "Name, Description, Guild ID, and Options are required to call");
+        if (name == null || description == null) {
+            throw new IllegalStateException("Name and Description are required to call");
         }
 
         var commands = getGlobalSlashCommands();
