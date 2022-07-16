@@ -20,7 +20,6 @@ package io.github.realyusufismail.ydwreg.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.action.Action;
 import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.User;
@@ -39,7 +38,6 @@ import io.github.realyusufismail.ydwreg.entities.guild.channel.thread.ThreadMeta
 import io.github.realyusufismail.ydwreg.entities.message.MessageFlags;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -315,37 +313,33 @@ public class ChannelReg implements Channel {
     }
 
     @Override
-    public void sendEmbedMessage(EmbedBuilder embedBuilder) {
-        ydw.getRest().getChannelCaller().sendEmbedMessage(this.id, embedBuilder);
-    }
-
-    @NotNull
-    @Override
-    public Message getMessage(@NotNull String messageId) {
-        return null;
+    public MessageActionReg sendEmbedMessage(EmbedBuilder embedBuilder) {
+        var req = ydw.getRest().getChannelCaller().sendEmbedMessage(this.id, embedBuilder);
+        return new MessageActionReg(req, ydw);
     }
 
     @NotNull
     @Override
     public Message getMessage(long messageId) {
-        return null;
+        return ydw.getRest().getChannelCaller().getMessage(this.id, messageId);
     }
 
-    @Nullable
     @Override
-    public Action deleteMessage(@NotNull String messageId) {
-        return null;
+    public List<Message> getMessages(int limit) {
+        return ydw.getRest().getChannelCaller().getMessages(this.id, limit);
     }
 
-    @Nullable
+    @NotNull
     @Override
-    public Action deleteMessage(long messageId) {
-        return null;
+    public MessageActionReg deleteMessage(long messageId) {
+        var req = ydw.getRest().getChannelCaller().deleteMessage(this.id, messageId);
+        return new MessageActionReg(req, ydw);
     }
 
-    @Nullable
+    @NotNull
     @Override
-    public Action deleteMessages(int min, int max) {
-        return null;
+    public MessageActionReg deleteMessages(int amount) {
+        var req = ydw.getRest().getChannelCaller().deleteMessages(this.id, amount);
+        return new MessageActionReg(req, ydw);
     }
 }

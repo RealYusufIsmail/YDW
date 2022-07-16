@@ -16,19 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package event;
+package io.github.realyusufismail.ydw.action;
 
-import io.github.realyusufismail.event.recieve.IEventReceiver;
-import io.github.realyusufismail.ydw.event.Event;
-import io.github.realyusufismail.ydw.event.events.ReadyEvent;
+import io.github.realyusufismail.ydw.action.config.ReplyConfig;
+import io.github.realyusufismail.ydwreg.action.config.ReplyConfigReg;
 
-public class Test implements IEventReceiver {
-
-
-    public void onEvent(Event event) {
-        if (event instanceof ReadyEvent) {
-            System.out
-                .println("The number of guilds is " + ((ReadyEvent) event).getNumberOfGuilds());
-        }
-    }
+public interface ReplyAction extends Action {
+    ReplyConfig config = new ReplyConfigReg();
 }

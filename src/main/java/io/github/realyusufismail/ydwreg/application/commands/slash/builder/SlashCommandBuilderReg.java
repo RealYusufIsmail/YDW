@@ -30,7 +30,6 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
         this.guildOnly = guildOnly;
     }
 
-
     @Override
     public void upsert() {
         if (guildOnly) {
@@ -42,11 +41,10 @@ public class SlashCommandBuilderReg implements SlashCommandBuilder {
 
     @Override
     public void create() {
-
-    }
-
-    @Override
-    public void delete() {
-
+        if (guildOnly) {
+            caller.createGuildOnlyCommand();
+        } else {
+            caller.createGlobalCommand();
+        }
     }
 }

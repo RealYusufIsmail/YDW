@@ -22,7 +22,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Objects;
-import com.google.errorprone.annotations.CheckReturnValue;
 import io.github.realyusufismail.ydw.entities.embed.Embed;
 import io.github.realyusufismail.ydw.entities.embed.objects.Image;
 import io.github.realyusufismail.ydw.entities.embed.objects.*;
@@ -115,7 +114,6 @@ public class EmbedBuilder {
     }
 
     @NotNull
-    @CheckReturnValue
     public EmbedBuilder setTitle(@NotNull String title) {
         Verify.verify(title.length() <= MAX_TITLE_LENGTH, "Title is too long");
         this.title = title;
@@ -123,7 +121,6 @@ public class EmbedBuilder {
     }
 
     @NotNull
-    @CheckReturnValue
     public EmbedBuilder setDescription(@NotNull String description) {
         Verify.verify(description.length() <= MAX_DESCRIPTION_LENGTH, "Description is too long");
         this.description = description;
@@ -131,28 +128,24 @@ public class EmbedBuilder {
     }
 
     @NotNull
-    @CheckReturnValue
     public EmbedBuilder setUrl(@NotNull String url) {
         this.url = url;
         return this;
     }
 
     @NotNull
-    @CheckReturnValue
     public EmbedBuilder setTimestamp(@NotNull String timestamp) {
         this.timestamp = timestamp;
         return this;
     }
 
     @NotNull
-    @CheckReturnValue
     public EmbedBuilder setColor(@NotNull Color color) {
         this.color = color;
         return this;
     }
 
     @NotNull
-    @CheckReturnValue
     public EmbedBuilder setFooter(@NotNull String text, String iconUrl) {
         Verify.verify(text.length() <= MAX_FOOTER_LENGTH, "Footer text is too long");
         this.footer = new FooterReg(text, iconUrl, null);
@@ -160,35 +153,30 @@ public class EmbedBuilder {
     }
 
     @NotNull
-    @CheckReturnValue
     public EmbedBuilder setImage(String url) {
         this.image = new ImageReg(url, null, null, null);
         return this;
     }
 
     @NotNull
-    @CheckReturnValue
     public EmbedBuilder setThumbnail(String url) {
         this.thumbnail = new ThumbnailReg(url, null, null, null);
         return this;
     }
 
     @NotNull
-    @CheckReturnValue
     public EmbedBuilder setVideo(String url) {
         this.video = new VideoReg(url, null, null, null);
         return this;
     }
 
     @NotNull
-    @CheckReturnValue
     public EmbedBuilder setProvider(@NotNull String name, @NotNull String url) {
         this.provider = new ProviderReg(name, url);
         return this;
     }
 
     @NotNull
-    @CheckReturnValue
     public EmbedBuilder setAuthor(@NotNull String name, String url, String iconUrl) {
         Verify.verify(name.length() <= MAX_AUTHOR_NAME_LENGTH, "Author name is too long");
         this.author = new AuthorReg(name, url, iconUrl, null);
@@ -196,7 +184,6 @@ public class EmbedBuilder {
     }
 
     @NotNull
-    @CheckReturnValue
     public EmbedBuilder addField(@NotNull String name, @NotNull String value, boolean inline) {
         Verify.verify(name.length() <= MAX_FIELD_NAME_LENGTH, "Field name is too long");
         Verify.verify(value.length() <= MAX_FIELD_VALUE_LENGTH, "Field value is too long");
@@ -207,13 +194,11 @@ public class EmbedBuilder {
         return this;
     }
 
-    @CheckReturnValue
     public EmbedBuilder addField(@NotNull String name, @NotNull String value) {
         return addField(name, value, false);
     }
 
     @NotNull
-    @CheckReturnValue
     public EmbedBuilder addFields(@NotNull List<Fields> fields) {
         for (Fields field : fields) {
             if (field.getName().isPresent() && field.getValue().isPresent()) {

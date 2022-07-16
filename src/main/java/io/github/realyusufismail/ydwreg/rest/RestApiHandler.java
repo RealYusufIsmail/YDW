@@ -70,10 +70,6 @@ public class RestApiHandler {
         return new UserCaller(token, ydw, client);
     }
 
-    public @NotNull MessageCaller getMessageCaller() {
-        return new MessageCaller(ydw, JSON, client);
-    }
-
     public @NotNull StickerCaller getStickerCaller() {
         return new StickerCaller(token, ydw, client);
     }

@@ -20,7 +20,13 @@ package io.github.realyusufismail.ydwreg.handle.handles.message;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.entities.Channel;
+import io.github.realyusufismail.ydw.entities.Guild;
+import io.github.realyusufismail.ydw.entities.guild.Message;
+import io.github.realyusufismail.ydw.event.events.message.MessageReactionRemoveAllEvent;
 import io.github.realyusufismail.ydwreg.handle.Handle;
+
+import java.util.Optional;
 
 public class MessageReactionRemoveAllHandler extends Handle {
 
@@ -30,6 +36,10 @@ public class MessageReactionRemoveAllHandler extends Handle {
 
     @Override
     public void start() {
+        Channel channel = ydw.getChannel(json.get("channel_id").asLong());
+        Message message = channel.getMessage(json.get("message_id").asLong());
+        Optional<Guild> guild = Optional.ofNullable(ydw.getGuild(json.get("guild_id").asLong()));
 
+        ydw.handelEvent(new MessageReactionRemoveAllEvent(ydw, channel, message, guild.get()));
     }
 }

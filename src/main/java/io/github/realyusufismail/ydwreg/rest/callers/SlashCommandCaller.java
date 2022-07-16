@@ -22,9 +22,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.action.config.ReplyConfig;
 import io.github.realyusufismail.ydw.application.commands.ApplicationCommand;
 import io.github.realyusufismail.ydw.application.commands.option.CommandType;
-import io.github.realyusufismail.ydw.application.commands.reply.ReplyConfig;
 import io.github.realyusufismail.ydw.application.interaction.InteractionCallbackType;
 import io.github.realyusufismail.ydw.builder.MessageBuilder;
 import io.github.realyusufismail.ydwreg.YDWReg;
@@ -242,9 +242,8 @@ public class SlashCommandCaller {
     public void upsertGlobalCommand() {
         // need to check if command exits and if so update it otherwise create it and if it is not
         // there delete it
-        if (name == null || description == null || guildId == null) {
-            throw new IllegalStateException(
-                    "Name, Description, Guild ID, and Options are required to call");
+        if (name == null || description == null) {
+            throw new IllegalStateException("Name and Description are required to call");
         }
 
         var commands = getGlobalSlashCommands();

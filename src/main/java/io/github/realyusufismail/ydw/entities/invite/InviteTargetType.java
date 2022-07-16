@@ -16,14 +16,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.ydw.application.commands.reply;
+package io.github.realyusufismail.ydw.entities.invite;
 
-public interface ReplyConfig {
-    ReplyConfig setEphemeral(boolean ephemeral);
+public enum InviteTargetType {
+    STREAM(1),
+    EMBEDDED_APPLICATION(2),
+    UNKNOWN(-1);
 
-    ReplyConfig setTTS(boolean tts);
+    private final int value;
 
-    boolean isEphemeral();
+    private InviteTargetType(int value) {
+        this.value = value;
+    }
 
-    boolean isTTS();
+    public int getValue() {
+        return value;
+    }
+
+    public static InviteTargetType fromValue(int value) {
+        for (InviteTargetType type : values()) {
+            if (type.getValue() == value) {
+                return type;
+            }
+        }
+        return UNKNOWN;
+    }
 }

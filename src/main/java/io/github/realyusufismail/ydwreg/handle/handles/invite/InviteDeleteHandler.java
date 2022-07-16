@@ -20,7 +20,12 @@ package io.github.realyusufismail.ydwreg.handle.handles.invite;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.entities.Channel;
+import io.github.realyusufismail.ydw.entities.Guild;
+import io.github.realyusufismail.ydw.event.events.invite.InviteDeleteEvent;
 import io.github.realyusufismail.ydwreg.handle.Handle;
+
+import java.util.Optional;
 
 public class InviteDeleteHandler extends Handle {
 
@@ -30,6 +35,10 @@ public class InviteDeleteHandler extends Handle {
 
     @Override
     public void start() {
+        Channel channel = ydw.getChannel(json.get("channel_id").asLong());
+        Optional<Guild> guild = Optional.ofNullable(ydw.getGuild(json.get("guild_id").asLong()));
+        String code = json.get("code").asText();
 
+        ydw.handelEvent(new InviteDeleteEvent(ydw, channel, guild.get(), code));
     }
 }

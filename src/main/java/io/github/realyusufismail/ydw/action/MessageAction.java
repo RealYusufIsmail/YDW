@@ -18,12 +18,10 @@
  */ 
 package io.github.realyusufismail.ydw.action;
 
-import org.jetbrains.annotations.NotNull;
+import io.github.realyusufismail.ydw.action.config.MessageConfig;
+import io.github.realyusufismail.ydwreg.action.config.MessageConfigReg;
 
 public interface MessageAction extends Action {
-    @NotNull
-    MessageAction isTTs();
-
-    @NotNull
-    MessageAction isMentionable();
+    MessageConfig config = new MessageConfigReg();
 }
+

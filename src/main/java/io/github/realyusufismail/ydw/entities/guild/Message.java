@@ -21,11 +21,11 @@ package io.github.realyusufismail.ydw.entities.guild;
 import io.github.realyusufismail.ydw.application.Application;
 import io.github.realyusufismail.ydw.entities.*;
 import io.github.realyusufismail.ydw.entities.embed.Embed;
+import io.github.realyusufismail.ydw.entities.guild.message.MessageActivity;
 import io.github.realyusufismail.ydw.entities.guild.message.MessageReference;
 import io.github.realyusufismail.ydw.entities.sticker.Sticker;
 import io.github.realyusufismail.ydw.entities.sticker.StickerItem;
 import io.github.realyusufismail.ydw.interaction.MessageInteraction;
-import io.github.realyusufismail.ydwreg.entities.message.MessageActivityType;
 import io.github.realyusufismail.ydwreg.entities.message.MessageFlags;
 import io.github.realyusufismail.ydwreg.entities.message.MessageType;
 import io.github.realyusufismail.ydwreg.message_components.ComponentType;
@@ -35,23 +35,18 @@ import org.jetbrains.annotations.NotNull;
 import java.time.ZonedDateTime;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public interface Message extends SnowFlake, GenericEntity {
     Channel getChannel();
 
-    Guild getGuild();
-
     User getAuthor();
-
-    Optional<Member> getMember();
 
     String getContent();
 
     ZonedDateTime getTimestamp();
 
-    ZonedDateTime getEditedTimestamp();
+    Optional<ZonedDateTime> getEditedTimestamp();
 
     /**
      * @return true if the message is text to speech(TTS), false otherwise
@@ -60,9 +55,9 @@ public interface Message extends SnowFlake, GenericEntity {
 
     Boolean doesMentionEveryone();
 
-    Map<User, Member> getMentions();
+    List<User> getMentions();
 
-    List<Role> getRoles();
+    List<Role> getMentionedRoles();
 
     List<Channel> getMentionChannels();
 
@@ -83,7 +78,7 @@ public interface Message extends SnowFlake, GenericEntity {
 
     MessageType getType();
 
-    MessageActivityType getActivityType();
+    Optional<MessageActivity> getActivity();
 
     Optional<Application> getApplication();
 
@@ -91,7 +86,7 @@ public interface Message extends SnowFlake, GenericEntity {
 
     EnumSet<MessageFlags> getFlags();
 
-    Optional<Message> getReferenceMessage();
+    Optional<Message> getReferencedMessage();
 
     Optional<MessageInteraction> getMessageInteraction();
 

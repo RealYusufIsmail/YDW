@@ -21,6 +21,7 @@ package io.github.realyusufismail.ydw.application.commands.slash.builder;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandCreatorReg;
 
+// TODO: problem were it registers only one command.
 public interface SlashCommandBuilder {
 
     static SlashCommandCreator create(YDW ydw, String name, String description) {
@@ -30,6 +31,4 @@ public interface SlashCommandBuilder {
     void upsert();
 
     void create();
-
-    void delete();
 }

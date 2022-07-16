@@ -20,47 +20,10 @@ package io.github.realyusufismail.ydwreg.action;
 
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.action.MessageAction;
-import io.github.realyusufismail.ydwreg.rest.callers.MessageCaller;
 import okhttp3.Request;
-import okhttp3.Response;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Consumer;
-
-public class MessageActionReg implements MessageAction {
-    private final Request request;
-
-    private final YDW ydw;
-
-    private final MessageCaller messageCaller;
-
+public class MessageActionReg extends ActionReg implements MessageAction {
     public MessageActionReg(Request request, YDW ydw) {
-        this.request = request;
-        this.ydw = ydw;
-        this.messageCaller = ydw.getRest().getMessageCaller();
-    }
-
-    @Override
-    public void queue(@Nullable Consumer<? super Throwable> failure,
-            Consumer<? super Response> success) {
-        messageCaller.queue(request, failure, success);
-    }
-
-    @Override
-    public @NotNull MessageAction isTTs() {
-        messageCaller.setTTS(true);
-        return this;
-    }
-
-    @Override
-    public @NotNull MessageAction isMentionable() {
-        messageCaller.setMentionable(true);
-        return this;
-    }
-
-    @Nullable
-    public YDW getYDW() {
-        return ydw;
+        super(request, ydw);
     }
 }

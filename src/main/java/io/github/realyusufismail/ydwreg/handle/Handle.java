@@ -21,12 +21,13 @@ package io.github.realyusufismail.ydwreg.handle;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydwreg.YDWReg;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class Handle {
     protected final JsonNode json;
     protected final YDWReg ydw;
 
-    protected Handle(JsonNode json, YDW ydw) {
+    protected Handle(@NotNull JsonNode json, YDW ydw) {
         this.json = json.get("d");
         this.ydw = (YDWReg) ydw;
     }

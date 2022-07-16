@@ -31,7 +31,6 @@ import io.github.realyusufismail.ydw.entities.guild.channel.StageChannel;
 import io.github.realyusufismail.ydw.entities.guild.channel.TextChannel;
 import io.github.realyusufismail.ydw.entities.guild.channel.VoiceChannel;
 import io.github.realyusufismail.ydw.entities.sticker.Sticker;
-import io.github.realyusufismail.ydw.entities.voice.VoiceState;
 import io.github.realyusufismail.ydwreg.entities.guild.GuildFeatures;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
@@ -42,6 +41,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 
+// TODO: Add documentation
 public interface Guild extends SnowFlake, GenericEntity {
     String getName();
 
@@ -141,13 +141,19 @@ public interface Guild extends SnowFlake, GenericEntity {
 
     EnumSet<GuildFeatures> getFeatures();
 
-    List<VoiceState> getVoiceStates();
-
     @NotNull
     List<Member> getMembers();
 
     @NotNull
     List<Channel> getChannels();
+
+    @NotNull
+    Channel getChannel(long channelIdLong);
+
+    @NotNull
+    default Channel getChannel(String channelId) {
+        return getChannel(Long.parseUnsignedLong(channelId));
+    }
 
     Member getBot();
 
@@ -280,4 +286,6 @@ public interface Guild extends SnowFlake, GenericEntity {
     List<NewsChannel> getNewsChannels();
 
     List<StageChannel> getStageChannels();
+
+    Member getSelfMember();
 }

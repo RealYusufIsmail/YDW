@@ -18,7 +18,6 @@
  */ 
 package io.github.realyusufismail.ydw.entities;
 
-import io.github.realyusufismail.ydw.action.Action;
 import io.github.realyusufismail.ydw.entities.channel.ChannelType;
 import io.github.realyusufismail.ydw.entities.channel.Overwrite;
 import io.github.realyusufismail.ydw.entities.guild.Member;
@@ -31,7 +30,6 @@ import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 import io.github.realyusufismail.ydwreg.entities.message.MessageFlags;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -97,20 +95,26 @@ public interface Channel extends SnowFlake, GenericEntity {
     // Rest Actions
     MessageActionReg sendMessage(String message);
 
-    void sendEmbedMessage(EmbedBuilder embedBuilder);
-
-    @NotNull
-    Message getMessage(@NotNull String messageId);
+    MessageActionReg sendEmbedMessage(EmbedBuilder embedBuilder);
 
     @NotNull
     Message getMessage(long messageId);
 
-    @Nullable
-    Action deleteMessage(@NotNull String messageId);
+    @NotNull
+    default Message getMessage(@NotNull String messageId) {
+        return getMessage(Long.parseUnsignedLong(messageId));
+    }
 
-    @Nullable
-    Action deleteMessage(long messageId);
+    List<Message> getMessages(int limit);
 
-    @Nullable
-    Action deleteMessages(int min, int max);
+    @NotNull
+    default MessageActionReg deleteMessage(@NotNull String messageId) {
+        return deleteMessage(Long.parseUnsignedLong(messageId));
+    }
+
+    @NotNull
+    MessageActionReg deleteMessage(long messageId);
+
+    @NotNull
+    MessageActionReg deleteMessages(int amount);
 }

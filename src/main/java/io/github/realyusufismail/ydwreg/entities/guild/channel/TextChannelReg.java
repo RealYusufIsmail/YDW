@@ -36,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-// TODO : once rest api is done start creating the rest api for this
 public class TextChannelReg extends ChannelReg implements TextChannel {
     private final YDW ydw;
 

@@ -16,17 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package event;
+package io.github.realyusufismail.ydwreg.action;
 
-import io.github.realyusufismail.event.recieve.EventReceiver;
-import io.github.realyusufismail.ydw.event.events.ReadyEvent;
+import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.action.ReplyAction;
+import okhttp3.Request;
 
-public class TestMain {
-    public static void main(String[] args) {
-        EventReceiver eventReceiver = new EventReceiver();
-        Test test = new Test();
-        eventReceiver.addEventReceiver(test);
+public class ReplyActionReg extends ActionReg implements ReplyAction {
 
-        test.onEvent(new ReadyEvent(null, 2, 2));
+    public ReplyActionReg(Request request, YDW ydw) {
+        super(request, ydw);
     }
 }

@@ -12,7 +12,7 @@ ext {
     dev_organizationUrl = 'https://github.com/RealYusufIsmail'
 
     gpl_name = 'GNU Library General Public License version 3'
-    gpl_url = 'https://github.com/RealYusufIsmail/YDW/blob/Master/LICENSE'
+    gpl_url = 'https://github.com/RealYusufIsmail/YDW/blob/master/LICENSE'
 
     // Make sure we have a default for initial configuration evaluation
     isReleaseVersion = false
@@ -37,7 +37,7 @@ dependencies {
     //config
     implementation group: 'io.github.yusufsdiscordbot', name: 'config', version: '1.0.4'
     //https and ws
-    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '5.0.0-alpha.7'
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '5.0.0-alpha.10'
     implementation group: 'com.neovisionaries', name: 'nv-websocket-client', version: '2.14'
     //json
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.3'

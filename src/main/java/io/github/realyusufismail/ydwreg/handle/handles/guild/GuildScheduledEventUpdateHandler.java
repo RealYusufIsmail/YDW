@@ -28,7 +28,5 @@ public class GuildScheduledEventUpdateHandler extends Handle {
     }
 
     @Override
-    public void start() {
-        // TODO
-    }
+    public void start() {}
 }

@@ -20,13 +20,11 @@ package io.github.realyusufismail.ydwreg.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.entities.SelfUser;
-import io.github.realyusufismail.ydw.entities.User;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 
 public class SelfUserReg extends UserReg implements SelfUser {
     private final Long applicationId;
@@ -70,10 +68,5 @@ public class SelfUserReg extends UserReg implements SelfUser {
 
     public YDWReg getYDWReg() {
         return getYDW();
-    }
-
-    @Override
-    public void ifPresent(@NotNull Consumer<User> consumer) {
-        super.ifPresent(consumer);
     }
 }

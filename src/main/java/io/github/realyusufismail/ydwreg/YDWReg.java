@@ -21,7 +21,6 @@ package io.github.realyusufismail.ydwreg;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.realyusufismail.event.recieve.EventReceiver;
 import io.github.realyusufismail.websocket.WebSocketManager;
-import io.github.realyusufismail.ydw.GateWayIntent;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
@@ -44,7 +43,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class YDWReg implements YDW {
-
     // logger
     public static final Logger logger = LoggerFactory.getLogger(YDWReg.class);
     @NotNull
@@ -70,17 +68,12 @@ public class YDWReg implements YDW {
 
     public void handelEvent(Event event) {
         eventReceiver.eventReceivers.forEach(eventReceiver -> eventReceiver.onEvent(event));
-
     }
 
     @NotNull
     @Override
     public List<Guild> getGuilds() {
-        return guilds;
-    }
-
-    public void setGuilds(List<Guild> guilds) {
-        this.guilds = guilds;
+        return rest.getYDW().getGuilds();
     }
 
     @Override
@@ -103,18 +96,13 @@ public class YDWReg implements YDW {
         return getRest().getYDWCaller().getCategory(categoryId);
     }
 
-    public boolean isGatewayIntents(@NotNull GateWayIntent intents) {
-        int raw = intents.getValue();
-        return (ws.getGatewayIntents() & raw) == raw;
-    }
-
-
     @Override
     public void login(String token, int gatewayIntents, String status, int largeThreshold,
-            ActivityConfig activity) {
+            ActivityConfig activity, int corePoolSize) {
         logger.info("Received login request");
         this.token = token;
-        ws = new WebSocketManager(this, token, gatewayIntents, status, largeThreshold, activity);
+        ws = new WebSocketManager(this, token, gatewayIntents, status, largeThreshold, activity)
+            .setCorePoolSize(corePoolSize);
     }
 
     @Override
@@ -163,12 +151,8 @@ public class YDWReg implements YDW {
         return ws;
     }
 
-    public boolean isSelfUserThere() {
-        return selfUser != null;
-    }
-
     @Override
-    public @NotNull SelfUser getSelfUser() throws InterruptedException {
+    public @NotNull SelfUser getSelfUser() {
         Optional<SelfUser> user = Optional.ofNullable(this.selfUser);
         return user.orElseThrow(() -> new IllegalStateException("Self user is not set"));
     }
@@ -188,7 +172,9 @@ public class YDWReg implements YDW {
             // need to delete all commands
             getRest().getSlashCommandCaller().deleteAllCommands();
         } else {
-            commands.forEach(SlashCommandBuilder::upsert);
+            for (SlashCommandBuilder command : commands) {
+                command.upsert();
+            }
         }
     }
 

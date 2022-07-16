@@ -25,7 +25,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 public interface User extends SnowFlake, GenericEntity {
     String getUserName();
@@ -60,8 +59,4 @@ public interface User extends SnowFlake, GenericEntity {
     Optional<UserFlags> getPublicFlags();
 
     List<Guild> getGuilds();
-
-    default void ifPresent(@NotNull Consumer<User> consumer) {
-        consumer.accept(this);
-    }
 }
