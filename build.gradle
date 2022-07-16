@@ -12,7 +12,7 @@ ext {
     dev_organizationUrl = 'https://github.com/RealYusufIsmail'
 
     gpl_name = 'GNU Library General Public License version 3'
-    gpl_url = 'https://github.com/RealYusufIsmail/YDW/blob/Master/LICENSE'
+    gpl_url = 'https://github.com/RealYusufIsmail/YDW/blob/master/LICENSE'
 
     // Make sure we have a default for initial configuration evaluation
     isReleaseVersion = false

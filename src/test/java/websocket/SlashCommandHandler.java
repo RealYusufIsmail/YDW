@@ -48,7 +48,6 @@ public class SlashCommandHandler extends EventAdapter {
             builder.addField("Discriminator", selfUser.getDiscriminator(), false);
             builder.addField("ID", selfUser.getId(), false);
             builder.addField("Avatar", selfUser.getAvatar(), false);
-            builder.addField("Servers", String.valueOf(event.getYDW().getGuilds().size()), false);
 
             event.replyEmbed(builder.build())
                 .queue(error -> System.out.println("Error: " + error.getCause()));

@@ -105,6 +105,7 @@ public class GuildReg implements Guild {
     private final List<NewsChannel> newsChannels = new ArrayList<>();
     private final List<StageChannel> stageChannels = new ArrayList<>();
     private final List<VoiceChannel> voiceChannels = new ArrayList<>();
+    private final Member selfMember;
 
     public GuildReg(@NotNull JsonNode guildJ, long guildId, @NotNull YDW ydw) {
         this.ydw = ydw;
@@ -194,14 +195,11 @@ public class GuildReg implements Guild {
         this.isLarge = guildJ.hasNonNull("large") ? guildJ.get("large").asBoolean() : null;
         this.isUnavailable =
                 guildJ.hasNonNull("unavailable") ? guildJ.get("unavailable").asBoolean() : null;
-
+        this.selfMember = getGuildCaller().getMember(guildId, ydw.getSelfUser().getId());
 
         final ArrayNode roles = (ArrayNode) guildJ.get("roles");
         final ArrayNode emojis = (ArrayNode) guildJ.get("emojis");
         final ArrayNode features = (ArrayNode) guildJ.get("features");
-        final ArrayNode voiceStates = (ArrayNode) guildJ.get("voice_states");
-        final ArrayNode members = (ArrayNode) guildJ.get("members");
-        final ArrayNode channels = (ArrayNode) guildJ.get("channels");
         final ArrayNode stickers = (ArrayNode) guildJ.get("stickers");
 
         if (guildJ.hasNonNull("roles")) {
@@ -562,6 +560,11 @@ public class GuildReg implements Guild {
     @Override
     public List<StageChannel> getStageChannels() {
         return stageChannels;
+    }
+
+    @Override
+    public Member getSelfMember() {
+        return selfMember;
     }
 
     /**

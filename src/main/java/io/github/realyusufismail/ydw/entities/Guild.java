@@ -41,6 +41,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 
+// TODO: Add documentation
 public interface Guild extends SnowFlake, GenericEntity {
     String getName();
 
@@ -285,4 +286,6 @@ public interface Guild extends SnowFlake, GenericEntity {
     List<NewsChannel> getNewsChannels();
 
     List<StageChannel> getStageChannels();
+
+    Member getSelfMember();
 }
