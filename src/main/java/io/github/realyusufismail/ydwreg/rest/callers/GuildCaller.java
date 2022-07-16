@@ -40,7 +40,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 // TODO: Create a system which checks if the required intents are enabled.
 public class GuildCaller {

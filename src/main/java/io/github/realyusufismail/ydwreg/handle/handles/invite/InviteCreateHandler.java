@@ -29,7 +29,6 @@ import io.github.realyusufismail.ydw.event.events.invite.InviteCreateEvent;
 import io.github.realyusufismail.ydwreg.application.ApplicationReg;
 import io.github.realyusufismail.ydwreg.entities.UserReg;
 import io.github.realyusufismail.ydwreg.handle.Handle;
-import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;

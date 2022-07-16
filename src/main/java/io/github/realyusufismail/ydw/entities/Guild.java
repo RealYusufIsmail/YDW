@@ -31,7 +31,6 @@ import io.github.realyusufismail.ydw.entities.guild.channel.StageChannel;
 import io.github.realyusufismail.ydw.entities.guild.channel.TextChannel;
 import io.github.realyusufismail.ydw.entities.guild.channel.VoiceChannel;
 import io.github.realyusufismail.ydw.entities.sticker.Sticker;
-import io.github.realyusufismail.ydw.entities.voice.VoiceState;
 import io.github.realyusufismail.ydwreg.entities.guild.GuildFeatures;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;

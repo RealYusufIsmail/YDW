@@ -22,13 +22,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
-import io.github.realyusufismail.ydw.entities.User;
-import io.github.realyusufismail.ydw.entities.emoji.Emoji;
-import io.github.realyusufismail.ydw.entities.guild.Member;
 import io.github.realyusufismail.ydw.entities.guild.Message;
 import io.github.realyusufismail.ydw.event.events.message.MessageReactionRemoveAllEvent;
-import io.github.realyusufismail.ydwreg.entities.emoji.EmojiReg;
-import io.github.realyusufismail.ydwreg.entities.guild.MemberReg;
 import io.github.realyusufismail.ydwreg.handle.Handle;
 
 import java.util.Optional;

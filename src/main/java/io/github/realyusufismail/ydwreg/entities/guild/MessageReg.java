@@ -21,11 +21,14 @@ package io.github.realyusufismail.ydwreg.entities.guild;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.application.Application;
-import io.github.realyusufismail.ydw.entities.*;
+import io.github.realyusufismail.ydw.entities.Attachment;
+import io.github.realyusufismail.ydw.entities.Channel;
+import io.github.realyusufismail.ydw.entities.Reaction;
+import io.github.realyusufismail.ydw.entities.User;
 import io.github.realyusufismail.ydw.entities.embed.Embed;
-import io.github.realyusufismail.ydw.entities.guild.Member;
 import io.github.realyusufismail.ydw.entities.guild.Message;
 import io.github.realyusufismail.ydw.entities.guild.Role;
+import io.github.realyusufismail.ydw.entities.guild.message.MessageActivity;
 import io.github.realyusufismail.ydw.entities.guild.message.MessageReference;
 import io.github.realyusufismail.ydw.entities.sticker.Sticker;
 import io.github.realyusufismail.ydw.entities.sticker.StickerItem;
@@ -35,7 +38,7 @@ import io.github.realyusufismail.ydwreg.entities.ChannelReg;
 import io.github.realyusufismail.ydwreg.entities.ReactionReg;
 import io.github.realyusufismail.ydwreg.entities.UserReg;
 import io.github.realyusufismail.ydwreg.entities.embed.EmbedReg;
-import io.github.realyusufismail.ydwreg.entities.message.MessageActivityType;
+import io.github.realyusufismail.ydwreg.entities.message.MessageActivityReg;
 import io.github.realyusufismail.ydwreg.entities.message.MessageFlags;
 import io.github.realyusufismail.ydwreg.entities.message.MessageReferenceReg;
 import io.github.realyusufismail.ydwreg.entities.message.MessageType;
@@ -44,10 +47,12 @@ import io.github.realyusufismail.ydwreg.entities.sticker.StickerReg;
 import io.github.realyusufismail.ydwreg.message_components.ComponentType;
 import io.github.realyusufismail.ydwreg.message_components.interaction.MessageInteractionReg;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
 
 public class MessageReg implements Message {
     private final YDW ydw;
@@ -56,17 +61,13 @@ public class MessageReg implements Message {
     private final Channel channel;
     @NotNull
     private final User author;
-    @Nullable
-    private final Member member;
     private final String content;
     private final ZonedDateTime timestamp;
     private final ZonedDateTime editedTimestamp;
-    @NotNull
-    private final Boolean tts;
-    @NotNull
-    private final Boolean mentionEveryone;
-    private final Map<User, Member> mentions = new HashMap<>();
-    private final List<Role> roles = new ArrayList<>();
+    private final boolean tts;
+
+    private final List<User> mentions = new ArrayList<>();
+    private final List<Role> mentionedRoles = new ArrayList<>();
     private final List<Channel> mentionedChannels = new ArrayList<>();
     private final List<Attachment> attachments = new ArrayList<>();
     private final List<Embed> embeds = new ArrayList<>();
@@ -75,24 +76,16 @@ public class MessageReg implements Message {
     private final EnumSet<MessageFlags> flags = EnumSet.noneOf(MessageFlags.class);
     private final List<StickerItem> stickerItems = new ArrayList<>();
     private final EnumSet<ComponentType> componentTypes = EnumSet.noneOf(ComponentType.class);
-    @NotNull
     private final MessageType type;
-    @NotNull
     private final Boolean isPinned;
     private final Integer nonce;
-    @Nullable
     private final MessageReference reference;
-    @Nullable
-    private final MessageActivityType activityType;
-    @NotNull
-    private final Boolean mentionsEveryone;
-    @Nullable
+    private final boolean mentionsEveryone;
     private final Application application;
-    @Nullable
     private final Message referencedMessage;
-    @Nullable
     private final MessageInteraction interaction;
     private final Channel thread;
+    private final MessageActivity messageActivity;
 
 
     public MessageReg(@NotNull JsonNode message, long id, @NotNull YDW ydw) {
@@ -102,13 +95,10 @@ public class MessageReg implements Message {
         this.channel = ydw.getChannel(message.get("channel_id").asLong());
         this.author =
                 new UserReg(message.get("author"), message.get("author").get("id").asLong(), ydw);
-        this.member =
-                message.get("member") != null ? new MemberReg(message.get("member"), ydw) : null;
         this.content = message.get("content").asText();
         this.timestamp = ZonedDateTime.parse(message.get("timestamp").asText());
         this.editedTimestamp = ZonedDateTime.parse(message.get("edited_timestamp").asText());
         this.tts = message.get("tts").asBoolean();
-        this.mentionEveryone = message.get("mention_everyone").asBoolean();
         this.type = MessageType.valueOf(message.get("type").asText());
         this.isPinned = message.get("pinned").asBoolean();
         this.nonce = message.get("nonce") != null ? message.get("nonce").asInt() : null;
@@ -116,10 +106,7 @@ public class MessageReg implements Message {
                 ? new MessageReferenceReg(message.get("message_reference"),
                         message.get("message_reference").get("id").asLong(), ydw)
                 : null;
-        this.activityType = message.get("activity") != null
-                ? MessageActivityType.valueOf(message.get("activity").get("type").asText())
-                : null;
-        this.mentionsEveryone = message.get("mentions_everyone").asBoolean();
+        this.mentionsEveryone = message.get("mention_everyone").asBoolean();
         this.application =
                 message.get("application") != null ? new ApplicationReg(message.get("application"),
                         message.get("application").get("id").asLong(), ydw) : null;
@@ -133,17 +120,19 @@ public class MessageReg implements Message {
         this.thread = message.get("thread_channel_id") != null
                 ? ydw.getChannel(message.get("thread_channel_id").asLong())
                 : null;
+        this.messageActivity =
+                message.get("activity") != null ? new MessageActivityReg(message.get("activity"))
+                        : null;
 
         if (message.hasNonNull("mentions")) {
             for (JsonNode mention : message.get("mentions")) {
-                mentions.put(new UserReg(mention, mention.get("id").asLong(), ydw),
-                        new MemberReg(mention, ydw));
+                mentions.add(new UserReg(mention, mention.get("id").asLong(), ydw));
             }
         }
 
         if (message.hasNonNull("mention_roles")) {
             for (JsonNode role : message.get("mention_roles")) {
-                roles.add(new RoleReg(role, ydw, role.get("id").asLong()));
+                mentionedRoles.add(new RoleReg(role, ydw, role.get("id").asLong()));
             }
         }
 
@@ -210,20 +199,10 @@ public class MessageReg implements Message {
         return channel;
     }
 
-    @Override
-    public Guild getGuild() {
-        return guild;
-    }
-
+    @NotNull
     @Override
     public User getAuthor() {
         return author;
-    }
-
-    @NotNull
-    @Override
-    public Optional<Member> getMember() {
-        return Optional.ofNullable(member);
     }
 
     @Override
@@ -251,16 +230,14 @@ public class MessageReg implements Message {
         return mentionsEveryone;
     }
 
-    @NotNull
     @Override
-    public Map<User, Member> getMentions() {
+    public List<User> getMentions() {
         return mentions;
     }
 
-    @NotNull
     @Override
-    public List<Role> getRoles() {
-        return roles;
+    public List<Role> getMentionedRoles() {
+        return mentionedRoles;
     }
 
     @NotNull
@@ -298,14 +275,15 @@ public class MessageReg implements Message {
         return isPinned;
     }
 
+    @NotNull
     @Override
     public MessageType getType() {
         return type;
     }
 
     @Override
-    public MessageActivityType getActivityType() {
-        return activityType;
+    public Optional<MessageActivity> getActivity() {
+        return Optional.ofNullable(messageActivity);
     }
 
     @NotNull
@@ -326,11 +304,11 @@ public class MessageReg implements Message {
         return flags;
     }
 
-    @NotNull
     @Override
-    public Optional<Message> getReferenceMessage() {
+    public Optional<Message> getReferencedMessage() {
         return Optional.ofNullable(referencedMessage);
     }
+
 
     @NotNull
     @Override

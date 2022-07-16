@@ -26,7 +26,6 @@ import io.github.realyusufismail.ydw.entities.guild.message.MessageReference;
 import io.github.realyusufismail.ydw.entities.sticker.Sticker;
 import io.github.realyusufismail.ydw.entities.sticker.StickerItem;
 import io.github.realyusufismail.ydw.interaction.MessageInteraction;
-import io.github.realyusufismail.ydwreg.entities.message.MessageActivityType;
 import io.github.realyusufismail.ydwreg.entities.message.MessageFlags;
 import io.github.realyusufismail.ydwreg.entities.message.MessageType;
 import io.github.realyusufismail.ydwreg.message_components.ComponentType;
@@ -36,7 +35,6 @@ import org.jetbrains.annotations.NotNull;
 import java.time.ZonedDateTime;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public interface Message extends SnowFlake, GenericEntity {
