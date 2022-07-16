@@ -90,7 +90,7 @@ public abstract class EventAdapter implements IEventReceiver {
 
     public void onChannelDelete(ChannelCreateEvent event) {}
 
-    //message
+    // message
     public void onMessageCreate(MessageCreateEvent event) {}
 
     /**

@@ -24,15 +24,16 @@ import io.github.realyusufismail.ydw.entities.guild.GuildApplicationCommandPermi
 import io.github.realyusufismail.ydwreg.entities.guild.GuildApplicationCommandPermissionReg;
 import io.github.realyusufismail.ydwreg.handle.Handle;
 
-public class ApplicationCommandPermissionsUpdateHandler extends Handle  {
+public class ApplicationCommandPermissionsUpdateHandler extends Handle {
     public ApplicationCommandPermissionsUpdateHandler(JsonNode json, YDW ydw) {
         super(json, ydw);
     }
 
     @Override
     public void start() {
-        GuildApplicationCommandPermission guildApplicationCommandPermission = new GuildApplicationCommandPermissionReg(json, json.get("id").asLong(), ydw);
+        GuildApplicationCommandPermission guildApplicationCommandPermission =
+                new GuildApplicationCommandPermissionReg(json, json.get("id").asLong(), ydw);
 
-        //TODO: Requires a cahce system to check for existing permissions.
+        // TODO: Requires a cahce system to check for existing permissions.
     }
 }

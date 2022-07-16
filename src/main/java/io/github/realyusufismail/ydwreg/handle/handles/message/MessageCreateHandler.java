@@ -42,7 +42,7 @@ public class MessageCreateHandler extends Handle {
     public void start() {
         Message message = new MessageReg(json, json.get("id").asLong(), ydw);
 
-        //will be null if message is ephemeral
+        // will be null if message is ephemeral
         Optional<Guild> guild = Optional.of(ydw.getGuild(json.get("guild_id").asLong()));
 
         Optional<Member> member = Optional.of(new MemberReg(json.get("member"), ydw));

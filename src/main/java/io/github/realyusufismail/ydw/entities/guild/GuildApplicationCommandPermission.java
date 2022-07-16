@@ -31,6 +31,7 @@ public interface GuildApplicationCommandPermission extends SnowFlake {
 
     /**
      * Gets the list of permissions for that command. Max of 100
+     * 
      * @return The list of permissions for that command.
      */
     List<ApplicationCommandPermission> getPermissions();
