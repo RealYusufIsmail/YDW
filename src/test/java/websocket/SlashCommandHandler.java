@@ -33,8 +33,10 @@ public class SlashCommandHandler extends EventAdapter {
             // event.replyEmbed(new EmbedBuilder().setTitle("Test").setColor(Color.CYAN).build())
             // .queue();
             event
-                .replyEmbed(new EmbedBuilder().setTitle("Test").setColor(Color.CYAN).build(),
-                        ReplyAction.config.setEphemeral(true))
+                .replyEmbed(new EmbedBuilder().setTitle("Test")
+                    .addField("yo", "1", false)
+                    .setColor(Color.CYAN)
+                    .build(), ReplyAction.config.setEphemeral(true))
                 .queue(error -> {
                     throw new RuntimeException(error);
                 }, success -> {

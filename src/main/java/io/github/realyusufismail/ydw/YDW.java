@@ -67,7 +67,7 @@ public interface YDW {
     }
 
     void login(String token, int gatewayIntents, String status, int largeThreshold,
-            ActivityConfig activity) throws Exception;
+            ActivityConfig activity, int corePoolSize) throws Exception;
 
     void loginForRest(String token, @Nullable String guildId);
 

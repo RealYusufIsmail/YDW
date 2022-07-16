@@ -54,7 +54,6 @@ public class MessageReg implements Message {
     private final long id;
 
     private final Channel channel;
-    private final Guild guild;
     @NotNull
     private final User author;
     @Nullable
@@ -101,9 +100,6 @@ public class MessageReg implements Message {
         this.id = id;
 
         this.channel = ydw.getChannel(message.get("channel_id").asLong());
-        this.guild =
-                message.get("guild_id") != null ? ydw.getGuild(message.get("guild_id").asLong())
-                        : null;
         this.author =
                 new UserReg(message.get("author"), message.get("author").get("id").asLong(), ydw);
         this.member =

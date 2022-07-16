@@ -102,10 +102,11 @@ public class YDWReg implements YDW {
 
     @Override
     public void login(String token, int gatewayIntents, String status, int largeThreshold,
-            ActivityConfig activity) {
+            ActivityConfig activity, int corePoolSize) {
         logger.info("Received login request");
         this.token = token;
-        ws = new WebSocketManager(this, token, gatewayIntents, status, largeThreshold, activity);
+        ws = new WebSocketManager(this, token, gatewayIntents, status, largeThreshold, activity)
+            .setCorePoolSize(corePoolSize);
     }
 
     @Override

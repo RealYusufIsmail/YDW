@@ -466,7 +466,8 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         this.needsToReconnect = needsToReconnect;
     }
 
-    public void setCorePoolSize(int corePoolSize) {
+    public WebSocketManager setCorePoolSize(int corePoolSize) {
         this.corePoolSize = corePoolSize;
+        return this;
     }
 }

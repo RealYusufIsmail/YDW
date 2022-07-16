@@ -88,7 +88,7 @@ public enum EndPoint {
     }
 
     public String getEndpoint() {
-        return endpoint;
+        return YDWInfo.DISCORD_REST_LINK + endpoint;
     }
 
     @NotNull
@@ -96,7 +96,6 @@ public enum EndPoint {
         StringBuilder sb = new StringBuilder(endpoint);
         // add YDWInfo.DISCORD_REST_LINK at the beginning of the string
         sb.insert(0, YDWInfo.DISCORD_REST_LINK);
-        // replaces %s with parameters
         for (Object parm : parameters) {
             sb.replace(sb.indexOf("%s"), sb.indexOf("%s") + 2, parm.toString());
         }

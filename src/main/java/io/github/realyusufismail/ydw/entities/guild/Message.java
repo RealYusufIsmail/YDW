@@ -21,6 +21,7 @@ package io.github.realyusufismail.ydw.entities.guild;
 import io.github.realyusufismail.ydw.application.Application;
 import io.github.realyusufismail.ydw.entities.*;
 import io.github.realyusufismail.ydw.entities.embed.Embed;
+import io.github.realyusufismail.ydw.entities.guild.message.MessageActivity;
 import io.github.realyusufismail.ydw.entities.guild.message.MessageReference;
 import io.github.realyusufismail.ydw.entities.sticker.Sticker;
 import io.github.realyusufismail.ydw.entities.sticker.StickerItem;
@@ -41,11 +42,7 @@ import java.util.Optional;
 public interface Message extends SnowFlake, GenericEntity {
     Channel getChannel();
 
-    Guild getGuild();
-
     User getAuthor();
-
-    Optional<Member> getMember();
 
     String getContent();
 
@@ -60,9 +57,9 @@ public interface Message extends SnowFlake, GenericEntity {
 
     Boolean doesMentionEveryone();
 
-    Map<User, Member> getMentions();
+    List<User> getMentions();
 
-    List<Role> getRoles();
+    List<Role> getMentionedRoles();
 
     List<Channel> getMentionChannels();
 
@@ -83,7 +80,7 @@ public interface Message extends SnowFlake, GenericEntity {
 
     MessageType getType();
 
-    MessageActivityType getActivityType();
+    Optional<MessageActivity> getActivity();
 
     Optional<Application> getApplication();
 
@@ -91,7 +88,7 @@ public interface Message extends SnowFlake, GenericEntity {
 
     EnumSet<MessageFlags> getFlags();
 
-    Optional<Message> getReferenceMessage();
+    Optional<Message> getReferencedMessage();
 
     Optional<MessageInteraction> getMessageInteraction();
 

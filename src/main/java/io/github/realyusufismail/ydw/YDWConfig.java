@@ -143,8 +143,7 @@ public class YDWConfig {
         client = Objects.requireNonNullElseGet(this.client, OkHttpClient::new);
         YDWReg ydw = new YDWReg(client);
         ydw.loginForRest(token, guildId);
-        ydw.getWebSocket().setCorePoolSize(corePoolSize);
-        ydw.login(token, gatewayIntents, status, largeThreshold, activity);
+        ydw.login(token, gatewayIntents, status, largeThreshold, activity, corePoolSize);
         return ydw;
     }
 }
