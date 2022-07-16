@@ -103,9 +103,6 @@ public class GuildReg implements Guild {
     private final List<Role> roles = new ArrayList<>();
     private final List<Emoji> emoji = new ArrayList<>();
     private final EnumSet<GuildFeatures> features = EnumSet.noneOf(GuildFeatures.class);
-    private final List<VoiceState> voiceStates = new ArrayList<>();
-    private final List<Member> members = new ArrayList<>();
-    private final List<Channel> channels = new ArrayList<>();
     private final List<Sticker> stickers = new ArrayList<>();
     private final List<TextChannel> textChannels = new ArrayList<>();
     private final List<NewsChannel> newsChannels = new ArrayList<>();
@@ -228,27 +225,6 @@ public class GuildReg implements Guild {
             for (JsonNode featureJ : features) {
                 GuildFeatures feature = GuildFeatures.getFeature(featureJ.asText());
                 this.features.add(feature);
-            }
-        }
-
-        if (guildJ.hasNonNull("voice_states")) {
-            for (JsonNode voiceStateJ : voiceStates) {
-                VoiceState voiceState = new VoiceStateReg(voiceStateJ, ydw);
-                this.voiceStates.add(voiceState);
-            }
-        }
-
-        if (guildJ.hasNonNull("members")) {
-            for (JsonNode memberJ : members) {
-                Member member = new MemberReg(memberJ, ydw);
-                this.members.add(member);
-            }
-        }
-
-        if (guildJ.hasNonNull("channels")) {
-            for (JsonNode channelJ : channels) {
-                Channel channel = new ChannelReg(channelJ, channelJ.get("id").asLong(), ydw);
-                this.channels.add(channel);
             }
         }
 
@@ -477,20 +453,22 @@ public class GuildReg implements Guild {
         return EnumSet.copyOf(features);
     }
 
-    @NotNull
-    @Override
-    public List<VoiceState> getVoiceStates() {
-        return Collections.unmodifiableList(voiceStates);
-    }
-
     @Override
     public @NotNull List<Member> getMembers() {
-        return Collections.unmodifiableList(members);
+        return Collections
+            .unmodifiableList(ydw.getRest().getGuildCaller().getGuildMembers(this.getIdLong()));
     }
 
     @Override
     public @NotNull List<Channel> getChannels() {
-        return Collections.unmodifiableList(channels);
+        return Collections
+            .unmodifiableList(ydw.getRest().getGuildCaller().getChannels(this.getIdLong()));
+    }
+
+    @NotNull
+    @Override
+    public Channel getChannel(long channelIdLong) {
+        return ydw.getRest().getGuildCaller().getChannel(this.getIdLong(), channelIdLong);
     }
 
     @Nullable

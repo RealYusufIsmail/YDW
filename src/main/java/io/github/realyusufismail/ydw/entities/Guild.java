@@ -141,13 +141,19 @@ public interface Guild extends SnowFlake, GenericEntity {
 
     EnumSet<GuildFeatures> getFeatures();
 
-    List<VoiceState> getVoiceStates();
-
     @NotNull
     List<Member> getMembers();
 
     @NotNull
     List<Channel> getChannels();
+
+    @NotNull
+    Channel getChannel(long channelIdLong);
+
+    @NotNull
+    default Channel getChannel(String channelId) {
+        return getChannel(Long.parseUnsignedLong(channelId));
+    }
 
     Member getBot();
 

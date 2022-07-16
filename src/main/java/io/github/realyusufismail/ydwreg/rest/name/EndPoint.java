@@ -39,14 +39,14 @@ public enum EndPoint {
     // channel
     GET_CHANNEL("/channels/%s"),
     DELETE_CHANNEL("/channels/%s"),
+    // does not include threads
+    GET_GUILD_CHANNELS("/guilds/%s/channels"),
+    GET_GUILD_CHANNEL("/guilds/%s/channels/%s"),
     GET_CHANNEL_MESSAGES("/channels/%s/messages"),
     GET_CHANNEL_MESSAGE("/channels/%s/messages/%s"),
     CREATE_MESSAGE("/channels/%s/messages"),
     DELETE_MESSAGE("/channels/%s/messages/%s"),
     BULK_DELETE_MESSAGES("/channels/%s/messages/bulk-delete"),
-    // does not include threads
-    GET_GUILD_CHANNELS("/guilds/%s/channels"),
-
     GET_CATEGORY("/channels/%s"),
 
     // user
@@ -56,6 +56,7 @@ public enum EndPoint {
     GET_CURRENT_USER_GUILDS("/users/@me/guilds"),
     LEAVE_GUILD("/users/@me/guilds/%s"),
     CREATE_DM("/users/@me/channels"),
+    GET_GUILD_MEMBERS("/guilds/%s/members"),
 
     // voice
     LIST_VOICE_REGIONS("/voice/regions"),

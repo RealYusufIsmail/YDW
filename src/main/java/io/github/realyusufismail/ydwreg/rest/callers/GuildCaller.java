@@ -21,12 +21,15 @@ package io.github.realyusufismail.ydwreg.rest.callers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.guild.GuildPreview;
 import io.github.realyusufismail.ydw.entities.guild.Member;
 import io.github.realyusufismail.ydwreg.YDWReg;
+import io.github.realyusufismail.ydwreg.entities.ChannelReg;
 import io.github.realyusufismail.ydwreg.entities.guild.GuildPreviewReg;
 import io.github.realyusufismail.ydwreg.entities.guild.MemberReg;
 import io.github.realyusufismail.ydwreg.json.YDWJson;
+import io.github.realyusufismail.ydwreg.rest.error.RestApiError;
 import io.github.realyusufismail.ydwreg.rest.exception.InvalidJsonException;
 import io.github.realyusufismail.ydwreg.rest.name.EndPoint;
 import io.github.realyusufismail.ydwreg.rest.request.YDWRequest;
@@ -35,7 +38,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
+// TODO: Create a system which checks if the required intents are enabled.
 public class GuildCaller {
 
     private final YDWReg ydw;
@@ -126,27 +133,97 @@ public class GuildCaller {
         return kickMember(guildId, Long.parseLong(userId));
     }
 
-    public @Nullable Member getMember(long guildId, long memberId) {
+    public @NotNull Member getMember(long guildId, long memberId) {
         String url = EndPoint.GET_MEMBER.getFullEndpoint(guildId, memberId);
         var request = new YDWRequest().request(token, url).get().build();
 
-        try {
-            var response = client.newCall(request).execute();
-            if (response.isSuccessful()) {
-                var member = YDWJson.parseObject(response.body().string());
-                return new MemberReg(member, ydw);
-            }
+        try (Response response = client.newCall(request).execute()) {
+
+            if (!response.isSuccessful())
+                throw new IOException("Unexpected code " + RestApiError.fromCode(response.code())
+                        + " " + RestApiError.fromCode(response.code()).getMessage());
+
+            var member = YDWJson.parseObject(response.body().string());
+            return new MemberReg(member, ydw);
         } catch (IOException e) {
             throw new InvalidJsonException(e);
         } finally {
             if (body != null)
                 body.close();
         }
-        return null;
     }
 
-    public @Nullable Member getMember(long guildId, @NotNull String memberId) {
+    public @NotNull Member getMember(long guildId, @NotNull String memberId) {
         return getMember(guildId, Long.parseLong(memberId));
+    }
+
+    public Channel getChannel(Long idLong, long channelIdLong) {
+        String url = EndPoint.GET_GUILD_CHANNEL.getFullEndpoint(idLong, channelIdLong);
+        var request = new YDWRequest().request(token, url).get().build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful())
+                throw new IOException("Unexpected code " + RestApiError.fromCode(response.code())
+                        + " " + RestApiError.fromCode(response.code()).getMessage());
+
+            var channel = YDWJson.parseObject(response.body().string());
+            return new ChannelReg(channel, channel.get("id").asLong(), ydw);
+        } catch (IOException e) {
+            throw new InvalidJsonException(e);
+        } finally {
+            if (body != null)
+                body.close();
+        }
+    }
+
+    public List<Channel> getChannels(Long idLong) {
+        String url = EndPoint.GET_GUILD_CHANNELS.getFullEndpoint(idLong);
+        var request = new YDWRequest().request(token, url).get().build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful())
+                throw new IOException("Unexpected code " + RestApiError.fromCode(response.code())
+                        + " " + RestApiError.fromCode(response.code()).getMessage());
+
+            body = response.body();
+            JsonNode json = ydw.getMapper().readTree(body.string());
+            List<Channel> channels = new ArrayList<>();
+            for (JsonNode channel : json) {
+                channels.add(new ChannelReg(channel, channel.get("id").asLong(), ydw));
+            }
+            return channels;
+        } catch (IOException e) {
+            throw new InvalidJsonException(e);
+        } finally {
+            if (body != null)
+                body.close();
+        }
+    }
+
+    public List<Member> getGuildMembers(Long idLong) {
+        String url = EndPoint.GET_GUILD_MEMBERS.getFullEndpoint(idLong);
+        HttpUrl urlBuilder =
+                HttpUrl.parse(url).newBuilder().addQueryParameter("limit", "1000").build();
+        var request = new YDWRequest().request(token, urlBuilder.toString()).get().build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful())
+                throw new IOException("Unexpected code " + RestApiError.fromCode(response.code())
+                        + " " + RestApiError.fromCode(response.code()).getMessage());
+
+            body = response.body();
+            JsonNode json = ydw.getMapper().readTree(body.string());
+            List<Member> members = new ArrayList<>();
+            for (JsonNode member : json) {
+                members.add(new MemberReg(member, ydw));
+            }
+            return members;
+        } catch (IOException e) {
+            throw new InvalidJsonException(e);
+        } finally {
+            if (body != null)
+                body.close();
+        }
     }
 }
 

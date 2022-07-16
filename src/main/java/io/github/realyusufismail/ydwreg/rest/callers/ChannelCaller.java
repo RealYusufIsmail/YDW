@@ -76,10 +76,10 @@ public class ChannelCaller {
     }
 
     public List<Message> getMessages(long id, int limit) {
-        HttpUrl url =
-                new HttpUrl.Builder().scheme(EndPoint.GET_CHANNEL_MESSAGES.getFullEndpoint(id))
-                    .addQueryParameter("limit", String.valueOf(limit))
-                    .build();
+        HttpUrl url = HttpUrl.parse(EndPoint.GET_CHANNEL_MESSAGES.getFullEndpoint(id))
+            .newBuilder()
+            .addQueryParameter("limit", String.valueOf(limit))
+            .build();
 
         Request request = new YDWRequest().request(token, url).get().build();
 
