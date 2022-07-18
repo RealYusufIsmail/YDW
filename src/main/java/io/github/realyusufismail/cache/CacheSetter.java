@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+@SuppressWarnings("unchecked")
 public class CacheSetter<T> implements ICacheSetter<T> {
     private final TLongObjectMap<T> cache;
     private final Function<T, String> nameFunction;

@@ -81,7 +81,6 @@ public class ReadyHandler extends Handle {
         SelfUser selfUser =
                 new SelfUserReg(json.get("user"), json.get("user").get("id").asLong(), ydw);
         ydw.setSelfUser(selfUser);
-        ydw.setGuilds(guild);
         ydw.setReady(true);
         ydw.getWebSocket().setReconnectTimeoutS(2);
         ydw.handelEvent(new ReadyEvent(ydw, unavailableGuilds.size(), availableGuilds.size()));

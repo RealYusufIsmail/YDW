@@ -20,12 +20,10 @@ package io.github.realyusufismail.ydwreg.handle.handles.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.channel.ChannelType;
 import io.github.realyusufismail.ydw.entities.guild.channel.*;
 import io.github.realyusufismail.ydw.event.events.channel.ChannelDeleteEvent;
 import io.github.realyusufismail.ydwreg.entities.GuildReg;
-import io.github.realyusufismail.ydwreg.entities.guild.channel.StageChannelReg;
 import io.github.realyusufismail.ydwreg.handle.Handle;
 
 public class ChannelDeleteHandler extends Handle {

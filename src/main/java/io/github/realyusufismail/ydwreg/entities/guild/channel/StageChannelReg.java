@@ -23,7 +23,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.cache.snowflake.SnowflakeCache;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.guild.channel.StageChannel;
-import io.github.realyusufismail.ydw.entities.guild.channel.VoiceChannel;
 import io.github.realyusufismail.ydwreg.entities.GuildReg;
 import org.jetbrains.annotations.NotNull;
 

@@ -20,8 +20,8 @@ package io.github.realyusufismail.ydwreg.handle.handles.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.channel.ChannelType;
+import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
 import io.github.realyusufismail.ydw.event.events.channel.ChannelCreateEvent;
 import io.github.realyusufismail.ydwreg.entities.guild.channel.*;
 import io.github.realyusufismail.ydwreg.handle.Handle;
@@ -35,7 +35,7 @@ public class ChannelCreateHandler extends Handle {
     public void start() {
         ChannelType channelType = ChannelType.getChannelType(json.get("type").asInt());
 
-        Channel channel = createChannel(channelType, json);
+        GuildChannel channel = createChannel(channelType, json);
 
         if (channel == null) {
             ydw.getLogger()
@@ -46,7 +46,7 @@ public class ChannelCreateHandler extends Handle {
         ydw.handelEvent(new ChannelCreateEvent(ydw, channel));
     }
 
-    private Channel createChannel(ChannelType channelType, JsonNode json) {
+    private GuildChannel createChannel(ChannelType channelType, JsonNode json) {
         switch (channelType) {
             case GUILD_TEXT:
                 new TextChannelReg(json, json.get("id").asLong(), ydw);
