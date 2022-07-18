@@ -29,6 +29,7 @@ import io.github.realyusufismail.ydw.event.events.ResumedEvent;
 import io.github.realyusufismail.ydw.event.events.ShutdownEvent;
 import io.github.realyusufismail.ydw.event.events.channel.ChannelCreateEvent;
 import io.github.realyusufismail.ydw.event.events.channel.ChannelDeleteEvent;
+import io.github.realyusufismail.ydw.event.events.channel.update.*;
 import io.github.realyusufismail.ydw.event.events.interaction.SlashCommandInteractionEvent;
 import io.github.realyusufismail.ydw.event.events.invite.InviteCreateEvent;
 import io.github.realyusufismail.ydw.event.events.invite.InviteDeleteEvent;
@@ -92,6 +93,24 @@ public abstract class EventAdapter implements IEventReceiver {
     public void onChannelCreate(ChannelCreateEvent event) {}
 
     public void onChannelDelete(ChannelDeleteEvent event) {}
+
+    public void onChannelNameUpdate(ChannelNameUpdateEvent event) {}
+
+    public void onChannelNFSWUpdate(ChannelNSFWUpdateEvent event) {}
+
+    public void onChannelLastMessageUpdate(ChannelLastMessageUpdateEvent event) {}
+
+    public void onChannelTopicUpdate(ChannelTopicUpdate event) {}
+
+    public void onChannelPositionUpdate(ChannelPositionUpdateEvent event) {}
+
+    public void onChannelRateLimitUpdate(ChannelRateLimitUpdateEvent event) {}
+
+    public void onChannelCategoryUpdate(ChannelCategoryUpdateEvent event) {}
+
+    public void onChannelParentUpdate(ChannelParentUpdateEvent event) {}
+
+    public void onPermissionUpdate(ChannelPermissionUpdateEvent event) {}
 
     // message
     public void onMessageCreate(MessageCreateEvent event) {}

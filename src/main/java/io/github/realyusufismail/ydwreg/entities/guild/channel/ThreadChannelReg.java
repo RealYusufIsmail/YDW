@@ -19,18 +19,43 @@
 package io.github.realyusufismail.ydwreg.entities.guild.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.github.realyusufismail.cache.snowflake.SnowflakeCache;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
 import io.github.realyusufismail.ydw.entities.guild.channel.ThreadChannel;
-import io.github.realyusufismail.ydwreg.entities.ChannelReg;
+import io.github.realyusufismail.ydwreg.entities.GuildReg;
+import io.github.realyusufismail.ydwreg.entities.guild.GuildChannelReg;
 import org.jetbrains.annotations.NotNull;
 
-public class ThreadChannelReg extends ChannelReg implements ThreadChannel {
+public class ThreadChannelReg extends GuildChannelReg implements ThreadChannel {
     private final long id;
 
     public ThreadChannelReg(@NotNull JsonNode json, long id, @NotNull YDW ydw) {
+        this(null, json, id, ydw);
+    }
+
+    public ThreadChannelReg(GuildReg guildReg, @NotNull JsonNode json, long id, @NotNull YDW ydw) {
         super(json, id, ydw);
         this.id = id;
+
+        long guildId = json.get("guild_id").asLong();
+        ThreadChannelReg channel = (ThreadChannelReg) getYDW().getThreadChannelCache().get(id);
+        if (channel == null) {
+            if (guildReg == null) {
+                guildReg = (GuildReg) getYDW().getGuildCache().get(guildId);
+                SnowflakeCache<ThreadChannel> guildTextCache = getYDW().getThreadChannelCache(),
+                        textCache = getYDW().getThreadChannelCache();
+
+                channel = new ThreadChannelReg(guildReg, json, id, ydw);
+                guildTextCache.getCacheMap().put(id, channel);
+                textCache.getCacheMap().put(id, channel);
+            }
+        }
+    }
+
+    @NotNull
+    public Long getIdLong() {
+        return id;
     }
 
     @Override

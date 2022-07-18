@@ -49,7 +49,8 @@ public class EmbedReg implements Embed {
 
     public EmbedReg(@NotNull JsonNode embed) {
         this.title = embed.hasNonNull("title") ? embed.get("title").asText() : null;
-        this.type = embed.hasNonNull("type") ? EmbedType.valueOf(embed.get("type").asText()) : null;
+        this.type = embed.hasNonNull("type") ? EmbedType.getEmbedType(embed.get("type").asText())
+                : null;
         this.description =
                 embed.hasNonNull("description") ? embed.get("description").asText() : null;
         this.url = embed.hasNonNull("url") ? embed.get("url").asText() : null;

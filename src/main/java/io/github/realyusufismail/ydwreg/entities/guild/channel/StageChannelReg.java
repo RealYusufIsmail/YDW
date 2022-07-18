@@ -20,14 +20,36 @@ package io.github.realyusufismail.ydwreg.entities.guild.channel;
 
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.github.realyusufismail.cache.snowflake.SnowflakeCache;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.guild.channel.StageChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.VoiceChannel;
+import io.github.realyusufismail.ydwreg.entities.GuildReg;
 import org.jetbrains.annotations.NotNull;
 
 public class StageChannelReg extends VoiceChannelReg implements StageChannel {
 
     public StageChannelReg(@NotNull JsonNode json, long id, @NotNull YDW ydw) {
         super(json, id, ydw);
+    }
+
+    public StageChannelReg(GuildReg guildReg, @NotNull JsonNode json, long id, @NotNull YDW ydw) {
+        super(guildReg, json, id, ydw);
+
+
+        long guildId = json.get("guild_id").asLong();
+        StageChannelReg channel = (StageChannelReg) getYDW().getStageChannelCache().get(id);
+        if (channel == null) {
+            if (guildReg == null) {
+                guildReg = (GuildReg) getYDW().getGuildCache().get(guildId);
+                SnowflakeCache<StageChannel> guildTextCache = getYDW().getStageChannelCache(),
+                        textCache = getYDW().getStageChannelCache();
+
+                channel = new StageChannelReg(guildReg, json, id, ydw);
+                guildTextCache.getCacheMap().put(id, channel);
+                textCache.getCacheMap().put(id, channel);
+            }
+        }
     }
 }
 

@@ -16,22 +16,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.ydw.event.events.channel;
+package io.github.realyusufismail.ydw.event.events.channel.update;
 
+import io.github.realyusufismail.event.updater.IEventUpdate;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
 import io.github.realyusufismail.ydw.event.Event;
 
-public class BasicChannelEvent extends Event {
-    private final GuildChannel channel;
+public class BasicChannelUpdateEvent<V> extends Event implements IEventUpdate<YDW, V> {
 
-    public BasicChannelEvent(YDW ydw, GuildChannel channel) {
+    protected final GuildChannel channel;
+    protected final V oldValue;
+    protected final V newValue;
+
+    public BasicChannelUpdateEvent(YDW ydw, GuildChannel channel, V oldValue, V newValue) {
         super(ydw);
         this.channel = channel;
+        this.oldValue = oldValue;
+        this.newValue = newValue;
     }
 
     public GuildChannel getChannel() {
         return channel;
+    }
+
+    @Override
+    public V getOldValue() {
+        return oldValue;
+    }
+
+    @Override
+    public V getNewValue() {
+        return newValue;
     }
 }

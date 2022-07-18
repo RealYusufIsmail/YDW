@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.AvailableGuild;
+import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.SelfUser;
 import io.github.realyusufismail.ydw.entities.UnavailableGuild;
 import io.github.realyusufismail.ydw.event.events.ReadyEvent;
@@ -60,6 +61,19 @@ public class ReadyHandler extends Handle {
             }
         }
 
+        List<Guild> guild = new ArrayList<>();
+        for (UnavailableGuild unavailableGuild1 : unavailableGuilds) {
+            var guild1 = ydw.getGuild(unavailableGuild1.getId());
+            guild.add(guild1);
+        }
+
+        for (AvailableGuild availableGuild1 : availableGuilds) {
+            var guild1 = ydw.getGuild(availableGuild1.getId());
+            guild.add(guild1);
+        }
+
+        // updateGuildChannels(guild);
+
         ydw.getWebSocket()
             .setSessionId(json.hasNonNull("session_id") ? json.get("session_id").asText() : null);
         ydw.setApplicationId(json.get("application").get("id").asLong());
@@ -67,7 +81,7 @@ public class ReadyHandler extends Handle {
         SelfUser selfUser =
                 new SelfUserReg(json.get("user"), json.get("user").get("id").asLong(), ydw);
         ydw.setSelfUser(selfUser);
-
+        ydw.setGuilds(guild);
         ydw.setReady(true);
         ydw.getWebSocket().setReconnectTimeoutS(2);
         ydw.handelEvent(new ReadyEvent(ydw, unavailableGuilds.size(), availableGuilds.size()));

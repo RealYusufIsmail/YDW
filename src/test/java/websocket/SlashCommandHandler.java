@@ -25,21 +25,13 @@ import io.github.realyusufismail.ydw.entities.SelfUser;
 import io.github.realyusufismail.ydw.event.events.interaction.SlashCommandInteractionEvent;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 
-import java.awt.*;
+import java.util.List;
+
 
 public class SlashCommandHandler extends EventAdapter {
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
-        if (event.getName().equals("ping")) {
-            // event.replyEmbed(new EmbedBuilder().setTitle("Test").setColor(Color.CYAN).build())
-            // .queue();
-            event
-                .replyEmbed(new EmbedBuilder().setTitle("Ping")
-                    .addField("Ping", String.valueOf(event.getYDW().getPing()), false)
-                    .setColor(Color.RED)
-                    .build(), ReplyAction.config.setEphemeral(true))
-                .queue();
-        } else if (event.getName().equals("info")) {
+        if (event.getName().equals("info")) {
             SelfUser selfUser = event.getYDW().getSelfUser();
             EmbedBuilder builder = new EmbedBuilder();
 

@@ -18,51 +18,20 @@
  */ 
 package io.github.realyusufismail.ydw.entities.guild.channel;
 
-import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.channel.ChannelType;
-import io.github.realyusufismail.ydw.entities.channel.Overwrite;
 import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
-import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.Optional;
-
 public interface VoiceChannel extends GuildChannel {
-
-    @Override
-    Optional<Guild> getGuild();
-
-    @Override
-    Optional<String> getName();
-
     @NotNull
     @Override
     default ChannelType getType() {
         return ChannelType.GUILD_VOICE;
     }
 
-    @Override
-    Optional<Boolean> isNSFW();
+    Integer getBitrate();
 
-    @Override
-    Optional<Integer> getPosition();
+    Integer getUserLimit();
 
-    @Override
-    List<Overwrite> getPermissionOverwrites();
-
-    @Override
-    Optional<Integer> getBitrate();
-
-    @Override
-    Optional<Integer> getUserLimit();
-
-    @Override
-    Optional<SnowFlake> getParentId();
-
-    @Override
-    Optional<String> getRTCRegion();
-
-    @Override
-    Optional<Category> getCategory();
+    String getRTCRegion();
 }

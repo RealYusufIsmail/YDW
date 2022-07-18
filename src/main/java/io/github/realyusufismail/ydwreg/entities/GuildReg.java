@@ -195,7 +195,9 @@ public class GuildReg implements Guild {
         this.isLarge = guildJ.hasNonNull("large") ? guildJ.get("large").asBoolean() : null;
         this.isUnavailable =
                 guildJ.hasNonNull("unavailable") ? guildJ.get("unavailable").asBoolean() : null;
-        this.selfMember = getGuildCaller().getMember(guildId, ydw.getSelfUser().getId());
+        this.selfMember = ydw.getSelfUser() != null
+                ? getGuildCaller().getMember(guildId, ydw.getSelfUser().getId())
+                : null;
 
         final ArrayNode roles = (ArrayNode) guildJ.get("roles");
         final ArrayNode emojis = (ArrayNode) guildJ.get("emojis");
@@ -468,8 +470,8 @@ public class GuildReg implements Guild {
 
     @Nullable
     @Override
-    public Member getBot() {
-        return null;
+    public Optional<Member> getBot() {
+        return Optional.ofNullable(selfMember);
     }
 
     @Override

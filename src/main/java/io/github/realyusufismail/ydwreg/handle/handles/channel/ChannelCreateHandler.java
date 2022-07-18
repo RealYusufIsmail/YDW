@@ -37,6 +37,12 @@ public class ChannelCreateHandler extends Handle {
 
         Channel channel = createChannel(channelType, json);
 
+        if (channel == null) {
+            ydw.getLogger()
+                .debug("Received channel create event but channel is null, here is the json: "
+                        + json.toPrettyString());
+        }
+
         ydw.handelEvent(new ChannelCreateEvent(ydw, channel));
     }
 

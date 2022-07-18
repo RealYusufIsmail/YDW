@@ -19,6 +19,7 @@
 package io.github.realyusufismail.ydwreg;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.realyusufismail.cache.snowflake.SnowflakeCacheReg;
 import io.github.realyusufismail.event.recieve.EventReceiver;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.ydw.YDW;
@@ -28,7 +29,7 @@ import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.SelfUser;
 import io.github.realyusufismail.ydw.entities.User;
-import io.github.realyusufismail.ydw.entities.guild.channel.Category;
+import io.github.realyusufismail.ydw.entities.guild.channel.*;
 import io.github.realyusufismail.ydw.event.Event;
 import io.github.realyusufismail.ydw.event.events.GatewayPingEvent;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
@@ -60,6 +61,24 @@ public class YDWReg implements YDW {
     private String token;
     private Long applicationId;
 
+    private final SnowflakeCacheReg<Guild> guildCache =
+            new SnowflakeCacheReg<>(Guild.class, Guild::getName);
+    private final SnowflakeCacheReg<User> userCache =
+            new SnowflakeCacheReg<>(User.class, User::getUserName);
+    private final SnowflakeCacheReg<TextChannel> textChannelCache =
+            new SnowflakeCacheReg<>(TextChannel.class, TextChannel::getName);
+    private final SnowflakeCacheReg<VoiceChannel> voiceChannelCache =
+            new SnowflakeCacheReg<>(VoiceChannel.class, VoiceChannel::getName);
+    private final SnowflakeCacheReg<NewsChannel> newsChannelCache =
+            new SnowflakeCacheReg<>(NewsChannel.class, NewsChannel::getName);
+    private final SnowflakeCacheReg<StageChannel> stageChannelCache =
+            new SnowflakeCacheReg<>(StageChannel.class, StageChannel::getName);
+    private final SnowflakeCacheReg<ThreadChannel> threadChannelCache =
+            new SnowflakeCacheReg<>(ThreadChannel.class, ThreadChannel::getName);
+    private final SnowflakeCacheReg<Category> categoryCache =
+            new SnowflakeCacheReg<>(Category.class, Category::getName);
+
+
     public YDWReg(@NotNull OkHttpClient okHttpClient) {
         mapper = new ObjectMapper();
         this.okHttpClient = okHttpClient;
@@ -70,21 +89,6 @@ public class YDWReg implements YDW {
         eventReceiver.eventReceivers.forEach(eventReceiver -> eventReceiver.onEvent(event));
     }
 
-    @NotNull
-    @Override
-    public List<Guild> getGuilds() {
-        return rest.getYDW().getGuilds();
-    }
-
-    @Override
-    public Guild getGuild(long guildId) {
-        return getRest().getYDWCaller().getGuild(guildId);
-    }
-
-    @Override
-    public @NotNull User getUser(long userId) {
-        return getRest().getYDWCaller().getUser(userId);
-    }
 
     @Override
     public Channel getChannel(long channelId) {
@@ -152,9 +156,9 @@ public class YDWReg implements YDW {
     }
 
     @Override
-    public @NotNull SelfUser getSelfUser() {
+    public @Nullable SelfUser getSelfUser() {
         Optional<SelfUser> user = Optional.ofNullable(this.selfUser);
-        return user.orElseThrow(() -> new IllegalStateException("Self user is not set"));
+        return user.orElse(null);
     }
 
     public void setSelfUser(@NotNull SelfUser selfUser) {
@@ -233,5 +237,37 @@ public class YDWReg implements YDW {
 
     public void setApplicationId(long applicationId) {
         this.applicationId = applicationId;
+    }
+
+    public SnowflakeCacheReg<Guild> getGuildCache() {
+        return guildCache;
+    }
+
+    public SnowflakeCacheReg<User> getUserCache() {
+        return userCache;
+    }
+
+    public SnowflakeCacheReg<TextChannel> getTextChannelCache() {
+        return textChannelCache;
+    }
+
+    public SnowflakeCacheReg<VoiceChannel> getVoiceChannelCache() {
+        return voiceChannelCache;
+    }
+
+    public SnowflakeCacheReg<NewsChannel> getNewsChannelCache() {
+        return newsChannelCache;
+    }
+
+    public SnowflakeCacheReg<StageChannel> getStageChannelCache() {
+        return stageChannelCache;
+    }
+
+    public SnowflakeCacheReg<ThreadChannel> getThreadChannelCache() {
+        return threadChannelCache;
+    }
+
+    public SnowflakeCacheReg<Category> getCategoryCache() {
+        return categoryCache;
     }
 }

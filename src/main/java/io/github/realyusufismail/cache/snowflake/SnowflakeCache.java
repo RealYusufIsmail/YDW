@@ -16,18 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.ydw.entities.guild.channel;
+package io.github.realyusufismail.cache.snowflake;
 
-import io.github.realyusufismail.ydw.entities.channel.ChannelType;
-import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
+import io.github.realyusufismail.cache.ICacheSetter;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
-import org.jetbrains.annotations.NotNull;
 
-public interface NewsChannel extends GuildChannel, SnowFlake {
-    @NotNull
-    @Override
-    default ChannelType getType() {
-        return ChannelType.GUILD_NEWS;
+public interface SnowflakeCache<T extends SnowFlake> extends ICacheSetter<T> {
+
+    T getCacheById(long id);
+
+    default T getCacheById(String id) {
+        return getCacheById(Long.parseLong(id));
     }
-
 }

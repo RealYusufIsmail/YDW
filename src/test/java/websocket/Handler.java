@@ -22,6 +22,7 @@ import io.github.realyusufismail.event.adapter.EventAdapter;
 import io.github.realyusufismail.ydw.event.events.GatewayPingEvent;
 import io.github.realyusufismail.ydw.event.events.ReadyEvent;
 import io.github.realyusufismail.ydw.event.events.ReconnectEvent;
+import io.github.realyusufismail.ydw.event.events.channel.update.ChannelNameUpdateEvent;
 
 public class Handler extends EventAdapter {
     @Override
@@ -32,5 +33,10 @@ public class Handler extends EventAdapter {
     @Override
     public void onReconnect(ReconnectEvent event) {
         System.out.println("Reconnecting...");
+    }
+
+    @Override
+    public void onChannelNameUpdate(ChannelNameUpdateEvent event) {
+        System.out.println("Channel name updated: " + event.getChannel().getName());
     }
 }
