@@ -15,7 +15,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 package io.github.realyusufismail.ydwreg.handle.handles.guild;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -36,6 +36,10 @@ public class GuildCreateHandler extends Handle {
         Guild guild = ydw.getGuild(json.get("id").asLong());
 
         if (guild == null) {
+            guild = new GuildReg(json, json.get("id").asLong(), ydw);
+            ydw.getGuildCache().getCacheMap().put(guild.getIdLong(), guild);
+        } else {
+            // Update guild
 
         }
     }
