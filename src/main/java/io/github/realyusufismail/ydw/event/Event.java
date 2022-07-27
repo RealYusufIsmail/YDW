@@ -30,6 +30,6 @@ public abstract class Event implements BasicEvent {
 
     @Override
     public YDW getYDW() {
-        return null;
+        return ydw;
     }
 }
