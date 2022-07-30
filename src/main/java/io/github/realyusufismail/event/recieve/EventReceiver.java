@@ -33,14 +33,6 @@ public class EventReceiver implements IEventReceiverConfig {
         eventReceivers = new ArrayList<>();
     }
 
-    public void receive(Event event) {
-        this.event = event;
-
-        for (IEventReceiver eventReceiver : eventReceivers) {
-            eventReceiver.onEvent(event);
-        }
-    }
-
     @Override
     public void addEventReceiver(Object eventReceiver) {
         if (eventReceiver instanceof IEventReceiver) {

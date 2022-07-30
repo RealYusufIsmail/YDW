@@ -155,7 +155,7 @@ public interface Guild extends SnowFlake, GenericEntity {
         return getChannel(Long.parseUnsignedLong(channelId));
     }
 
-    Member getBot();
+    Optional<Member> getBot();
 
     @CheckReturnValue
     @NotNull

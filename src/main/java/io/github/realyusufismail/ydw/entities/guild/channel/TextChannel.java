@@ -27,7 +27,6 @@ import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface TextChannel extends SnowFlake, GenericEntity, GuildChannel {
 
@@ -35,34 +34,34 @@ public interface TextChannel extends SnowFlake, GenericEntity, GuildChannel {
     List<Overwrite> getPermissionOverwrites();
 
     @Override
-    Optional<String> getName();
+    String getName();
 
     @Override
-    Optional<Boolean> isNSFW();
+    Boolean isNSFW();
 
     @Override
-    Optional<Integer> getPosition();
+    Integer getPosition();
 
     @Override
-    Optional<Integer> getRateLimitPerUser();
+    Integer getRateLimitPerUser();
 
     @Override
-    Optional<String> getTopic();
+    String getTopic();
 
     @Override
-    Optional<SnowFlake> getLastMessageId();
+    SnowFlake getLastMessageId();
 
     @Override
-    Optional<SnowFlake> getParentId();
+    SnowFlake getParentId();
 
     @Override
-    Optional<Integer> getDefaultAutoArchiveDuration();
+    Integer getDefaultAutoArchiveDuration();
 
     @Override
-    Optional<Category> getCategory();
+    Category getCategory();
 
     @Override
-    Optional<Guild> getGuild();
+    Guild getGuild();
 
     @NotNull
     @Override

@@ -16,18 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.ydw.entities.guild.channel;
+package io.github.realyusufismail.ydw.event.events.channel.update;
 
-import io.github.realyusufismail.ydw.entities.channel.ChannelType;
+import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
-import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
-import org.jetbrains.annotations.NotNull;
+import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 
-public interface NewsChannel extends GuildChannel, SnowFlake {
-    @NotNull
-    @Override
-    default ChannelType getType() {
-        return ChannelType.GUILD_NEWS;
+public class ChannelCategoryUpdateEvent extends BasicChannelUpdateEvent<Category> {
+
+    public ChannelCategoryUpdateEvent(YDW ydw, GuildChannel channel, Category oldCategory,
+            Category newCategory) {
+        super(ydw, channel, oldCategory, newCategory);
     }
 
+    public Category getOldCategory() {
+        return oldValue;
+    }
+
+    public Category getNewCategory() {
+        return newValue;
+    }
 }

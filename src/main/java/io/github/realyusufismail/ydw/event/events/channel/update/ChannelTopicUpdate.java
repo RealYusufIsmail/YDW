@@ -16,7 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.event.respond;
+package io.github.realyusufismail.ydw.event.events.channel.update;
 
-public class EventResponder {
+import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
+
+public class ChannelTopicUpdate extends BasicChannelUpdateEvent<String> {
+
+    public ChannelTopicUpdate(YDW ydw, GuildChannel channel, String oldTopic, String newTopic) {
+        super(ydw, channel, oldTopic, newTopic);
+    }
+
+    public String getOldTopic() {
+        return oldValue;
+    }
+
+    public String getNewTopic() {
+        return newValue;
+    }
 }

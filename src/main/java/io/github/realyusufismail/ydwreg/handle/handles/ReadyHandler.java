@@ -20,12 +20,16 @@ package io.github.realyusufismail.ydwreg.handle.handles;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import gnu.trove.map.TLongObjectMap;
+import gnu.trove.map.hash.TLongObjectHashMap;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.AvailableGuild;
+import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.SelfUser;
 import io.github.realyusufismail.ydw.entities.UnavailableGuild;
 import io.github.realyusufismail.ydw.event.events.ReadyEvent;
 import io.github.realyusufismail.ydwreg.entities.AvailableGuildReg;
+import io.github.realyusufismail.ydwreg.entities.GuildReg;
 import io.github.realyusufismail.ydwreg.entities.SelfUserReg;
 import io.github.realyusufismail.ydwreg.entities.UnavailableGuildReg;
 import io.github.realyusufismail.ydwreg.handle.Handle;
@@ -41,6 +45,8 @@ public class ReadyHandler extends Handle {
 
     @Override
     public void start() {
+
+
         List<UnavailableGuild> unavailableGuilds = new ArrayList<>();
         ArrayNode guilds = (ArrayNode) json.get("guilds");
         for (JsonNode guild : guilds) {
@@ -60,6 +66,17 @@ public class ReadyHandler extends Handle {
             }
         }
 
+        TLongObjectMap<JsonNode> guildsMap = new TLongObjectHashMap<>();
+
+        for (int i = 0; i < guilds.size(); i++) {
+            JsonNode guildNode = guilds.get(i);
+            long guildId = guildNode.get("id").asLong();
+            JsonNode guild = guildsMap.put(guildId, guildNode);
+            if (guild != null)
+                ydw.getLogger().warn("Duplicate guild id: " + guildId);
+
+            ydw.getGuildCache().getCacheMap().put(guildId, new GuildReg(guild, guildId, ydw));
+        }
         ydw.getWebSocket()
             .setSessionId(json.hasNonNull("session_id") ? json.get("session_id").asText() : null);
         ydw.setApplicationId(json.get("application").get("id").asLong());
@@ -67,7 +84,6 @@ public class ReadyHandler extends Handle {
         SelfUser selfUser =
                 new SelfUserReg(json.get("user"), json.get("user").get("id").asLong(), ydw);
         ydw.setSelfUser(selfUser);
-
         ydw.setReady(true);
         ydw.getWebSocket().setReconnectTimeoutS(2);
         ydw.handelEvent(new ReadyEvent(ydw, unavailableGuilds.size(), availableGuilds.size()));

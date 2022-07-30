@@ -83,7 +83,7 @@ public class UserReg implements User {
         this.publicFlags = user.hasNonNull("public_flags")
                 ? UserFlags.getFlag(user.get("public_flags").asInt())
                 : null;
-        guilds.addAll(ydw.getRest().getUseCaller().getGuilds());
+        // guilds.addAll(ydw.getRest().getUseCaller().getGuilds());
     }
 
 

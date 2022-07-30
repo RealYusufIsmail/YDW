@@ -20,6 +20,7 @@ package io.github.realyusufismail.ydw;
 
 
 import com.google.errorprone.annotations.CheckReturnValue;
+import io.github.realyusufismail.cache.snowflake.SnowflakeCache;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
@@ -37,17 +38,28 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public interface YDW {
-    @NotNull
-    List<Guild> getGuilds();
 
-    Guild getGuild(long guildId);
+    SnowflakeCache<Guild> getGuildCache();
+
+    @NotNull
+    default List<Guild> getGuilds() {
+        return getGuildCache().toList();
+    }
+
+    default Guild getGuild(long guildId) {
+        return getGuildCache().getCacheById(guildId);
+    }
 
     default Guild getGuild(@NotNull String guildId) {
         return getGuild(Long.parseLong(guildId));
     }
 
+    SnowflakeCache<User> getUserCache();
+
     @NotNull
-    User getUser(long userId);
+    default User getUser(long userId) {
+        return getUserCache().getCacheById(userId);
+    }
 
     @NotNull
     default User getUser(@NotNull String userId) {
@@ -60,7 +72,11 @@ public interface YDW {
         return getChannel(Long.parseLong(channelId));
     }
 
-    Category getCategory(long categoryId);
+    SnowflakeCache<Category> getCategoryCache();
+
+    default Category getCategory(long categoryId) {
+        return getCategoryCache().getCacheById(categoryId);
+    }
 
     default Category getCategory(@NotNull String categoryId) {
         return getCategory(Long.parseLong(categoryId));

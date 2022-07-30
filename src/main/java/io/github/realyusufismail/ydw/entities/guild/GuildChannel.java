@@ -18,11 +18,37 @@
  */ 
 package io.github.realyusufismail.ydw.entities.guild;
 
-import io.github.realyusufismail.ydw.entities.Channel;
+import io.github.realyusufismail.ydw.entities.GenericEntity;
 import io.github.realyusufismail.ydw.entities.Guild;
+import io.github.realyusufismail.ydw.entities.channel.ChannelType;
+import io.github.realyusufismail.ydw.entities.channel.Overwrite;
+import io.github.realyusufismail.ydw.entities.guild.channel.Category;
+import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 
-import java.util.Optional;
+import java.util.List;
 
-public interface GuildChannel extends Channel, Comparable<GuildChannel> {
-    Optional<Guild> getGuild();
+public interface GuildChannel extends SnowFlake, Comparable<GuildChannel>, GenericEntity {
+    List<Overwrite> getPermissionOverwrites();
+
+    String getName();
+
+    Boolean isNSFW();
+
+    Integer getPosition();
+
+    Integer getRateLimitPerUser();
+
+    String getTopic();
+
+    SnowFlake getLastMessageId();
+
+    SnowFlake getParentId();
+
+    Integer getDefaultAutoArchiveDuration();
+
+    Category getCategory();
+
+    Guild getGuild();
+
+    ChannelType getType();
 }

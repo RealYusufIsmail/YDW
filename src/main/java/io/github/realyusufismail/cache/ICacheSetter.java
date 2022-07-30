@@ -16,18 +16,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.ydw.entities.guild.channel;
+package io.github.realyusufismail.cache;
 
-import io.github.realyusufismail.ydw.entities.channel.ChannelType;
-import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
-import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
-import org.jetbrains.annotations.NotNull;
+import gnu.trove.map.TLongObjectMap;
 
-public interface NewsChannel extends GuildChannel, SnowFlake {
-    @NotNull
-    @Override
-    default ChannelType getType() {
-        return ChannelType.GUILD_NEWS;
-    }
+import java.util.List;
+
+public interface ICacheSetter<T> extends Iterable<T> {
+
+    TLongObjectMap<T> getCacheMap();
+
+    T get(long key);
+
+    T remove(long key);
+
+    void clear();
+
+    List<T> getCacheByName(String name);
+
+    List<T> toList();
+
 
 }
