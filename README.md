@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    implementation group: 'io.github.realyusufismail', name: 'ydw', version: '0.0.3'
+    implementation group: 'io.github.realyusufismail', name: 'ydw', version: '0.0.4'
 }
 ```
 
