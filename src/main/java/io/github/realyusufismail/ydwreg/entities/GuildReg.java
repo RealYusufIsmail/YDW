@@ -195,7 +195,7 @@ public class GuildReg implements Guild {
         this.isLarge = guildJ.hasNonNull("large") ? guildJ.get("large").asBoolean() : null;
         this.isUnavailable =
                 guildJ.hasNonNull("unavailable") ? guildJ.get("unavailable").asBoolean() : null;
-        this.selfMember = getGuildCaller().getMember(guildId, ydw.getSelfUser().getId());
+        this.selfMember = null;
 
         final ArrayNode roles = (ArrayNode) guildJ.get("roles");
         final ArrayNode emojis = (ArrayNode) guildJ.get("emojis");

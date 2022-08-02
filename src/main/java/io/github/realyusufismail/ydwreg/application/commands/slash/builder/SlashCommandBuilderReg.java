@@ -21,30 +21,4 @@ package io.github.realyusufismail.ydwreg.application.commands.slash.builder;
 import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
 import io.github.realyusufismail.ydwreg.rest.callers.SlashCommandCaller;
 
-public class SlashCommandBuilderReg implements SlashCommandBuilder {
-    private final SlashCommandCaller caller;
-    private final boolean guildOnly;
-
-    public SlashCommandBuilderReg(SlashCommandCaller caller, boolean guildOnly) {
-        this.caller = caller;
-        this.guildOnly = guildOnly;
-    }
-
-    @Override
-    public void upsert() {
-        if (guildOnly) {
-            caller.upsertGuildCommand();
-        } else {
-            caller.upsertGlobalCommand();
-        }
-    }
-
-    @Override
-    public void create() {
-        if (guildOnly) {
-            caller.createGuildOnlyCommand();
-        } else {
-            caller.createGlobalCommand();
-        }
-    }
-}
+public record SlashCommandBuilderReg(SlashCommandCaller caller, boolean guildOnly) implements SlashCommandBuilder { }

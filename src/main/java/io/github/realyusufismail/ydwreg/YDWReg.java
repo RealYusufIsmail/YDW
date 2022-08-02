@@ -32,6 +32,8 @@ import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 import io.github.realyusufismail.ydw.event.Event;
 import io.github.realyusufismail.ydw.event.events.GatewayPingEvent;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
+import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandBuilderReg;
+import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandCreatorReg;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
@@ -173,7 +175,17 @@ public class YDWReg implements YDW {
             getRest().getSlashCommandCaller().deleteAllCommands();
         } else {
             for (SlashCommandBuilder command : commands) {
-                command.upsert();
+                var reg = (SlashCommandBuilderReg) command;
+
+                var caller =  ((SlashCommandBuilderReg) command).caller();
+
+                var guildOnly = ((SlashCommandBuilderReg) command).guildOnly();
+
+                if (guildOnly) {
+                    caller.upsertGuildCommand();
+                } else {
+                    caller.upsertGlobalCommand();
+                }
             }
         }
     }
@@ -199,6 +211,14 @@ public class YDWReg implements YDW {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            } finally {
+                // check if ready
+                if (isReady()) {
+                    logger.info("YDW is ready");
+                } else {
+                    logger.info("YDW is not ready, trying again");
+                    awaitReady();
+                }
             }
         }
 

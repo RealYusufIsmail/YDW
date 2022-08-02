@@ -275,12 +275,10 @@ public class SlashCommandCaller {
 
         commands.stream()
             .filter(c -> !c.getName().equals(name))
-            .filter(c -> !c.getDescription().equals(description))
             .forEach(c -> deleteGuildCommand(c.getIdLong()));
 
         commands.stream()
             .filter(c -> c.getName().equals(name))
-            .filter(c -> c.getDescription().equals(description))
             .forEach(c -> updateGuildCommand(c.getIdLong()));
 
         if (commands.stream().noneMatch(c -> c.getName().equals(name))) {

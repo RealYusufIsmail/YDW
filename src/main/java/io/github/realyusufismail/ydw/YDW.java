@@ -85,18 +85,6 @@ public interface YDW {
 
     InteractionManager getInteractionManager();
 
-    @CheckReturnValue
-    default SlashCommandCreator newSlashCommand(String name, String description)
-            throws InterruptedException {
-        return SlashCommandBuilder.create(this, name, description);
-    }
-
-    @CheckReturnValue
-    default SlashCommandCreator updateSlashCommand(String name, String description)
-            throws InterruptedException {
-        return SlashCommandBuilder.create(this, name, description);
-    }
-
     default void deleteGlobalSlashCommand(long commandId) throws InterruptedException {
         getRest().getSlashCommandCaller().deleteGlobalCommand(commandId);
     }
