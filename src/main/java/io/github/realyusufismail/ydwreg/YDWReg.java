@@ -34,6 +34,7 @@ import io.github.realyusufismail.ydw.event.events.GatewayPingEvent;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandBuilderReg;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandCreatorReg;
+import io.github.realyusufismail.ydwreg.exception.NotReadyException;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
@@ -156,7 +157,7 @@ public class YDWReg implements YDW {
     @Override
     public @NotNull SelfUser getSelfUser() {
         Optional<SelfUser> user = Optional.ofNullable(this.selfUser);
-        return user.orElseThrow(() -> new IllegalStateException("Self user is not set"));
+        return user.orElseThrow(() -> new NotReadyException("Self user"));
     }
 
     public void setSelfUser(@NotNull SelfUser selfUser) {
@@ -247,7 +248,7 @@ public class YDWReg implements YDW {
 
     public long getApplicationId() {
         if (applicationId == null)
-            throw new IllegalStateException("Application id is not set");
+            throw new NotReadyException("Application id");
         return applicationId;
     }
 
