@@ -177,7 +177,7 @@ public class YDWReg implements YDW {
             for (SlashCommandBuilder command : commands) {
                 var reg = (SlashCommandBuilderReg) command;
 
-                var caller =  ((SlashCommandBuilderReg) command).caller();
+                var caller = ((SlashCommandBuilderReg) command).caller();
 
                 var guildOnly = ((SlashCommandBuilderReg) command).guildOnly();
 

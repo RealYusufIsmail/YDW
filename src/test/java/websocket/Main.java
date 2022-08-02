@@ -47,6 +47,7 @@ public class Main {
 
         slashCommandBuilders.add(SlashCommandBuilder.create(ydw, "info", "Info!").build());
         slashCommandBuilders.add(SlashCommandBuilder.create(ydw, "ping", "Ping!").build());
+
         ydw.awaitReady().upsertCommands(slashCommandBuilders);
     }
 }
