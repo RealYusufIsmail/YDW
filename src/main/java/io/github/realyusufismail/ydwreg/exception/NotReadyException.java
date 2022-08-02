@@ -16,9 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.ydwreg.application.commands.slash.builder;
+package io.github.realyusufismail.ydwreg.exception;
 
-import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
-import io.github.realyusufismail.ydwreg.rest.callers.SlashCommandCaller;
-
-public record SlashCommandBuilderReg(SlashCommandCaller caller, boolean guildOnly) implements SlashCommandBuilder { }
+public class NotReadyException extends RuntimeException {
+    public NotReadyException(String name) {
+        super(name
+                + " is null thus meaning the bot is ready, please try place awaitReady() before calling a method."
+                + "\n"
+                + "For example if you called a slash command without awaitReady() this error will be thrown.");
+    }
+}

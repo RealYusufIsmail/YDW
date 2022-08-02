@@ -28,7 +28,4 @@ public interface SlashCommandBuilder {
         return new SlashCommandCreatorReg(ydw, name, description);
     }
 
-    void upsert();
-
-    void create();
 }

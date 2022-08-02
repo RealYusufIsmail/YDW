@@ -49,6 +49,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class SlashCommandCaller {
@@ -62,8 +63,8 @@ public class SlashCommandCaller {
     private String interactionToken;
     private String name;
     private String description;
-    private Collection<Option> options;
-    private Collection<OptionExtender> extender;
+    private Collection<Option> options = new ArrayList<>();
+    private Collection<OptionExtender> extender = new ArrayList<>();
     private ResponseBody body = null;
 
     public SlashCommandCaller(String token, String guildId, YDW ydw, MediaType json,
@@ -78,10 +79,6 @@ public class SlashCommandCaller {
     public void createGlobalCommand() {
         if (name == null || description == null) {
             throw new IllegalStateException("Name, Description, and Options are required to call");
-        }
-
-        if (options != null) {
-            slashCommandJson().set("options", Option.toJsonArray(options, extender));
         }
 
         RequestBody body = RequestBody.create(slashCommandJson().toString(), JSON);
@@ -114,10 +111,6 @@ public class SlashCommandCaller {
                     "Name, Description, Guild ID, and Options are required to call");
         }
 
-        if (options != null) {
-            slashCommandJson().set("options", Option.toJsonArray(options, extender));
-        }
-
         RequestBody body = RequestBody.create(slashCommandJson().toString(), JSON);
 
         Request request =
@@ -146,65 +139,101 @@ public class SlashCommandCaller {
         });
     }
 
-    public void updateGlobalCommand(long commandId) {
+    public void updateGlobalCommand(ApplicationCommand command) {
 
+        long commandId = command.getIdLong();
         if (name == null || description == null || guildId == null) {
             throw new IllegalStateException(
                     "Name, Description, Guild ID, and Options are required to call");
         }
 
-        Request request = new YDWRequest()
-            .request(token,
-                    EndPoint.UPDATE_GLOBAL_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
-                            commandId))
-            .patch(RequestBody.create(slashCommandJson().toString(), JSON))
-            .build();
+        // need to check if description, and options are different from the original command
 
-        client.newCall(request).enqueue(new YDWCallback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                ydw.getLogger().error("Failed to update global slash command", e);
-            }
+        boolean b = checkIfChanged(command);
 
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) {
-                if (!response.isSuccessful()) {
-                    RestApiError error = RestApiError.fromCode(response.code());
-                    ydw.getLogger()
-                        .error("Failed to update global slash command: " + error.getMessage());
+        if (b) {
+            Request request = new YDWRequest()
+                .request(token,
+                        EndPoint.UPDATE_GLOBAL_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
+                                commandId))
+                .patch(RequestBody.create(slashCommandJson().toString(), JSON))
+                .build();
+
+            client.newCall(request).enqueue(new YDWCallback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    ydw.getLogger().error("Failed to update global slash command", e);
                 }
-            }
-        });
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) {
+                    if (!response.isSuccessful()) {
+                        RestApiError error = RestApiError.fromCode(response.code());
+                        ydw.getLogger()
+                            .error("Failed to update global slash command: " + error.getMessage());
+                    }
+                }
+            });
+        } else {
+            ydw.getLogger().debug("No changes detected for global slash command");
+            // no changes detected, so no need to update
+        }
     }
 
-    public void updateGuildCommand(long commandId) {
+    public void updateGuildCommand(ApplicationCommand command) {
+        var commandId = command.getIdLong();
+
         if (name == null || description == null || guildId == null) {
             throw new IllegalStateException(
                     "Name, Description, Guild ID, and Options are required to call");
         }
 
-        Request request = new YDWRequest()
-            .request(token,
-                    EndPoint.UPDATE_GUILD_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
-                            guildId, commandId))
-            .patch(RequestBody.create(slashCommandJson().toString(), JSON))
-            .build();
 
-        client.newCall(request).enqueue(new YDWCallback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                ydw.getLogger().error("Failed to update guild slash command", e);
-            }
+        boolean b = checkIfChanged(command);
 
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) {
-                if (!response.isSuccessful()) {
-                    RestApiError error = RestApiError.fromCode(response.code());
-                    ydw.getLogger()
-                        .error("Failed to update guild slash command: " + error.getMessage());
+        if (b) {
+
+            Request request = new YDWRequest()
+                .request(token,
+                        EndPoint.UPDATE_GUILD_SLASH_COMMAND.getFullEndpoint(ydw.getApplicationId(),
+                                guildId, commandId))
+                .patch(RequestBody.create(slashCommandJson().toString(), JSON))
+                .build();
+
+            client.newCall(request).enqueue(new YDWCallback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    ydw.getLogger().error("Failed to update guild slash command", e);
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) {
+                    if (!response.isSuccessful()) {
+                        RestApiError error = RestApiError.fromCode(response.code());
+                        ydw.getLogger()
+                            .error("Failed to update guild slash command: " + error.getMessage());
+                    }
+                }
+            });
+        } else {
+            ydw.getLogger().debug("No changes detected for guild slash command");
+            // no changes detected, so no need to update
+        }
+    }
+
+    public boolean checkIfChanged(@NotNull ApplicationCommand command) {
+        if (Objects.equals(description, command.getDescription())) {
+            return false;
+        } else if (options.size() == command.getOptions().size()) {
+            for (Option option : options) {
+                if (!command.getOptions().contains(option)) {
+                    return false;
                 }
             }
-        });
+        } else {
+            return false;
+        }
+        return true;
     }
 
     public void deleteGlobalCommand(long commandId) {
@@ -253,9 +282,7 @@ public class SlashCommandCaller {
             .filter(command -> !command.getName().equals(name))
             .forEach(command -> deleteGlobalCommand(command.getIdLong()));
 
-        commands.stream()
-            .filter(c -> c.getName().equals(name))
-            .forEach(c -> updateGlobalCommand(c.getIdLong()));
+        commands.stream().filter(c -> c.getName().equals(name)).forEach(this::updateGlobalCommand);
 
         if (commands.stream().noneMatch(c -> c.getName().equals(name))) {
             createGlobalCommand();
@@ -272,16 +299,11 @@ public class SlashCommandCaller {
 
         var commands = getGuildSlashCommands();
 
-
         commands.stream()
             .filter(c -> !c.getName().equals(name))
-            .filter(c -> !c.getDescription().equals(description))
             .forEach(c -> deleteGuildCommand(c.getIdLong()));
 
-        commands.stream()
-            .filter(c -> c.getName().equals(name))
-            .filter(c -> c.getDescription().equals(description))
-            .forEach(c -> updateGuildCommand(c.getIdLong()));
+        commands.stream().filter(c -> c.getName().equals(name)).forEach(this::updateGuildCommand);
 
         if (commands.stream().noneMatch(c -> c.getName().equals(name))) {
             createGuildOnlyCommand();
@@ -381,7 +403,8 @@ public class SlashCommandCaller {
         return JsonNodeFactory.instance.objectNode()
             .put("name", name)
             .put("description", description)
-            .put("type", commandType);
+            .put("type", commandType)
+            .set("options", Option.toJsonArray(options, extender));
     }
 
 
