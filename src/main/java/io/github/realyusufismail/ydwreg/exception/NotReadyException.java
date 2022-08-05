@@ -21,7 +21,7 @@ package io.github.realyusufismail.ydwreg.exception;
 public class NotReadyException extends RuntimeException {
     public NotReadyException(String name) {
         super(name
-                + " is null thus meaning the bot is ready, please try place awaitReady() before calling a method."
+                + " is null thus meaning the bot is not ready, please try place awaitReady() before calling a method."
                 + "\n"
                 + "For example if you called a slash command without awaitReady() this error will be thrown.");
     }

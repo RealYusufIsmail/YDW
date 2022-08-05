@@ -44,13 +44,6 @@ public class RestApiHandler {
         this.client = client;
         this.token = token;
         this.guildId = guildId;
-
-        /*
-         * // while ydw and token are null, we wait for them to be set while (ydw == null || token
-         * == null) { try { System.out.println("Waiting for ydw and token to be set");
-         * Thread.sleep(100); } catch (InterruptedException e) { e.printStackTrace(); } }
-         *
-         */
     }
 
 
