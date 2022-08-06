@@ -31,6 +31,7 @@ public class ResumedHandler extends Handle {
     @Override
     public void start() {
         ydw.getWebSocket().setReconnectTimeoutS(2);
+        ydw.getWebSocket().sentAuthInfo(true);
         ydw.handelEvent(new ResumedEvent(ydw, true));
     }
 }

@@ -60,14 +60,14 @@ public class ReadyHandler extends Handle {
             }
         }
 
-        ydw.getWebSocket()
-            .setSessionId(json.hasNonNull("session_id") ? json.get("session_id").asText() : null);
         ydw.setApplicationId(json.get("application").get("id").asLong());
 
         SelfUser selfUser =
                 new SelfUserReg(json.get("user"), json.get("user").get("id").asLong(), ydw);
         ydw.setSelfUser(selfUser);
 
+        ydw.getWebSocket().setSessionId(json.get("session_id").asText());
+        ydw.getWebSocket().setResumeGatewayUrl(json.hasNonNull("resume_gateway_url" ) ? json.get("resume_gateway_url").asText() : null);
         ydw.setReady(true);
         ydw.getWebSocket().setReconnectTimeoutS(2);
         ydw.handelEvent(new ReadyEvent(ydw, unavailableGuilds.size(), availableGuilds.size()));

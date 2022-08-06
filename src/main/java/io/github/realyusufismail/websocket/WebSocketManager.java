@@ -79,6 +79,9 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     private Integer seq = null;
     // The session id. This is basically a key that stores the past activity of the bot.
     private volatile String sessionId = null;
+    //gateway url for resuming
+    //TODO: Not announced by discord yet.
+    private String resumeGateWayUrl = null;
     // Used to indicate that the bot has connected to the gateway.
     private boolean connected = false;
     // The thread used for the heartbeat. Needed in cases such as disconnect.
@@ -91,6 +94,8 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     private int reconnectTimeoutS = 2;
     // weather we need to reconnect or not.
     private boolean needsToReconnect;
+    // weather the authentication info has been sent or not.
+    private boolean sentAuthInfo = false;
 
 
     public WebSocketManager(YDW ydw, String token, Integer intent, String status,
@@ -112,7 +117,8 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
     public synchronized void connect() {
         try {
-            ws = new WebSocketFactory().createSocket(YDWInfo.DISCORD_GATEWAY_LINK);
+            String url = resumeGateWayUrl != null ? resumeGateWayUrl : YDWInfo.DISCORD_GATEWAY_LINK;
+            ws = new WebSocketFactory().createSocket(url);
             ws.addHeader("Accept-Encoding", "gzip");
             ws.addListener(this);
             ws.connect();
@@ -120,11 +126,6 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             logger.error("Error while connecting to the gateway", e);
         }
     }
-
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
-    }
-
 
     @Override
     public void onTextMessage(WebSocket websocket, String message) throws Exception {
@@ -177,8 +178,11 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             case INVALID_SESSION -> {
                 logger.debug("Received INVALID_SESSION");
                 boolean shouldResume = d.asBoolean();
+                sentAuthInfo = false;
                 if (shouldResume)
                     logger.debug("Session invalidated, resuming session");
+                else
+                    invalidate();
 
                 int closeCode = shouldResume ? 4900 : 1000;
                 wsClose(closeCode, "Session invalidated");
@@ -317,7 +321,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         }
 
         JsonNode json = JsonNodeFactory.instance.objectNode().put("op", 2).set("d", d);
-
+        sentAuthInfo = true;
         ws.sendText(json.toString());
         logger.info("Connected");
     }
@@ -339,6 +343,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     @Override
     public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame,
             WebSocketFrame clientCloseFrame, boolean closedByServer) {
+        sentAuthInfo = false;
         connected = false;
         if (Thread.currentThread().isInterrupted()) {
             Thread thread = new Thread(() -> handleDisconnect(websocket, serverCloseFrame,
@@ -389,7 +394,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
                     new ShutdownEvent(ydwReg, DateTime.now(), CloseCode.fromCode(rawCloseCode)));
         } else {
             if (canNotResume)
-                unableToResume();
+                invalidate();
 
             // received reconnect close code, try to reconnect
             try {
@@ -397,7 +402,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             } catch (InterruptedException e) {
                 logger.error("Error reconnecting", e);
                 queueReconnect();
-                unableToResume();
+                invalidate();
             }
         }
     }
@@ -429,16 +434,18 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         }
     }
 
+    private void invalidate() {
+        resumeGateWayUrl = null;
+        sessionId = null;
+        sentAuthInfo = false;
+    }
+
     public void queueReconnect() {
         try {
             connect();
         } catch (Exception e) {
             logger.error("Error reconnecting", e);
         }
-    }
-
-    private void unableToResume() {
-        sessionId = null;
     }
 
     @Override
@@ -454,16 +461,24 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         }
     }
 
-    public int getGatewayIntents() {
-        return intent;
-    }
-
     public void setReconnectTimeoutS(int reconnectTimeoutS) {
         this.reconnectTimeoutS = reconnectTimeoutS;
     }
 
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public void setResumeGatewayUrl(String resumeGateWayUrl) {
+        this.resumeGateWayUrl = resumeGateWayUrl;
+    }
+
     public void needsToReconnect(boolean needsToReconnect) {
         this.needsToReconnect = needsToReconnect;
+    }
+
+    public void sentAuthInfo(boolean sentAuthInfo) {
+        this.sentAuthInfo = sentAuthInfo;
     }
 
     public WebSocketManager setCorePoolSize(int corePoolSize) {
