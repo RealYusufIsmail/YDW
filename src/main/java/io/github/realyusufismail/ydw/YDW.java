@@ -20,6 +20,8 @@ package io.github.realyusufismail.ydw;
 
 
 import com.google.errorprone.annotations.CheckReturnValue;
+import io.github.realyusufismail.cache.CacheStorerer;
+import io.github.realyusufismail.cache.SnowFlakeCache;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
@@ -28,7 +30,7 @@ import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.SelfUser;
 import io.github.realyusufismail.ydw.entities.User;
-import io.github.realyusufismail.ydw.entities.guild.channel.Category;
+import io.github.realyusufismail.ydw.entities.guild.channel.*;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import org.jetbrains.annotations.NotNull;
@@ -104,4 +106,15 @@ public interface YDW {
     void removeEventAdapter(Object... eventAdapters);
 
     YDW awaitReady();
+
+    //cache
+    SnowFlakeCache<Category> getCategoryCache();
+    SnowFlakeCache<NewsChannel> getNewsChannelCache();
+    SnowFlakeCache<StageChannel> getStageChannelCache();
+    SnowFlakeCache<TextChannel> getTextChannelCache();
+    SnowFlakeCache<ThreadChannel> getThreadChannelCache();
+    SnowFlakeCache<VoiceChannel> getVoiceChannelCache();
+    SnowFlakeCache<Guild> getGuildCache();
+    SnowFlakeCache<User> getUserCache();
+    SnowFlakeCache<SelfUser> getSelfUserCache();
 }

@@ -19,6 +19,7 @@
 package io.github.realyusufismail.ydwreg;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.realyusufismail.cache.SnowFlakeCache;
 import io.github.realyusufismail.event.recieve.EventReceiver;
 import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.ydw.YDW;
@@ -28,7 +29,7 @@ import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.SelfUser;
 import io.github.realyusufismail.ydw.entities.User;
-import io.github.realyusufismail.ydw.entities.guild.channel.Category;
+import io.github.realyusufismail.ydw.entities.guild.channel.*;
 import io.github.realyusufismail.ydw.event.Event;
 import io.github.realyusufismail.ydw.event.events.GatewayPingEvent;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
@@ -224,6 +225,52 @@ public class YDWReg implements YDW {
         }
 
         return this;
+    }
+
+    //TODO: implement this
+    @Override
+    public SnowFlakeCache<Category> getCategoryCache() {
+        return null;
+    }
+
+    @Override
+    public SnowFlakeCache<NewsChannel> getNewsChannelCache() {
+        return null;
+    }
+
+    @Override
+    public SnowFlakeCache<StageChannel> getStageChannelCache() {
+        return null;
+    }
+
+    @Override
+    public SnowFlakeCache<TextChannel> getTextChannelCache() {
+        return null;
+    }
+
+    @Override
+    public SnowFlakeCache<ThreadChannel> getThreadChannelCache() {
+        return null;
+    }
+
+    @Override
+    public SnowFlakeCache<VoiceChannel> getVoiceChannelCache() {
+        return null;
+    }
+
+    @Override
+    public SnowFlakeCache<Guild> getGuildCache() {
+        return null;
+    }
+
+    @Override
+    public SnowFlakeCache<User> getUserCache() {
+        return null;
+    }
+
+    @Override
+    public SnowFlakeCache<SelfUser> getSelfUserCache() {
+        return null;
     }
 
     private synchronized boolean isReady() {
