@@ -1,5 +1,6 @@
 package io.github.realyusufismail.ydw.entities.automod;
 
+import java.util.EnumSet;
 import java.util.List;
 
 public interface TriggerMetadata {
@@ -13,4 +14,13 @@ public interface TriggerMetadata {
      */
     List<String> getKeyWordFilter();
 
+
+    /**
+     * Gets the internally pre-defined wordsets which will be searched for in content
+     * <p>
+     * Associated with the trigger type {@link TriggerType#KEYWORD_PRESET}
+     *
+     * @return the internally pre-defined wordsets which will be searched for in content
+     */
+    EnumSet<KeywordPresetType> getKeyWordPreset();
 }
