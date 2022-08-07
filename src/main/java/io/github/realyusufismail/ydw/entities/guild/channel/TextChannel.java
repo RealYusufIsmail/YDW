@@ -23,6 +23,9 @@ import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.channel.ChannelType;
 import io.github.realyusufismail.ydw.entities.channel.Overwrite;
 import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
+import io.github.realyusufismail.ydw.entities.guild.Message;
+import io.github.realyusufismail.ydwreg.action.MessageActionReg;
+import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,38 +34,27 @@ import java.util.Optional;
 
 public interface TextChannel extends SnowFlake, GenericEntity, GuildChannel {
 
-    @Override
     List<Overwrite> getPermissionOverwrites();
 
-    @Override
     Optional<String> getName();
 
-    @Override
     Optional<Boolean> isNSFW();
 
-    @Override
     Optional<Integer> getPosition();
 
-    @Override
     Optional<Integer> getRateLimitPerUser();
 
-    @Override
     Optional<String> getTopic();
 
-    @Override
     Optional<SnowFlake> getLastMessageId();
 
-    @Override
     Optional<SnowFlake> getParentId();
 
-    @Override
     Optional<Integer> getDefaultAutoArchiveDuration();
 
-    @Override
     Optional<Category> getCategory();
 
-    @Override
-    Optional<Guild> getGuild();
+    Guild getGuild();
 
     @NotNull
     @Override
@@ -70,4 +62,28 @@ public interface TextChannel extends SnowFlake, GenericEntity, GuildChannel {
         return ChannelType.GUILD_TEXT;
     }
 
+    MessageActionReg sendMessage(String message);
+
+    MessageActionReg sendEmbedMessage(EmbedBuilder embedBuilder);
+
+    @NotNull
+    Message getMessage(long messageId);
+
+    @NotNull
+    default Message getMessage(@NotNull String messageId) {
+        return getMessage(Long.parseUnsignedLong(messageId));
+    }
+
+    List<Message> getMessages(int limit);
+
+    @NotNull
+    default MessageActionReg deleteMessage(@NotNull String messageId) {
+        return deleteMessage(Long.parseUnsignedLong(messageId));
+    }
+
+    @NotNull
+    MessageActionReg deleteMessage(long messageId);
+
+    @NotNull
+    MessageActionReg deleteMessages(int amount);
 }

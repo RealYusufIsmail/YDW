@@ -23,11 +23,14 @@ import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.channel.Overwrite;
 import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
+import io.github.realyusufismail.ydw.entities.guild.Message;
 import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 import io.github.realyusufismail.ydw.entities.guild.channel.TextChannel;
 import io.github.realyusufismail.ydwreg.YDWReg;
+import io.github.realyusufismail.ydwreg.action.MessageActionReg;
 import io.github.realyusufismail.ydwreg.entities.ChannelReg;
 import io.github.realyusufismail.ydwreg.entities.channel.OverwriteReg;
+import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,8 +40,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class TextChannelReg extends ChannelReg implements TextChannel {
-    private final YDW ydw;
-
     private final long textChannelId;
 
     private final List<Overwrite> permissionOverwrites = new ArrayList<>();
@@ -53,7 +54,6 @@ public class TextChannelReg extends ChannelReg implements TextChannel {
 
     public TextChannelReg(@NotNull JsonNode messageJson, long id, @NotNull YDW ydw) {
         super(messageJson, id, ydw);
-        this.ydw = ydw;
         this.textChannelId = id;
 
         this.guild = messageJson.hasNonNull("guild_id")
@@ -143,8 +143,8 @@ public class TextChannelReg extends ChannelReg implements TextChannel {
 
     @NotNull
     @Override
-    public Optional<Guild> getGuild() {
-        return Optional.ofNullable(guild);
+    public Guild getGuild() {
+        return guild;
     }
 
     @Override
@@ -156,6 +156,43 @@ public class TextChannelReg extends ChannelReg implements TextChannel {
     @Override
     public Long getIdLong() {
         return textChannelId;
+    }
+
+    @Override
+    public MessageActionReg sendMessage(String message) {
+        var req = ydw.getRest().getChannelCaller().sendMessage(this.id, message);
+        return new MessageActionReg(req, ydw);
+    }
+
+    @Override
+    public MessageActionReg sendEmbedMessage(EmbedBuilder embedBuilder) {
+        var req = ydw.getRest().getChannelCaller().sendEmbedMessage(this.id, embedBuilder);
+        return new MessageActionReg(req, ydw);
+    }
+
+    @NotNull
+    @Override
+    public Message getMessage(long messageId) {
+        return ydw.getRest().getChannelCaller().getMessage(this.id, messageId);
+    }
+
+    @Override
+    public List<Message> getMessages(int limit) {
+        return ydw.getRest().getChannelCaller().getMessages(this.id, limit);
+    }
+
+    @NotNull
+    @Override
+    public MessageActionReg deleteMessage(long messageId) {
+        var req = ydw.getRest().getChannelCaller().deleteMessage(this.id, messageId);
+        return new MessageActionReg(req, ydw);
+    }
+
+    @NotNull
+    @Override
+    public MessageActionReg deleteMessages(int amount) {
+        var req = ydw.getRest().getChannelCaller().deleteMessages(this.id, amount);
+        return new MessageActionReg(req, ydw);
     }
 
     @Override
