@@ -1,14 +1,11 @@
 /*
  * Copyright 2022 Yusuf Arfan Ismail and other YDW contributors.
  *
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
- *
  * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
  *
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,17 +16,49 @@
 package io.github.realyusufismail.ydw.entities.guild.channel.threads;
 
 import java.time.ZonedDateTime;
+import java.util.Optional;
 
 public interface ThreadMetadata {
+    /**
+     * Informs you whether the thread is archived or not.
+     *
+     * @return true if the thread is archived, false otherwise.
+     */
     boolean isArchived();
 
+    /**
+     * The time after the last message of when the thread should automatically be archived.
+     *
+     * @return the time after the last message of when the thread should automatically be archived.
+     */
     int getAutoArchiveDuration();
 
-    ZonedDateTime getArchivedTimestamp();
+    /**
+     * Informs you the time of when the thread was last archived.
+     *
+     * @return the time of when the thread was last archived.
+     */
+    Optional<ZonedDateTime> getArchivedTimestamp();
 
+    /**
+     * Informs you whether the thread is locked or not. Only users with MANAGE_THREADS can unarchive
+     * it.
+     *
+     * @return true if the thread is locked, false otherwise.
+     */
     boolean isLocked();
 
+    /**
+     * Informs you whether the non-mods can add non-mods to the thread.
+     *
+     * @return true if the non-mods can add non-mods to the thread, false otherwise.
+     */
     boolean isInvitable();
 
+    /**
+     * Informs you the time of when the thread was created.
+     *
+     * @return the time of when the thread was created.
+     */
     ZonedDateTime getCreationTimestamp();
 }

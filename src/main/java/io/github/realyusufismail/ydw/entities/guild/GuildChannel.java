@@ -1,14 +1,11 @@
 /*
  * Copyright 2022 Yusuf Arfan Ismail and other YDW contributors.
  *
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
- *
  * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
  *
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,6 +17,7 @@ package io.github.realyusufismail.ydw.entities.guild;
 
 import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
+import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 import io.github.realyusufismail.ydwreg.action.MessageActionReg;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -29,5 +27,13 @@ import java.util.Optional;
 
 public interface GuildChannel extends Channel, Comparable<GuildChannel> {
 
-   Guild getGuild();
+    Guild getGuild();
+
+    String getName();
+
+    Optional<Category> getCategory();
+
+    boolean isNSFW();
+
+    int getPosition();
 }

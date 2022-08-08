@@ -1,14 +1,11 @@
 /*
  * Copyright 2022 Yusuf Arfan Ismail and other YDW contributors.
  *
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
- *
  * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
  *
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,6 +26,7 @@ import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.SelfUser;
 import io.github.realyusufismail.ydw.entities.User;
+import io.github.realyusufismail.ydw.entities.channel.ChannelType;
 import io.github.realyusufismail.ydw.entities.guild.channel.*;
 import io.github.realyusufismail.ydw.event.Event;
 import io.github.realyusufismail.ydw.event.events.GatewayPingEvent;
@@ -36,6 +34,7 @@ import io.github.realyusufismail.ydwreg.application.commands.option.interaction.
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandBuilderReg;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandCreatorReg;
 import io.github.realyusufismail.ydwreg.exception.NotReadyException;
+import io.github.realyusufismail.ydwreg.handle.EventCache;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
@@ -49,11 +48,10 @@ import java.util.Optional;
 public class YDWReg implements YDW {
     // logger
     public static final Logger logger = LoggerFactory.getLogger(YDWReg.class);
-    @NotNull
     private final ObjectMapper mapper;
-    @NotNull
     private final OkHttpClient okHttpClient;
     private final EventReceiver eventReceiver;
+    private final EventCache eventCache;
     private RestApiHandler rest;
     private WebSocketManager ws;
     private long ping;
@@ -68,6 +66,7 @@ public class YDWReg implements YDW {
         mapper = new ObjectMapper();
         this.okHttpClient = okHttpClient;
         eventReceiver = new EventReceiver();
+        eventCache = new EventCache();
     }
 
     public void handelEvent(Event event) {
@@ -91,13 +90,9 @@ public class YDWReg implements YDW {
     }
 
     @Override
-    public Channel getChannel(long channelId) {
-        return getRest().getYDWCaller().getChannel(channelId);
-    }
-
-    @Override
-    public Category getCategory(long categoryId) {
-        return getRest().getYDWCaller().getCategory(categoryId);
+    public <T extends Channel> T getChannel(Class<T> channel, long channelId) {
+        var ch = getRest().getYDWCaller().getChannel(channelId);
+        return channel.isInstance(ch) ? channel.cast(ch) : null;
     }
 
     @Override
@@ -165,6 +160,10 @@ public class YDWReg implements YDW {
         this.selfUser = selfUser;
     }
 
+    public boolean isSelfUserThere() {
+        return selfUser != null;
+    }
+
     @Override
     public InteractionManager getInteractionManager() {
         return new InteractionManager(this);
@@ -227,50 +226,49 @@ public class YDWReg implements YDW {
         return this;
     }
 
-    //TODO: implement this
     @Override
     public SnowFlakeCache<Category> getCategoryCache() {
-        return null;
+        return new SnowFlakeCache<>(Category.class);
     }
 
     @Override
     public SnowFlakeCache<NewsChannel> getNewsChannelCache() {
-        return null;
+        return new SnowFlakeCache<>(NewsChannel.class);
     }
 
     @Override
     public SnowFlakeCache<StageChannel> getStageChannelCache() {
-        return null;
+        return new SnowFlakeCache<>(StageChannel.class);
     }
 
     @Override
     public SnowFlakeCache<TextChannel> getTextChannelCache() {
-        return null;
+        return new SnowFlakeCache<>(TextChannel.class);
     }
 
     @Override
     public SnowFlakeCache<ThreadChannel> getThreadChannelCache() {
-        return null;
+        return new SnowFlakeCache<>(ThreadChannel.class);
     }
 
     @Override
     public SnowFlakeCache<VoiceChannel> getVoiceChannelCache() {
-        return null;
+        return new SnowFlakeCache<>(VoiceChannel.class);
     }
 
     @Override
     public SnowFlakeCache<Guild> getGuildCache() {
-        return null;
+        return new SnowFlakeCache<>(Guild.class);
     }
 
     @Override
     public SnowFlakeCache<User> getUserCache() {
-        return null;
+        return new SnowFlakeCache<>(User.class);
     }
 
     @Override
     public SnowFlakeCache<SelfUser> getSelfUserCache() {
-        return null;
+        return new SnowFlakeCache<>(SelfUser.class);
     }
 
     private synchronized boolean isReady() {
@@ -301,5 +299,9 @@ public class YDWReg implements YDW {
 
     public void setApplicationId(long applicationId) {
         this.applicationId = applicationId;
+    }
+
+    public EventCache getEventCache() {
+        return eventCache;
     }
 }

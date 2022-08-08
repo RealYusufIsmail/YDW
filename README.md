@@ -38,6 +38,9 @@ Inspiration for event adapter. Handle event system was built alone.
 Inspiration for the gateway intent.
 <br>
 <br>
+The caching system and idea was inspired by JDA.
+<br>
+<br>
 some other minor methods such as gateway ping.
 <br>
 <br>

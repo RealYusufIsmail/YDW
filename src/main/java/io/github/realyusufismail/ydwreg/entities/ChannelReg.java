@@ -1,14 +1,11 @@
 /*
  * Copyright 2022 Yusuf Arfan Ismail and other YDW contributors.
  *
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
- *
  * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
  *
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,6 +27,7 @@ import io.github.realyusufismail.ydw.entities.guild.Message;
 import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 import io.github.realyusufismail.ydw.entities.guild.channel.threads.ThreadMetadata;
 import io.github.realyusufismail.ydw.perm.Permission;
+import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.action.MessageActionReg;
 import io.github.realyusufismail.ydwreg.entities.channel.OverwriteReg;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
@@ -72,8 +70,8 @@ public class ChannelReg implements Channel {
     }
 
     @Override
-    public YDW getYDW() {
-        return ydw;
+    public YDWReg getYDW() {
+        return (YDWReg) ydw;
     }
 
     @Override

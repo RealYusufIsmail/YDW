@@ -1,14 +1,11 @@
 /*
  * Copyright 2022 Yusuf Arfan Ismail and other YDW contributors.
  *
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
- *
  * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
  *
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,16 +17,14 @@ package io.github.realyusufismail.ydw.entities;
 
 
 import com.google.errorprone.annotations.CheckReturnValue;
+import io.github.realyusufismail.cache.SortedSnowflakeCache;
 import io.github.realyusufismail.ydw.action.Action;
 import io.github.realyusufismail.ydw.entities.emoji.Emoji;
 import io.github.realyusufismail.ydw.entities.guild.Member;
 import io.github.realyusufismail.ydw.entities.guild.Role;
 import io.github.realyusufismail.ydw.entities.guild.SystemChannelFlags;
 import io.github.realyusufismail.ydw.entities.guild.WelcomeScreen;
-import io.github.realyusufismail.ydw.entities.guild.channel.NewsChannel;
-import io.github.realyusufismail.ydw.entities.guild.channel.StageChannel;
-import io.github.realyusufismail.ydw.entities.guild.channel.TextChannel;
-import io.github.realyusufismail.ydw.entities.guild.channel.VoiceChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.*;
 import io.github.realyusufismail.ydw.entities.sticker.Sticker;
 import io.github.realyusufismail.ydwreg.entities.guild.GuildFeatures;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
@@ -278,14 +273,18 @@ public interface Guild extends SnowFlake, GenericEntity {
         return getStickerById(Long.parseLong(id));
     }
 
-
-    List<TextChannel> getTextChannels();
-
-    List<VoiceChannel> getVoiceChannels();
-
-    List<NewsChannel> getNewsChannels();
-
-    List<StageChannel> getStageChannels();
-
     Member getSelfMember();
+
+    // cache
+    SortedSnowflakeCache<Category> getCategoryCache();
+
+    SortedSnowflakeCache<TextChannel> getTextChannelCache();
+
+    SortedSnowflakeCache<VoiceChannel> getVoiceChannelCache();
+
+    SortedSnowflakeCache<NewsChannel> getNewsChannelCache();
+
+    SortedSnowflakeCache<StageChannel> getStageChannelCache();
+
+    SortedSnowflakeCache<ThreadChannel> getThreadChannelCache();
 }

@@ -1,14 +1,11 @@
 /*
  * Copyright 2022 Yusuf Arfan Ismail and other YDW contributors.
  *
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
- *
  * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
  *
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,6 +18,8 @@ package io.github.realyusufismail.ydwreg.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import io.github.realyusufismail.cache.SortedSnowflakeCache;
+import io.github.realyusufismail.cache.member.MemberCache;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.action.Action;
 import io.github.realyusufismail.ydw.entities.Channel;
@@ -30,10 +29,7 @@ import io.github.realyusufismail.ydw.entities.guild.Member;
 import io.github.realyusufismail.ydw.entities.guild.Role;
 import io.github.realyusufismail.ydw.entities.guild.SystemChannelFlags;
 import io.github.realyusufismail.ydw.entities.guild.WelcomeScreen;
-import io.github.realyusufismail.ydw.entities.guild.channel.NewsChannel;
-import io.github.realyusufismail.ydw.entities.guild.channel.StageChannel;
-import io.github.realyusufismail.ydw.entities.guild.channel.TextChannel;
-import io.github.realyusufismail.ydw.entities.guild.channel.VoiceChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.*;
 import io.github.realyusufismail.ydw.entities.sticker.Sticker;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.action.ActionReg;
@@ -56,56 +52,66 @@ import java.util.*;
 public class GuildReg implements Guild {
     private final YDW ydw;
     private final long id;
-    private final String name;
-    private final String icon;
-    private final String iconHash;
-    private final String splash;
-    private final String discoverySplash;
-    private final Boolean owner;
-    private final Integer maxPresences;
-    private final Integer maxMembers;
-    private final String vanityUrlCode;
-    private final String description;
-    private final String banner;
 
-    private final Integer premiumTier;
-    private final Integer premiumSubscriptionCount;
-    private final String preferredLocale;
-    private final Long publicUpdateChannelId;
-    private final Integer maxVideoChannelUsers;
-    private final Integer approximatePresenceCount;
-    @Nullable
-    private final WelcomeScreen welcomeScreen;
-    @NotNull
-    private final Integer nsfwLevel;
-    private final Boolean isPremiumProgressBarEnabled;
-    private final Long ownerId;
-    private final Long afkChannelId;
-    private final Integer afkTimeout;
-    private final Boolean isWidgetEnabled;
-    private final String permissions;
-    private final Long widgetChannelId;
-    private final Integer verificationLevel;
-    private final Integer defaultMessageNotifications;
-    private final Integer explicitContentFilter;
-    private final Integer mfaLevel;
-    private final Long applicationId;
-    private final Long systemChannelId;
-    private final SystemChannelFlags systemChannelFlags;
-    private final Long rulesChannelId;
-    private final ZonedDateTime joinedAt;
-    private final Boolean isLarge;
-    private final Boolean isUnavailable;
-    private final Integer memberCount;
-    private final List<Role> roles = new ArrayList<>();
-    private final List<Emoji> emoji = new ArrayList<>();
-    private final EnumSet<GuildFeatures> features = EnumSet.noneOf(GuildFeatures.class);
-    private final List<Sticker> stickers = new ArrayList<>();
-    private final List<TextChannel> textChannels = new ArrayList<>();
-    private final List<NewsChannel> newsChannels = new ArrayList<>();
-    private final List<StageChannel> stageChannels = new ArrayList<>();
-    private final List<VoiceChannel> voiceChannels = new ArrayList<>();
-    private final Member selfMember;
+    // cache
+    private final SortedSnowflakeCache<Category> categoryCache =
+            new SortedSnowflakeCache<>(Category.class, Comparator.naturalOrder());
+    private final SortedSnowflakeCache<TextChannel> textChannelCache =
+            new SortedSnowflakeCache<>(TextChannel.class, Comparator.naturalOrder());
+    private final SortedSnowflakeCache<VoiceChannel> voiceChannelCache =
+            new SortedSnowflakeCache<>(VoiceChannel.class, Comparator.naturalOrder());
+    private final SortedSnowflakeCache<NewsChannel> newsChannelCache =
+            new SortedSnowflakeCache<>(NewsChannel.class, Comparator.naturalOrder());
+    private final SortedSnowflakeCache<StageChannel> stageChannelCache =
+            new SortedSnowflakeCache<>(StageChannel.class, Comparator.naturalOrder());
+    private final SortedSnowflakeCache<ThreadChannel> threadChannelCache =
+            new SortedSnowflakeCache<>(ThreadChannel.class, Comparator.naturalOrder());
+    private final MemberCache memberCache = new MemberCache();
+    // end of cache
+    private String name;
+    private String icon;
+    private String iconHash;
+    private String splash;
+    private String discoverySplash;
+    private Boolean owner;
+    private Integer maxPresences;
+    private Integer maxMembers;
+    private String vanityUrlCode;
+    private String description;
+    private String banner;
+
+    private Integer premiumTier;
+    private Integer premiumSubscriptionCount;
+    private String preferredLocale;
+    private Long publicUpdateChannelId;
+    private Integer maxVideoChannelUsers;
+    private Integer approximatePresenceCount;
+    private WelcomeScreen welcomeScreen;
+    private Integer nsfwLevel;
+    private Boolean isPremiumProgressBarEnabled;
+    private Long ownerId;
+    private Long afkChannelId;
+    private Integer afkTimeout;
+    private Boolean isWidgetEnabled;
+    private String permissions;
+    private Long widgetChannelId;
+    private Integer verificationLevel;
+    private Integer defaultMessageNotifications;
+    private Integer explicitContentFilter;
+    private Integer mfaLevel;
+    private Long applicationId;
+    private Long systemChannelId;
+    private SystemChannelFlags systemChannelFlags;
+    private Long rulesChannelId;
+    private ZonedDateTime joinedAt;
+    private Boolean isLarge;
+    private Boolean isUnavailable;
+    private Integer memberCount;
+    private List<Role> roles = new ArrayList<>();
+    private List<Emoji> emoji = new ArrayList<>();
+    private EnumSet<GuildFeatures> features = EnumSet.noneOf(GuildFeatures.class);
+    private List<Sticker> stickers = new ArrayList<>();
+    private Member selfMember;
 
     public GuildReg(@NotNull JsonNode guildJ, long guildId, @NotNull YDW ydw) {
         this.ydw = ydw;
@@ -543,28 +549,38 @@ public class GuildReg implements Guild {
     }
 
     @Override
-    public List<TextChannel> getTextChannels() {
-        return textChannels;
-    }
-
-    @Override
-    public List<VoiceChannel> getVoiceChannels() {
-        return voiceChannels;
-    }
-
-    @Override
-    public List<NewsChannel> getNewsChannels() {
-        return newsChannels;
-    }
-
-    @Override
-    public List<StageChannel> getStageChannels() {
-        return stageChannels;
-    }
-
-    @Override
     public Member getSelfMember() {
         return selfMember;
+    }
+
+    @Override
+    public SortedSnowflakeCache<Category> getCategoryCache() {
+        return categoryCache;
+    }
+
+    @Override
+    public SortedSnowflakeCache<TextChannel> getTextChannelCache() {
+        return textChannelCache;
+    }
+
+    @Override
+    public SortedSnowflakeCache<VoiceChannel> getVoiceChannelCache() {
+        return voiceChannelCache;
+    }
+
+    @Override
+    public SortedSnowflakeCache<NewsChannel> getNewsChannelCache() {
+        return newsChannelCache;
+    }
+
+    @Override
+    public SortedSnowflakeCache<StageChannel> getStageChannelCache() {
+        return stageChannelCache;
+    }
+
+    @Override
+    public SortedSnowflakeCache<ThreadChannel> getThreadChannelCache() {
+        return threadChannelCache;
     }
 
     /**
@@ -585,5 +601,179 @@ public class GuildReg implements Guild {
     @NotNull
     private GuildCaller getGuildCaller() {
         return ydw.getRest().getGuildCaller();
+    }
+
+    // setters
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public void setIconHash(String iconHash) {
+        this.iconHash = iconHash;
+    }
+
+    public void setSplash(String splash) {
+        this.splash = splash;
+    }
+
+    public void setDiscoverySplash(String discoverySplash) {
+        this.discoverySplash = discoverySplash;
+    }
+
+    public void setOwner(Boolean owner) {
+        this.owner = owner;
+    }
+
+    public void setMaxPresences(Integer maxPresences) {
+        this.maxPresences = maxPresences;
+    }
+
+    public void setMaxMembers(Integer maxMembers) {
+        this.maxMembers = maxMembers;
+    }
+
+    public void setVanityUrlCode(String vanityUrlCode) {
+        this.vanityUrlCode = vanityUrlCode;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setBanner(String banner) {
+        this.banner = banner;
+    }
+
+    public void setPremiumTier(Integer premiumTier) {
+        this.premiumTier = premiumTier;
+    }
+
+    public void setPremiumSubscriptionCount(Integer premiumSubscriptionCount) {
+        this.premiumSubscriptionCount = premiumSubscriptionCount;
+    }
+
+    public void setPreferredLocale(String preferredLocale) {
+        this.preferredLocale = preferredLocale;
+    }
+
+    public void setPublicUpdateChannelId(Long publicUpdateChannelId) {
+        this.publicUpdateChannelId = publicUpdateChannelId;
+    }
+
+    public void setMaxVideoChannelUsers(Integer maxVideoChannelUsers) {
+        this.maxVideoChannelUsers = maxVideoChannelUsers;
+    }
+
+    public void setApproximatePresenceCount(Integer approximatePresenceCount) {
+        this.approximatePresenceCount = approximatePresenceCount;
+    }
+
+    public void setWelcomeScreen(WelcomeScreen welcomeScreen) {
+        this.welcomeScreen = welcomeScreen;
+    }
+
+    public void setNsfwLevel(Integer nsfwLevel) {
+        this.nsfwLevel = nsfwLevel;
+    }
+
+    public void setPremiumProgressBarEnabled(Boolean premiumProgressBarEnabled) {
+        isPremiumProgressBarEnabled = premiumProgressBarEnabled;
+    }
+
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public void setAfkChannelId(Long afkChannelId) {
+        this.afkChannelId = afkChannelId;
+    }
+
+    public void setAfkTimeout(Integer afkTimeout) {
+        this.afkTimeout = afkTimeout;
+    }
+
+    public void setWidgetEnabled(Boolean widgetEnabled) {
+        isWidgetEnabled = widgetEnabled;
+    }
+
+    public void setPermissions(String permissions) {
+        this.permissions = permissions;
+    }
+
+    public void setWidgetChannelId(Long widgetChannelId) {
+        this.widgetChannelId = widgetChannelId;
+    }
+
+    public void setVerificationLevel(Integer verificationLevel) {
+        this.verificationLevel = verificationLevel;
+    }
+
+    public void setDefaultMessageNotifications(Integer defaultMessageNotifications) {
+        this.defaultMessageNotifications = defaultMessageNotifications;
+    }
+
+    public void setExplicitContentFilter(Integer explicitContentFilter) {
+        this.explicitContentFilter = explicitContentFilter;
+    }
+
+    public void setMfaLevel(Integer mfaLevel) {
+        this.mfaLevel = mfaLevel;
+    }
+
+    public void setApplicationId(Long applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public void setSystemChannelId(Long systemChannelId) {
+        this.systemChannelId = systemChannelId;
+    }
+
+    public void setSystemChannelFlags(SystemChannelFlags systemChannelFlags) {
+        this.systemChannelFlags = systemChannelFlags;
+    }
+
+    public void setRulesChannelId(Long rulesChannelId) {
+        this.rulesChannelId = rulesChannelId;
+    }
+
+    public void setJoinedAt(ZonedDateTime joinedAt) {
+        this.joinedAt = joinedAt;
+    }
+
+    public void setLarge(Boolean large) {
+        isLarge = large;
+    }
+
+    public void setUnavailable(Boolean unavailable) {
+        isUnavailable = unavailable;
+    }
+
+    public void setMemberCount(Integer memberCount) {
+        this.memberCount = memberCount;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void setEmoji(List<Emoji> emoji) {
+        this.emoji = emoji;
+    }
+
+    public void setFeatures(EnumSet<GuildFeatures> features) {
+        this.features = features;
+    }
+
+    public void setStickers(List<Sticker> stickers) {
+        this.stickers = stickers;
+    }
+
+    public void setSelfMember(Member selfMember) {
+        this.selfMember = selfMember;
     }
 }

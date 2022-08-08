@@ -1,14 +1,11 @@
 /*
  * Copyright 2022 Yusuf Arfan Ismail and other YDW contributors.
  *
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
- *
  * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
  *
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -56,16 +53,10 @@ public interface YDW {
         return getUser(Long.parseLong(userId));
     }
 
-    Channel getChannel(long channelId);
+    <T extends Channel> T getChannel(Class<T> channel, long channelId);
 
-    default Channel getChannel(@NotNull String channelId) {
-        return getChannel(Long.parseLong(channelId));
-    }
-
-    Category getCategory(long categoryId);
-
-    default Category getCategory(@NotNull String categoryId) {
-        return getCategory(Long.parseLong(categoryId));
+    default <T extends Channel> T getChannel(Class<T> channel, @NotNull String channelId) {
+        return getChannel(channel, Long.parseLong(channelId));
     }
 
     void login(String token, int gatewayIntents, String status, int largeThreshold,
@@ -107,14 +98,22 @@ public interface YDW {
 
     YDW awaitReady();
 
-    //cache
+    // cache
     SnowFlakeCache<Category> getCategoryCache();
+
     SnowFlakeCache<NewsChannel> getNewsChannelCache();
+
     SnowFlakeCache<StageChannel> getStageChannelCache();
+
     SnowFlakeCache<TextChannel> getTextChannelCache();
+
     SnowFlakeCache<ThreadChannel> getThreadChannelCache();
+
     SnowFlakeCache<VoiceChannel> getVoiceChannelCache();
+
     SnowFlakeCache<Guild> getGuildCache();
+
     SnowFlakeCache<User> getUserCache();
+
     SnowFlakeCache<SelfUser> getSelfUserCache();
 }

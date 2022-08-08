@@ -1,14 +1,11 @@
 /*
  * Copyright 2022 Yusuf Arfan Ismail and other YDW contributors.
  *
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
- *
  * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
  *
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -37,28 +34,21 @@ public class UserReg implements User {
     private final YDW ydw;
     private final long id;
 
-    private final String username;
-    private final String discriminator;
-    private final String avatar;
-    @NotNull
-    private final Boolean isBot;
-    @NotNull
-    private final Boolean isSystem;
-    @NotNull
-    private final Boolean isMfaEnabled;
-    private final String banner;
-    private final Integer accentColor;
-    private final String locale;
-    @NotNull
-    private final Boolean isVerified;
-    private final String email;
-    @Nullable
-    private final UserFlags flags;
-    @Nullable
-    private final PremiumTypes premiumType;
-    @Nullable
-    private final UserFlags publicFlags;
-    private final List<Guild> guilds = new ArrayList<>();
+    private String username;
+    private String discriminator;
+    private String avatar;
+    private Boolean isBot;
+    private Boolean isSystem;
+    private Boolean isMfaEnabled;
+    private String banner;
+    private Integer accentColor;
+    private String locale;
+    private Boolean isVerified;
+    private String email;
+    private UserFlags flags;
+    private PremiumTypes premiumType;
+    private UserFlags publicFlags;
+    private List<Guild> guilds = new ArrayList<>();
 
     public UserReg(@NotNull JsonNode user, long userId, @NotNull YDW ydw) {
         this.ydw = ydw;
@@ -181,5 +171,68 @@ public class UserReg implements User {
     @Override
     public YDWReg getYDW() {
         return (YDWReg) ydw;
+    }
+
+    // setters
+
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setDiscriminator(String discriminator) {
+        this.discriminator = discriminator;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public void setBot(Boolean bot) {
+        isBot = bot;
+    }
+
+    public void setSystem(Boolean system) {
+        isSystem = system;
+    }
+
+    public void setMfaEnabled(Boolean mfaEnabled) {
+        isMfaEnabled = mfaEnabled;
+    }
+
+    public void setBanner(String banner) {
+        this.banner = banner;
+    }
+
+    public void setAccentColor(Integer accentColor) {
+        this.accentColor = accentColor;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
+
+    public void setVerified(Boolean verified) {
+        isVerified = verified;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setFlags(UserFlags flags) {
+        this.flags = flags;
+    }
+
+    public void setPremiumType(PremiumTypes premiumType) {
+        this.premiumType = premiumType;
+    }
+
+    public void setPublicFlags(UserFlags publicFlags) {
+        this.publicFlags = publicFlags;
+    }
+
+    public void setGuilds(List<Guild> guilds) {
+        this.guilds = guilds;
     }
 }

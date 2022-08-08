@@ -1,14 +1,11 @@
 /*
  * Copyright 2022 Yusuf Arfan Ismail and other YDW contributors.
  *
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
- *
  * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
  *
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,10 +24,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 
 public class SelfUserReg extends UserReg implements SelfUser {
-    private final Long applicationId;
-    private final Boolean isMfaEnabled;
-    private final Integer allowedFileSize;
-    private final Boolean isVerified;
+    private Long applicationId;
+    private Boolean isMfaEnabled;
+    private Integer allowedFileSize;
+    private Boolean isVerified;
 
     public SelfUserReg(@NotNull JsonNode user, long userId, @NotNull YDWReg ydw) {
         super(user, userId, ydw);
@@ -68,5 +65,24 @@ public class SelfUserReg extends UserReg implements SelfUser {
 
     public YDWReg getYDWReg() {
         return getYDW();
+    }
+
+    // setters
+    public void setApplicationId(Long applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    @Override
+    public void setMfaEnabled(Boolean mfaEnabled) {
+        isMfaEnabled = mfaEnabled;
+    }
+
+    public void setAllowedFileSize(Integer allowedFileSize) {
+        this.allowedFileSize = allowedFileSize;
+    }
+
+    @Override
+    public void setVerified(Boolean verified) {
+        isVerified = verified;
     }
 }

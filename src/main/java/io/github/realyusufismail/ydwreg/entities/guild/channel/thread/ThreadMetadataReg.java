@@ -1,14 +1,11 @@
 /*
  * Copyright 2022 Yusuf Arfan Ismail and other YDW contributors.
  *
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
- *
  * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
  *
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,12 +22,9 @@ import io.github.realyusufismail.ydwreg.util.Verify;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.ZonedDateTime;
+import java.util.Optional;
 
 public class ThreadMetadataReg implements ThreadMetadata {
-    private final JsonNode json;
-    private final long id;
-
-    private final YDW ydw;
 
     private boolean isArchived;
     private int autoArchiveDuration;
@@ -40,10 +34,15 @@ public class ThreadMetadataReg implements ThreadMetadata {
     private boolean isInvitable;
     private ZonedDateTime creationTimestamp;
 
-    public ThreadMetadataReg(JsonNode json, long id, YDW ydw) {
-        this.json = json;
-        this.id = id;
-        this.ydw = ydw;
+    public ThreadMetadataReg(JsonNode json) {
+        isArchived = json.get("archived").asBoolean();
+        autoArchiveDuration = json.get("auto_archive_duration").asInt();
+        autoArchiveTimeStamp = json.hasNonNull("archive_timestamp")
+                ? ZonedDateTime.parse(json.get("archive_timestamp").asText())
+                : null;
+        isLocked = json.get("locked").asBoolean();
+        isInvitable = json.get("invitable").asBoolean();
+        creationTimestamp = ZonedDateTime.parse(json.get("creation_timestamp").asText());
     }
 
     @Override
@@ -51,26 +50,15 @@ public class ThreadMetadataReg implements ThreadMetadata {
         return isArchived;
     }
 
-    @NotNull
-    public ThreadMetadataReg setArchived(boolean archived) {
-        isArchived = archived;
-        return this;
-    }
-
     @Override
     public int getAutoArchiveDuration() {
         return autoArchiveDuration;
     }
 
-    @NotNull
-    public ThreadMetadataReg setAutoArchiveDuration(int autoArchiveDuration) {
-        this.autoArchiveDuration = autoArchiveDuration;
-        return this;
-    }
 
     @Override
-    public ZonedDateTime getArchivedTimestamp() {
-        return autoArchiveTimeStamp;
+    public Optional<ZonedDateTime> getArchivedTimestamp() {
+        return Optional.ofNullable(autoArchiveTimeStamp);
     }
 
     @Override
@@ -78,38 +66,38 @@ public class ThreadMetadataReg implements ThreadMetadata {
         return isLocked;
     }
 
-    @NotNull
-    public ThreadMetadataReg setLocked(boolean locked) {
-        isLocked = locked;
-        return this;
-    }
-
     @Override
     public boolean isInvitable() {
         return isInvitable;
     }
 
-    @NotNull
-    public ThreadMetadataReg setInvitable(boolean invitable) {
-        isInvitable = invitable;
-        return this;
-    }
-
     @Override
     public ZonedDateTime getCreationTimestamp() {
-        Verify.checkIfNull(creationTimestamp, "creation_timestamp");
         return creationTimestamp;
     }
 
-    @NotNull
-    public ThreadMetadataReg setCreationTimestamp(ZonedDateTime creationTimestamp) {
-        this.creationTimestamp = creationTimestamp;
-        return this;
+    // setters
+    public void setArchived(boolean archived) {
+        isArchived = archived;
     }
 
-    @NotNull
-    public ThreadMetadataReg setAutoArchiveTimeStamp(ZonedDateTime autoArchiveTimeStamp) {
+    public void setAutoArchiveDuration(int autoArchiveDuration) {
+        this.autoArchiveDuration = autoArchiveDuration;
+    }
+
+    public void setAutoArchiveTimeStamp(ZonedDateTime autoArchiveTimeStamp) {
         this.autoArchiveTimeStamp = autoArchiveTimeStamp;
-        return this;
+    }
+
+    public void setLocked(boolean locked) {
+        isLocked = locked;
+    }
+
+    public void setInvitable(boolean invitable) {
+        isInvitable = invitable;
+    }
+
+    public void setCreationTimestamp(ZonedDateTime creationTimestamp) {
+        this.creationTimestamp = creationTimestamp;
     }
 }

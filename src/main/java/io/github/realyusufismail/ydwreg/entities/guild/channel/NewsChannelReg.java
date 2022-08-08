@@ -1,14 +1,11 @@
 /*
  * Copyright 2022 Yusuf Arfan Ismail and other YDW contributors.
  *
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
- *
  * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
  *
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -36,34 +33,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+// TODO: finish working on the cache
 public class NewsChannelReg extends ChannelReg implements NewsChannel {
     private final YDW ydw;
     private final Long id;
 
-    private final Guild guild;
-    private final String name;
-    private final Integer position;
-    private final List<Overwrite> permissionOverwrites = new ArrayList<>();
-    private final Boolean nsfw;
-    private final String topic;
-    private final Long parentId;
-    private final Integer defaultAutoArchiveDuration;
+    private final long guildId;
+    private String name;
+    private int position;
+    private List<Overwrite> permissionOverwrites = new ArrayList<>();
+    private boolean nsfw;
+    private String topic;
+    private Category category;
+    private int defaultAutoArchiveDuration;
 
     public NewsChannelReg(@NotNull JsonNode json, long id, @NotNull YDW ydw) {
         super(json, id, ydw);
         this.ydw = ydw;
         this.id = id;
 
-        this.guild =
-                json.hasNonNull("guild_id") ? ydw.getGuild(json.get("guild_id").asLong()) : null;
-        this.name = json.hasNonNull("name") ? json.get("name").asText() : null;
-        this.position = json.hasNonNull("position") ? json.get("position").asInt() : null;
-        this.nsfw = json.hasNonNull("nsfw") ? json.get("nsfw").asBoolean() : null;
-        this.topic = json.hasNonNull("topic") ? json.get("topic").asText() : null;
-        this.parentId = json.hasNonNull("parent_id") ? json.get("parent_id").asLong() : null;
-        this.defaultAutoArchiveDuration = json.hasNonNull("default_auto_archive_duration")
-                ? json.get("default_auto_archive_duration").asInt()
+        this.guildId = json.get("guild_id").asLong();
+        this.name = json.get("name").asText();
+        this.position = json.get("position").asInt();
+        this.nsfw = json.get("nsfw").asBoolean();
+        this.topic = json.get("topic").asText();
+        this.category = json.hasNonNull("parent_id")
+                ? ydw.getChannel(Category.class, json.get("parent_id").asLong())
                 : null;
+        this.defaultAutoArchiveDuration = json.get("default_auto_archive_duration").asInt();
 
         if (json.hasNonNull("permission_overwrites")) {
             json.get("permission_overwrites").forEach(permissionOverwrite -> {
@@ -71,62 +68,6 @@ public class NewsChannelReg extends ChannelReg implements NewsChannel {
                         permissionOverwrite.get("id").asLong(), ydw));
             });
         }
-    }
-
-    @Override
-    public YDWReg getYDW() {
-        return (YDWReg) ydw;
-    }
-
-    @Override
-    public Optional<Guild> getGuild() {
-        return Optional.ofNullable(guild);
-    }
-
-    @Override
-    public Optional<String> getName() {
-        return Optional.ofNullable(name);
-    }
-
-    @NotNull
-    @Override
-    public ChannelType getType() {
-        return NewsChannel.super.getType();
-    }
-
-    @Override
-    public Optional<Integer> getPosition() {
-        return Optional.ofNullable(position);
-    }
-
-    @Override
-    public List<Overwrite> getPermissionOverwrites() {
-        return permissionOverwrites;
-    }
-
-    @Override
-    public Optional<Boolean> isNSFW() {
-        return Optional.ofNullable(nsfw);
-    }
-
-    @Override
-    public Optional<String> getTopic() {
-        return Optional.ofNullable(topic);
-    }
-
-    @Override
-    public Optional<SnowFlake> getParentId() {
-        return Optional.ofNullable(parentId).map(SnowFlake::of);
-    }
-
-    @Override
-    public Optional<Integer> getDefaultAutoArchiveDuration() {
-        return Optional.ofNullable(defaultAutoArchiveDuration);
-    }
-
-    @Override
-    public Optional<Category> getCategory() {
-        return getParentId().map(id -> ydw.getCategory(id.getId()));
     }
 
     @NotNull
@@ -137,5 +78,80 @@ public class NewsChannelReg extends ChannelReg implements NewsChannel {
     @Override
     public int compareTo(@NotNull GuildChannel o) {
         return Long.compare(id, o.getIdLong());
+    }
+
+    // setters
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public void setPermissionOverwrites(List<Overwrite> permissionOverwrites) {
+        this.permissionOverwrites = permissionOverwrites;
+    }
+
+    public void setNsfw(boolean nsfw) {
+        this.nsfw = nsfw;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setDefaultAutoArchiveDuration(int defaultAutoArchiveDuration) {
+        this.defaultAutoArchiveDuration = defaultAutoArchiveDuration;
+    }
+
+    @Override
+    public Guild getGuild() {
+        return ydw.getGuild(guildId);
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public Optional<Category> getCategory() {
+        return Optional.ofNullable(category);
+    }
+
+    @Override
+    public boolean isNSFW() {
+        return nsfw;
+    }
+
+    @Override
+    public int getPosition() {
+        return position;
+    }
+
+    @Override
+    public List<Overwrite> getPermissionOverwrites() {
+        return permissionOverwrites;
+    }
+
+    @Override
+    public String getTopic() {
+        return null;
+    }
+
+    @Override
+    public SnowFlake lastMessageId() {
+        return null;
+    }
+
+    @Override
+    public int getDefaultAutoArchiveDuration() {
+        return 0;
     }
 }

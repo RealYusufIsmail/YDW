@@ -1,14 +1,11 @@
 /*
  * Copyright 2022 Yusuf Arfan Ismail and other YDW contributors.
  *
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
- *
  * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
  *
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,6 +21,7 @@ import io.github.realyusufismail.ydw.entities.User;
 import io.github.realyusufismail.ydw.entities.channel.ChannelType;
 import io.github.realyusufismail.ydw.entities.channel.GroupDm;
 import io.github.realyusufismail.ydwreg.entities.ChannelReg;
+import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -35,18 +33,15 @@ public class GroupDmReg extends ChannelReg implements GroupDm {
     private final String name;
     private final Long lastMessageId;
     private final List<User> users = new ArrayList<>();
-    private final User owner;
+    private final long ownerId;
 
     public GroupDmReg(@NotNull JsonNode channelJ, long id, @NotNull YDW ydw) {
         super(channelJ, id, ydw);
 
-        this.name = channelJ.hasNonNull("name") ? channelJ.get("name").asText() : null;
-        this.lastMessageId =
-                channelJ.hasNonNull("last_message_id") ? channelJ.get("last_message_id").asLong()
-                        : null;
-        this.owner =
-                channelJ.hasNonNull("owner_id") ? ydw.getUser(channelJ.get("owner_id").asLong())
-                        : null;
+        this.name = channelJ.get("name").asText();
+        this.lastMessageId = channelJ.get("last_message_id").asLong();
+
+        this.ownerId = channelJ.get("owner_id").asLong();
 
         if (channelJ.hasNonNull("recipients")) {
             channelJ.get("recipients").forEach(recipient -> {
@@ -56,28 +51,22 @@ public class GroupDmReg extends ChannelReg implements GroupDm {
     }
 
     @Override
-    public Optional<String> getName() {
-        return Optional.ofNullable(name);
+    public String getName() {
+        return name;
     }
 
     @Override
-    public Optional<Long> lastMessageId() {
-        return Optional.ofNullable(lastMessageId);
-    }
-
-    @NotNull
-    @Override
-    public ChannelType getType() {
-        return GroupDm.super.getType();
+    public SnowFlake lastMessageId() {
+        return SnowFlake.of(lastMessageId);
     }
 
     @Override
-    public List<User> getUsers() {
+    public List<User> getRecipients() {
         return users;
     }
 
     @Override
-    public Optional<User> getOwner() {
-        return Optional.ofNullable(owner);
+    public SnowFlake getOwnerId() {
+        return SnowFlake.of(ownerId);
     }
 }

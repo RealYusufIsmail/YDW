@@ -1,14 +1,11 @@
 /*
  * Copyright 2022 Yusuf Arfan Ismail and other YDW contributors.
  *
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
- *
  * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
  *
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,18 +16,17 @@
 package io.github.realyusufismail.ydwreg.entities.guild.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.github.realyusufismail.cache.SnowFlakeCache;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.channel.Overwrite;
 import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
-import io.github.realyusufismail.ydw.entities.guild.Message;
 import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 import io.github.realyusufismail.ydw.entities.guild.channel.TextChannel;
 import io.github.realyusufismail.ydwreg.YDWReg;
-import io.github.realyusufismail.ydwreg.action.MessageActionReg;
-import io.github.realyusufismail.ydwreg.entities.ChannelReg;
+import io.github.realyusufismail.ydwreg.entities.GuildReg;
 import io.github.realyusufismail.ydwreg.entities.channel.OverwriteReg;
-import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
+import io.github.realyusufismail.ydwreg.handle.EventCache;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,39 +35,44 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class TextChannelReg extends ChannelReg implements TextChannel {
-    private final long textChannelId;
+public class TextChannelReg extends GeneralTextChannelReg implements TextChannel {
+    private final long id;
+    private final YDW ydw;
 
-    private final List<Overwrite> permissionOverwrites = new ArrayList<>();
-    private final Boolean nsfw;
-    private final String name;
-    private final String topic;
-    private final Long lastMessageId;
-    private final Integer rateLimitPerUser;
-    private final Guild guild;
-    private final Integer position;
-    private final Long parentId;
+    private List<Overwrite> permissionOverwrites = new ArrayList<>();
+    private Boolean nsfw;
+    private String name;
+    private String topic;
+    private long lastMessageId;
+    private int rateLimitPerUser;
+    private final long guildId;
+    private int position;
+    private int defaultAutoArchiveDuration;
+    private Category category;
 
     public TextChannelReg(@NotNull JsonNode messageJson, long id, @NotNull YDW ydw) {
-        super(messageJson, id, ydw);
-        this.textChannelId = id;
+        this(null, messageJson, id, ydw);
+    }
 
-        this.guild = messageJson.hasNonNull("guild_id")
-                ? ydw.getGuild(messageJson.get("guild_id").asLong())
+    public TextChannelReg(GuildReg guildReg, @NotNull JsonNode messageJson, long id,
+            @NotNull YDW ydw) {
+        super(ydw, id);
+        this.ydw = ydw;
+        this.id = id;
+
+        this.guildId = messageJson.get("guild_id").asLong();
+
+        this.name = messageJson.get("name").asText();
+        this.topic = messageJson.get("topic").asText();
+        this.nsfw = messageJson.get("nsfw").asBoolean();
+        this.lastMessageId = messageJson.get("last_message_id").asLong();
+
+        this.position = messageJson.get("position").asInt();
+        this.rateLimitPerUser = messageJson.get("rate_limit_per_user").asInt();
+        this.defaultAutoArchiveDuration = messageJson.get("default_auto_archive_duration").asInt();
+        this.category = messageJson.hasNonNull("parent_id")
+                ? ydw.getChannel(Category.class, messageJson.get("parent_id").asLong())
                 : null;
-        this.name = messageJson.hasNonNull("name") ? messageJson.get("name").asText() : null;
-        this.topic = messageJson.hasNonNull("topic") ? messageJson.get("topic").asText() : null;
-        this.nsfw = messageJson.hasNonNull("nsfw") ? messageJson.get("nsfw").asBoolean() : null;
-        this.lastMessageId = messageJson.hasNonNull("last_message_id")
-                ? messageJson.get("last_message_id").asLong()
-                : null;
-        this.position =
-                messageJson.hasNonNull("position") ? messageJson.get("position").asInt() : null;
-        this.rateLimitPerUser = messageJson.hasNonNull("rate_limit_per_user")
-                ? messageJson.get("rate_limit_per_user").asInt()
-                : null;
-        this.parentId =
-                messageJson.hasNonNull("parent_id") ? messageJson.get("parent_id").asLong() : null;
 
         if (messageJson.hasNonNull("permission_overwrites")) {
             for (JsonNode permission : messageJson.get("permission_overwrites")) {
@@ -79,6 +80,24 @@ public class TextChannelReg extends ChannelReg implements TextChannel {
                     .add(new OverwriteReg(permission, permission.get("id").asLong(), ydw));
             }
         }
+
+        boolean playbackCache = false;
+        // cache
+        TextChannelReg channel = (TextChannelReg) getYDW().getTextChannelCache().get(id);
+        if (channel == null) {
+            if (guildReg == null)
+                guildReg = (GuildReg) getYDW().getGuildCache().get(guildId);
+
+            SnowFlakeCache<TextChannel> guildTextView = guildReg.getTextChannelCache(),
+                    textView = getYDW().getTextChannelCache();
+
+            channel = this;
+            guildTextView.put(id, channel);
+            playbackCache = textView.put(id, channel) == null;
+        }
+
+        if (playbackCache)
+            getYDW().getEventCache().playbackCache(EventCache.CacheType.CHANNEL, id);
     }
 
     @Nullable
@@ -93,110 +112,96 @@ public class TextChannelReg extends ChannelReg implements TextChannel {
         return permissionOverwrites;
     }
 
-    @NotNull
     @Override
-    public Optional<String> getName() {
-        return Optional.ofNullable(name);
+    public int getRateLimitPerUser() {
+        return rateLimitPerUser;
     }
 
-    @NotNull
     @Override
-    public Optional<Boolean> isNSFW() {
-        return Optional.ofNullable(nsfw);
+    public String getTopic() {
+        return topic;
     }
 
-    @NotNull
     @Override
-    public Optional<Integer> getPosition() {
-        return Optional.ofNullable(position);
+    public SnowFlake getLastMessageId() {
+        return SnowFlake.of(lastMessageId);
     }
 
-    @NotNull
     @Override
-    public Optional<Integer> getRateLimitPerUser() {
-        return Optional.ofNullable(rateLimitPerUser);
+    public int getDefaultAutoArchiveDuration() {
+        return defaultAutoArchiveDuration;
     }
 
-    @NotNull
-    @Override
-    public Optional<String> getTopic() {
-        return Optional.ofNullable(topic);
-    }
-
-    @NotNull
-    @Override
-    public Optional<SnowFlake> getLastMessageId() {
-        return Optional.ofNullable(lastMessageId).map(SnowFlake::of);
-    }
-
-    @NotNull
-    @Override
-    public Optional<SnowFlake> getParentId() {
-        return Optional.ofNullable(parentId).map(SnowFlake::of);
-    }
-
-    @NotNull
-    @Override
-    public Optional<Integer> getDefaultAutoArchiveDuration() {
-        return Optional.empty();
-    }
-
-    @NotNull
     @Override
     public Guild getGuild() {
-        return guild;
+        return ydw.getGuild(guildId);
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
     public Optional<Category> getCategory() {
-        return getParentId().map(id -> ydw.getCategory(id.getId()));
+        return Optional.ofNullable(category);
+    }
+
+    @Override
+    public boolean isNSFW() {
+        return nsfw;
+    }
+
+    @Override
+    public int getPosition() {
+        return position;
     }
 
     @NotNull
     @Override
     public Long getIdLong() {
-        return textChannelId;
-    }
-
-    @Override
-    public MessageActionReg sendMessage(String message) {
-        var req = ydw.getRest().getChannelCaller().sendMessage(this.id, message);
-        return new MessageActionReg(req, ydw);
-    }
-
-    @Override
-    public MessageActionReg sendEmbedMessage(EmbedBuilder embedBuilder) {
-        var req = ydw.getRest().getChannelCaller().sendEmbedMessage(this.id, embedBuilder);
-        return new MessageActionReg(req, ydw);
-    }
-
-    @NotNull
-    @Override
-    public Message getMessage(long messageId) {
-        return ydw.getRest().getChannelCaller().getMessage(this.id, messageId);
-    }
-
-    @Override
-    public List<Message> getMessages(int limit) {
-        return ydw.getRest().getChannelCaller().getMessages(this.id, limit);
-    }
-
-    @NotNull
-    @Override
-    public MessageActionReg deleteMessage(long messageId) {
-        var req = ydw.getRest().getChannelCaller().deleteMessage(this.id, messageId);
-        return new MessageActionReg(req, ydw);
-    }
-
-    @NotNull
-    @Override
-    public MessageActionReg deleteMessages(int amount) {
-        var req = ydw.getRest().getChannelCaller().deleteMessages(this.id, amount);
-        return new MessageActionReg(req, ydw);
+        return id;
     }
 
     @Override
     public int compareTo(@NotNull GuildChannel o) {
-        return Long.compare(textChannelId, o.getIdLong());
+        return Long.compare(id, o.getIdLong());
+    }
+
+    // setters
+    public void setPermissionOverwrites(List<Overwrite> permissionOverwrites) {
+        this.permissionOverwrites = permissionOverwrites;
+    }
+
+    public void setNsfw(Boolean nsfw) {
+        this.nsfw = nsfw;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
+    public void setLastMessageId(long lastMessageId) {
+        this.lastMessageId = lastMessageId;
+    }
+
+    public void setRateLimitPerUser(int rateLimitPerUser) {
+        this.rateLimitPerUser = rateLimitPerUser;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public void setDefaultAutoArchiveDuration(int defaultAutoArchiveDuration) {
+        this.defaultAutoArchiveDuration = defaultAutoArchiveDuration;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
