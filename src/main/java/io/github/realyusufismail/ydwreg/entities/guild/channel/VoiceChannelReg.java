@@ -16,16 +16,20 @@
 package io.github.realyusufismail.ydwreg.entities.guild.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.github.realyusufismail.cache.SnowFlakeCache;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.channel.ChannelType;
 import io.github.realyusufismail.ydw.entities.channel.Overwrite;
 import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
 import io.github.realyusufismail.ydw.entities.guild.channel.Category;
+import io.github.realyusufismail.ydw.entities.guild.channel.StageChannel;
 import io.github.realyusufismail.ydw.entities.guild.channel.VoiceChannel;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.entities.ChannelReg;
+import io.github.realyusufismail.ydwreg.entities.GuildReg;
 import io.github.realyusufismail.ydwreg.entities.channel.OverwriteReg;
+import io.github.realyusufismail.ydwreg.handle.EventCache;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,25 +39,28 @@ import java.util.Optional;
 
 public class VoiceChannelReg extends ChannelReg implements VoiceChannel {
     private final YDW ydw;
-    private final Long id;
+    private final long id;
 
-    private final Guild guild;
-    private final String name;
-    private final Boolean isNSFW;
-    private final Integer position;
-    private final List<Overwrite> permissionOverwrites = new ArrayList<>();
-    private final Integer bitrate;
-    private final Integer userLimit;
-    private final Long parentId;
-    private final String rtcRegion;
+    protected final long guildId;
+    private String name;
+    private Boolean isNSFW;
+    private Integer position;
+    private List<Overwrite> permissionOverwrites = new ArrayList<>();
+    private Integer bitrate;
+    private Integer userLimit;
+    private Long parentId;
+    private String rtcRegion;
 
     public VoiceChannelReg(@NotNull JsonNode json, long id, @NotNull YDW ydw) {
+        this(null, json, id, ydw);
+    }
+
+    public VoiceChannelReg(GuildReg guildReg, @NotNull JsonNode json, long id, @NotNull YDW ydw) {
         super(json, id, ydw);
         this.ydw = ydw;
         this.id = id;
 
-        this.guild =
-                json.hasNonNull("guild_id") ? ydw.getGuild(json.get("guild_id").asLong()) : null;
+        this.guildId = json.get("guild_id").asLong();
         this.name = json.hasNonNull("name") ? json.get("name").asText() : null;
         this.isNSFW = json.hasNonNull("nsfw") ? json.get("nsfw").asBoolean() : null;
         this.position = json.hasNonNull("position") ? json.get("position").asInt() : null;
@@ -68,67 +75,29 @@ public class VoiceChannelReg extends ChannelReg implements VoiceChannel {
                         permissionOverwrite.get("id").asLong(), ydw));
             }
         }
+
+        boolean playbackCache = false;
+        // cache
+        VoiceChannelReg channel = (VoiceChannelReg) getYDW().getVoiceChannelCache().get(id);
+        if (channel == null) {
+            if (guildReg == null)
+                guildReg = (GuildReg) getYDW().getGuildCache().get(guildId);
+
+            SnowFlakeCache<VoiceChannel> guildVoiceView = guildReg.getVoiceChannelCache(),
+                    voiceView = getYDW().getVoiceChannelCache();
+
+            channel = this;
+            guildVoiceView.put(id, channel);
+            playbackCache = voiceView.put(id, channel) == null;
+        }
+
+        if (playbackCache)
+            getYDW().getEventCache().playbackCache(EventCache.CacheType.CHANNEL, id);
     }
 
     @Override
     public YDWReg getYDW() {
         return (YDWReg) ydw;
-    }
-
-    @Override
-    public Optional<Guild> getGuild() {
-        return Optional.ofNullable(guild);
-    }
-
-    @Override
-    public Optional<String> getName() {
-        return Optional.ofNullable(name);
-    }
-
-    @NotNull
-    @Override
-    public ChannelType getType() {
-        return VoiceChannel.super.getType();
-    }
-
-    @Override
-    public Optional<Boolean> isNSFW() {
-        return Optional.ofNullable(isNSFW);
-    }
-
-    @Override
-    public Optional<Integer> getPosition() {
-        return Optional.ofNullable(position);
-    }
-
-    @Override
-    public List<Overwrite> getPermissionOverwrites() {
-        return permissionOverwrites;
-    }
-
-    @Override
-    public Optional<Integer> getBitrate() {
-        return Optional.ofNullable(bitrate);
-    }
-
-    @Override
-    public Optional<Integer> getUserLimit() {
-        return Optional.ofNullable(userLimit);
-    }
-
-    @Override
-    public Optional<SnowFlake> getParentId() {
-        return Optional.ofNullable(parentId).map(SnowFlake::of);
-    }
-
-    @Override
-    public Optional<String> getRTCRegion() {
-        return Optional.ofNullable(rtcRegion);
-    }
-
-    @Override
-    public Optional<Category> getCategory() {
-        return getParentId().map(id -> ydw.getCategory(id.getId()));
     }
 
     @NotNull
@@ -140,5 +109,84 @@ public class VoiceChannelReg extends ChannelReg implements VoiceChannel {
     @Override
     public int compareTo(@NotNull GuildChannel o) {
         return Long.compare(id, o.getIdLong());
+    }
+
+    @Override
+    public Guild getGuild() {
+        return ydw.getGuild(guildId);
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public Optional<Category> getCategory() {
+        return Optional.ofNullable(ydw.getChannel(Category.class, parentId));
+    }
+
+    @Override
+    public boolean isNSFW() {
+        return isNSFW;
+    }
+
+    @Override
+    public int getPosition() {
+        return position;
+    }
+
+    @Override
+    public List<Overwrite> getPermissionOverwrites() {
+        return permissionOverwrites;
+    }
+
+    @Override
+    public int getBitrate() {
+        return bitrate;
+    }
+
+    @Override
+    public int getUserLimit() {
+        return userLimit;
+    }
+
+    @Override
+    public String getRTCRegion() {
+        return rtcRegion;
+    }
+
+    // setters
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNSFW(Boolean NSFW) {
+        isNSFW = NSFW;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
+    }
+
+    public void setPermissionOverwrites(List<Overwrite> permissionOverwrites) {
+        this.permissionOverwrites = permissionOverwrites;
+    }
+
+    public void setBitrate(Integer bitrate) {
+        this.bitrate = bitrate;
+    }
+
+    public void setUserLimit(Integer userLimit) {
+        this.userLimit = userLimit;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
+    public void setRtcRegion(String rtcRegion) {
+        this.rtcRegion = rtcRegion;
     }
 }

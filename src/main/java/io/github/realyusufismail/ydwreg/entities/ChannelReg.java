@@ -57,7 +57,6 @@ public class ChannelReg implements Channel {
         this.ydw = ydw;
 
         this.type = ChannelType.getChannelType(channelJ.get("type").asInt());
-
     }
 
     /**

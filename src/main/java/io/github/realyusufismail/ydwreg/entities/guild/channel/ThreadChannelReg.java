@@ -16,22 +16,168 @@
 package io.github.realyusufismail.ydwreg.entities.guild.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.github.realyusufismail.cache.SnowFlakeCache;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 import io.github.realyusufismail.ydw.entities.guild.channel.ThreadChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.threads.ThreadMetadata;
 import io.github.realyusufismail.ydwreg.entities.ChannelReg;
+import io.github.realyusufismail.ydwreg.entities.GuildReg;
+import io.github.realyusufismail.ydwreg.entities.guild.channel.thread.ThreadMetadataReg;
+import io.github.realyusufismail.ydwreg.handle.EventCache;
+import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 public class ThreadChannelReg extends ChannelReg implements ThreadChannel {
     private final long id;
 
+    private String name;
+    private final long guildId;
+    private final long ownerId;
+    private final Category category;
+    private long lastMessageId;
+    private int messageCount;
+    private int memberCount;
+    private int rateLimitPerUser;
+    private ThreadMetadata metadata;
+    private int totalMessagesSent;
+
     public ThreadChannelReg(@NotNull JsonNode json, long id, @NotNull YDW ydw) {
+        this(null, json, id, ydw);
+    }
+
+    public ThreadChannelReg(GuildReg guildReg, @NotNull JsonNode json, long id, @NotNull YDW ydw) {
         super(json, id, ydw);
         this.id = id;
+
+        this.name = json.get("name").asText();
+        guildId = json.get("guild_id").asLong();
+        ownerId = json.get("owner_id").asLong();
+        category = json.hasNonNull("parent_id")
+                ? ydw.getChannel(Category.class, json.get("parent_id").asLong())
+                : null;
+        this.lastMessageId = json.get("last_message_id").asLong();
+        this.messageCount = json.get("message_count").asInt();
+        this.memberCount = json.get("member_count").asInt();
+        this.rateLimitPerUser = json.get("rate_limit_per_user").asInt();
+        this.metadata =
+                json.hasNonNull("metadata") ? new ThreadMetadataReg(json.get("metadata")) : null;
+        this.totalMessagesSent = json.get("total_messages_sent").asInt();
+
+        boolean playbackCache = false;
+        // cache
+        ThreadChannelReg channel = (ThreadChannelReg) getYDW().getThreadChannelCache().get(id);
+        if (channel == null) {
+            if (guildReg == null)
+                guildReg = (GuildReg) getYDW().getGuildCache().get(guildId);
+
+            SnowFlakeCache<ThreadChannel> guildThreadView = guildReg.getThreadChannelCache(),
+                    threadView = getYDW().getThreadChannelCache();
+
+            channel = this;
+            guildThreadView.put(id, channel);
+            playbackCache = threadView.put(id, channel) == null;
+        }
+
+        if (playbackCache)
+            getYDW().getEventCache().playbackCache(EventCache.CacheType.CHANNEL, id);
+    }
+
+    @Override
+    public Guild getGuild() {
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public Optional<Category> getCategory() {
+        return Optional.empty();
+    }
+
+    @Override
+    public boolean isNSFW() {
+        return false;
+    }
+
+    @Override
+    public int getPosition() {
+        return 0;
+    }
+
+    @Override
+    public SnowFlake getOwnerId() {
+        return null;
+    }
+
+    @Override
+    public SnowFlake getLastMessageId() {
+        return null;
+    }
+
+    @Override
+    public int getMessageCount() {
+        return 0;
+    }
+
+    @Override
+    public int getMemberCount() {
+        return 0;
+    }
+
+    @Override
+    public int getRateLimitPerUser() {
+        return 0;
+    }
+
+    @Override
+    public ThreadMetadata getMetadata() {
+        return null;
+    }
+
+    @Override
+    public int getTotalMessagesSent() {
+        return 0;
     }
 
     @Override
     public int compareTo(@NotNull GuildChannel o) {
         return Long.compare(id, o.getIdLong());
+    }
+
+    // setters
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setLastMessageId(long lastMessageId) {
+        this.lastMessageId = lastMessageId;
+    }
+
+    public void setMessageCount(int messageCount) {
+        this.messageCount = messageCount;
+    }
+
+    public void setMemberCount(int memberCount) {
+        this.memberCount = memberCount;
+    }
+
+    public void setRateLimitPerUser(int rateLimitPerUser) {
+        this.rateLimitPerUser = rateLimitPerUser;
+    }
+
+    public void setMetadata(ThreadMetadata metadata) {
+        this.metadata = metadata;
+    }
+
+    public void setTotalMessagesSent(int totalMessagesSent) {
+        this.totalMessagesSent = totalMessagesSent;
     }
 }

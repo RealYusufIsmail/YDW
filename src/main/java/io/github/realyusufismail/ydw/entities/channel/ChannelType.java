@@ -58,7 +58,7 @@ public enum ChannelType {
     /**
      * A voice channel for hosting events with an audience.
      */
-    STAGE_VOICE(13),
+    STAGE(13),
     /**
      * The channel in a hub containing the listed servers.
      */

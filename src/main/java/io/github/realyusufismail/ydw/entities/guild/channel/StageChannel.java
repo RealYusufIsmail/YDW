@@ -24,6 +24,6 @@ public interface StageChannel extends VoiceChannel, GuildChannel, SnowFlake {
     @NotNull
     @Override
     default ChannelType getType() {
-        return ChannelType.STAGE_VOICE;
+        return ChannelType.STAGE;
     }
 }

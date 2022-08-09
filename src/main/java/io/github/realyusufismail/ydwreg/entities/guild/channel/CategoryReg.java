@@ -77,27 +77,6 @@ public class CategoryReg extends ChannelReg implements Category {
 
 
     @Override
-    public int compareTo(@NotNull GuildChannel o) {
-        return Long.compare(id, o.getIdLong());
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public void setNsfw(boolean nsfw) {
-        this.nsfw = nsfw;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
-    @Override
     public Guild getGuild() {
         return ydw.getGuild(guildId);
     }
@@ -120,5 +99,26 @@ public class CategoryReg extends ChannelReg implements Category {
     @Override
     public int getPosition() {
         return position;
+    }
+
+    @Override
+    public int compareTo(@NotNull GuildChannel o) {
+        return Long.compare(id, o.getIdLong());
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setNsfw(boolean nsfw) {
+        this.nsfw = nsfw;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

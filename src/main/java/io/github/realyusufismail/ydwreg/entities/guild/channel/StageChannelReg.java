@@ -17,14 +17,40 @@ package io.github.realyusufismail.ydwreg.entities.guild.channel;
 
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.github.realyusufismail.cache.SnowFlakeCache;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.entities.guild.channel.NewsChannel;
 import io.github.realyusufismail.ydw.entities.guild.channel.StageChannel;
+import io.github.realyusufismail.ydwreg.entities.GuildReg;
+import io.github.realyusufismail.ydwreg.handle.EventCache;
 import org.jetbrains.annotations.NotNull;
 
 public class StageChannelReg extends VoiceChannelReg implements StageChannel {
 
     public StageChannelReg(@NotNull JsonNode json, long id, @NotNull YDW ydw) {
+        this(null, json, id, ydw);
+    }
+
+    public StageChannelReg(GuildReg guildReg, @NotNull JsonNode json, long id, @NotNull YDW ydw) {
         super(json, id, ydw);
+
+        boolean playbackCache = false;
+        // cache
+        StageChannelReg channel = (StageChannelReg) getYDW().getStageChannelCache().get(id);
+        if (channel == null) {
+            if (guildReg == null)
+                guildReg = (GuildReg) getYDW().getGuildCache().get(guildId);
+
+            SnowFlakeCache<StageChannel> guildStageView = guildReg.getStageChannelCache(),
+                    stageView = getYDW().getStageChannelCache();
+
+            channel = this;
+            guildStageView.put(id, channel);
+            playbackCache = stageView.put(id, channel) == null;
+        }
+
+        if (playbackCache)
+            getYDW().getEventCache().playbackCache(EventCache.CacheType.CHANNEL, id);
     }
 }
 
