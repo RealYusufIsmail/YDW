@@ -79,8 +79,8 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     private Integer seq = null;
     // The session id. This is basically a key that stores the past activity of the bot.
     private volatile String sessionId = null;
-    //gateway url for resuming
-    //TODO: Not announced by discord yet.
+    // gateway url for resuming
+    // TODO: Not announced by discord yet.
     private String resumeGateWayUrl = null;
     // Used to indicate that the bot has connected to the gateway.
     private boolean connected = false;
