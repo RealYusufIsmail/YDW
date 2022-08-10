@@ -1,0 +1,37 @@
+{
+  "t" : "READY",
+  "s" : 1,
+  "op" : 0,
+  "d" : {
+    "v" : 10,
+    "user_settings" : { },
+    "user" : {
+      "verified" : true,
+      "username" : "YDBK",
+      "mfa_enabled" : true,
+      "id" : "1000488596295401643",
+      "flags" : 0,
+      "email" : null,
+      "discriminator" : "5098",
+      "bot" : true,
+      "avatar" : null
+    },
+    "session_type" : "normal",
+    "session_id" : "16eeb40b8850cb4f4cf065549e18ba78",
+    "resume_gateway_url" : "wss://gateway.discord.gg/",
+    "relationships" : [ ],
+    "private_channels" : [ ],
+    "presences" : [ ],
+    "guilds" : [ {
+      "unavailable" : true,
+      "id" : "938122131949097052"
+    } ],
+    "guild_join_requests" : [ ],
+    "geo_ordered_rtc_regions" : [ "rotterdam", "milan", "stockholm", "madrid", "finland" ],
+    "application" : {
+      "id" : "1000488596295401643",
+      "flags" : 11051008
+    },
+    "_trace" : [ "[\"gateway-prd-main-bpfc\",{\"micros\":63810,\"calls\":[\"discord-sessions-green-prd-2-78\",{\"micros\":63005,\"calls\":[\"start_session\",{\"micros\":59955,\"calls\":[\"discord-api-7dd57df7cf-czmpr\",{\"micros\":49665,\"calls\":[\"get_user\",{\"micros\":11674},\"add_authorized_ip\",{\"micros\":4384},\"get_guilds\",{\"micros\":11895},\"send_scheduled_deleteion_message\",{\"micros\":14},\"guild_join_requests\",{\"micros\":3}]}]},\"guilds_connect\",{\"micros\":1,\"calls\":[]},\"presence_connect\",{\"micros\":2322,\"calls\":[]}]}]}]" ]
+  }
+}

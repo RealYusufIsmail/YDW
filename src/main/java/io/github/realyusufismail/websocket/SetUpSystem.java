@@ -16,22 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.ydwreg.handle.handles;
+package io.github.realyusufismail.websocket;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.event.events.ResumedEvent;
-import io.github.realyusufismail.ydwreg.handle.Handle;
+public abstract class SetUpSystem {
+    abstract boolean isReconnect();
 
-public class ResumedHandler extends Handle {
-    public ResumedHandler(JsonNode json, YDW ydw) {
-        super(json, ydw);
-    }
-
-    @Override
-    public void start() {
-        ydw.getWebSocket().setReconnectTimeoutS(2);
-        ydw.getWebSocket().sentAuthInfo(true);
-        ydw.handelEvent(new ResumedEvent(ydw, true));
-    }
+    abstract void handle(boolean lastInQueue);
 }

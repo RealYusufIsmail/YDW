@@ -25,13 +25,23 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.neovisionaries.ws.client.*;
 import io.github.realyusufismail.websocket.core.CloseCode;
+import io.github.realyusufismail.websocket.core.EventNames;
 import io.github.realyusufismail.websocket.core.OpCode;
 import io.github.realyusufismail.ydw.GateWayIntent;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.YDWInfo;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
+import io.github.realyusufismail.ydw.entities.AvailableGuild;
+import io.github.realyusufismail.ydw.entities.SelfUser;
+import io.github.realyusufismail.ydw.entities.UnavailableGuild;
+import io.github.realyusufismail.ydw.event.events.ReadyEvent;
+import io.github.realyusufismail.ydw.event.events.ReconnectEvent;
+import io.github.realyusufismail.ydw.event.events.ResumedEvent;
 import io.github.realyusufismail.ydw.event.events.ShutdownEvent;
 import io.github.realyusufismail.ydwreg.YDWReg;
+import io.github.realyusufismail.ydwreg.entities.AvailableGuildReg;
+import io.github.realyusufismail.ydwreg.entities.SelfUserReg;
+import io.github.realyusufismail.ydwreg.entities.UnavailableGuildReg;
 import io.github.realyusufismail.ydwreg.handle.OnHandler;
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
@@ -43,6 +53,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.nio.channels.ClosedChannelException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -57,46 +68,64 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     // Create a WebSocketFactory instance.
     static WebSocket ws;
     // YDW
-    private final YDWReg ydwReg;
-    private final Logger logger = LoggerFactory.getLogger(WebSocketManager.class);
+    protected final YDWReg ydwReg;
+    public static final Logger logger = LoggerFactory.getLogger(WebSocketManager.class);
     // the core pool
     private int corePoolSize;
     // the scheduled thread pool
-    private final ScheduledExecutorService scheduler =
+    protected final ScheduledExecutorService scheduler =
             Executors.newScheduledThreadPool(corePoolSize);
     // The bots token.
-    private final String token;
+    protected final String token;
     // The gateway intents
-    private final int intent;
+    protected final int intent;
     // The sequence number, used for resuming sessions and heartbeats.
     // The status of the bot e.g. online, idle, dnd, invisible etc.
-    private final String status;
-    private final Integer largeThreshold;
+    protected final String status;
+    protected final Integer largeThreshold;
     // The activity of the bot e.g. playing, streaming, listening, watching etc.
-    private final ActivityConfig activity;
-    ObjectMapper mapper = new ObjectMapper();
+    protected final ActivityConfig activity;
     // The sequence number, used for resuming sessions and heartbeats.
-    private Integer seq = null;
+    protected Integer seq = null;
     // The session id. This is basically a key that stores the past activity of the bot.
-    private volatile String sessionId = null;
+    protected volatile String sessionId = null;
     // gateway url for resuming
-    // TODO: Not announced by discord yet.
-    private String resumeGateWayUrl = null;
+    protected String resumeGateWayUrl = null;
     // Used to indicate that the bot has connected to the gateway.
-    private boolean connected = false;
+    protected boolean connected = false;
     // The thread used for the heartbeat. Needed in cases such as disconnect.
-    private volatile Future<?> heartbeatThread;
-    private boolean canNotResume = false;
+    protected volatile Future<?> heartbeatThread;
+    // code 1000 meaning resuming can not be done
+    protected boolean canNotResume = false;
     // the time that the hearbeat started
-    private long heartbeatStartTime;
+    protected long heartbeatStartTime;
     // The amounts of time that the heartbeat has been missed.
-    private int heartbeatsMissed = 0;
-    private int reconnectTimeoutS = 2;
+    protected int heartbeatsMissed = 0;
     // weather we need to reconnect or not.
-    private boolean needsToReconnect;
+    protected boolean needsToReconnect;
     // weather the authentication info has been sent or not.
-    private boolean sentAuthInfo = false;
+    protected boolean sentAuthInfo = false;
+    protected static final String INVALID_SESSION = "INVALID_SESSION";
+    // As discord states if the TCP connection is closed, or use a different close code, the bot
+    // session will remain active and timeout after a few minutes. This can be useful for a
+    // reconnect, which will resume the previous session.
+    protected int reconnectTimeout = 2;
+    // Conforms that everything is done in the ws.
+    protected boolean loadingDoneHere = false;
+    // Indicates that a reconnect has been queued.
+    protected boolean reconnectQueued = false;
+    // Used for reconnecting and starting(not ready) the bot.
+    protected volatile SetUpSystem setUpSystem;
 
+    protected WebSocketManager(YDW ydw) {
+        this.ydwReg = (YDWReg) ydw;
+        this.token = null;
+        this.intent = 0;
+        this.status = null;
+        this.largeThreshold = null;
+        this.activity = null;
+        this.setUpSystem = null;
+    }
 
     public WebSocketManager(YDW ydw, String token, Integer intent, String status,
             int largeThreshold, ActivityConfig activity) {
@@ -106,9 +135,12 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         this.status = status;
         this.largeThreshold = largeThreshold;
         this.activity = activity;
+        this.setUpSystem = new ConnectEvent();
+        // TODO: add the setUpSystem to the queue.
         // Create a WebSocketFactory instance.
         connect();
     }
+
 
     public WebSocketManager(YDW ydw, String token, @NotNull GateWayIntent intent, String status,
             int largeThreshold, ActivityConfig activity) {
@@ -117,7 +149,10 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
     public synchronized void connect() {
         try {
-            String url = resumeGateWayUrl != null ? resumeGateWayUrl : YDWInfo.DISCORD_GATEWAY_LINK;
+            String url =
+                    (resumeGateWayUrl != null ? resumeGateWayUrl : YDWInfo.DISCORD_GATEWAY_LINK)
+                            + YDWInfo.REST_OF_DISCORD_GATEWAY_LINK;
+
             ws = new WebSocketFactory().createSocket(url);
             ws.addHeader("Accept-Encoding", "gzip");
             ws.addListener(this);
@@ -132,9 +167,52 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         onHandelMessage(message);
     }
 
+    @Override
+    public void onConnected(WebSocket websocket, Map<String, List<String>> headers) {
+        // in a rare case, HELLO might not be sent so waiting 10 seconds to see if it is sent
+        prepareClose();
+        connected = true;
+        if (sessionId == null) {
+            logger.info("Connected to the gateway.");
+            identify();
+        } else {
+            logger.info("Resumed session.");
+            resume();
+        }
+    }
+
+    @Override
+    public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame,
+            WebSocketFrame clientCloseFrame, boolean closedByServer) {
+        sentAuthInfo = false;
+        connected = false;
+        if (Thread.currentThread().isInterrupted()) {
+            Thread thread = new Thread(() -> new HandleDisconnect(this.ydwReg, websocket,
+                    serverCloseFrame, clientCloseFrame, closedByServer).handle());
+            thread.setName("reconnect-thread");
+            thread.start();
+        } else {
+            new HandleDisconnect(this.ydwReg, websocket, serverCloseFrame, clientCloseFrame,
+                    closedByServer).handle();
+        }
+    }
+
+    @Override
+    public void onError(WebSocket websocket, @NotNull WebSocketException cause) {
+        if (cause.getCause() instanceof SocketTimeoutException) {
+            logger.error("Socket timeout");
+        } else if (cause.getCause() instanceof IOException) {
+            logger.error("IO error {}", cause.getCause().getMessage());
+        } else if (cause.getCause() instanceof ClosedChannelException) {
+            logger.error("Closed channel error {}", cause.getCause().getMessage());
+        } else {
+            logger.error("Unknown error", cause);
+        }
+    }
+
     public void onHandelMessage(String message) {
         try {
-            JsonNode payload = mapper.readTree(message);
+            JsonNode payload = ydwReg.getMapper().readTree(message);
             onHandel(payload);
         } catch (Exception e) {
             logger.error("Error while handling message", e);
@@ -155,8 +233,61 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         op.ifPresent(integer -> onOpcode(op.get(), d.get()));
 
         Optional<String> t = Optional.of(payload.get("t").asText());
-        logger.debug("Received event: {}", t.orElse(""));
-        t.ifPresent(text -> new OnHandler(ydwReg, text, payload).start());
+
+        t.ifPresent(text -> {
+            EventNames event = EventNames.getEvent(text);
+            switch (event) {
+                case READY -> {
+                    reconnectTimeout = 2;
+                    loadingDoneHere = true;
+                    List<UnavailableGuild> unavailableGuilds = new ArrayList<>();
+                    ArrayNode guilds = (ArrayNode) payload.get("guilds");
+                    for (JsonNode guild : guilds) {
+                        if (guild.get("unavailable").asBoolean()) {
+                            UnavailableGuild unavailableGuild = new UnavailableGuildReg(ydwReg,
+                                    guild.get("id").asLong(), guild);
+                            unavailableGuilds.add(unavailableGuild);
+                        }
+                    }
+
+                    List<AvailableGuild> availableGuilds = new ArrayList<>();
+                    for (JsonNode guild : guilds) {
+                        if (!guild.get("unavailable").asBoolean()) {
+                            AvailableGuild availableGuild =
+                                    new AvailableGuildReg(ydwReg, guild.get("id").asLong(), guild);
+                            availableGuilds.add(availableGuild);
+                        }
+                    }
+
+                    ydwReg.setApplicationId(payload.get("application").get("id").asLong());
+
+
+                    ydwReg.setSelfUser(new SelfUserReg(payload.get("user"),
+                            payload.get("user").get("id").asLong(), ydwReg));
+
+                    sessionId = payload.get("session_id").asText();
+
+                    resumeGateWayUrl = payload.hasNonNull("resume_gateway_url")
+                            ? payload.get("resume_gateway_url").asText()
+                            : null;
+
+                    ydwReg.setReady(true);
+                    // ydw.getWebSocket().setReconnectTimeoutS(2);
+                    ydwReg.handelEvent(new ReadyEvent(ydwReg, unavailableGuilds.size(),
+                            availableGuilds.size()));
+                }
+                case RESUMED -> {
+                    loadingDoneHere = true;
+                    reconnectTimeout = 2;
+                    sentAuthInfo = true;
+                    ydwReg.handelEvent(new ResumedEvent(ydwReg, true));
+                }
+                case RECONNECT -> {
+                    ydwReg.handelEvent(new ReconnectEvent(ydwReg, false));
+                }
+                default -> new OnHandler(ydwReg, text, payload).start();
+            }
+        });
     }
 
     public void onOpcode(Integer opcode, JsonNode d) {
@@ -166,7 +297,6 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             case HELLO -> {
                 logger.debug("Received HELLO");
                 int heartbeatInterval = d.get("heartbeat_interval").asInt();
-                logger.info("Received heartbeat interval of {}ms", heartbeatInterval);
                 // Send heartbeat
                 sendHeartbeat(heartbeatInterval);
             }
@@ -178,18 +308,23 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             case INVALID_SESSION -> {
                 logger.debug("Received INVALID_SESSION");
                 boolean shouldResume = d.asBoolean();
+                logger.debug("Should resume: {}", shouldResume);
                 sentAuthInfo = false;
+
+                int reconnectCode = shouldResume ? CloseCode.RECONNECT.getCode()
+                        : CloseCode.ZOMBIE_CONNECTION.getCode();
+
                 if (shouldResume)
                     logger.debug("Session invalidated, resuming session");
                 else
                     invalidate();
 
-                int closeCode = shouldResume ? 4900 : 1000;
-                wsClose(closeCode, "Session invalidated");
+                wsClose(reconnectCode, INVALID_SESSION);
             }
             case RECONNECT -> {
                 logger.debug("Received RECONNECT");
-                wsClose(4900, "OpCode 7 received hence requesting a reconnect");
+                wsClose(CloseCode.RECONNECT.getCode(),
+                        "OpCode 7 received hence requesting a reconnect");
             }
             default -> logger.debug("Unhandled opcode: {}", op);
         }
@@ -199,6 +334,13 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         prepareClose();
         if (ws != null) {
             ws.sendClose(code, reason);
+        }
+    }
+
+    protected void wsClose() {
+        prepareClose();
+        if (ws != null) {
+            ws.sendClose(1000);
         }
     }
 
@@ -232,7 +374,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
             heartbeatsMissed = 0;
             logger.warn("Heartbeat missed, will attempt to reconnect");
             prepareClose();
-            ws.disconnect(4900, "ZOMBIE CONNECTION");
+            ws.disconnect(CloseCode.RECONNECT.getCode(), "ZOMBIE CONNECTION");
         } else {
             heartbeatsMissed += 1;
             ws.sendText(heartbeat.toString());
@@ -240,10 +382,6 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         }
     }
 
-    /**
-     * This was taken from JDA's WebSocket. <a href=
-     * "https://github.com/DV8FromTheWorld/JDA/blob/023a6c9de489d2e487d44b294614bb4911597817/src/main/java/net/dv8tion/jda/internal/requests/WebSocketClient.java#L671">WebSocketClient.java</a>
-     */
     private void prepareClose() {
         try {
             if (ws != null) {
@@ -281,15 +419,6 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
     }
 
 
-    @Override
-    public void onConnected(WebSocket websocket, Map<String, List<String>> headers) {
-        connected = true;
-        if (sessionId == null) {
-            identify();
-        } else {
-            resume();
-        }
-    }
 
     public void identify() {
 
@@ -340,149 +469,43 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         logger.info("Reconnected");
     }
 
-    @Override
-    public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame,
-            WebSocketFrame clientCloseFrame, boolean closedByServer) {
-        sentAuthInfo = false;
-        connected = false;
-        if (Thread.currentThread().isInterrupted()) {
-            Thread thread = new Thread(() -> handleDisconnect(websocket, serverCloseFrame,
-                    clientCloseFrame, closedByServer));
-            thread.setName("reconnect-thread");
-            thread.start();
-        } else {
-            handleDisconnect(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
-        }
-    }
 
-    private void handleDisconnect(WebSocket websocket, WebSocketFrame serverCloseFrame,
-            WebSocketFrame clientCloseFrame, boolean closedByServer) {
-        CloseCode closeCode = null;
-        int rawCloseCode = 1005;
-        canNotResume = false;
-        // Done to make sure no more heartbeats are sent
-        if (heartbeatThread != null) {
-            heartbeatThread.cancel(false);
-            heartbeatThread = null;
-        }
-
-        if (closedByServer && serverCloseFrame != null) {
-            rawCloseCode = serverCloseFrame.getCloseCode();
-            closeCode = CloseCode.fromCode(rawCloseCode);
-
-            if (closeCode == CloseCode.RATE_LIMITED) {
-                logger.error("'{}'", closeCode.getReason());
-            } else {
-                logger.error("'{}'", closeCode.getReason());
-            }
-        } else if (clientCloseFrame != null) {
-            rawCloseCode = clientCloseFrame.getCloseCode();
-            closeCode = CloseCode.fromCode(rawCloseCode);
-            if (rawCloseCode == 1000) {
-                canNotResume = true;
-            }
-        }
-
-        boolean closeCodeIsReconnect = closeCode == null || closeCode.isReconnect();
-        if (!needsToReconnect || !closeCodeIsReconnect || scheduler.isShutdown()) {
-            if (!closeCodeIsReconnect) {
-                logger.error(
-                        "WebSocket connection was closed and cannot be recovered due to identification issues\n{}",
-                        closeCode);
-            }
-            ydwReg.handelEvent(
-                    new ShutdownEvent(ydwReg, DateTime.now(), CloseCode.fromCode(rawCloseCode)));
-        } else {
-            if (canNotResume)
-                invalidate();
-
-            // received reconnect close code, try to reconnect
-            try {
-                onReconnect(rawCloseCode);
-            } catch (InterruptedException e) {
-                logger.error("Error reconnecting", e);
-                queueReconnect();
-                invalidate();
-            }
-        }
-    }
-
-    private void onReconnect(int closeCode) throws InterruptedException {
-        if (sessionId == null) {
-            logger.warn("Session ID is null, starting a new session...");
-            queueReconnect();
-        } else {
-            reconnect();
-        }
-    }
-
-    public void reconnect() throws InterruptedException {
-        if (sessionId != null)
-            reconnectTimeoutS = 0;
-
-        while (needsToReconnect) {
-            int delay = reconnectTimeoutS;
-            Thread.sleep(delay * 1000L);
-            try {
-                connect();
-            } catch (RejectedExecutionException e) {
-                ydwReg.handelEvent(
-                        new ShutdownEvent(ydwReg, DateTime.now(), CloseCode.fromCode(1000)));
-            } catch (RuntimeException e) {
-                logger.error("Error reconnecting", e);
-            }
-        }
-    }
-
-    private void invalidate() {
+    protected void invalidate() {
         resumeGateWayUrl = null;
         sessionId = null;
         sentAuthInfo = false;
     }
 
-    public void queueReconnect() {
-        try {
-            connect();
-        } catch (Exception e) {
-            logger.error("Error reconnecting", e);
-        }
-    }
-
-    @Override
-    public void onError(WebSocket websocket, @NotNull WebSocketException cause) {
-        if (cause.getCause() instanceof SocketTimeoutException) {
-            logger.error("Socket timeout");
-        } else if (cause.getCause() instanceof IOException) {
-            logger.error("IO error {}", cause.getCause().getMessage());
-        } else if (cause.getCause() instanceof ClosedChannelException) {
-            logger.error("Closed channel error {}", cause.getCause().getMessage());
-        } else {
-            logger.error("Unknown error", cause);
-        }
-    }
-
-    public void setReconnectTimeoutS(int reconnectTimeoutS) {
-        this.reconnectTimeoutS = reconnectTimeoutS;
-    }
-
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
-    }
-
-    public void setResumeGatewayUrl(String resumeGateWayUrl) {
-        this.resumeGateWayUrl = resumeGateWayUrl;
-    }
-
-    public void needsToReconnect(boolean needsToReconnect) {
-        this.needsToReconnect = needsToReconnect;
-    }
-
-    public void sentAuthInfo(boolean sentAuthInfo) {
-        this.sentAuthInfo = sentAuthInfo;
-    }
-
     public WebSocketManager setCorePoolSize(int corePoolSize) {
         this.corePoolSize = corePoolSize;
         return this;
+    }
+
+    protected WebSocketManager awaitConfirmation() throws InterruptedException {
+        // TODO: implement this
+        return this;
+    }
+
+    protected class ConnectEvent extends SetUpSystem {
+        @Override
+        boolean isReconnect() {
+            return false;
+        }
+
+        @Override
+        void handle(boolean lastInQueue) {
+            connect();
+
+            if (lastInQueue) {
+                return;
+            }
+
+            try {
+                awaitConfirmation();
+            } catch (InterruptedException e) {
+                logger.error("Error waiting for reconnect confirmation", e);
+                wsClose();
+            }
+        }
     }
 }

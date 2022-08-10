@@ -19,7 +19,8 @@
 package io.github.realyusufismail.ydwreg.handle;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.github.realyusufismail.websocket.EventNames;
+import io.github.realyusufismail.websocket.WebSocketManager;
+import io.github.realyusufismail.websocket.core.EventNames;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.handle.handles.*;
 import io.github.realyusufismail.ydwreg.handle.handles.channel.ChannelCreateHandler;
@@ -60,9 +61,6 @@ public class OnHandler {
     public void fire(@NotNull EventNames event, JsonNode json) {
         switch (event) {
             case HELLO -> new HelloHandler(json, ydw).start();
-            case READY -> new ReadyHandler(json, ydw).start();
-            case RESUMED -> new ResumedHandler(json, ydw).start();
-            case RECONNECT -> new ReconnectHandler(json, ydw).start();
             case INVALID_SESSION -> new InvalidSessionHandler(json, ydw).start();
             case APPLICATION_COMMAND_PERMISSIONS_UPDATE -> new ApplicationCommandPermissionsUpdateHandler(
                     json, ydw).start();
@@ -118,6 +116,7 @@ public class OnHandler {
             case VOICE_STATE_UPDATE -> new VoiceStateUpdateHandler(json, ydw).start();
             case VOICE_SERVER_UPDATE -> new VoiceServerUpdateHandler(json, ydw).start();
             case WEBHOOKS_UPDATE -> new WebhooksUpdateHandler(json, ydw).start();
+            default -> WebSocketManager.logger.debug("Event not found: " + event);
         }
     }
 }

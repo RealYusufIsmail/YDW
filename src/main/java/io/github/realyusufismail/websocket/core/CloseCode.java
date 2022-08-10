@@ -20,6 +20,8 @@ package io.github.realyusufismail.websocket.core;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Consumer;
+
 /**
  * Inspired from JDA's <a href=
  * "https://github.com/DV8FromTheWorld/JDA/blob/master/src/main/java/net/dv8tion/jda/api/requests/CloseCode.java">Close
@@ -27,9 +29,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public enum CloseCode {
 
-    RECONNECT(4900, "Something has happened, attempting to reconnect"),
-    GRACEFUL_CLOSE(1000, "The connection was closed gracefully or your heartbeats timed out."),
-    CLOUD_FLARE_LOAD(1001, "The connection was closed due to CloudFlare load balancing."),
     UNKNOWN_OPCODE(4001,
             "You sent an invalid Gateway opcode or an invalid payload for an opcode. Don't do that!"),
     DECODE_ERROR(4002, "You sent an invalid payload to us. Make sure you follow the protocol."),
@@ -53,6 +52,9 @@ public enum CloseCode {
     DISALLOWED_INTENTS(4014,
             "You sent a disallowed intent for a Gateway Intent. You may have tried to specify an intent that you have not enabled or are not approved for. Examples include : GUILD_PRESENCES, MESSAGE_CONTENT, or GUILD_MEMBERS.",
             false),
+    RECONNECT(4015, "Seems like the bot has disconnected. Will try to reconnect."),
+    ZOMBIE_CONNECTION(1000,
+            "The connection to the gateway has been lost. This is most likely due to a network error. Will try to reconnect."),
     UNKNOWN(4000, "We're not sure what went wrong. Will try to reconnect.");
 
     private final int code;
@@ -88,5 +90,11 @@ public enum CloseCode {
 
     public boolean isReconnect() {
         return reconnect;
+    }
+
+    public void forEach(@NotNull Consumer<CloseCode> consumer) {
+        for (CloseCode closeCode : CloseCode.values()) {
+            consumer.accept(closeCode);
+        }
     }
 }

@@ -33,7 +33,6 @@ import io.github.realyusufismail.ydw.event.Event;
 import io.github.realyusufismail.ydw.event.events.GatewayPingEvent;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandBuilderReg;
-import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandCreatorReg;
 import io.github.realyusufismail.ydwreg.exception.NotReadyException;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import okhttp3.OkHttpClient;
@@ -44,6 +43,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class YDWReg implements YDW {
     // logger
@@ -62,11 +63,13 @@ public class YDWReg implements YDW {
     private boolean ready;
     private String token;
     private Long applicationId;
+    private final ConcurrentMap<String, String> mdcContextMap;
 
-    public YDWReg(@NotNull OkHttpClient okHttpClient) {
+    public YDWReg(@NotNull OkHttpClient okHttpClient, ConcurrentMap<String, String> mdcContextMap) {
         mapper = new ObjectMapper();
         this.okHttpClient = okHttpClient;
         eventReceiver = new EventReceiver();
+        this.mdcContextMap = mdcContextMap == null ? new ConcurrentHashMap<>() : mdcContextMap;
     }
 
     public void handelEvent(Event event) {
@@ -254,5 +257,9 @@ public class YDWReg implements YDW {
 
     public void setApplicationId(long applicationId) {
         this.applicationId = applicationId;
+    }
+
+    public ConcurrentMap<String, String> getMdcContextMap() {
+        return mdcContextMap;
     }
 }

@@ -23,8 +23,10 @@ public final class YDWInfo {
     public static final int DISCORD_GATEWAY_VERSION = 10;
     public static final String ydw_VERSION = "0.0.2";
 
-    public static final String DISCORD_GATEWAY_LINK =
-            "wss://gateway.discord.gg/?v=" + DISCORD_GATEWAY_VERSION + "&encoding=json";
+    public static final String DISCORD_GATEWAY_LINK = "wss://gateway.discord.gg/";
+
+    public static final String REST_OF_DISCORD_GATEWAY_LINK =
+            "?encoding=json&v" + DISCORD_GATEWAY_VERSION;
     public static final String DISCORD_REST_LINK =
             "https://discord.com/api/v" + DISCORD_REST_VERSION;
     public static final String ydw_GITHUB = "https://github.com/ydw";
