@@ -24,12 +24,10 @@ import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
 import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandCreator;
-import io.github.realyusufismail.ydw.entities.Channel;
-import io.github.realyusufismail.ydw.entities.Guild;
-import io.github.realyusufismail.ydw.entities.SelfUser;
-import io.github.realyusufismail.ydw.entities.User;
+import io.github.realyusufismail.ydw.entities.*;
 import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
+import io.github.realyusufismail.ydwreg.control.GuildSetupControl;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,6 +35,35 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public interface YDW {
+
+    enum Status {
+        CONNECTED(true),
+        INITIALIZING(true),
+        LOADING_SUBSYSTEMS(true),
+        RECONNECT_QUEUED,
+        SHUTDOWN,
+        ATTEMPTING_TO_RECONNECT,
+        CONNECTING_TO_WEBSOCKET(true),
+        WAITING_TO_RECONNECT,
+        IDENTIFYING_SESSION(true);
+
+        private final boolean isInit;
+
+        Status(boolean isInit) {
+            this.isInit = isInit;
+        }
+
+        Status() {
+            this.isInit = false;
+        }
+
+        public boolean isInit() {
+            return isInit;
+        }
+    }
+
+    YDW.Status getStatus();
+
     @NotNull
     List<Guild> getGuilds();
 
@@ -45,6 +72,12 @@ public interface YDW {
     default Guild getGuild(@NotNull String guildId) {
         return getGuild(Long.parseLong(guildId));
     }
+
+    List<AvailableGuild> getAvailableGuilds();
+
+    List<UnavailableGuild> getUnavailableGuilds();
+
+    GuildSetupControl guildSetupControl();
 
     @NotNull
     User getUser(long userId);
@@ -104,4 +137,23 @@ public interface YDW {
     void removeEventAdapter(Object... eventAdapters);
 
     YDW awaitReady();
+
+    ShardInfo getShardInfo();
+
+    class ShardInfo {
+        // Default i.e only one shard
+        public static final ShardInfo ONE_SHARD = new ShardInfo(0, 1);
+
+        private final int shardId;
+        private final int shardCount;
+
+        public ShardInfo(int shardId, int shardCount) {
+            this.shardId = shardId;
+            this.shardCount = shardCount;
+        }
+
+        public int getShardId() {
+            return shardId;
+        }
+    }
 }

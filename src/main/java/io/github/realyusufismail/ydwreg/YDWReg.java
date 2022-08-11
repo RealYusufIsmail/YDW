@@ -21,19 +21,19 @@ package io.github.realyusufismail.ydwreg;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.realyusufismail.event.recieve.EventReceiver;
 import io.github.realyusufismail.websocket.WebSocketManager;
+import io.github.realyusufismail.websocket.system.ISetUpSystem;
+import io.github.realyusufismail.websocket.system.SetUpSystem;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
-import io.github.realyusufismail.ydw.entities.Channel;
-import io.github.realyusufismail.ydw.entities.Guild;
-import io.github.realyusufismail.ydw.entities.SelfUser;
-import io.github.realyusufismail.ydw.entities.User;
+import io.github.realyusufismail.ydw.entities.*;
 import io.github.realyusufismail.ydw.entities.guild.channel.Category;
 import io.github.realyusufismail.ydw.event.Event;
 import io.github.realyusufismail.ydw.event.events.GatewayPingEvent;
+import io.github.realyusufismail.ydw.event.events.StatusChangeEvent;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandBuilderReg;
-import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandCreatorReg;
+import io.github.realyusufismail.ydwreg.control.GuildSetupControl;
 import io.github.realyusufismail.ydwreg.exception.NotReadyException;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import okhttp3.OkHttpClient;
@@ -42,8 +42,11 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class YDWReg implements YDW {
     // logger
@@ -62,11 +65,19 @@ public class YDWReg implements YDW {
     private boolean ready;
     private String token;
     private Long applicationId;
+    private final ConcurrentMap<String, String> mdcContextMap;
+    private ShardInfo shardInfo;
+    private List<UnavailableGuild> unavailableGuilds;
+    private List<AvailableGuild> availableGuilds;
+    private YDW.Status status = Status.INITIALIZING;
+    private final GuildSetupControl guildSetupControl;
 
-    public YDWReg(@NotNull OkHttpClient okHttpClient) {
+    public YDWReg(@NotNull OkHttpClient okHttpClient, ConcurrentMap<String, String> mdcContextMap) {
         mapper = new ObjectMapper();
         this.okHttpClient = okHttpClient;
         eventReceiver = new EventReceiver();
+        this.mdcContextMap = mdcContextMap == null ? new ConcurrentHashMap<>() : mdcContextMap;
+        guildSetupControl = new GuildSetupControl(this);
     }
 
     public void handelEvent(Event event) {
@@ -82,6 +93,21 @@ public class YDWReg implements YDW {
     @Override
     public Guild getGuild(long guildId) {
         return getRest().getYDWCaller().getGuild(guildId);
+    }
+
+    @Override
+    public List<AvailableGuild> getAvailableGuilds() {
+        return availableGuilds;
+    }
+
+    @Override
+    public List<UnavailableGuild> getUnavailableGuilds() {
+        return unavailableGuilds;
+    }
+
+    @Override
+    public GuildSetupControl guildSetupControl() {
+        return guildSetupControl;
     }
 
     @Override
@@ -226,6 +252,45 @@ public class YDWReg implements YDW {
         return this;
     }
 
+    public void setStatus(YDW.Status status) {
+        synchronized (this.status) {
+            Status oldStatus = this.status;
+            this.status = status;
+
+            handelEvent(new StatusChangeEvent(this, status, oldStatus));
+        }
+    }
+
+    @Override
+    public YDW.Status getStatus() {
+        return status;
+    }
+
+    public YDW awaitStatus(YDW.Status status, YDW.Status... others) throws InterruptedException {
+
+        if (!status.isInit()) {
+            throw new IllegalArgumentException("Status must be INITIALIZING or READY");
+        }
+
+        if (getStatus() == YDW.Status.CONNECTED)
+            return this;
+
+        List<YDW.Status> othersList = Arrays.asList(others);
+        while (!getStatus().isInit() || getStatus().ordinal() < status.ordinal()) {
+            if (getStatus() == YDW.Status.SHUTDOWN)
+                throw new IllegalStateException("WebSocketManager is shutdown");
+            else if (othersList.contains(getStatus()))
+                return this;
+            Thread.sleep(50);
+        }
+        return this;
+    }
+
+    @Override
+    public ShardInfo getShardInfo() {
+        return shardInfo == null ? ShardInfo.ONE_SHARD : shardInfo;
+    }
+
     private synchronized boolean isReady() {
         return ready;
     }
@@ -254,5 +319,21 @@ public class YDWReg implements YDW {
 
     public void setApplicationId(long applicationId) {
         this.applicationId = applicationId;
+    }
+
+    public ConcurrentMap<String, String> getMdcContextMap() {
+        return mdcContextMap;
+    }
+
+    public ISetUpSystem getSetupSystem() {
+        return new SetUpSystem();
+    }
+
+    public void setUnavailableGuilds(List<UnavailableGuild> unavailableGuilds) {
+        this.unavailableGuilds = unavailableGuilds;
+    }
+
+    public void setAvailableGuilds(List<AvailableGuild> availableGuilds) {
+        this.availableGuilds = availableGuilds;
     }
 }

@@ -16,20 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.ydwreg.handle.handles;
+package io.github.realyusufismail.websocket;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.event.events.ReconnectEvent;
-import io.github.realyusufismail.ydwreg.handle.Handle;
+import io.github.realyusufismail.websocket.WebSocketManager;
+import io.github.realyusufismail.ydwreg.YDWReg;
 
-public class ReconnectHandler extends Handle {
-    public ReconnectHandler(JsonNode json, YDW ydw) {
-        super(json, ydw);
+public class HandleResume extends WebSocketManager {
+    private final WebSocketManager ws;
+
+    public HandleResume(YDWReg ydw, WebSocketManager ws) {
+        super(ydw);
+        this.ws = ws;
     }
 
-    @Override
-    public void start() {
-        ydw.handelEvent(new ReconnectEvent(ydw, false));
+    public void handle() {
+
     }
 }

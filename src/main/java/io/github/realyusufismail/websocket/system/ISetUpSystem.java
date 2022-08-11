@@ -16,21 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.ydwreg.handle.handles;
+package io.github.realyusufismail.websocket.system;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.event.events.ResumedEvent;
-import io.github.realyusufismail.ydwreg.handle.Handle;
 
-public class ResumedHandler extends Handle {
-    public ResumedHandler(JsonNode json, YDW ydw) {
-        super(json, ydw);
-    }
+public interface ISetUpSystem {
 
-    @Override
-    public void start() {
-        ydw.getWebSocket().setReconnectTimeoutS(2);
-        ydw.handelEvent(new ResumedEvent(ydw, true));
+    /**
+     * The delay between each attempt to connect to the server.
+     */
+    int CONNECT_DELAY = 5;
+
+    void add(SetUpSystemConnector setUpSystemConnector);
+
+    void remove(SetUpSystemConnector setUpSystemConnector);
+
+    interface SetUpSystemConnector {
+        boolean isReconnect();
+
+        YDW.ShardInfo getShardInfo();
+
+        void run(boolean lastInQueue) throws InterruptedException;
     }
 }

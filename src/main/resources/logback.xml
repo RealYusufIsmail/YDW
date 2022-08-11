@@ -17,38 +17,23 @@
   ~  */
   -->
 
-<configuration>
-    <conversionRule conversionWord="highlight" converterClass="logger.LoggerColorScheme"/>
+<configuration scan="true" debug="true">
+<conversionRule conversionWord="highlight" converterClass="io.github.realyusufismail.logger.LoggerColorScheme"/>
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </encoder>
-    </appender>
+<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+        <Pattern>
+            %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+        </Pattern>
+    </layout>
+</appender>
 
-    <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>files/logs/all.log</file>
-        <encoder>
-            <pattern>%d{yyyy/mm/dd HH:mm:ss} {%thread} [%level] %logger: %msg%n</pattern>
-            <charset>UTF-8</charset>
-        </encoder>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>files/logs/archive/%d{yyyy-MM-dd}.log.gz</fileNamePattern>
-            <!-- Keep logs for 30 days -->
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-    </appender>
+<logger name="io.github.realyusufismail" level="debug" additivity="false">
+    <appender-ref ref="CONSOLE"/>
+</logger>
 
-    <logger name="io.github.org.programming" level="${LOG_LEVEL:-INFO}" additivity="false">
-        <appender-ref ref="STDOUT"/>
-        <appender-ref ref="LOGFILE"/>
-        <appender-ref ref="METRICS"/>
-    </logger>
-
-    <root level="${ROOT_LOG_LEVEL:-WARN}">
-        <appender-ref ref="STDOUT"/>
-        <appender-ref ref="LOGFILE"/>
-        <appender-ref ref="METRICS"/>
-    </root>
+<root level="error">
+    <appender-ref ref="CONSOLE"/>
+</root>
 
 </configuration>

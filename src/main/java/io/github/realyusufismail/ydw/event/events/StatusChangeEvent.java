@@ -18,26 +18,36 @@
  */ 
 package io.github.realyusufismail.ydw.event.events;
 
-import io.github.realyusufismail.websocket.core.CloseCode;
+import io.github.realyusufismail.event.updater.IEventUpdate;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.event.Event;
-import org.joda.time.DateTime;
 
-public class ShutdownEvent extends Event {
-    private final DateTime shutdownTime;
-    private final int closeCode;
+public class StatusChangeEvent extends Event implements IEventUpdate<YDW, YDW.Status> {
 
-    public ShutdownEvent(YDW ydw, DateTime shutdownTime, int closeCode) {
+    private final YDW.Status newStatus;
+    private final YDW.Status oldStatus;
+
+    public StatusChangeEvent(YDW ydw, YDW.Status newStatus, YDW.Status oldStatus) {
         super(ydw);
-        this.shutdownTime = shutdownTime;
-        this.closeCode = closeCode;
+        this.newStatus = newStatus;
+        this.oldStatus = oldStatus;
     }
 
-    public DateTime getShutdownTime() {
-        return shutdownTime;
+    public YDW.Status getNewStatus() {
+        return newStatus;
     }
 
-    public int getCloseCode() {
-        return closeCode;
+    public YDW.Status getOldStatus() {
+        return oldStatus;
+    }
+
+    @Override
+    public YDW.Status getOldValue() {
+        return oldStatus;
+    }
+
+    @Override
+    public YDW.Status getNewValue() {
+        return newStatus;
     }
 }

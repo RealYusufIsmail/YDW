@@ -18,26 +18,32 @@
  */ 
 package io.github.realyusufismail.ydw.event.events;
 
-import io.github.realyusufismail.websocket.core.CloseCode;
+import com.neovisionaries.ws.client.WebSocketFrame;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.event.Event;
-import org.joda.time.DateTime;
 
-public class ShutdownEvent extends Event {
-    private final DateTime shutdownTime;
-    private final int closeCode;
+public class DisconnectEvent extends Event {
+    private final WebSocketFrame serverCloseFrame;
+    private final WebSocketFrame clientCloseFrame;
+    private final boolean closedByServer;
 
-    public ShutdownEvent(YDW ydw, DateTime shutdownTime, int closeCode) {
+    public DisconnectEvent(YDW ydw, WebSocketFrame serverCloseFrame,
+            WebSocketFrame clientCloseFrame, boolean closedByServer) {
         super(ydw);
-        this.shutdownTime = shutdownTime;
-        this.closeCode = closeCode;
+        this.serverCloseFrame = serverCloseFrame;
+        this.clientCloseFrame = clientCloseFrame;
+        this.closedByServer = closedByServer;
     }
 
-    public DateTime getShutdownTime() {
-        return shutdownTime;
+    public WebSocketFrame getServerCloseFrame() {
+        return serverCloseFrame;
     }
 
-    public int getCloseCode() {
-        return closeCode;
+    public WebSocketFrame getClientCloseFrame() {
+        return clientCloseFrame;
+    }
+
+    public boolean isClosedByServer() {
+        return closedByServer;
     }
 }
