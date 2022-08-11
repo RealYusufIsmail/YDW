@@ -23,7 +23,6 @@ import io.github.realyusufismail.ydwreg.YDWReg;
 import io.github.realyusufismail.ydwreg.entities.user.PremiumTypes;
 import io.github.realyusufismail.ydwreg.entities.user.UserFlags;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.ArrayList;

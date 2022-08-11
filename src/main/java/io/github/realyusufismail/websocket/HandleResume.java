@@ -15,7 +15,6 @@
  */ 
 package io.github.realyusufismail.websocket;
 
-import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.ydwreg.YDWReg;
 
 public class HandleResume extends WebSocketManager {

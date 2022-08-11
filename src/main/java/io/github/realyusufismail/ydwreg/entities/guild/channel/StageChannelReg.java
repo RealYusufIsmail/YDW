@@ -19,7 +19,6 @@ package io.github.realyusufismail.ydwreg.entities.guild.channel;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.cache.SnowFlakeCache;
 import io.github.realyusufismail.ydw.YDW;
-import io.github.realyusufismail.ydw.entities.guild.channel.NewsChannel;
 import io.github.realyusufismail.ydw.entities.guild.channel.StageChannel;
 import io.github.realyusufismail.ydwreg.entities.GuildReg;
 import io.github.realyusufismail.ydwreg.handle.EventCache;

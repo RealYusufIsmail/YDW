@@ -17,22 +17,11 @@ package io.github.realyusufismail.ydw.entities;
 
 import io.github.realyusufismail.ydw.entities.channel.AssignableChannel;
 import io.github.realyusufismail.ydw.entities.channel.ChannelType;
-import io.github.realyusufismail.ydw.entities.channel.Overwrite;
 import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
-import io.github.realyusufismail.ydw.entities.guild.Member;
-import io.github.realyusufismail.ydw.entities.guild.Message;
 import io.github.realyusufismail.ydw.entities.guild.channel.*;
-import io.github.realyusufismail.ydw.entities.guild.channel.threads.ThreadMetadata;
-import io.github.realyusufismail.ydw.perm.Permission;
-import io.github.realyusufismail.ydwreg.action.MessageActionReg;
-import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
-import io.github.realyusufismail.ydwreg.entities.message.MessageFlags;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
 
-import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public interface Channel extends SnowFlake, GenericEntity, AssignableChannel {

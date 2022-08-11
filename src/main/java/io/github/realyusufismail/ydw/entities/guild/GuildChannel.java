@@ -18,11 +18,7 @@ package io.github.realyusufismail.ydw.entities.guild;
 import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.guild.channel.Category;
-import io.github.realyusufismail.ydwreg.action.MessageActionReg;
-import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface GuildChannel extends Channel, Comparable<GuildChannel> {

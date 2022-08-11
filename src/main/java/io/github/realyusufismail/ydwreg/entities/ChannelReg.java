@@ -18,29 +18,9 @@ package io.github.realyusufismail.ydwreg.entities;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.Channel;
-import io.github.realyusufismail.ydw.entities.Guild;
-import io.github.realyusufismail.ydw.entities.User;
 import io.github.realyusufismail.ydw.entities.channel.ChannelType;
-import io.github.realyusufismail.ydw.entities.channel.Overwrite;
-import io.github.realyusufismail.ydw.entities.guild.Member;
-import io.github.realyusufismail.ydw.entities.guild.Message;
-import io.github.realyusufismail.ydw.entities.guild.channel.Category;
-import io.github.realyusufismail.ydw.entities.guild.channel.threads.ThreadMetadata;
-import io.github.realyusufismail.ydw.perm.Permission;
 import io.github.realyusufismail.ydwreg.YDWReg;
-import io.github.realyusufismail.ydwreg.action.MessageActionReg;
-import io.github.realyusufismail.ydwreg.entities.channel.OverwriteReg;
-import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
-import io.github.realyusufismail.ydwreg.entities.guild.MemberReg;
-import io.github.realyusufismail.ydwreg.entities.guild.channel.thread.ThreadMetadataReg;
-import io.github.realyusufismail.ydwreg.entities.message.MessageFlags;
-import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
-
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 public class ChannelReg implements Channel {
     protected final long id;

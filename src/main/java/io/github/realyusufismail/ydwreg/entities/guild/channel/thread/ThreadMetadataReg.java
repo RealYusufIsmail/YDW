@@ -16,10 +16,7 @@
 package io.github.realyusufismail.ydwreg.entities.guild.channel.thread;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.guild.channel.threads.ThreadMetadata;
-import io.github.realyusufismail.ydwreg.util.Verify;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;

@@ -21,8 +21,6 @@ import io.github.realyusufismail.ydw.entities.guild.channel.threads.ThreadMetada
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
-
 public interface ThreadChannel extends GuildChannel {
     @NotNull
     @Override

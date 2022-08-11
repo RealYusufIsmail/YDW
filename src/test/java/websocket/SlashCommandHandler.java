@@ -16,7 +16,6 @@
 package websocket;
 
 import io.github.realyusufismail.event.adapter.EventAdapter;
-import io.github.realyusufismail.ydw.action.Action;
 import io.github.realyusufismail.ydw.action.ReplyAction;
 import io.github.realyusufismail.ydw.entities.SelfUser;
 import io.github.realyusufismail.ydw.event.events.interaction.SlashCommandInteractionEvent;

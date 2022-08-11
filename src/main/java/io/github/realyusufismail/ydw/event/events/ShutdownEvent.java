@@ -15,7 +15,6 @@
  */ 
 package io.github.realyusufismail.ydw.event.events;
 
-import io.github.realyusufismail.websocket.core.CloseCode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.event.Event;
 import org.joda.time.DateTime;

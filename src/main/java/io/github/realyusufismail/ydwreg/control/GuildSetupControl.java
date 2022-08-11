@@ -19,7 +19,6 @@
 package io.github.realyusufismail.ydwreg.control;
 
 import io.github.realyusufismail.websocket.WebSocketManager;
-import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

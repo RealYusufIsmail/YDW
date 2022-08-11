@@ -16,7 +16,6 @@
 package websocket;
 
 import io.github.realyusufismail.event.adapter.EventAdapter;
-import io.github.realyusufismail.ydw.event.events.GatewayPingEvent;
 import io.github.realyusufismail.ydw.event.events.ReadyEvent;
 import io.github.realyusufismail.ydw.event.events.ReconnectEvent;
 
