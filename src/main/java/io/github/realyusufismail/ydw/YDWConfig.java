@@ -23,20 +23,20 @@ import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.concurrent.ConcurrentMap;
 
 public class YDWConfig {
     private final String token;
     private final int gatewayIntents;
-
     private String status;
     private int largeThreshold = 250;
     private ActivityConfig activity = null;
-
     private OkHttpClient client;
-
+    // used for resuming
+    private ConcurrentMap<String, String> mdcContextMap;
     private String guildId;
-
     private int corePoolSize = 1;
+
 
     private YDWConfig(String token, int gatewayIntents) {
         this.token = token;
@@ -130,6 +130,16 @@ public class YDWConfig {
         return this;
     }
 
+    /**
+     * Used to set the mdc context map.
+     *
+     * @param mdcContextMap mdcContextMap
+     */
+    public YDWConfig setMdcContextMap(ConcurrentMap<String, String> mdcContextMap) {
+        this.mdcContextMap = mdcContextMap;
+        return this;
+    }
+
     public YDW build() throws Exception {
 
         if (token == null || token.isEmpty()) {
@@ -138,7 +148,7 @@ public class YDWConfig {
 
         OkHttpClient client;
         client = Objects.requireNonNullElseGet(this.client, OkHttpClient::new);
-        YDWReg ydw = new YDWReg(client);
+        YDWReg ydw = new YDWReg(client, mdcContextMap);
         ydw.loginForRest(token, guildId);
         ydw.login(token, gatewayIntents, status, largeThreshold, activity, corePoolSize);
         return ydw;

@@ -40,7 +40,7 @@ apply plugin: 'jacoco' // code coverage reports
 archivesBaseName = "YDW"
 description = "YDW (Yusuf's Discord Wrapper) My own Discord Wrapper"
 group 'io.github.realyusufismail'
-version '0.0.4'
+version '0.0.5'
 
 repositories {
     mavenCentral()

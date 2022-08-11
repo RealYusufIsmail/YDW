@@ -22,9 +22,9 @@ import org.joda.time.DateTime;
 
 public class ShutdownEvent extends Event {
     private final DateTime shutdownTime;
-    private final CloseCode closeCode;
+    private final int closeCode;
 
-    public ShutdownEvent(YDW ydw, DateTime shutdownTime, CloseCode closeCode) {
+    public ShutdownEvent(YDW ydw, DateTime shutdownTime, int closeCode) {
         super(ydw);
         this.shutdownTime = shutdownTime;
         this.closeCode = closeCode;
@@ -34,7 +34,7 @@ public class ShutdownEvent extends Event {
         return shutdownTime;
     }
 
-    public CloseCode getCloseCode() {
+    public int getCloseCode() {
         return closeCode;
     }
 }

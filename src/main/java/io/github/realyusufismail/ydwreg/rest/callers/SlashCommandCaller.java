@@ -48,6 +48,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class SlashCommandCaller {
 
@@ -281,8 +282,10 @@ public class SlashCommandCaller {
 
         commands.stream().filter(c -> c.getName().equals(name)).forEach(this::updateGlobalCommand);
 
+        // when starting the bot need to check if tha command exsists on discord
         if (commands.stream().noneMatch(c -> c.getName().equals(name))) {
             createGlobalCommand();
+            ydw.getLogger().debug("Created guild only command");
         }
     }
 
@@ -302,8 +305,10 @@ public class SlashCommandCaller {
 
         commands.stream().filter(c -> c.getName().equals(name)).forEach(this::updateGuildCommand);
 
+        // if command does not exist, create it
         if (commands.stream().noneMatch(c -> c.getName().equals(name))) {
             createGuildOnlyCommand();
+            ydw.getLogger().debug("Created guild only command");
         }
     }
 
