@@ -19,6 +19,8 @@
 package io.github.realyusufismail.websocket;
 
 import com.neovisionaries.ws.client.WebSocket;
+import io.github.realyusufismail.websocket.system.ISetUpSystem;
+import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.event.events.ShutdownEvent;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import org.joda.time.DateTime;
@@ -42,6 +44,15 @@ public class HandleReconnect extends WebSocketManager {
 
     public void handle() throws InterruptedException {
         if (sessionId == null) {
+            if (handleIdentifyRateLimit) {
+                long backoff = calculateIdentifyBackoff();
+                if (backoff > 0) {
+                    logger.info("Sleeping for {} seconds before reconnecting", backoff);
+                    Thread.sleep(backoff);
+                } else {
+                    logger.info("Encounters rate limit");
+                }
+            }
             logger.warn(
                     "A disconnection occurred due to receiving the close code '{}', will try to reconnect.",
                     closeCode);
@@ -56,9 +67,9 @@ public class HandleReconnect extends WebSocketManager {
 
     public void queueReconnect() {
         try {
-            reconnectQueued = true;
-            setUpSystem = new ReconnectEvent();
-            // TODO: add reconnect event to queue.
+            ydwReg.setStatus(YDW.Status.RECONNECT_QUEUED);
+            setUpSystemConnector = new ReconnectEvent();
+            ydwReg.getSetupSystem().add(setUpSystemConnector);
         } catch (RejectedExecutionException e) {
             logger.warn("Could not queue reconnect event, will try to reconnect immediately.", e);
             ydwReg.handelEvent(new ShutdownEvent(ydwReg, DateTime.now(), 1006));
@@ -98,15 +109,17 @@ public class HandleReconnect extends WebSocketManager {
 
         while (needsToReconnect) {
             int delay = reconnectTimeout;
-
+            ydwReg.setStatus(YDW.Status.WAITING_TO_RECONNECT);
             // In case there is a rapid burst of reconnects, we will wait for a little longer.
             reconnectTimeout = reconnectTimeout == 0 ? 2 : Math.min(reconnectTimeout << 1, 900);
             // Wait for the reconnect timeout.
             Thread.sleep(delay * 1000);
+            ydwReg.setStatus(YDW.Status.ATTEMPTING_TO_RECONNECT);
             logger.debug("Attempting to reconnect");
             try {
                 connect();
             } catch (RejectedExecutionException e) {
+                ydwReg.setStatus(YDW.Status.SHUTDOWN);
                 ydwReg.handelEvent(new ShutdownEvent(ydwReg, DateTime.now(), 1000));
             } catch (RuntimeException e) {
                 logger.error("Error reconnecting, next attempt in {} minutes.", reconnectTimeout);
@@ -122,20 +135,25 @@ public class HandleReconnect extends WebSocketManager {
         }
     }
 
-    private class ReconnectEvent extends SetUpSystem {
+    private class ReconnectEvent implements ISetUpSystem.SetUpSystemConnector {
         @Override
-        boolean isReconnect() {
+        public boolean isReconnect() {
             return true;
         }
 
         @Override
-        void handle(boolean lastInQueue) {
+        public YDW.ShardInfo getShardInfo() {
+            return ydwReg.getShardInfo();
+        }
+
+        @Override
+        public void run(boolean lastInQueue) {
             needsToReconnect = true;
             if (lastInQueue) {
                 return;
             }
             try {
-                awaitConfirmation();
+                ydwReg.awaitStatus(YDW.Status.LOADING_SUBSYSTEMS, YDW.Status.RECONNECT_QUEUED);
             } catch (InterruptedException e) {
                 logger.error("Error waiting for reconnect confirmation", e);
                 wsClose();

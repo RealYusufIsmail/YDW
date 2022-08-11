@@ -16,10 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.websocket;
+package io.github.realyusufismail.websocket.system;
 
-public abstract class SetUpSystem {
-    abstract boolean isReconnect();
+import io.github.realyusufismail.ydw.YDW;
 
-    abstract void handle(boolean lastInQueue);
+public interface ISetUpSystem {
+
+    /**
+     * The delay between each attempt to connect to the server.
+     */
+    int CONNECT_DELAY = 5;
+
+    void add(SetUpSystemConnector setUpSystemConnector);
+
+    void remove(SetUpSystemConnector setUpSystemConnector);
+
+    interface SetUpSystemConnector {
+        boolean isReconnect();
+
+        YDW.ShardInfo getShardInfo();
+
+        void run(boolean lastInQueue) throws InterruptedException;
+    }
 }
