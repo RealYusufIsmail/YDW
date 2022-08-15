@@ -32,7 +32,6 @@ public class CategoryReg extends ChannelReg implements Category {
     private final long id;
 
     private String name;
-    private Category category;
     private boolean nsfw;
     private int position;
     private final long guildId;
@@ -46,9 +45,6 @@ public class CategoryReg extends ChannelReg implements Category {
         this.id = id;
 
         this.name = channelJ.get("name").asText();
-        this.category = channelJ.hasNonNull("parent_id")
-                ? ydw.getChannel(Category.class, channelJ.get("parent_id").asLong())
-                : null;
         this.nsfw = channelJ.get("nsfw").asBoolean();
         this.position = channelJ.get("position").asInt();
         this.guildId = channelJ.get("guild_id").asLong();
@@ -85,7 +81,7 @@ public class CategoryReg extends ChannelReg implements Category {
 
     @Override
     public Optional<Category> getCategory() {
-        return Optional.ofNullable(category);
+        return Optional.empty();
     }
 
     @Override
@@ -105,10 +101,6 @@ public class CategoryReg extends ChannelReg implements Category {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
     }
 
     public void setNsfw(boolean nsfw) {
