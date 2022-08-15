@@ -20,34 +20,50 @@ import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.User;
 import io.github.realyusufismail.ydw.entities.channel.Dm;
 import io.github.realyusufismail.ydwreg.entities.ChannelReg;
+import io.github.realyusufismail.ydwreg.entities.UserReg;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class DmReg extends ChannelReg implements Dm {
 
+    private final String name;
     private final Long lassMessageId;
-    private final User user;
+    private final List<User> users = new ArrayList<>();
 
     public DmReg(@NotNull JsonNode channelJ, long id, @NotNull YDW ydw) {
         super(channelJ, id, ydw);
 
+        this.name = channelJ.get("name").asText();
+
         this.lassMessageId =
                 channelJ.hasNonNull("last_message_id") ? channelJ.get("last_message_id").asLong()
                         : null;
-        this.user = channelJ.hasNonNull("recipients")
-                ? ydw.getUser(channelJ.get("recipients").get(0).get("id").asLong())
-                : null;
+
+        if (channelJ.hasNonNull("recipients")) {
+            channelJ.get("recipients").forEach(recipient -> {
+                users.add(new UserReg(channelJ.get("recipients"),
+                        channelJ.get("recipients").get("id").asLong(), ydw));
+            });
+        }
+    }
+
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
-    public Optional<SnowFlake> getLastMessageId() {
-        return Optional.ofNullable(lassMessageId).map(SnowFlake::of);
+    public SnowFlake lastMessageId() {
+        return SnowFlake.of(lassMessageId);
     }
 
     @Override
-    public User getUser() {
-        return user;
+    public List<User> getRecipients() {
+        return users;
     }
 }

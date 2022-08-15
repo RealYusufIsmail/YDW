@@ -15,6 +15,7 @@
  */ 
 package io.github.realyusufismail.ydw.entities.guild.channel;
 
+import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.guild.Message;
 import io.github.realyusufismail.ydwreg.action.MessageActionReg;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
@@ -22,8 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-// TODO: add methods that are common to text and thread channels
-public interface GeneralTextChannel {
+public interface GeneralTextChannel extends Channel {
     MessageActionReg sendMessage(String message);
 
     MessageActionReg sendEmbedMessage(EmbedBuilder embedBuilder);

@@ -21,6 +21,7 @@ import io.github.realyusufismail.ydw.application.Application;
 import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.User;
+import io.github.realyusufismail.ydw.entities.guild.channel.GeneralTextChannel;
 import io.github.realyusufismail.ydw.entities.invite.InviteTargetType;
 import io.github.realyusufismail.ydw.event.events.invite.InviteCreateEvent;
 import io.github.realyusufismail.ydwreg.application.ApplicationReg;
@@ -38,7 +39,8 @@ public class InviteCreateHandler extends Handle {
 
     @Override
     public void start() {
-        Channel channel = ydw.getChannel(json.get("channel_id").asLong());
+        GeneralTextChannel channel =
+                ydw.getChannel(GeneralTextChannel.class, json.get("channel_id").asLong());
         String code = json.get("code").asText();
         ZonedDateTime createdAt = ZonedDateTime.parse(json.get("created_at").asText());
         Guild guild = ydw.getGuild(json.get("guild_id").asLong());

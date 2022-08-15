@@ -69,9 +69,9 @@ public class VoiceStateReg implements VoiceState {
 
         this.guild =
                 voice.hasNonNull("guild_id") ? ydw.getGuild(voice.get("guild_id").asLong()) : null;
-        this.channel =
-                voice.hasNonNull("channel_id") ? ydw.getChannel(voice.get("channel_id").asLong())
-                        : null;
+        this.channel = voice.hasNonNull("channel_id")
+                ? ydw.getChannel(Channel.class, voice.get("channel_id").asLong())
+                : null;
         this.user = voice.hasNonNull("user_id") ? ydw.getUser(voice.get("user_id").asLong()) : null;
         this.member = voice.hasNonNull("member") ? new MemberReg(voice.get("member"), ydw) : null;
         this.sessionId = voice.get("session_id").asText();

@@ -20,6 +20,8 @@ import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.guild.Message;
+import io.github.realyusufismail.ydw.entities.guild.channel.GeneralTextChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.TextChannel;
 import io.github.realyusufismail.ydw.event.events.message.MessageDeleteEvent;
 import io.github.realyusufismail.ydwreg.handle.Handle;
 
@@ -38,9 +40,9 @@ public class MessageDeleteHandler extends Handle {
         long channelId = json.get("channel_id").asLong();
         Optional<Guild> guild = Optional.ofNullable(ydw.getGuild(json.get("guild_id").asLong()));
 
-        AtomicReference<Channel> channel = new AtomicReference<>();
+        AtomicReference<GeneralTextChannel> channel = new AtomicReference<>();
         guild.ifPresent(g -> {
-            channel.set((g.getChannel(channelId)));
+            channel.set((GeneralTextChannel) g.getChannel(channelId));
         });
 
         Message message;

@@ -35,7 +35,7 @@ public class WelcomeScreenChannelReg implements WelcomeScreenChannel {
     public WelcomeScreenChannelReg(@NotNull JsonNode welcome, long guildId, @NotNull YDW ydw) {
         this.ydw = ydw;
 
-        this.channel = ydw.getChannel(welcome.get("channel_id").asLong());
+        this.channel = ydw.getChannel(Channel.class, welcome.get("channel_id").asLong());
         this.description = welcome.get("description").asText();
         this.emoji = ydw.getRest()
             .getEmojiCaller()

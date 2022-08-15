@@ -21,8 +21,11 @@ import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.User;
 import io.github.realyusufismail.ydw.entities.emoji.Emoji;
+import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
 import io.github.realyusufismail.ydw.entities.guild.Member;
 import io.github.realyusufismail.ydw.entities.guild.Message;
+import io.github.realyusufismail.ydw.entities.guild.channel.GeneralTextChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.TextChannel;
 import io.github.realyusufismail.ydw.event.events.message.MessageReactionRemoveEvent;
 import io.github.realyusufismail.ydwreg.entities.emoji.EmojiReg;
 import io.github.realyusufismail.ydwreg.entities.guild.MemberReg;
@@ -39,7 +42,8 @@ public class MessageReactionRemoveHandler extends Handle {
     @Override
     public void start() {
         User user = ydw.getUser(json.get("user_id").asLong());
-        Channel channel = ydw.getChannel(json.get("channel_id").asLong());
+        GeneralTextChannel channel =
+                ydw.getChannel(GeneralTextChannel.class, json.get("channel_id").asLong());
         Message message = channel.getMessage(json.get("message_id").asLong());
         Optional<Guild> guild = Optional.ofNullable(ydw.getGuild(json.get("guild_id").asLong()));
         Optional<Member> member = Optional.ofNullable(new MemberReg(json.get("member"), ydw));

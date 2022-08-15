@@ -333,8 +333,7 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
                         ydwReg.setReady(true);
 
-                        ydwReg.handelEvent(new ReadyEvent(ydwReg, unavailableGuilds.size(),
-                                availableGuilds.size()));
+                        ready();
                     }
                     case RESUMED -> {
                         reconnectTimeout = 2;
@@ -365,7 +364,8 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
             if (firstInit) {
                 firstInit = false;
-                if (ydwReg.getGuilds().size() >= 2000) {
+                if (ydwReg.getAvailableGuilds().size()
+                        + ydwReg.getUnavailableGuilds().size() >= 2000) {
                     YDWReg.logger.warn("You are trying to connect to over 2000 guilds. This is not "
                             + "recommended. You can still connect, but you will not be able to "
                             + "use any features that require all guilds to be loaded.");
@@ -598,6 +598,14 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         resumeGateWayUrl = null;
         sessionId = null;
         sentAuthInfo = false;
+
+        ydwReg.getGuilds().clear();
+        ydwReg.getTextChannelCache().clear();
+        ydwReg.getVoiceChannelCache().clear();
+        ydwReg.getUserCache().clear();
+        ydwReg.getThreadChannelCache().clear();
+        ydwReg.getNewsChannelCache().clear();
+        ydwReg.getStageChannelCache().clear();
     }
 
     public WebSocketManager setCorePoolSize(int corePoolSize) {

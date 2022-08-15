@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
+import io.github.realyusufismail.ydw.entities.guild.channel.GeneralTextChannel;
 import io.github.realyusufismail.ydw.event.events.channel.ChannelPinsUpdateEvent;
 import io.github.realyusufismail.ydwreg.handle.Handle;
 
@@ -35,9 +36,9 @@ public class ChannelPinsUpdateHandler extends Handle {
         Guild guild =
                 json.hasNonNull("guild_id") ? ydw.getGuild(json.get("guild_id").asLong()) : null;
 
-        Channel channel =
-                json.hasNonNull("channel_id") ? ydw.getChannel(json.get("channel_id").asLong())
-                        : null;
+        GeneralTextChannel channel = json.hasNonNull("channel_id")
+                ? ydw.getChannel(GeneralTextChannel.class, json.get("channel_id").asLong())
+                : null;
 
         ZonedDateTime lastPinTime = json.hasNonNull("last_pin_timestamp")
                 ? ZonedDateTime.parse(json.get("last_pin_timestamp").asText())

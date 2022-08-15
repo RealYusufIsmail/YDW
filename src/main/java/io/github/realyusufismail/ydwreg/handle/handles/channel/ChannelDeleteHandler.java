@@ -18,6 +18,7 @@ package io.github.realyusufismail.ydwreg.handle.handles.channel;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.Channel;
+import io.github.realyusufismail.ydw.entities.guild.channel.GeneralTextChannel;
 import io.github.realyusufismail.ydw.event.events.channel.ChannelDeleteEvent;
 import io.github.realyusufismail.ydwreg.handle.Handle;
 
@@ -28,7 +29,8 @@ public class ChannelDeleteHandler extends Handle {
 
     @Override
     public void start() {
-        Channel channel = ydw.getChannel(json.get("channel").asText());
+        GeneralTextChannel channel =
+                ydw.getChannel(GeneralTextChannel.class, json.get("channel").asText());
         ydw.handelEvent(new ChannelDeleteEvent(ydw, channel));
     }
 }

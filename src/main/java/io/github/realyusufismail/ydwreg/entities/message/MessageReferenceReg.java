@@ -40,7 +40,7 @@ public class MessageReferenceReg implements MessageReference {
 
         this.message = message.hasNonNull("message_id") ? message.get("message_id").asLong() : null;
         this.channel = message.hasNonNull("channel_id")
-                ? ydw.getChannel(message.get("channel_id").asLong())
+                ? ydw.getChannel(Channel.class, message.get("channel_id").asLong())
                 : null;
         this.guild = message.hasNonNull("guild_id") ? ydw.getGuild(message.get("guild_id").asLong())
                 : null;

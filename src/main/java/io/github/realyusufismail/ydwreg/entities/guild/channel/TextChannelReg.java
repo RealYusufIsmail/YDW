@@ -56,7 +56,7 @@ public class TextChannelReg extends GeneralTextChannelReg implements TextChannel
 
     public TextChannelReg(GuildReg guildReg, @NotNull JsonNode messageJson, long id,
             @NotNull YDW ydw) {
-        super(ydw, id);
+        super(messageJson, ydw, id);
         this.ydw = ydw;
         this.id = id;
 

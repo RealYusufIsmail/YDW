@@ -15,20 +15,24 @@
  */ 
 package io.github.realyusufismail.ydwreg.entities.guild.channel;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import io.github.realyusufismail.ydw.YDW;
+import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.guild.Message;
 import io.github.realyusufismail.ydw.entities.guild.channel.GeneralTextChannel;
 import io.github.realyusufismail.ydwreg.action.MessageActionReg;
+import io.github.realyusufismail.ydwreg.entities.ChannelReg;
 import io.github.realyusufismail.ydwreg.entities.embed.builder.EmbedBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class GeneralTextChannelReg implements GeneralTextChannel {
+public class GeneralTextChannelReg extends ChannelReg implements GeneralTextChannel {
     private final YDW ydw;
     private final long id;
 
-    public GeneralTextChannelReg(YDW ydw, long id) {
+    public GeneralTextChannelReg(JsonNode json, YDW ydw, long id) {
+        super(json, id, ydw);
         this.ydw = ydw;
         this.id = id;
     }

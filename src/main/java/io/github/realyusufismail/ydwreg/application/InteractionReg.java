@@ -25,6 +25,7 @@ import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.User;
 import io.github.realyusufismail.ydw.entities.guild.Member;
 import io.github.realyusufismail.ydw.entities.guild.Message;
+import io.github.realyusufismail.ydw.entities.guild.channel.GeneralTextChannel;
 import io.github.realyusufismail.ydw.event.Event;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionDataReg;
 import io.github.realyusufismail.ydwreg.entities.UserReg;
@@ -44,7 +45,7 @@ public class InteractionReg extends Event implements Interaction {
     private final InteractionType type;
     private final InteractionData data;
     private final Guild guild;
-    private final Channel channel;
+    private final GeneralTextChannel channel;
     private final Member member;
     private final User user;
     private final String token;
@@ -68,7 +69,7 @@ public class InteractionReg extends Event implements Interaction {
                 ? ydw.getGuild(interaction.get("guild_id").asLong())
                 : null;
         channel = interaction.hasNonNull("channel_id")
-                ? ydw.getChannel(interaction.get("channel_id").asLong())
+                ? ydw.getChannel(GeneralTextChannel.class, interaction.get("channel_id").asLong())
                 : null;
         member = interaction.hasNonNull("member") ? new MemberReg(interaction.get("member"), ydw)
                 : null;

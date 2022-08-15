@@ -89,7 +89,7 @@ public class MessageReg implements Message {
         this.ydw = ydw;
         this.id = id;
 
-        this.channel = ydw.getChannel(message.get("channel_id").asLong());
+        this.channel = ydw.getChannel(Channel.class, message.get("channel_id").asLong());
 
         this.author =
                 new UserReg(message.get("author"), message.get("author").get("id").asLong(), ydw);
@@ -135,7 +135,7 @@ public class MessageReg implements Message {
                 : null;
 
         this.thread = message.hasNonNull("thread_channel_id")
-                ? ydw.getChannel(message.get("thread_channel_id").asLong())
+                ? ydw.getChannel(Channel.class, message.get("thread_channel_id").asLong())
                 : null;
 
         this.messageActivity =

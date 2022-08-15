@@ -44,7 +44,7 @@ public class StageInstanceReg implements StageInstance {
         this.id = id;
 
         this.guild = ydw.getGuild(stage.get("guildId").asLong());
-        this.channel = ydw.getChannel(stage.get("channelId").asLong());
+        this.channel = ydw.getChannel(Channel.class, stage.get("channelId").asLong());
         this.topic = stage.get("topic").asText();
         this.privacyLevel = StagePrivacyLevel.valueOf(stage.get("privacyLevel").asText());
         this.isDiscoverableDisabled = stage.get("isDiscoverableDisabled").asBoolean();

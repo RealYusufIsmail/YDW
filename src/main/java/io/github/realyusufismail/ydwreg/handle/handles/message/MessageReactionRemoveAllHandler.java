@@ -20,6 +20,7 @@ import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.guild.Message;
+import io.github.realyusufismail.ydw.entities.guild.channel.GeneralTextChannel;
 import io.github.realyusufismail.ydw.event.events.message.MessageReactionRemoveAllEvent;
 import io.github.realyusufismail.ydwreg.handle.Handle;
 
@@ -33,7 +34,8 @@ public class MessageReactionRemoveAllHandler extends Handle {
 
     @Override
     public void start() {
-        Channel channel = ydw.getChannel(json.get("channel_id").asLong());
+        GeneralTextChannel channel =
+                ydw.getChannel(GeneralTextChannel.class, json.get("channel_id").asLong());
         Message message = channel.getMessage(json.get("message_id").asLong());
         Optional<Guild> guild = Optional.ofNullable(ydw.getGuild(json.get("guild_id").asLong()));
 

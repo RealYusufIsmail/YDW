@@ -58,8 +58,9 @@ public class GuildScheduledEventsReg implements GuildScheduledEvents {
         this.id = id;
 
         this.guild = event.hasNonNull("guild") ? ydw.getGuild(event.get("guild").asLong()) : null;
-        this.channel =
-                event.hasNonNull("channel") ? ydw.getChannel(event.get("channel").asLong()) : null;
+        this.channel = event.hasNonNull("channel")
+                ? ydw.getChannel(Channel.class, event.get("channel").asLong())
+                : null;
         this.creator =
                 event.hasNonNull("creator") ? ydw.getUser(event.get("creator").asLong()) : null;
         this.name = event.hasNonNull("name") ? event.get("name").asText() : null;

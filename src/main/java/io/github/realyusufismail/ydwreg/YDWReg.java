@@ -31,7 +31,6 @@ import io.github.realyusufismail.ydw.event.events.GatewayPingEvent;
 import io.github.realyusufismail.ydw.event.events.StatusChangeEvent;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
 import io.github.realyusufismail.ydwreg.application.commands.slash.builder.SlashCommandBuilderReg;
-import io.github.realyusufismail.ydwreg.control.GuildSetupControl;
 import io.github.realyusufismail.ydwreg.exception.NotReadyException;
 import io.github.realyusufismail.ydwreg.handle.EventCache;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
@@ -68,7 +67,6 @@ public class YDWReg implements YDW {
     private List<UnavailableGuild> unavailableGuilds;
     private List<AvailableGuild> availableGuilds;
     private YDW.Status status = Status.INITIALIZING;
-    private final GuildSetupControl guildSetupControl;
 
     public YDWReg(@NotNull OkHttpClient okHttpClient, ConcurrentMap<String, String> mdcContextMap) {
         mapper = new ObjectMapper();
@@ -76,7 +74,6 @@ public class YDWReg implements YDW {
         eventReceiver = new EventReceiver();
         eventCache = new EventCache();
         this.mdcContextMap = mdcContextMap == null ? new ConcurrentHashMap<>() : mdcContextMap;
-        guildSetupControl = new GuildSetupControl(this);
     }
 
     public void handelEvent(Event event) {
@@ -102,11 +99,6 @@ public class YDWReg implements YDW {
     @Override
     public List<UnavailableGuild> getUnavailableGuilds() {
         return unavailableGuilds;
-    }
-
-    @Override
-    public GuildSetupControl guildSetupControl() {
-        return guildSetupControl;
     }
 
     @Override

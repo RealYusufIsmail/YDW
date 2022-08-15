@@ -20,6 +20,7 @@ import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.guild.Message;
+import io.github.realyusufismail.ydw.entities.guild.channel.GeneralTextChannel;
 import io.github.realyusufismail.ydw.event.events.message.MessageDeleteBulkEvent;
 import io.github.realyusufismail.ydwreg.handle.Handle;
 
@@ -45,9 +46,9 @@ public class MessageDeleteBulkHandler extends Handle {
             messageIds.add(messageIdNode.asLong());
         }
 
-        AtomicReference<Channel> channel = new AtomicReference<>();
+        AtomicReference<GeneralTextChannel> channel = new AtomicReference<>();
         guild.ifPresent(g -> {
-            channel.set((g.getChannel(channelId)));
+            channel.set((GeneralTextChannel) g.getChannel(channelId));
         });
 
 

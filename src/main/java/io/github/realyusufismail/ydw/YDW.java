@@ -22,7 +22,6 @@ import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCom
 import io.github.realyusufismail.ydw.entities.*;
 import io.github.realyusufismail.ydw.entities.guild.channel.*;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
-import io.github.realyusufismail.ydwreg.control.GuildSetupControl;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -71,8 +70,6 @@ public interface YDW {
     List<AvailableGuild> getAvailableGuilds();
 
     List<UnavailableGuild> getUnavailableGuilds();
-
-    GuildSetupControl guildSetupControl();
 
     @NotNull
     User getUser(long userId);
