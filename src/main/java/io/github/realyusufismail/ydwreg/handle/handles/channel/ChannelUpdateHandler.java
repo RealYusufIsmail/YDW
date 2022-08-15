@@ -51,7 +51,7 @@ public class ChannelUpdateHandler extends Handle {
                 case NEWS -> updateNews(guildChannel.get());
                 case VOICE -> updateVoice(guildChannel.get());
                 case CATEGORY -> updateCategory(guildChannel.get());
-                case STAGE ->  updateStage(guildChannel.get());
+                case STAGE -> updateStage(guildChannel.get());
                 case GUILD_DIRECTORY -> updateGuildDirectory(guildChannel.get());
                 case NEWS_THREAD -> updateNewsThread(guildChannel.get());
                 case PUBLIC_THREAD -> updatePublicThread(guildChannel.get());
@@ -119,34 +119,24 @@ public class ChannelUpdateHandler extends Handle {
         String oldTopic = textChannel.getTopic();
     }
 
-    private void updateNews(GuildChannel channel) {
-    }
+    private void updateNews(GuildChannel channel) {}
 
-    private void updateVoice(GuildChannel channel) {
-    }
+    private void updateVoice(GuildChannel channel) {}
 
-    private void updateNewsThread(GuildChannel channel) {
-    }
+    private void updateNewsThread(GuildChannel channel) {}
 
-    private void updatePublicThread(GuildChannel channel) {
-    }
+    private void updatePublicThread(GuildChannel channel) {}
 
-    private void updatePrivateThread(GuildChannel channel) {
-    }
+    private void updatePrivateThread(GuildChannel channel) {}
 
-    private void updateGuildForum(GuildChannel channel) {
-    }
+    private void updateGuildForum(GuildChannel channel) {}
 
-    private void updateStage(GuildChannel channel) {
-    }
+    private void updateStage(GuildChannel channel) {}
 
-    private void updateGuildDirectory(GuildChannel channel) {
-    }
+    private void updateGuildDirectory(GuildChannel channel) {}
 
-    //non-guild channels
-    private void updateDM(Channel channel) {
-    }
+    // non-guild channels
+    private void updateDM(Channel channel) {}
 
-    private void updateGroupDM(Channel channel) {
-    }
+    private void updateGroupDM(Channel channel) {}
 }
