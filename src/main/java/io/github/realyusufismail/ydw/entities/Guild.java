@@ -20,10 +20,7 @@ import com.google.errorprone.annotations.CheckReturnValue;
 import io.github.realyusufismail.cache.SortedSnowflakeCache;
 import io.github.realyusufismail.ydw.action.Action;
 import io.github.realyusufismail.ydw.entities.emoji.Emoji;
-import io.github.realyusufismail.ydw.entities.guild.Member;
-import io.github.realyusufismail.ydw.entities.guild.Role;
-import io.github.realyusufismail.ydw.entities.guild.SystemChannelFlags;
-import io.github.realyusufismail.ydw.entities.guild.WelcomeScreen;
+import io.github.realyusufismail.ydw.entities.guild.*;
 import io.github.realyusufismail.ydw.entities.guild.channel.*;
 import io.github.realyusufismail.ydw.entities.sticker.Sticker;
 import io.github.realyusufismail.ydwreg.entities.guild.GuildFeatures;
@@ -140,14 +137,15 @@ public interface Guild extends SnowFlake, GenericEntity {
     List<Member> getMembers();
 
     @NotNull
-    List<Channel> getChannels();
+    List<GuildChannel> getChannels();
+
 
     @NotNull
-    Channel getChannel(long channelIdLong);
+    GuildChannel getGuildChannelById(long id);
 
     @NotNull
-    default Channel getChannel(String channelId) {
-        return getChannel(Long.parseUnsignedLong(channelId));
+    default GuildChannel getGuildChannelById(String channelId) {
+        return getGuildChannelById(Long.parseUnsignedLong(channelId));
     }
 
     Member getBot();

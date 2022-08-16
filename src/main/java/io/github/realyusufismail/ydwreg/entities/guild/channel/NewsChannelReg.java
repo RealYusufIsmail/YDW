@@ -159,8 +159,8 @@ public class NewsChannelReg extends ChannelReg implements NewsChannel {
         this.position = position;
     }
 
-    public void setPermissionOverwrites(List<Overwrite> permissionOverwrites) {
-        this.permissionOverwrites = permissionOverwrites;
+    public void setPermissionOverwrites(Overwrite permissionOverwrites) {
+        this.permissionOverwrites.add(permissionOverwrites);
     }
 
     public void setNsfw(boolean nsfw) {
@@ -177,5 +177,9 @@ public class NewsChannelReg extends ChannelReg implements NewsChannel {
 
     public void setDefaultAutoArchiveDuration(int defaultAutoArchiveDuration) {
         this.defaultAutoArchiveDuration = defaultAutoArchiveDuration;
+    }
+
+    public void setLastMessageId(long lastMessageId) {
+        this.lastMessageId = lastMessageId;
     }
 }

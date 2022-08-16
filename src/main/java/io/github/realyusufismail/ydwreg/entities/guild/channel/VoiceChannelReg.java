@@ -45,7 +45,7 @@ public class VoiceChannelReg extends ChannelReg implements VoiceChannel {
     private List<Overwrite> permissionOverwrites = new ArrayList<>();
     private Integer bitrate;
     private Integer userLimit;
-    private Long parentId;
+    private Category category;
     private String rtcRegion;
 
     public VoiceChannelReg(@NotNull JsonNode json, long id, @NotNull YDW ydw) {
@@ -63,7 +63,9 @@ public class VoiceChannelReg extends ChannelReg implements VoiceChannel {
         this.position = json.hasNonNull("position") ? json.get("position").asInt() : null;
         this.bitrate = json.hasNonNull("bitrate") ? json.get("bitrate").asInt() : null;
         this.userLimit = json.hasNonNull("user_limit") ? json.get("user_limit").asInt() : null;
-        this.parentId = json.hasNonNull("parent_id") ? json.get("parent_id").asLong() : null;
+        this.category = json.hasNonNull("parent_id")
+                ? ydw.getChannel(Category.class, json.get("parent_id").asLong())
+                : null;
         this.rtcRegion = json.hasNonNull("rtc_region") ? json.get("rtc_region").asText() : null;
 
         if (json.hasNonNull("permission_overwrites")) {
@@ -120,7 +122,7 @@ public class VoiceChannelReg extends ChannelReg implements VoiceChannel {
 
     @Override
     public Optional<Category> getCategory() {
-        return Optional.ofNullable(ydw.getChannel(Category.class, parentId));
+        return Optional.ofNullable(category);
     }
 
     @Override
@@ -167,8 +169,8 @@ public class VoiceChannelReg extends ChannelReg implements VoiceChannel {
         this.position = position;
     }
 
-    public void setPermissionOverwrites(List<Overwrite> permissionOverwrites) {
-        this.permissionOverwrites = permissionOverwrites;
+    public void setPermissionOverwrites(Overwrite permissionOverwrites) {
+        this.permissionOverwrites.add(permissionOverwrites);
     }
 
     public void setBitrate(Integer bitrate) {
@@ -179,8 +181,8 @@ public class VoiceChannelReg extends ChannelReg implements VoiceChannel {
         this.userLimit = userLimit;
     }
 
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public void setRtcRegion(String rtcRegion) {

@@ -169,8 +169,8 @@ public class TextChannelReg extends GeneralTextChannelReg implements TextChannel
     }
 
     // setters
-    public void setPermissionOverwrites(List<Overwrite> permissionOverwrites) {
-        this.permissionOverwrites = permissionOverwrites;
+    public void setPermissionOverwrites(Overwrite permissionOverwrites) {
+        this.permissionOverwrites.add(permissionOverwrites);
     }
 
     public void setNsfw(Boolean nsfw) {

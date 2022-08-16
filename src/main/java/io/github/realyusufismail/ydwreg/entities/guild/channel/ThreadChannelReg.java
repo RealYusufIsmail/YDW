@@ -45,6 +45,9 @@ public class ThreadChannelReg extends ChannelReg implements ThreadChannel {
     private int rateLimitPerUser;
     private ThreadMetadata metadata;
     private int totalMessagesSent;
+    private boolean nsfw;
+    private int position;
+
 
     public ThreadChannelReg(@NotNull JsonNode json, long id, @NotNull YDW ydw) {
         this(null, json, id, ydw);
@@ -67,6 +70,8 @@ public class ThreadChannelReg extends ChannelReg implements ThreadChannel {
         this.metadata =
                 json.hasNonNull("metadata") ? new ThreadMetadataReg(json.get("metadata")) : null;
         this.totalMessagesSent = json.get("total_messages_sent").asInt();
+        this.nsfw = json.get("nsfw").asBoolean();
+        this.position = json.get("position").asInt();
 
         boolean playbackCache = false;
         // cache
@@ -94,57 +99,57 @@ public class ThreadChannelReg extends ChannelReg implements ThreadChannel {
 
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 
     @Override
     public Optional<Category> getCategory() {
-        return Optional.empty();
+        return Optional.ofNullable(category);
     }
 
     @Override
     public boolean isNSFW() {
-        return false;
+        return nsfw;
     }
 
     @Override
     public int getPosition() {
-        return 0;
+        return position;
     }
 
     @Override
     public SnowFlake getOwnerId() {
-        return null;
+        return SnowFlake.of(ownerId);
     }
 
     @Override
     public SnowFlake getLastMessageId() {
-        return null;
+        return SnowFlake.of(lastMessageId);
     }
 
     @Override
     public int getMessageCount() {
-        return 0;
+        return messageCount;
     }
 
     @Override
     public int getMemberCount() {
-        return 0;
+        return memberCount;
     }
 
     @Override
     public int getRateLimitPerUser() {
-        return 0;
+        return rateLimitPerUser;
     }
 
     @Override
     public ThreadMetadata getMetadata() {
-        return null;
+        return metadata;
     }
 
     @Override
     public int getTotalMessagesSent() {
-        return 0;
+        return totalMessagesSent;
     }
 
     @Override
@@ -179,5 +184,13 @@ public class ThreadChannelReg extends ChannelReg implements ThreadChannel {
 
     public void setTotalMessagesSent(int totalMessagesSent) {
         this.totalMessagesSent = totalMessagesSent;
+    }
+
+    public void setNSFW(boolean nsfw) {
+        this.nsfw = nsfw;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

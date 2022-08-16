@@ -25,10 +25,7 @@ import io.github.realyusufismail.ydw.action.Action;
 import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.Guild;
 import io.github.realyusufismail.ydw.entities.emoji.Emoji;
-import io.github.realyusufismail.ydw.entities.guild.Member;
-import io.github.realyusufismail.ydw.entities.guild.Role;
-import io.github.realyusufismail.ydw.entities.guild.SystemChannelFlags;
-import io.github.realyusufismail.ydw.entities.guild.WelcomeScreen;
+import io.github.realyusufismail.ydw.entities.guild.*;
 import io.github.realyusufismail.ydw.entities.guild.channel.*;
 import io.github.realyusufismail.ydw.entities.sticker.Sticker;
 import io.github.realyusufismail.ydwreg.YDWReg;
@@ -461,15 +458,23 @@ public class GuildReg implements Guild {
     }
 
     @Override
-    public @NotNull List<Channel> getChannels() {
-        return Collections
-            .unmodifiableList(ydw.getRest().getGuildCaller().getChannels(this.getIdLong()));
+    public @NotNull List<GuildChannel> getChannels() {
+        var channels = ydw.getRest().getGuildCaller().getChannels(this.getIdLong());
+        List<GuildChannel> guildChannels = new ArrayList<>(channels.size());
+
+        for (var channel : channels) {
+            guildChannels.add((GuildChannel) channel);
+        }
+
+        return Collections.unmodifiableList(guildChannels);
     }
 
     @NotNull
     @Override
-    public Channel getChannel(long channelIdLong) {
-        return ydw.getRest().getGuildCaller().getChannel(this.getIdLong(), channelIdLong);
+    public GuildChannel getGuildChannelById(long channelIdLong) {
+        return (GuildChannel) ydw.getRest()
+            .getGuildCaller()
+            .getChannel(this.getIdLong(), channelIdLong);
     }
 
     @Nullable

@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.Channel;
+import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
 import io.github.realyusufismail.ydw.entities.guild.GuildPreview;
 import io.github.realyusufismail.ydw.entities.guild.Member;
 import io.github.realyusufismail.ydwreg.YDWReg;
