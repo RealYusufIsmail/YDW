@@ -48,7 +48,7 @@ public class MessageDeleteBulkHandler extends Handle {
 
         AtomicReference<GeneralTextChannel> channel = new AtomicReference<>();
         guild.ifPresent(g -> {
-            channel.set((GeneralTextChannel) g.getChannel(channelId));
+            channel.set((GeneralTextChannel) g.getGuildChannelById(channelId));
         });
 
 

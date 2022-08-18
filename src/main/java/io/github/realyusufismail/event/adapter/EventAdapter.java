@@ -23,6 +23,7 @@ import io.github.realyusufismail.ydw.event.Event;
 import io.github.realyusufismail.ydw.event.events.*;
 import io.github.realyusufismail.ydw.event.events.channel.ChannelCreateEvent;
 import io.github.realyusufismail.ydw.event.events.channel.ChannelDeleteEvent;
+import io.github.realyusufismail.ydw.event.events.channel.update.ChannelNameUpdateEvent;
 import io.github.realyusufismail.ydw.event.events.interaction.SlashCommandInteractionEvent;
 import io.github.realyusufismail.ydw.event.events.invite.InviteCreateEvent;
 import io.github.realyusufismail.ydw.event.events.invite.InviteDeleteEvent;
@@ -88,6 +89,8 @@ public abstract class EventAdapter implements IEventReceiver {
     public void onChannelCreate(ChannelCreateEvent event) {}
 
     public void onChannelDelete(ChannelDeleteEvent event) {}
+
+    public void onChannelNameUpdate(ChannelNameUpdateEvent event) {}
 
     // message
     public void onMessageCreate(MessageCreateEvent event) {}

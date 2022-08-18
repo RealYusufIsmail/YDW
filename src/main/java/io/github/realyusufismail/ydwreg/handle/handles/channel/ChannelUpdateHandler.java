@@ -21,9 +21,12 @@ import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.channel.ChannelType;
 import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
 import io.github.realyusufismail.ydw.entities.guild.channel.*;
+import io.github.realyusufismail.ydw.entities.guild.channel.threads.ThreadMetadata;
+import io.github.realyusufismail.ydw.event.events.channel.update.ChannelNameUpdateEvent;
 import io.github.realyusufismail.ydwreg.entities.ChannelReg;
 import io.github.realyusufismail.ydwreg.entities.channel.OverwriteReg;
 import io.github.realyusufismail.ydwreg.entities.guild.channel.*;
+import io.github.realyusufismail.ydwreg.entities.guild.channel.thread.ThreadMetadataReg;
 import io.github.realyusufismail.ydwreg.handle.Handle;
 
 import java.util.Objects;
@@ -137,6 +140,8 @@ public class ChannelUpdateHandler extends Handle {
 
         if (!Objects.deepEquals(oldName, newName)) {
             textChannel.setName(newName);
+
+            ydw.handelEvent(new ChannelNameUpdateEvent(ydw, textChannel, oldName, newName));
         }
 
         if (oldPosition != newPosition) {
@@ -207,6 +212,8 @@ public class ChannelUpdateHandler extends Handle {
 
         if (!Objects.deepEquals(oldName, newName)) {
             newsChannel.setName(newName);
+
+            ydw.handelEvent(new ChannelNameUpdateEvent(ydw, newsChannel, oldName, newName));
         }
 
         if (oldPosition != newPosition) {
@@ -274,6 +281,8 @@ public class ChannelUpdateHandler extends Handle {
 
         if (!Objects.deepEquals(oldName, newName)) {
             voiceChannel.setName(newName);
+
+            ydw.handelEvent(new ChannelNameUpdateEvent(ydw, voiceChannel, oldName, newName));
         }
 
         if (oldPermissionOverwrites != newPermissionOverwrites) {
@@ -323,11 +332,118 @@ public class ChannelUpdateHandler extends Handle {
         int oldMessageCount = threadChannel.getMessageCount();
         int oldMemberCount = threadChannel.getMemberCount();
         int oldRateLimitPerUser = threadChannel.getRateLimitPerUser();
+        ThreadMetadata oldMetadata = threadChannel.getMetadata();
+        int oldTotalMessageSent = threadChannel.getTotalMessagesSent();
+
+        String newName = json.get("name").asText();
+        long newLastMessageId = json.get("last_message_id").asLong();
+        int newMessageCount = json.get("message_count").asInt();
+        int newMemberCount = json.get("member_count").asInt();
+        int newRateLimitPerUser = json.get("rate_limit_per_user").asInt();
+        ThreadMetadata newMetadata = new ThreadMetadataReg(json.get("metadata"));
+        int newTotalMessageSent = json.get("total_messages_sent").asInt();
+
+        if (!Objects.deepEquals(oldName, newName)) {
+            threadChannel.setName(newName);
+
+            ydw.handelEvent(new ChannelNameUpdateEvent(ydw, threadChannel, oldName, newName));
+        }
+
+        if (oldLastMessageId != newLastMessageId) {
+            threadChannel.setLastMessageId(newLastMessageId);
+        }
+
+        if (oldMessageCount != newMessageCount) {
+            threadChannel.setMessageCount(newMessageCount);
+        }
+
+        if (oldMemberCount != newMemberCount) {
+            threadChannel.setMemberCount(newMemberCount);
+        }
+
+        if (oldRateLimitPerUser != newRateLimitPerUser) {
+            threadChannel.setRateLimitPerUser(newRateLimitPerUser);
+        }
+
+        if (!Objects.deepEquals(oldMetadata, newMetadata)) {
+            threadChannel.setMetadata(newMetadata);
+        }
+
+        if (oldTotalMessageSent != newTotalMessageSent) {
+            threadChannel.setTotalMessagesSent(newTotalMessageSent);
+        }
     }
 
     private void updateGuildForum(GuildChannel channel) {}
 
-    private void updateStage(GuildChannel channel) {}
+    private void updateStage(GuildChannel channel) {
+        Optional<StageChannel> opStageChannel = channel.asStageChannel();
+
+        if (opStageChannel.isEmpty()) {
+            return;
+        }
+
+        StageChannelReg stageChannel = (StageChannelReg) opStageChannel.get();
+
+        String oldName = stageChannel.getName();
+        int oldPermissionOverwrites = stageChannel.getPermissionOverwrites().size();
+        boolean oldNSFW = stageChannel.isNSFW();
+        int oldBitrate = stageChannel.getBitrate();
+        int oldUserLimit = stageChannel.getUserLimit();
+        String oldRTCRegion = stageChannel.getRTCRegion();
+        int oldPosition = stageChannel.getPosition();
+        Optional<Category> oldCategory = stageChannel.getCategory();
+
+
+        String newName = json.get("name").asText();
+        int newPermissionOverwrites = json.get("permission_overwrites").size();
+        boolean newNSFW = json.get("nsfw").asBoolean();
+        int newBitrate = json.get("bitrate").asInt();
+        int newUserLimit = json.get("user_limit").asInt();
+        String newRTCRegion = json.get("rtc_region").asText();
+        int newPosition = json.get("position").asInt();
+        Optional<Category> newCategory = json.hasNonNull("parent_id")
+                ? Optional
+                    .ofNullable(ydw.getChannel(Category.class, json.get("parent_id").asLong()))
+                : Optional.empty();
+
+        if (!Objects.deepEquals(oldName, newName)) {
+            stageChannel.setName(newName);
+
+            ydw.handelEvent(new ChannelNameUpdateEvent(ydw, stageChannel, oldName, newName));
+        }
+
+        if (oldPermissionOverwrites != newPermissionOverwrites) {
+            for (JsonNode permissionOverwrite : json.get("permission_overwrites")) {
+                stageChannel.setPermissionOverwrites(new OverwriteReg(permissionOverwrite,
+                        permissionOverwrite.get("id").asLong(), ydw));
+            }
+        }
+
+        if (oldNSFW != newNSFW) {
+            stageChannel.setNSFW(newNSFW);
+        }
+
+        if (oldBitrate != newBitrate) {
+            stageChannel.setBitrate(newBitrate);
+        }
+
+        if (oldUserLimit != newUserLimit) {
+            stageChannel.setUserLimit(newUserLimit);
+        }
+
+        if (!Objects.deepEquals(oldRTCRegion, newRTCRegion)) {
+            stageChannel.setRtcRegion(newRTCRegion);
+        }
+
+        if (oldPosition != newPosition) {
+            stageChannel.setPosition(newPosition);
+        }
+
+        if (!oldCategory.equals(newCategory)) {
+            oldCategory.ifPresent(stageChannel::setCategory);
+        }
+    }
 
     private void updateGuildDirectory(GuildChannel channel) {}
 
