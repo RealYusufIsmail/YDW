@@ -20,7 +20,8 @@ import io.github.realyusufismail.websocket.WebSocketManager;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
 import io.github.realyusufismail.ydw.entities.*;
-import io.github.realyusufismail.ydw.entities.guild.channel.*;
+import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
+import io.github.realyusufismail.ydw.entities.guild.channel.cache.GuildChannelCache;
 import io.github.realyusufismail.ydwreg.application.commands.option.interaction.InteractionManager;
 import io.github.realyusufismail.ydwreg.rest.RestApiHandler;
 import org.jetbrains.annotations.NotNull;
@@ -28,8 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface YDW {
-
+public interface YDW extends GuildChannelCache {
     enum Status {
         CONNECTED(true),
         INITIALIZING(true),
@@ -125,18 +125,6 @@ public interface YDW {
     YDW awaitReady();
 
     // cache
-    SnowFlakeCache<Category> getCategoryCache();
-
-    SnowFlakeCache<NewsChannel> getNewsChannelCache();
-
-    SnowFlakeCache<StageChannel> getStageChannelCache();
-
-    SnowFlakeCache<TextChannel> getTextChannelCache();
-
-    SnowFlakeCache<ThreadChannel> getThreadChannelCache();
-
-    SnowFlakeCache<VoiceChannel> getVoiceChannelCache();
-
     SnowFlakeCache<Guild> getGuildCache();
 
     SnowFlakeCache<User> getUserCache();

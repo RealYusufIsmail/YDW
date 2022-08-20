@@ -20,6 +20,8 @@ import gnu.trove.map.TLongObjectMap;
 import gnu.trove.map.hash.TLongObjectHashMap;
 import io.github.realyusufismail.cache.Cache;
 import io.github.realyusufismail.ydwreg.YDWReg;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.EnumMap;
 import java.util.LinkedList;
@@ -31,6 +33,7 @@ import java.util.List;
  * target="_blank">JDA</a>
  */
 public class EventCache {
+    public static final Logger logger = LoggerFactory.getLogger(EventCache.class);
     private final EnumMap<CacheType, TLongObjectMap<List<CacheNode>>> eventEnum =
             new EnumMap<>(CacheType.class);
 
@@ -82,5 +85,5 @@ public class EventCache {
         void execute() {
                 callback.execute(jsonNode);
             }
-        }
+    }
 }

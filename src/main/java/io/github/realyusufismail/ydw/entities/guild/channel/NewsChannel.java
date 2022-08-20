@@ -35,7 +35,7 @@ public interface NewsChannel extends GuildChannel, SnowFlake {
 
     String getTopic();
 
-    SnowFlake lastMessageId();
+    SnowFlake getLastMessageId();
 
     int getDefaultAutoArchiveDuration();
 }

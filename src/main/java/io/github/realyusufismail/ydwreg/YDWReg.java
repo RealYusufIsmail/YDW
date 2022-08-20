@@ -25,6 +25,7 @@ import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.activity.ActivityConfig;
 import io.github.realyusufismail.ydw.application.commands.slash.builder.SlashCommandBuilder;
 import io.github.realyusufismail.ydw.entities.*;
+import io.github.realyusufismail.ydw.entities.guild.GuildChannel;
 import io.github.realyusufismail.ydw.entities.guild.channel.*;
 import io.github.realyusufismail.ydw.event.Event;
 import io.github.realyusufismail.ydw.event.events.GatewayPingEvent;

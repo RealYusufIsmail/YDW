@@ -130,7 +130,7 @@ public class NewsChannelReg extends ChannelReg implements NewsChannel {
     }
 
     @Override
-    public SnowFlake lastMessageId() {
+    public SnowFlake getLastMessageId() {
         return SnowFlake.of(lastMessageId);
     }
 

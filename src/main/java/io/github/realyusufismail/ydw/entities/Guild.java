@@ -17,11 +17,10 @@ package io.github.realyusufismail.ydw.entities;
 
 
 import com.google.errorprone.annotations.CheckReturnValue;
-import io.github.realyusufismail.cache.SortedSnowflakeCache;
 import io.github.realyusufismail.ydw.action.Action;
 import io.github.realyusufismail.ydw.entities.emoji.Emoji;
 import io.github.realyusufismail.ydw.entities.guild.*;
-import io.github.realyusufismail.ydw.entities.guild.channel.*;
+import io.github.realyusufismail.ydw.entities.guild.channel.cache.GuildChannelCache;
 import io.github.realyusufismail.ydw.entities.sticker.Sticker;
 import io.github.realyusufismail.ydwreg.entities.guild.GuildFeatures;
 import io.github.realyusufismail.ydwreg.snowflake.SnowFlake;
@@ -34,7 +33,7 @@ import java.util.List;
 import java.util.Optional;
 
 // TODO: Add documentation
-public interface Guild extends SnowFlake, GenericEntity {
+public interface Guild extends SnowFlake, GenericEntity, GuildChannelCache {
     String getName();
 
     String getIcon();
@@ -138,15 +137,6 @@ public interface Guild extends SnowFlake, GenericEntity {
 
     @NotNull
     List<GuildChannel> getChannels();
-
-
-    @NotNull
-    GuildChannel getGuildChannelById(long id);
-
-    @NotNull
-    default GuildChannel getGuildChannelById(String channelId) {
-        return getGuildChannelById(Long.parseUnsignedLong(channelId));
-    }
 
     Member getBot();
 
@@ -272,17 +262,4 @@ public interface Guild extends SnowFlake, GenericEntity {
     }
 
     Member getSelfMember();
-
-    // cache
-    SortedSnowflakeCache<Category> getCategoryCache();
-
-    SortedSnowflakeCache<TextChannel> getTextChannelCache();
-
-    SortedSnowflakeCache<VoiceChannel> getVoiceChannelCache();
-
-    SortedSnowflakeCache<NewsChannel> getNewsChannelCache();
-
-    SortedSnowflakeCache<StageChannel> getStageChannelCache();
-
-    SortedSnowflakeCache<ThreadChannel> getThreadChannelCache();
 }

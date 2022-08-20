@@ -16,6 +16,7 @@
 package io.github.realyusufismail.ydwreg.handle.handles.channel;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.github.realyusufismail.cache.Cache;
 import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydw.entities.Channel;
 import io.github.realyusufismail.ydw.entities.channel.ChannelType;
@@ -24,9 +25,11 @@ import io.github.realyusufismail.ydw.entities.guild.channel.*;
 import io.github.realyusufismail.ydw.entities.guild.channel.threads.ThreadMetadata;
 import io.github.realyusufismail.ydw.event.events.channel.update.ChannelNameUpdateEvent;
 import io.github.realyusufismail.ydwreg.entities.ChannelReg;
+import io.github.realyusufismail.ydwreg.entities.GuildReg;
 import io.github.realyusufismail.ydwreg.entities.channel.OverwriteReg;
 import io.github.realyusufismail.ydwreg.entities.guild.channel.*;
 import io.github.realyusufismail.ydwreg.entities.guild.channel.thread.ThreadMetadataReg;
+import io.github.realyusufismail.ydwreg.handle.EventCache;
 import io.github.realyusufismail.ydwreg.handle.Handle;
 
 import java.util.Objects;
@@ -43,14 +46,6 @@ public class ChannelUpdateHandler extends Handle {
         ChannelType channelType = channel.getType();
 
         if (channelType.isGuild()) {
-            Optional<GuildChannel> opGuildChannel = channel.asGuildChannel();
-
-            if (opGuildChannel.isEmpty()) {
-                return;
-            }
-
-            GuildChannel guildChannel = opGuildChannel.get();
-
             long channelId = json.get("id").asLong();
             String newName = json.get("name").asText();
             int newPosition = json.get("position").asInt();
@@ -66,10 +61,21 @@ public class ChannelUpdateHandler extends Handle {
                 newCategory = Optional.empty();
             }
 
+            GuildChannel guildChannel = ydw.getGuildChannelById(channelId);
+
+            if (guildChannel == null) {
+                ydw.getEventCache()
+                    .cache(EventCache.CacheType.CHANNEL, channelId, json, (Cache) this);
+                EventCache.logger.debug("Channel {} is not cached yet", channelId);
+                return;
+            }
+
+            guildChannel = checkForChannelChange(guildChannel, json, channelType);
+
             switch (channelType) {
-                case TEXT -> updateText(guildChannel, channelId, newName, newPosition, newNSFW,
+                case TEXT -> updateText(guildChannel, newName, newPosition, newNSFW,
                         newPermissionOverwrites, newRateLimitPerUser, newCategory.get());
-                case NEWS -> updateNews(guildChannel, channelId, newName, newPosition, newNSFW,
+                case NEWS -> updateNews(guildChannel, newName, newPosition, newNSFW,
                         newPermissionOverwrites, newRateLimitPerUser, newCategory.get());
                 case VOICE -> updateVoice(guildChannel, channelId, newName, newPosition, newNSFW,
                         newPermissionOverwrites, newRateLimitPerUser, newCategory.get());
@@ -80,8 +86,7 @@ public class ChannelUpdateHandler extends Handle {
                         newPosition, newNSFW, newPermissionOverwrites, newRateLimitPerUser,
                         newCategory.get());
                 case NEWS_THREAD, PRIVATE_THREAD, PUBLIC_THREAD -> updateThread(guildChannel,
-                        channelId, newName, newPosition, newNSFW, newPermissionOverwrites,
-                        newRateLimitPerUser, newCategory.get());
+                        newName, newRateLimitPerUser);
                 case GUILD_FORUM -> updateGuildForum(guildChannel, channelId, newName, newPosition,
                         newNSFW, newPermissionOverwrites, newRateLimitPerUser, newCategory.get());
                 default -> {
@@ -97,6 +102,44 @@ public class ChannelUpdateHandler extends Handle {
                 }
             }
         }
+    }
+
+    private GuildChannel checkForChannelChange(GuildChannel guildChannel, JsonNode json,
+            ChannelType channelType) {
+        if (guildChannel.getType() == channelType) {
+            return guildChannel;
+        }
+
+        GuildReg guildReg = (GuildReg) guildChannel.getGuild();
+
+        // TODO: Add handle update event
+        if (channelType == ChannelType.TEXT) {
+            NewsChannel newsChannel = (NewsChannel) guildChannel;
+            ydw.getNewsChannelCache().remove(newsChannel);
+            guildReg.getNewsChannelCache().remove(newsChannel);
+
+            TextChannelReg textChannelReg =
+                    new TextChannelReg(guildReg, json, json.get("id").asLong(), ydw);
+
+            textChannelReg.setLastMessageId(newsChannel.getLastMessageId().getIdLong());
+
+            return textChannelReg;
+        }
+
+        if (channelType == ChannelType.NEWS) {
+            TextChannel textChannelReg = (TextChannel) guildChannel;
+            ydw.getTextChannelCache().remove(textChannelReg);
+            guildReg.getTextChannelCache().remove(textChannelReg);
+
+            NewsChannelReg newsChannelReg =
+                    new NewsChannelReg(guildReg, json, json.get("id").asLong(), ydw);
+
+            newsChannelReg.setLastMessageId(textChannelReg.getLastMessageId().getIdLong());
+
+            return newsChannelReg;
+        }
+
+        return guildChannel;
     }
 
     // Guild channels
@@ -127,9 +170,8 @@ public class ChannelUpdateHandler extends Handle {
         }
     }
 
-    private void updateText(GuildChannel channel, long channelId, String newName, int newPosition,
-            boolean newNSFW, int newPermissionOverwrites, int newRateLimitPerUser,
-            Category newCategory) {
+    private void updateText(GuildChannel channel, String newName, int newPosition, boolean newNSFW,
+            int newPermissionOverwrites, int newRateLimitPerUser, Category newCategory) {
         Optional<TextChannel> opTextChannel = channel.asTextChannel();
 
         if (opTextChannel.isEmpty()) {
@@ -188,8 +230,10 @@ public class ChannelUpdateHandler extends Handle {
             textChannel.setDefaultAutoArchiveDuration(newDefaultAutoArchiveDuration);
         }
 
-        if (!oldCategory.equals(newCategory)) {
-            oldCategory.ifPresent(textChannel::setCategory);
+        if (oldCategory.isPresent()) {
+            if (!oldCategory.get().equals(newCategory)) {
+                oldCategory.ifPresent(textChannel::setCategory);
+            }
         }
 
         if (oldLastMessageId != newLastMessageId) {
@@ -197,9 +241,8 @@ public class ChannelUpdateHandler extends Handle {
         }
     }
 
-    private void updateNews(GuildChannel channel, long channelId, String newName, int newPosition,
-            boolean newNSFW, int newPermissionOverwrites, int newRateLimitPerUser,
-            Category newCategory) {
+    private void updateNews(GuildChannel channel, String newName, int newPosition, boolean newNSFW,
+            int newPermissionOverwrites, int newRateLimitPerUser, Category newCategory) {
         Optional<NewsChannel> opNewsChannel = channel.asNewsChannel();
 
         if (opNewsChannel.isEmpty()) {
@@ -214,7 +257,7 @@ public class ChannelUpdateHandler extends Handle {
         String oldTopic = newsChannel.getTopic();
         int oldPermissionOverwrites = newsChannel.getPermissionOverwrites().size();
         int oldDefaultAutoArchiveDuration = newsChannel.getDefaultAutoArchiveDuration();
-        long oldLastMessageId = newsChannel.lastMessageId().getIdLong();
+        long oldLastMessageId = newsChannel.getLastMessageId().getIdLong();
         Optional<Category> oldCategory = newsChannel.getCategory();
 
         int newDefaultAutoArchiveDuration = json.get("default_auto_archive_duration").asInt();
@@ -255,8 +298,10 @@ public class ChannelUpdateHandler extends Handle {
             newsChannel.setLastMessageId(newLastMessageId);
         }
 
-        if (!oldCategory.equals(newCategory)) {
-            oldCategory.ifPresent(newsChannel::setCategory);
+        if (oldCategory.isPresent()) {
+            if (!oldCategory.get().equals(newCategory)) {
+                oldCategory.ifPresent(newsChannel::setCategory);
+            }
         }
     }
 
@@ -318,14 +363,15 @@ public class ChannelUpdateHandler extends Handle {
             voiceChannel.setNSFW(newNSFW);
         }
 
-        if (!oldCategory.equals(newCategory)) {
-            oldCategory.ifPresent(voiceChannel::setCategory);
+
+        if (oldCategory.isPresent()) {
+            if (!oldCategory.get().equals(newCategory)) {
+                oldCategory.ifPresent(voiceChannel::setCategory);
+            }
         }
     }
 
-    private void updateThread(GuildChannel channel, long channelId, String newName, int newPosition,
-            boolean newNSFW, int newPermissionOverwrites, int newRateLimitPerUser,
-            Category category) {
+    private void updateThread(GuildChannel channel, String newName, int newRateLimitPerUser) {
         Optional<ThreadChannel> opThreadChannel = channel.asThread();
 
         if (opThreadChannel.isEmpty()) {
