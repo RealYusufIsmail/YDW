@@ -50,8 +50,8 @@ public class CacheStorerer<E> implements Iterable<E> {
         return map.get(Long.parseUnsignedLong(key));
     }
 
-    public void remove(SnowFlake key) {
-        map.remove(key.getIdLong());
+    public E remove(SnowFlake key) {
+        return map.remove(key.getIdLong());
     }
 
     public boolean containsKey(SnowFlake key) {
