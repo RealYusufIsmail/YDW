@@ -51,15 +51,39 @@ public class ChannelUpdateHandler extends Handle {
 
             GuildChannel guildChannel = opGuildChannel.get();
 
+            long channelId = json.get("id").asLong();
+            String newName = json.get("name").asText();
+            int newPosition = json.get("position").asInt();
+            boolean newNSFW = json.get("nsfw").asBoolean();
+            int newPermissionOverwrites = json.get("permission_overwrites").size();
+            int newRateLimitPerUser = json.get("rate_limit_per_user").asInt();
+            Optional<Category> newCategory = json.hasNonNull("parent_id")
+                    ? Optional
+                        .ofNullable(ydw.getChannel(Category.class, json.get("parent_id").asLong()))
+                    : Optional.empty();
+
+            if (newCategory.isEmpty()) {
+                newCategory = Optional.empty();
+            }
+
             switch (channelType) {
-                case TEXT -> updateText(guildChannel);
-                case NEWS -> updateNews(guildChannel);
-                case VOICE -> updateVoice(guildChannel);
-                case CATEGORY -> updateCategory(guildChannel);
-                case STAGE -> updateStage(guildChannel);
-                case GUILD_DIRECTORY -> updateGuildDirectory(guildChannel);
-                case NEWS_THREAD, PRIVATE_THREAD, PUBLIC_THREAD -> updateThread(guildChannel);
-                case GUILD_FORUM -> updateGuildForum(guildChannel);
+                case TEXT -> updateText(guildChannel, channelId, newName, newPosition, newNSFW,
+                        newPermissionOverwrites, newRateLimitPerUser, newCategory.get());
+                case NEWS -> updateNews(guildChannel, channelId, newName, newPosition, newNSFW,
+                        newPermissionOverwrites, newRateLimitPerUser, newCategory.get());
+                case VOICE -> updateVoice(guildChannel, channelId, newName, newPosition, newNSFW,
+                        newPermissionOverwrites, newRateLimitPerUser, newCategory.get());
+                case CATEGORY -> updateCategory(guildChannel, newName, newPosition, newNSFW);
+                case STAGE -> updateStage(guildChannel, channelId, newName, newPosition, newNSFW,
+                        newPermissionOverwrites, newRateLimitPerUser, newCategory.get());
+                case GUILD_DIRECTORY -> updateGuildDirectory(guildChannel, channelId, newName,
+                        newPosition, newNSFW, newPermissionOverwrites, newRateLimitPerUser,
+                        newCategory.get());
+                case NEWS_THREAD, PRIVATE_THREAD, PUBLIC_THREAD -> updateThread(guildChannel,
+                        channelId, newName, newPosition, newNSFW, newPermissionOverwrites,
+                        newRateLimitPerUser, newCategory.get());
+                case GUILD_FORUM -> updateGuildForum(guildChannel, channelId, newName, newPosition,
+                        newNSFW, newPermissionOverwrites, newRateLimitPerUser, newCategory.get());
                 default -> {
                     // Do nothing
                 }
@@ -76,7 +100,8 @@ public class ChannelUpdateHandler extends Handle {
     }
 
     // Guild channels
-    private void updateCategory(GuildChannel channel) {
+    private void updateCategory(GuildChannel channel, String newName, int newPosition,
+            boolean newNSFW) {
         Optional<Category> opCategory = channel.asCategory();
 
         if (opCategory.isEmpty()) {
@@ -88,10 +113,6 @@ public class ChannelUpdateHandler extends Handle {
         String oldName = category.getName();
         int oldPosition = category.getPosition();
         boolean oldNSFW = category.isNSFW();
-
-        String newName = json.get("name").asText();
-        int newPosition = json.get("position").asInt();
-        boolean newNSFW = json.get("nsfw").asBoolean();
 
         if (!Objects.deepEquals(oldName, newName)) {
             category.setName(newName);
@@ -106,7 +127,9 @@ public class ChannelUpdateHandler extends Handle {
         }
     }
 
-    private void updateText(GuildChannel channel) {
+    private void updateText(GuildChannel channel, long channelId, String newName, int newPosition,
+            boolean newNSFW, int newPermissionOverwrites, int newRateLimitPerUser,
+            Category newCategory) {
         Optional<TextChannel> opTextChannel = channel.asTextChannel();
 
         if (opTextChannel.isEmpty()) {
@@ -125,17 +148,11 @@ public class ChannelUpdateHandler extends Handle {
         Optional<Category> oldCategory = textChannel.getCategory();
         long oldLastMessageId = textChannel.getLastMessageId().getIdLong();
 
-        String newName = json.get("name").asText();
-        int newPosition = json.get("position").asInt();
-        boolean newNSFW = json.get("nsfw").asBoolean();
+
         int newRateLimit = json.get("rate_limit_per_user").asInt();
         String newTopic = json.get("topic").asText();
-        int newPermissionOverwrites = json.get("permission_overwrites").size();
         int newDefaultAutoArchiveDuration = json.get("default_auto_archive_duration").asInt();
-        Optional<Category> newCategory = json.hasNonNull("parent_id")
-                ? Optional
-                    .ofNullable(ydw.getChannel(Category.class, json.get("parent_id").asLong()))
-                : Optional.empty();
+
         long newLastMessageId = json.get("last_message_id").asLong();
 
         if (!Objects.deepEquals(oldName, newName)) {
@@ -180,7 +197,9 @@ public class ChannelUpdateHandler extends Handle {
         }
     }
 
-    private void updateNews(GuildChannel channel) {
+    private void updateNews(GuildChannel channel, long channelId, String newName, int newPosition,
+            boolean newNSFW, int newPermissionOverwrites, int newRateLimitPerUser,
+            Category newCategory) {
         Optional<NewsChannel> opNewsChannel = channel.asNewsChannel();
 
         if (opNewsChannel.isEmpty()) {
@@ -198,17 +217,10 @@ public class ChannelUpdateHandler extends Handle {
         long oldLastMessageId = newsChannel.lastMessageId().getIdLong();
         Optional<Category> oldCategory = newsChannel.getCategory();
 
-        String newName = json.get("name").asText();
-        int newPosition = json.get("position").asInt();
-        boolean newNSFW = json.get("nsfw").asBoolean();
-        String newTopic = json.get("topic").asText();
-        int newPermissionOverwrites = json.get("permission_overwrites").size();
         int newDefaultAutoArchiveDuration = json.get("default_auto_archive_duration").asInt();
+        String newTopic = json.get("topic").asText();
         long newLastMessageId = json.get("last_message_id").asLong();
-        Optional<Category> newCategory = json.hasNonNull("parent_id")
-                ? Optional
-                    .ofNullable(ydw.getChannel(Category.class, json.get("parent_id").asLong()))
-                : Optional.empty();
+
 
         if (!Objects.deepEquals(oldName, newName)) {
             newsChannel.setName(newName);
@@ -248,7 +260,9 @@ public class ChannelUpdateHandler extends Handle {
         }
     }
 
-    private void updateVoice(GuildChannel channel) {
+    private void updateVoice(GuildChannel channel, long channelId, String newName, int newPosition,
+            boolean newNSFW, int newPermissionOverwrites, int newRateLimitPerUser,
+            Category newCategory) {
         Optional<VoiceChannel> opVoiceChannel = channel.asVoiceChannel();
 
         if (opVoiceChannel.isEmpty()) {
@@ -267,17 +281,9 @@ public class ChannelUpdateHandler extends Handle {
         Optional<Category> oldCategory = voiceChannel.getCategory();
 
 
-        String newName = json.get("name").asText();
-        int newPermissionOverwrites = json.get("permission_overwrites").size();
         int newBitrate = json.get("bitrate").asInt();
         int newUserLimit = json.get("user_limit").asInt();
         String newRTCRegion = json.get("rtc_region").asText();
-        int newPosition = json.get("position").asInt();
-        boolean newNSFW = json.get("nsfw").asBoolean();
-        Optional<Category> newCategory = json.hasNonNull("parent_id")
-                ? Optional
-                    .ofNullable(ydw.getChannel(Category.class, json.get("parent_id").asLong()))
-                : Optional.empty();
 
         if (!Objects.deepEquals(oldName, newName)) {
             voiceChannel.setName(newName);
@@ -317,7 +323,9 @@ public class ChannelUpdateHandler extends Handle {
         }
     }
 
-    private void updateThread(GuildChannel channel) {
+    private void updateThread(GuildChannel channel, long channelId, String newName, int newPosition,
+            boolean newNSFW, int newPermissionOverwrites, int newRateLimitPerUser,
+            Category category) {
         Optional<ThreadChannel> opThreadChannel = channel.asThread();
 
         if (opThreadChannel.isEmpty()) {
@@ -335,13 +343,11 @@ public class ChannelUpdateHandler extends Handle {
         ThreadMetadata oldMetadata = threadChannel.getMetadata();
         int oldTotalMessageSent = threadChannel.getTotalMessagesSent();
 
-        String newName = json.get("name").asText();
-        long newLastMessageId = json.get("last_message_id").asLong();
         int newMessageCount = json.get("message_count").asInt();
         int newMemberCount = json.get("member_count").asInt();
-        int newRateLimitPerUser = json.get("rate_limit_per_user").asInt();
         ThreadMetadata newMetadata = new ThreadMetadataReg(json.get("metadata"));
         int newTotalMessageSent = json.get("total_messages_sent").asInt();
+        long newLastMessageId = json.get("last_message_id").asLong();
 
         if (!Objects.deepEquals(oldName, newName)) {
             threadChannel.setName(newName);
@@ -374,9 +380,13 @@ public class ChannelUpdateHandler extends Handle {
         }
     }
 
-    private void updateGuildForum(GuildChannel channel) {}
+    private void updateGuildForum(GuildChannel channel, long channelId, String newName,
+            int newPosition, boolean newNSFW, int newPermissionOverwrites, int newRateLimitPerUser,
+            Category newCategory) {}
 
-    private void updateStage(GuildChannel channel) {
+    private void updateStage(GuildChannel channel, long channelId, String newName, int newPosition,
+            boolean newNSFW, int newPermissionOverwrites, int newRateLimitPerUser,
+            Category newCategory) {
         Optional<StageChannel> opStageChannel = channel.asStageChannel();
 
         if (opStageChannel.isEmpty()) {
@@ -395,17 +405,9 @@ public class ChannelUpdateHandler extends Handle {
         Optional<Category> oldCategory = stageChannel.getCategory();
 
 
-        String newName = json.get("name").asText();
-        int newPermissionOverwrites = json.get("permission_overwrites").size();
-        boolean newNSFW = json.get("nsfw").asBoolean();
         int newBitrate = json.get("bitrate").asInt();
         int newUserLimit = json.get("user_limit").asInt();
         String newRTCRegion = json.get("rtc_region").asText();
-        int newPosition = json.get("position").asInt();
-        Optional<Category> newCategory = json.hasNonNull("parent_id")
-                ? Optional
-                    .ofNullable(ydw.getChannel(Category.class, json.get("parent_id").asLong()))
-                : Optional.empty();
 
         if (!Objects.deepEquals(oldName, newName)) {
             stageChannel.setName(newName);
@@ -440,12 +442,16 @@ public class ChannelUpdateHandler extends Handle {
             stageChannel.setPosition(newPosition);
         }
 
-        if (!oldCategory.equals(newCategory)) {
-            oldCategory.ifPresent(stageChannel::setCategory);
+        if (oldCategory.isPresent()) {
+            if (!oldCategory.get().equals(newCategory)) {
+                oldCategory.ifPresent(stageChannel::setCategory);
+            }
         }
     }
 
-    private void updateGuildDirectory(GuildChannel channel) {}
+    private void updateGuildDirectory(GuildChannel channel, long channelId, String newName,
+            int newPosition, boolean newNSFW, int newPermissionOverwrites, int newRateLimitPerUser,
+            Category category) {}
 
     // non-guild channels
     private void updateDM(Channel channel) {}
