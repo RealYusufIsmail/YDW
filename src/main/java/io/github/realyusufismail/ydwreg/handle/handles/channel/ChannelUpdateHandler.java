@@ -159,6 +159,8 @@ public class ChannelUpdateHandler extends Handle {
 
         if (!Objects.deepEquals(oldName, newName)) {
             category.setName(newName);
+
+            ydw.handelEvent(new ChannelNameUpdateEvent(ydw, category, oldName, newName));
         }
 
         if (oldPosition != newPosition) {
