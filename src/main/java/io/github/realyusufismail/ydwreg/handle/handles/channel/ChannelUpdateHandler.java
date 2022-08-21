@@ -64,8 +64,14 @@ public class ChannelUpdateHandler extends Handle {
             GuildChannel guildChannel = ydw.getGuildChannelById(channelId);
 
             if (guildChannel == null) {
+                // need to get the constructor
+                // is there a way to get the constructer as this::new?
+
+
                 ydw.getEventCache()
-                    .cache(EventCache.CacheType.CHANNEL, channelId, json, (Cache) this);
+                    .cache(EventCache.CacheType.CHANNEL, channelId, json,
+                            ChannelUpdateHandler::new);
+
                 EventCache.logger.debug("Channel {} is not cached yet", channelId);
                 return;
             }

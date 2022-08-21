@@ -16,8 +16,9 @@
 package io.github.realyusufismail.cache;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.github.realyusufismail.ydw.YDW;
 
 @FunctionalInterface
 public interface Cache {
-    void execute(JsonNode jsonNode);
+    void execute(JsonNode jsonNode, YDW ydw);
 }

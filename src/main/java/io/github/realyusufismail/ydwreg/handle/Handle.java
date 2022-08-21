@@ -27,7 +27,14 @@ public abstract class Handle {
     protected Handle(@NotNull JsonNode json, YDW ydw) {
         this.json = json.get("d");
         this.ydw = (YDWReg) ydw;
+
+        if (this.json == null) {
+            throw new IllegalArgumentException("Invalid JSON: " + json.toString());
+        } else if (this.ydw == null) {
+            throw new IllegalArgumentException("Invalid YDW: " + ydw.toString());
+        }
     }
+
 
     public abstract void start();
 }

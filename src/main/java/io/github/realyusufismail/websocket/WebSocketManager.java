@@ -333,7 +333,10 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
 
                         ydwReg.setReady(true);
 
-                        ready();
+                        // ready();
+                        ydwReg.handelEvent(
+                                new ReadyEvent(ydwReg, ydwReg.getUnavailableGuilds().size(),
+                                        ydwReg.getAvailableGuilds().size()));
                     }
                     case RESUMED -> {
                         reconnectTimeout = 2;
