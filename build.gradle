@@ -61,6 +61,7 @@ dependencies {
     //Logger
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.11'
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.11'
+    implementation "uk.org.lidalia:sysout-over-slf4j:1.0.2"
     //google
     implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
     //better time

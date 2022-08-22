@@ -32,8 +32,9 @@ public class GuildCacheHandler {
     }
 
     public void onCreate(long id, JsonNode jsonNode) {
-        //need to check if the guild is available or not
-        boolean available = jsonNode.hasNonNull("unavailable") && jsonNode.get("unavailable").asBoolean();
+        // need to check if the guild is available or not
+        boolean available =
+                jsonNode.hasNonNull("unavailable") && jsonNode.get("unavailable").asBoolean();
 
         if (available && unavailableGuilds.contains(id) && !guildStarters.containsKey(id)) {
             unavailableGuilds.remove(id);
@@ -42,7 +43,7 @@ public class GuildCacheHandler {
     }
 
     public void onDelete() {
-        
+
     }
 
     public void onMemberChunk() {
@@ -58,6 +59,11 @@ public class GuildCacheHandler {
     }
 
     enum Type {
-        INITIALIZING, CHUNKING, CREATING, READY, UNAVAILABLE, REMOVING
+        INITIALIZING,
+        CHUNKING,
+        CREATING,
+        READY,
+        UNAVAILABLE,
+        REMOVING
     }
 }

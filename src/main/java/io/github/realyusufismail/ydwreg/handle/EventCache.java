@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import gnu.trove.map.TLongObjectMap;
 import gnu.trove.map.hash.TLongObjectHashMap;
 import io.github.realyusufismail.cache.Cache;
+import io.github.realyusufismail.ydw.YDW;
 import io.github.realyusufismail.ydwreg.YDWReg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,7 @@ public class EventCache {
     private final EnumMap<CacheType, TLongObjectMap<List<CacheNode>>> eventEnum =
             new EnumMap<>(CacheType.class);
 
-    public synchronized void cache(CacheType type, long id, JsonNode event, Cache cache) {
+    public synchronized void cache(CacheType type, long id, JsonNode event, Cache cache, YDW ydw) {
         TLongObjectMap<List<CacheNode>> triggerCache =
                 eventEnum.computeIfAbsent(type, k -> new TLongObjectHashMap<>());
 
@@ -47,7 +48,7 @@ public class EventCache {
             triggerCache.put(id, items);
         }
 
-        items.add(new CacheNode(event, cache));
+        items.add(new CacheNode(ydw, event, cache));
     }
 
     public synchronized void playbackCache(CacheType type, long id) {
@@ -81,9 +82,9 @@ public class EventCache {
         MEMBER
     }
 
-    private record CacheNode(JsonNode jsonNode, Cache callback) {
+    private record CacheNode(YDW ydw, JsonNode jsonNode, Cache callback) {
         void execute() {
-                callback.execute(jsonNode);
+                callback.execute(jsonNode, ydw);
             }
     }
 }

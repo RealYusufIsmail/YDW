@@ -69,8 +69,8 @@ public class ChannelUpdateHandler extends Handle {
 
 
                 ydw.getEventCache()
-                    .cache(EventCache.CacheType.CHANNEL, channelId, json,
-                            ChannelUpdateHandler::new);
+                    .cache(EventCache.CacheType.CHANNEL, channelId, json, ChannelUpdateHandler::new,
+                            ydw);
 
                 EventCache.logger.debug("Channel {} is not cached yet", channelId);
                 return;

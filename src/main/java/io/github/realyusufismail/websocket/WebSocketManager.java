@@ -220,9 +220,9 @@ public class WebSocketManager extends WebSocketAdapter implements WebSocketListe
         prepareClose();
         ydwReg.setStatus(YDW.Status.IDENTIFYING_SESSION);
         if (sessionId == null) {
-            System.out.println("Connected to the gateway.");
+            logger.info("Session id is null, sending identify");
         } else {
-            System.out.println("Resuming session.");
+            logger.info("Session id is not null, sending resume");
         }
 
         connected = true;
